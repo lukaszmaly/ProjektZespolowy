@@ -10,6 +10,8 @@ CardB::~CardB(void)
 {
 }
 
+
+
 CardB::CardB(Mat &img,int id,string name,Color color,Type t)
 {
 	this->type=t;

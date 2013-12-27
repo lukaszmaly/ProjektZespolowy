@@ -48,9 +48,29 @@ public:
 	void Draw(Mat img,vector<CardB>&bkarty,bool first);
 	void Update(Point a,Point b,Point c,Point d);
 		Point2f getCenter();
+		static void fastImg(string name,float s)
+		{
+			Mat img(200,200,CV_64F);
+	char cad[100];
+
+	sprintf(cad,"%f",s);
+	putText(img,cad, Point(10,10),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(200,200,200),2);
+	imshow(name,img);
+
+		}
+		static float getangle( cv::Point pt1, cv::Point pt2, cv::Point pt0 ) {
+	float dx1 = pt1.x - pt0.x;
+	float dy1 = pt1.y - pt0.y;
+	float dx2 = pt2.x - pt0.x;
+	float dy2 = pt2.y - pt0.y;
+	return (dx1*dx2 + dy1*dy2)/sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2));
+}
+		static Point2f getCenter(Point a,Point b,Point c,Point d);
 	bool Check(Card k);
 	void Tap(Player &player);
 	void Untap(Player &player);
+	int MinusCount(int a,int b,int c);
+	static void Prepare(vector<Point> &square,Mat &img);
 	static bool Valid(Point a,Point b,Point c,Point d)
 	{
 			float a1=Distance(a,b)/Distance(b,c);

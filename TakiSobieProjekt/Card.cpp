@@ -10,6 +10,103 @@ Card::~Card(void)
 {
 }
 
+int Card::MinusCount(int a,int b,int c)
+{
+	int r=0;
+	if(a<0) r++;
+	if(b<0) r++;
+	if(c<0) r++;
+	return r;
+}
+
+
+ void Card::Prepare(vector<Point>&square,Mat &img)
+{
+
+		float ab = Distance(square[0],square[1]);
+	float bc = Distance(square[1],square[2]);
+	float cd = Distance(square[2],square[3]);
+	float da = Distance(square[3],square[0]);
+
+
+	if(ab>bc) { }
+
+
+
+
+			Mat tmp;
+		Mat t;
+		img.copyTo(t);
+		tmp.cols=200;
+		tmp.rows=400;
+		Point2f c1[4] = {square[0],square[1],square[2],square[3]};
+		Point2f c2[4] = {Point2f(0,0), Point2f(251,0), Point2f(251,356),Point2f(0,356)};
+		Mat mmat(3,3,CV_32FC1);
+		mmat=getAffineTransform(c1,c2);
+		warpAffine(t,tmp,mmat,Size(251,356));
+
+			int tab1[3]={0,0,0};
+	int tab2[3]={0,0,0};
+	int tab3[3]={0,0,0};
+	int width=tmp.cols;
+	int channels=tmp.channels();
+	int height=tmp.rows;
+
+	for(int y=10;y<height/2-10;y++)
+	{
+		for(int x=0;x<width;x++)
+		{
+			tab1[0]+=tmp.data[channels*(width*y + x)];
+			tab1[1]+=tmp.data[channels*(width*y + x) +1];
+			tab1[2]+=tmp.data[channels*(width*y + x) +2];
+		}
+	}
+
+	for(int y=height/2+10;y<height-10;y++)
+	{
+		for(int x=0;x<width;x++)
+		{
+			tab2[0]+=tmp.data[channels*(width*y + x)];
+			tab2[1]+=tmp.data[channels*(width*y + x) +1];
+			tab2[2]+=tmp.data[channels*(width*y + x) +2];
+		}
+	}
+	tab3[0]=tab2[0]-tab1[0];
+	tab3[1]=tab2[1]-tab1[1];
+	tab3[2]=tab2[2]-tab1[2];
+
+	//jeœli r jest mniejsze od 2 to góra kart jest dobrze okreslona
+	int r=0;
+	if(tab3[0]<0) r++;
+	if(tab3[1]<0) r++;
+	if(tab3[2]<0) r++;
+if(r>=2)
+{
+	
+
+
+
+}
+else
+{
+
+	float a=getangle(square[0],square[1],getCenter(square[0],square[1],square[2],square[3]));
+	fastImg("angle",a);
+
+
+
+}
+
+
+
+
+
+
+
+
+
+
+}
 
 void Card::Compare(Mat &img1,Mat &img2,float tab[3])
 {
@@ -91,7 +188,15 @@ Point2f Card::getCenter()
 	t.y/=(float)4;
 	return t;
 }
-
+Point2f Card::getCenter(Point a,Point b,Point c,Point d)
+{
+	Point2f t(0,0);
+	t.x=t.x+a.x+b.x+c.x+d.x;
+	t.y=t.y+a.y+b.y+c.y+d.y;
+	t.x/=(float)4;
+	t.y/=(float)4;
+	return t;
+}
 void Card::Update(Point a,Point b,Point c,Point d)
 {
 	this->a=a;

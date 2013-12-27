@@ -54,70 +54,6 @@ void Compare(Mat &img1,Mat &img2)
 
 
 
-int findObject(Mat img,Mat base, int minHessian)
-{
-	//vector of keypoints	
-	vector<cv::KeyPoint> keypointsO;
-	vector<cv::KeyPoint> keypointsS;
-
-
-	SurfFeatureDetector surf(minHessian);
-	surf.detect(img,keypointsO);
-	surf.detect(base,keypointsS);
-
-
-	//-- Step 2: Calculate descriptors (feature vectors)
-	SurfDescriptorExtractor extractor;
-
-	Mat descriptors_object, descriptors_scene;
-
-	extractor.compute( img, keypointsO, descriptors_object );
-	extractor.compute( base, keypointsS, descriptors_scene );
-
-
-
-	//-- Step 3: Matching descriptor vectors using FLANN matcher
-	FlannBasedMatcher matcher;  
-	//BFMatcher matcher(NORM_L1);
-	std::vector< DMatch > matches;
-	matcher.match( descriptors_object, descriptors_scene, matches );
-
-	double max_dist = 0; double min_dist = 150;
-	double dist;
-
-	//Quick calculation of min and max distances between keypoints
-	for(int i=0; i<descriptors_object.rows; i++)
-	{
-		dist = matches[i].distance;
-		if( dist < min_dist ) min_dist = dist;
-		if( dist > max_dist ) max_dist = dist;
-	}
-
-	/* cout << "-- Max Dist: " << max_dist << endl;
-	cout << "-- Min Dist: " << min_dist << endl;*/
-
-	vector< DMatch > good_matches;
-
-	for(int i = 0; i < descriptors_object.rows; i++)
-	{
-		if( matches[i].distance < 3*min_dist) 
-			good_matches.push_back( matches[i] );
-	}
-
-
-
-	return (int)good_matches.size();
-}
-
-Mat Obraz(Mat src,vector<Point> a)
-{
-
-	int maxX= std::max(a[0].x,std::max(a[1].x,std::max(a[2].x,a[3].x)));
-	int maxY= std::max(a[0].y,std::max(a[1].y,std::max(a[2].y,a[3].y)));
-	Mat temp;
-	return temp;
-}
-
 
 
 
@@ -174,34 +110,18 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 	grey_image.copyTo(diff);
 	cvtColor(grey_image,a,CV_RGB2GRAY);
 	cvtColor(grey_base,b,CV_RGB2GRAY);
-
-
 	absdiff(a,b,diff);
 	Canny(diff,diff,160,160);
-
 	findContours( diff, contours,hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
-	// goodFeaturesToTrack(diff,
-	//                      contours,
-	//                      1000,//max corner
-	//                      0.01,//quality
-	//                      10,//minDistance,
-	//                      Mat(),
-	//                     3,// blockSize,
-	//                     false,// useHarrisDetector,
-	//                      0.04 );
-
-	//TermCriteria criteria = TermCriteria( CV_TERMCRIT_EPS + CV_TERMCRIT_ITER, 40, 0.001 );
-	//cornerSubPix(diff,contours,Size(5,5),Size(-1,-1),criteria);
 	for(int i=0;i<contours.size();i++)
 	{
 		if(contours[i].size()>10) edge_pts.push_back(contours[i]);
-		// if(contours[i].size()==0) break; //spróbuj bez tego
 	}
 	vector<vector<Point> >hull( edge_pts.size() );//tutaj zmiana
 	for( int i = 0; i < edge_pts.size(); i++ )
 	{  convexHull( Mat(edge_pts[i]), hull[i],true); }
 
-
+	
 	vector<vector<Point> > squares;
 	vector<Point> approx;
 	for (size_t i = 0; i < edge_pts.size(); i++)
@@ -238,10 +158,10 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 		}
 
 	}
-	RemoveSquare(squares);
+	RemoveSquare(squares);//Ÿle napisane
 	for ( int i = 0; i<squares.size(); i++ ) 
 	{
-
+	Card::Prepare(squares[i],grey_image);
 		//   cv::drawContours(dst, squares, i, cv::Scalar(255,0,0), 1, 8, std::vector<cv::Vec4i>(), 0, cv::Point());
 
 		tmp=0;
@@ -302,54 +222,7 @@ int main( int argc, char** argv )
 	Player player1("lukasz");
 	Player player2("daniel");
 	Mat img1=imread("Roting.jpg");
-	int tab1[3]={0,0,0};
-	int tab2[3]={0,0,0};
 
-	int width=img1.cols;
-	int channels=img1.channels();
-	int height=img1.rows;
-	int red1=0,blue1=0,green1=0;
-	int red2=0,blue2=0,green2=0;
-	for(int y=10;y<height/2-10;y++)
-	{
-		for(int x=0;x<width;x++)
-		{
-			blue1+=img1.data[channels*(width*y + x)];
-
-			green1+=img1.data[channels*(width*y + x) +1];
-
-			red1+=img1.data[channels*(width*y + x) +2];
-
-		}
-	}
-
-	for(int y=height/2+10;y<height;y++)
-	{
-		for(int x=0;x<width;x++)
-		{
-			blue2+=img1.data[channels*(width*y + x)];
-
-			green2+=img1.data[channels*(width*y + x) +1];
-
-			red2+=img1.data[channels*(width*y + x) +2];
-
-		}
-	}
-
-	cout<<"R="<<red2-red1<<endl;
-cout<<"G="<<green2-green1<<endl;
-cout<<"B="<<blue2-blue1<<endl;
-
-
-
-
-
-
-
-
-
-
-	return 1;
 	vector<CardB> bkarty;
 
 
