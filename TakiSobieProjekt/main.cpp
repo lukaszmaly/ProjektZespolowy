@@ -8,7 +8,9 @@
 #include "Card.h"
 #include "Player.h"
 #include "CardB.h"
+#include "SFML\Network.hpp"
 using namespace cv;
+using namespace sf;
 using namespace std;
 const int OD=50;
 int mini=8;
@@ -18,9 +20,9 @@ int three2=1000;
 int three=1800;
 int kernel;
 int biel=1;
-
-
-
+UdpSocket soc;
+IpAddress client;
+	int port=54000;
 
 
 void Compare(Mat &img1,Mat &img2)
@@ -121,7 +123,7 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 	for( int i = 0; i < edge_pts.size(); i++ )
 	{  convexHull( Mat(edge_pts[i]), hull[i],true); }
 
-	
+
 	vector<vector<Point> > squares;
 	vector<Point> approx;
 	for (size_t i = 0; i < edge_pts.size(); i++)
@@ -161,7 +163,7 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 	RemoveSquare(squares);//Ÿle napisane
 	for ( int i = 0; i<squares.size(); i++ ) 
 	{
-	Card::Prepare(squares[i],grey_image);
+		Card::Prepare(squares[i],grey_image);
 		//   cv::drawContours(dst, squares, i, cv::Scalar(255,0,0), 1, 8, std::vector<cv::Vec4i>(), 0, cv::Point());
 
 		tmp=0;
@@ -190,9 +192,17 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 			}
 
 			//if(add==true)
-
+			char cad[100];
+			sprintf(cad,"Karta: %d %d %d %d P",squares[i][0].x,squares[i][1].x,squares[i][2].x,squares[i][3].x);
 			karty.push_back(Card(squares[i][0],squares[i][1],squares[i][2],squares[i][3]));
-
+			if (soc.send(cad,strlen(cad)*sizeof(char) , client, port-10) != sf::Socket::Done)
+{
+  cout<<"Blad podczas wysylania danych"<<endl;
+}
+			else
+			{
+				cout<<"Wysylam dane karty"<<endl;
+			}
 		}
 	}
 
@@ -219,67 +229,80 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 int Card::ID=0;
 int main( int argc, char** argv )
 {
-	Player player1("lukasz");
-	Player player2("daniel");
-	Mat img1=imread("Roting.jpg");
+	client =IpAddress::getLocalAddress();
 
-	vector<CardB> bkarty;
-
-
-	VideoCapture capture(0); 
-	Mat frame;
-	Mat l_frame;
-
-	vector<Card> karty;
-
-	char data[256];
-	//namedWindow("Ustawienia",CV_WINDOW_AUTOSIZE);
-	//createTrackbar("Threeshold1","Ustawienia",&three1,3000);
-	//createTrackbar("Threeshold","Ustawienia",&three,3000);
-	//createTrackbar("Min","Ustawienia",&mini,20);
-	//createTrackbar("Maxi","Ustawienia",&maxi,50);
-
-	capture.set(CV_CAP_PROP_FRAME_WIDTH, 1280 );
-	capture.set(CV_CAP_PROP_FRAME_HEIGHT, 720 );
-	capture.set(CV_CAP_PROP_FOCUS, 13 );
+		if(soc.bind(port) !=Socket::Done)
+		{
+			cout<<"Blad podczas tworzenia socketa"<<endl;
+			return 1;
+		}
+		else
+		{
+			cout<<"Utworzono serwer UDP na porcie "<<port<<endl;
+		}
 
 
-	capture.read(frame);
+		Player player1("lukasz");
+		Player player2("daniel");
+		Mat img1=imread("Roting.jpg");
 
-	frame.copyTo(l_frame);
+		vector<CardB> bkarty;
 
-	while(1)
-	{
+
+		VideoCapture capture(0); 
+		Mat frame;
+		Mat l_frame;
+
+		vector<Card> karty;
+
+		char data[256];
+		//namedWindow("Ustawienia",CV_WINDOW_AUTOSIZE);
+		//createTrackbar("Threeshold1","Ustawienia",&three1,3000);
+		//createTrackbar("Threeshold","Ustawienia",&three,3000);
+		//createTrackbar("Min","Ustawienia",&mini,20);
+		//createTrackbar("Maxi","Ustawienia",&maxi,50);
+
+		capture.set(CV_CAP_PROP_FRAME_WIDTH, 1280 );
+		capture.set(CV_CAP_PROP_FRAME_HEIGHT, 720 );
+		capture.set(CV_CAP_PROP_FOCUS, 13 );
+
+
 		capture.read(frame);
 
+		frame.copyTo(l_frame);
 
-		Wykryj_karty(frame,l_frame,three,karty,bkarty,false);
-
-
-		if(waitKey(30)==97) { cout<<"Druga faza"<<endl; bkarty.clear();  }
-
-		if(waitKey(30)==101) 
-		{ 
-			cout<<"Usuwam ostatnio dodana karte"<<endl;
-			if(bkarty.size()!=0) 
-			{
-				bkarty.pop_back(); 	
-				cout<<"Karta usunieta"<<endl;
-			}
-			else
-				cout<<"Brak kart"<<endl;
-		}
-		if(waitKey(20)==32) 
+		while(1)
 		{
-			frame.copyTo(l_frame);
-			cout<<"Zaladowano ponownie klatke bazowa!"<<endl;
-		} 
-		if(waitKey(30)==27) break;
+			capture.read(frame);
 
-		player1.Draw();
-		player2.Draw();
-	}
-	capture.release();
-	waitKey(0);
-	return 0;
+
+			Wykryj_karty(frame,l_frame,three,karty,bkarty,false);
+
+
+			if(waitKey(30)==97) { cout<<"Druga faza"<<endl; bkarty.clear();  }
+
+			if(waitKey(30)==101) 
+			{ 
+				cout<<"Usuwam ostatnio dodana karte"<<endl;
+				if(bkarty.size()!=0) 
+				{
+					bkarty.pop_back(); 	
+					cout<<"Karta usunieta"<<endl;
+				}
+				else
+					cout<<"Brak kart"<<endl;
+			}
+			if(waitKey(20)==32) 
+			{
+				frame.copyTo(l_frame);
+				cout<<"Zaladowano ponownie klatke bazowa!"<<endl;
+			} 
+			if(waitKey(30)==27) break;
+
+			player1.Draw();
+			player2.Draw();
+		}
+		capture.release();
+		waitKey(0);
+		return 0;
 }

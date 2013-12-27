@@ -51,13 +51,13 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\opencv\build\include;C:\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>C:\opencv\build\x86\vc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>aruco124.lib;opencv_core241d.lib;opencv_imgproc241d.lib;opencv_highgui241d.lib;opencv_ml241d.lib;opencv_video241d.lib;opencv_nonfree241d.lib;opencv_features2d241d.lib;opencv_calib3d241d.lib;opencv_objdetect241d.lib;opencv_contrib241d.lib;opencv_legacy241d.lib;opencv_flann241d.lib;libtesseract302.lib;libtesseract302d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\opencv\build\x86\vc10\lib;C:\SFML\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>aruco124.lib;opencv_core241d.lib;opencv_imgproc241d.lib;opencv_highgui241d.lib;opencv_ml241d.lib;opencv_video241d.lib;opencv_nonfree241d.lib;opencv_features2d241d.lib;opencv_calib3d241d.lib;opencv_objdetect241d.lib;opencv_contrib241d.lib;opencv_legacy241d.lib;opencv_flann241d.lib;libtesseract302.lib;libtesseract302d.lib;sfml-network-d.lib;sfml-system-d.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -69,15 +69,15 @@
       <FunctionLevelLinking>true</FunctionLevelLinking>
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>C:\opencv\build\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>C:\opencv\build\include;C:\SFML\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalLibraryDirectories>C:\opencv\build\x86\vc10\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
-      <AdditionalDependencies>zoidcom_vc.lib;zoidcom_vcs.lib;aruco124.lib;opencv_core241.lib;opencv_imgproc241.lib;opencv_highgui241.lib;opencv_ml241.lib;opencv_video241.lib;opencv_nonfree241.lib;opencv_features2d241.lib;opencv_calib3d241.lib;opencv_objdetect241.lib;opencv_contrib241.lib;opencv_legacy241.lib;opencv_flann241.lib;WSock32.Lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>C:\opencv\build\x86\vc10\lib;C:\SFML\lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>zoidcom_vc.lib;zoidcom_vcs.lib;aruco124.lib;opencv_core241.lib;opencv_imgproc241.lib;opencv_highgui241.lib;opencv_ml241.lib;opencv_video241.lib;opencv_nonfree241.lib;opencv_features2d241.lib;opencv_calib3d241.lib;opencv_objdetect241.lib;opencv_contrib241.lib;opencv_legacy241.lib;opencv_flann241.lib;sfml-network.lib;sfml-system.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
