@@ -3,11 +3,12 @@
 
 Card::Card(void)
 {
-}
 
+}
 
 Card::~Card(void)
 {
+
 }
 
 int Card::MinusCount(int a,int b,int c)
@@ -20,32 +21,49 @@ int Card::MinusCount(int a,int b,int c)
 }
 
 
- void Card::Prepare(vector<Point>&square,Mat &img)
+void Card::Prepare(vector<Point>&square,Mat &img)
 {
+	bool f1=false;
+	bool f2=false;
 
-		float ab = Distance(square[0],square[1]);
+	float ab = Distance(square[0],square[1]);
 	float bc = Distance(square[1],square[2]);
-	float cd = Distance(square[2],square[3]);
-	float da = Distance(square[3],square[0]);
+
+	//Poprawienie bokow
+	if(ab>bc) 
+	{
+		f1=true;
+		//cout<<"Poprawianie bokow"<<endl; 
+		Point ta,tb,tc,td;
+		ta=square[0];
+		tb=square[1];
+		tc=square[2];
+		td=square[3];
+		square[0]=tb;
+		square[1]=tc;
+		square[2]=td;
+		square[3]=ta;
+		float a=atan2f(( square[0].y - square[1].y ),( square[0].x - square[1].x ) ) * 180 / M_PI + 180;
 
 
-	if(ab>bc) { }
+	}
 
 
 
 
-			Mat tmp;
-		Mat t;
-		img.copyTo(t);
-		tmp.cols=200;
-		tmp.rows=400;
-		Point2f c1[4] = {square[0],square[1],square[2],square[3]};
-		Point2f c2[4] = {Point2f(0,0), Point2f(251,0), Point2f(251,356),Point2f(0,356)};
-		Mat mmat(3,3,CV_32FC1);
-		mmat=getAffineTransform(c1,c2);
-		warpAffine(t,tmp,mmat,Size(251,356));
 
-			int tab1[3]={0,0,0};
+	Mat tmp;
+	Mat t;
+	img.copyTo(t);
+	tmp.cols=200;
+	tmp.rows=400;
+	Point2f c1[4] = {square[0],square[1],square[2],square[3]};
+	Point2f c2[4] = {Point2f(0,0), Point2f(251,0), Point2f(251,356),Point2f(0,356)};
+	Mat mmat(3,3,CV_32FC1);
+	mmat=getAffineTransform(c1,c2);
+	warpAffine(t,tmp,mmat,Size(251,356));
+
+	int tab1[3]={0,0,0};
 	int tab2[3]={0,0,0};
 	int tab3[3]={0,0,0};
 	int width=tmp.cols;
@@ -80,63 +98,78 @@ int Card::MinusCount(int a,int b,int c)
 	if(tab3[0]<0) r++;
 	if(tab3[1]<0) r++;
 	if(tab3[2]<0) r++;
-if(r>=2)
+	if(r>=2)
+	{
+		f2=true;
+		//cout<<"Poprawianie kolwjnoaci"<<endl; 
+		swap(square[0],square[2]);
+		swap(square[1],square[3]);
+	}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	//////Koniec poprawiania boków
+	//////Poprawianie kolejnoœci punktów
+
+	float a=atan2f(( square[0].y - square[1].y ),( square[0].x - square[1].x ) ) * 180 / M_PI + 180;
+	fastImg("a",a);
+	if(a>90) 
+	{ 
+		//cout<<"Zamieniam kolejnoœæ punktow"<<endl;
+		swap(square[0],square[1]);
+		swap(square[2],square[3]);
+	}
+
+
+	//Koniec poprawiania kolejnoœci punktów
+
+
+}
+
+float Card::getAngle()
 {
-	
-
-
-
+	return atan2f(( a.y - b.y ),( a.x - b.x ) ) * 180 / M_PI + 180;
 }
-else
-{
-
-	float a=getangle(square[0],square[1],getCenter(square[0],square[1],square[2],square[3]));
-	fastImg("angle",a);
-
-
-
-}
-
-
-
-
-
-
-
-
-
-
-}
-
 void Card::Compare(Mat &img1,Mat &img2,float tab[3])
 {
 	if(img1.data && img2.data)
 	{
-	int width=img1.cols;
-	int channels=img1.channels();
-	int height=img1.rows;
-	long int red=0,green=0,blue=0;
-	long int red2=0,green2=0,blue2=0;
-	int fred=0,fgreen=0,fblue=0;
-	int n=width*height;
-	for(int y=0;y<height;y++)
-	{
-		for(int x=0;x<width;x++)
+		int width=img1.cols;
+		int channels=img1.channels();
+		int height=img1.rows;
+		long int red=0,green=0,blue=0;
+		long int red2=0,green2=0,blue2=0;
+		int fred=0,fgreen=0,fblue=0;
+		int n=width*height;
+		for(int y=0;y<height;y++)
 		{
-			blue=img1.data[channels*(width*y + x)]-img2.data[channels*(width*y + x)];
-			blue2+=blue*blue;
-			green=img1.data[channels*(width*y + x) +1]-img2.data[channels*(width*y + x) +1];
-			green2+=green*green;
-			red=img1.data[channels*(width*y + x) +2]-img2.data[channels*(width*y + x) +2];
-			red2+=red*red;
+			for(int x=0;x<width;x++)
+			{
+				blue=img1.data[channels*(width*y + x)]-img2.data[channels*(width*y + x)];
+				blue2+=blue*blue;
+				green=img1.data[channels*(width*y + x) +1]-img2.data[channels*(width*y + x) +1];
+				green2+=green*green;
+				red=img1.data[channels*(width*y + x) +2]-img2.data[channels*(width*y + x) +2];
+				red2+=red*red;
+			}
 		}
-	}
-	tab[2]=fred=red2/n;
-	tab[1]=fgreen=green2/n;
-	tab[0]=fblue=blue2/n;
-	/*cout<<"Fred = "<<fred<<endl;
-	cout<<"Fgreen = "<<fgreen<<endl;
-	cout<<"Gblue = "<<fblue<<endl;*/
+		tab[2]=fred=red2/n;
+		tab[1]=fgreen=green2/n;
+		tab[0]=fblue=blue2/n;
+		/*cout<<"Fred = "<<fred<<endl;
+		cout<<"Fgreen = "<<fgreen<<endl;
+		cout<<"Gblue = "<<fblue<<endl;*/
 	}
 
 }
@@ -204,6 +237,25 @@ void Card::Update(Point a,Point b,Point c,Point d)
 	this->c=c;
 	this->d=d;
 	ttl=TTL;
+	bool taptemp=false;
+	if(getAngle()>45) taptemp=true;
+
+
+	if(taptemp!=taped)
+	{
+		taped=taptemp;
+		if(taped==false)
+		{
+			Untap();
+		}
+		else
+		{
+			Tap();
+		}
+
+	}
+
+	fastImg("kat",getAngle());
 }
 int Card::maxC(int a,int b,int c)
 {
@@ -225,20 +277,14 @@ void Card::setCardBase(CardB &card)
 	this->cardBase=card;
 }
 
-void Card::Tap(Player &player)
+void Card::Tap()
 {
-	if(cardBase.type==LAND)
-	{
-		player.mana++;
-	}
+	cout<<"Tapnieto"<<endl;
 }
 
-void Card::Untap(Player &player)
+void Card::Untap()
 {
-		if(cardBase.type==LAND)
-	{
-		player.mana--;
-	}
+	cout<<"Odtapowano"<<endl;
 }
 string Card::Wynik(int b,int g,int r,int h, int s,int v)
 {
@@ -300,7 +346,10 @@ void Card::Draw(Mat img,vector<CardB>&bkarty,bool first)
 		{
 			sprintf(cad,"none");
 		}
-		sprintf(cad1,"Tapnieta: %b",taped);
+		if(taped==true)
+			sprintf(cad1,"Karta tapnieta");
+		else
+			sprintf(cad1,"KArta odtapowana");
 		putText(img,"a", Point(a.x,a.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 		putText(img,"b", Point(b.x,b.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 		putText(img,"c", Point(c.x,c.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);

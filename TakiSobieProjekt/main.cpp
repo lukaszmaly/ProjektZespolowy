@@ -169,10 +169,11 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 		tmp=0;
 		for(int j=0;j< karty.size();j++)
 		{
-			if(odleglos(squares[i][0],karty[j].a)>35 
+	/*		if(odleglos(squares[i][0],karty[j].a)>35 
 				&& odleglos(squares[i][1],karty[j].b)>35
 				&& odleglos(squares[i][2],karty[j].c)>35
-				&& odleglos(squares[i][3],karty[j].d)>35) tmp++;
+				&& odleglos(squares[i][3],karty[j].d)>35) tmp++;*/
+			if(odleglos(karty[j].getCenter(),Card::getCenter(squares[i][0],squares[i][1],squares[i][2],squares[i][3]))>50) tmp++;
 			else
 			{
 				karty[j].Update(squares[i][0],squares[i][1],squares[i][2],squares[i][3]);
@@ -299,8 +300,8 @@ int main( int argc, char** argv )
 			} 
 			if(waitKey(30)==27) break;
 
-			player1.Draw();
-			player2.Draw();
+		//	player1.Draw();
+		//	player2.Draw();
 		}
 		capture.release();
 		waitKey(0);

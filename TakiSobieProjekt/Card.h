@@ -9,11 +9,12 @@
 #include <opencv2\objdetect\objdetect.hpp>
 #include <opencv2\calib3d\calib3d.hpp>
 #include <iostream>
+#include <cmath>
 #include "CardB.h"
 #include "Player.h"
 #define MIN_D1 1.37
 #define MAX_D1 1.45
-
+#define M_PI 3.14159265358979323846
 #define MIN_D2 0.67
 #define MAX_D2 0.73
 using namespace std;
@@ -42,6 +43,7 @@ public:
 	void Compare(Mat &img1,Mat &img2,float tab[3]);
 	Card(Point a, Point b, Point c,Point d,bool check=false);
 	Card(void);
+	float getAngle();
 	int maxC(int a,int b,int c);
 	int minC(int a,int b,int c);
 	string Wynik(int b,int g,int r,int h, int s,int v);
@@ -67,8 +69,8 @@ public:
 }
 		static Point2f getCenter(Point a,Point b,Point c,Point d);
 	bool Check(Card k);
-	void Tap(Player &player);
-	void Untap(Player &player);
+	void Tap();
+	void Untap();
 	int MinusCount(int a,int b,int c);
 	static void Prepare(vector<Point> &square,Mat &img);
 	static bool Valid(Point a,Point b,Point c,Point d)
