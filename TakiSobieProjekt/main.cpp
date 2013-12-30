@@ -8,10 +8,16 @@
 #include "Card.h"
 #include "Player.h"
 #include "CardB.h"
+#include "aruco.h"
+#include "marker.h"
+#include "cvdrawingutils.h"
 #include "SFML\Network.hpp"
+#include <fstream>
+#include "Game.h"
 using namespace cv;
 using namespace sf;
 using namespace std;
+using namespace aruco;
 const int OD=50;
 int mini=8;
 int maxi=30;
@@ -22,40 +28,7 @@ int kernel;
 int biel=1;
 UdpSocket soc;
 IpAddress client;
-	int port=54000;
-
-
-void Compare(Mat &img1,Mat &img2)
-{
-	int width=img1.cols;
-	int channels=img1.channels();
-	int height=img1.rows;
-	long int red=0,green=0,blue=0;
-	long int red2=0,green2=0,blue2=0;
-	float fred=0,fgreen=0,fblue=0;
-	int n=width*height;
-	for(int y=0;y<height;y++)
-	{
-		for(int x=0;x<width;x++)
-		{
-			blue=img1.data[channels*(width*y + x)]-img2.data[channels*(width*y + x)];
-			blue2+=blue*blue;
-			green=img1.data[channels*(width*y + x) +1]-img2.data[channels*(width*y + x) +1];
-			green2+=green*green;
-			red=img1.data[channels*(width*y + x) +2]-img2.data[channels*(width*y + x) +2];
-			red2+=red*red;
-		}
-	}
-	fred=red2/(float)n;
-	fgreen=green2/(float)n;
-	fblue=blue2/(float)n;
-	cout<<"Fred = "<<fred<<endl;
-	cout<<"Fgreen = "<<fgreen<<endl;
-	cout<<"Gblue = "<<fblue<<endl;
-}
-
-
-
+int port=54000;
 
 
 
@@ -64,16 +37,18 @@ int odleglos(Point a,Point b)
 {
 	return std::sqrtf(((b.x-a.x)*(b.x-a.x)+(b.y-a.y)*(b.y-a.y)));
 }
+
 void RemoveSquare(std::vector<std::vector<cv::Point>> &squares)
 {
+
 	bool flaga=false;
 	while(flaga==false)
 	{
 		flaga=true;
-		for(int i=0;i<squares.size();i++)
+		for(unsigned int i=0;i<squares.size();i++)
 		{
 
-			for(int j=i+1;j<squares.size();j++)
+			for(unsigned int j=i+1;j<squares.size();j++)
 			{
 				if((squares[i][0].x>=squares[j][0].x && squares[i][0].y>=squares[j][0].y) ||
 					(squares[i][1].x>=squares[j][1].x && squares[i][1].y<=squares[j][1].y) ||
@@ -100,7 +75,7 @@ double angle( cv::Point pt1, cv::Point pt2, cv::Point pt0 ) {
 
 
 
-void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,vector<CardB> &bkarty,bool first)
+void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,vector<CardB> &bkarty,bool first,Game &game)
 {
 	Mat a,b;
 	Mat diff;
@@ -115,12 +90,12 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 	absdiff(a,b,diff);
 	Canny(diff,diff,160,160);
 	findContours( diff, contours,hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
-	for(int i=0;i<contours.size();i++)
+	for(unsigned int i=0;i<contours.size();i++)
 	{
 		if(contours[i].size()>10) edge_pts.push_back(contours[i]);
 	}
 	vector<vector<Point> >hull( edge_pts.size() );//tutaj zmiana
-	for( int i = 0; i < edge_pts.size(); i++ )
+	for(unsigned int i = 0; i < edge_pts.size(); i++ )
 	{  convexHull( Mat(edge_pts[i]), hull[i],true); }
 
 
@@ -146,11 +121,8 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 		}
 	}
 
-
-
-
 	int tmp=0;
-	for ( int i = 0; i<squares.size(); i++ ) 
+	for (unsigned int i = 0; i<squares.size(); i++ ) 
 	{
 		if(squares[i][1].y>squares[i][3].y) swap(squares[i][1],squares[i][3]);
 		if(Card::Valid(squares[i][0],squares[i][1],squares[i][2],squares[i][3])==false)
@@ -161,45 +133,39 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 
 	}
 	RemoveSquare(squares);//Ÿle napisane
-	for ( int i = 0; i<squares.size(); i++ ) 
+	for (unsigned int i = 0; i<squares.size(); i++ ) 
 	{
 		Card::Prepare(squares[i],grey_image);
-		//   cv::drawContours(dst, squares, i, cv::Scalar(255,0,0), 1, 8, std::vector<cv::Vec4i>(), 0, cv::Point());
 
 		tmp=0;
-		for(int j=0;j< karty.size();j++)
+		for(unsigned int j=0;j< karty.size();j++)
 		{
-	/*		if(odleglos(squares[i][0],karty[j].a)>35 
-				&& odleglos(squares[i][1],karty[j].b)>35
-				&& odleglos(squares[i][2],karty[j].c)>35
-				&& odleglos(squares[i][3],karty[j].d)>35) tmp++;*/
 			if(odleglos(karty[j].getCenter(),Card::getCenter(squares[i][0],squares[i][1],squares[i][2],squares[i][3]))>50) tmp++;
 			else
 			{
-				karty[j].Update(squares[i][0],squares[i][1],squares[i][2],squares[i][3]);
+				karty[j].Update(squares[i][0],squares[i][1],squares[i][2],squares[i][3],grey_image,bkarty,game);
 			}
 		}
 		if(tmp==karty.size())
 		{
 			bool add=true;
-			for(int k=0;k<karty.size();k++)
+			for(unsigned int k=0;k<karty.size();k++)
 			{
 
-				Card ab(squares[i][0],squares[i][1],squares[i][2],squares[i][3],true);
+				Card ab(squares[i][0],squares[i][1],squares[i][2],squares[i][3],grey_image,bkarty,game);
 				if(karty[k].Check(ab)==true) {
 					add=false;
 					break;
 				}
 			}
 
-			//if(add==true)
 			char cad[100];
 			sprintf(cad,"Karta: %d %d %d %d P",squares[i][0].x,squares[i][1].x,squares[i][2].x,squares[i][3].x);
-			karty.push_back(Card(squares[i][0],squares[i][1],squares[i][2],squares[i][3]));
+			karty.push_back(Card(squares[i][0],squares[i][1],squares[i][2],squares[i][3],grey_image,bkarty,game));
 			if (soc.send(cad,strlen(cad)*sizeof(char) , client, port-10) != sf::Socket::Done)
-{
-  cout<<"Blad podczas wysylania danych"<<endl;
-}
+			{
+				cout<<"Blad podczas wysylania danych"<<endl;
+			}
 			else
 			{
 				cout<<"Wysylam dane karty"<<endl;
@@ -209,101 +175,117 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 
 
 
-	for(int i=0;i<karty.size();i++)
+	for(unsigned int i=0;i<karty.size();i++)
 	{
 
-		karty[i].Draw(grey_image,bkarty,first);
-
-
+		karty[i].Draw(grey_image,bkarty);
 	}
 
-	namedWindow("Hull demo", CV_WINDOW_AUTOSIZE );
-	imshow( "Hull demo", grey_image);
-
-
-
-
+	imshow("Podglad", grey_image);
 }
-
-
 
 int Card::ID=0;
 int main( int argc, char** argv )
 {
+	Game game("lukasz",1,"daniel",2);
+	MarkerDetector MDetector;
+	vector<Marker> markers;
+	vector<CardB> bkarty;
+
+	fstream plik("cards.txt", ios::in );
+	string dane;
+	while(!plik.eof())
+	{
+		int id=0,t=0,cost=0;
+		char name[10];
+		string name1;
+		char src[10];
+		getline(plik,dane);
+		sscanf(dane.c_str(),"%d %s %d %d",&id,name,&t,&cost);
+		name1=name;
+	Type tt;
+	if(t==0) tt=CREATURE;
+	else tt=LAND;
+		Mat a=imread("C:/umk/"+name1+".jpg");
+		if(!a.data) cout<<"ADS"<<endl;
+	//	imshow("A",a);
+		bkarty.push_back(CardB(a,id,name,Red,tt));
+	//cout<<"Karta: "<<id<<" "<<name1<<" "<<t<<" "<<cost<<"|"<<endl;
+		
+
+	}
+	cout<<"Koniec"<<endl;
+
 	client =IpAddress::getLocalAddress();
 
-		if(soc.bind(port) !=Socket::Done)
-		{
-			cout<<"Blad podczas tworzenia socketa"<<endl;
-			return 1;
-		}
-		else
-		{
-			cout<<"Utworzono serwer UDP na porcie "<<port<<endl;
-		}
+	if(soc.bind(port) !=Socket::Done)
+	{
+		cout<<"Blad podczas tworzenia socketa"<<endl;
+		return 1;
+	}
+	else
+	{
+		cout<<"Utworzono serwer UDP na porcie "<<port<<endl;
+	}
 
 
-		Player player1("lukasz");
-		Player player2("daniel");
-		Mat img1=imread("Roting.jpg");
-
-		vector<CardB> bkarty;
 
 
-		VideoCapture capture(0); 
-		Mat frame;
-		Mat l_frame;
+	
 
-		vector<Card> karty;
+	VideoCapture capture(0); 
+	Mat frame;
+	Mat l_frame;
 
-		char data[256];
-		//namedWindow("Ustawienia",CV_WINDOW_AUTOSIZE);
-		//createTrackbar("Threeshold1","Ustawienia",&three1,3000);
-		//createTrackbar("Threeshold","Ustawienia",&three,3000);
-		//createTrackbar("Min","Ustawienia",&mini,20);
-		//createTrackbar("Maxi","Ustawienia",&maxi,50);
+	vector<Card> karty;
 
-		capture.set(CV_CAP_PROP_FRAME_WIDTH, 1280 );
-		capture.set(CV_CAP_PROP_FRAME_HEIGHT, 720 );
-		capture.set(CV_CAP_PROP_FOCUS, 13 );
+	capture.set(CV_CAP_PROP_FRAME_WIDTH, 1280 );
+	capture.set(CV_CAP_PROP_FRAME_HEIGHT, 720 );
+	capture.set(CV_CAP_PROP_FOCUS, 13 );
 
 
+	capture.read(frame);
+
+	frame.copyTo(l_frame);
+
+	while(1)
+	{
+		markers.clear();
 		capture.read(frame);
 
-		frame.copyTo(l_frame);
-
-		while(1)
-		{
-			capture.read(frame);
-
-
-			Wykryj_karty(frame,l_frame,three,karty,bkarty,false);
-
-
-			if(waitKey(30)==97) { cout<<"Druga faza"<<endl; bkarty.clear();  }
-
-			if(waitKey(30)==101) 
-			{ 
-				cout<<"Usuwam ostatnio dodana karte"<<endl;
-				if(bkarty.size()!=0) 
-				{
-					bkarty.pop_back(); 	
-					cout<<"Karta usunieta"<<endl;
-				}
-				else
-					cout<<"Brak kart"<<endl;
-			}
-			if(waitKey(20)==32) 
+		MDetector.detect(frame,markers);
+		for(int i=0;i<markers.size();i++) 
 			{
-				frame.copyTo(l_frame);
-				cout<<"Zaladowano ponownie klatke bazowa!"<<endl;
-			} 
-			if(waitKey(30)==27) break;
+				markers[i].draw(frame,Scalar(100,100,100));
+				if(game.player1.markerId==markers[i].id) game.aPlayer=markers[i].id;
+				if(game.player2.markerId==markers[i].id) game.aPlayer=markers[i].id;
+		}
+
+		Wykryj_karty(frame,l_frame,three,karty,bkarty,false,game);
+		if(cv::waitKey(30)==97) { cout<<"Druga faza"<<endl; bkarty.clear();  }
+
+		if(cv::waitKey(30)==101) 
+		{ 
+			cout<<"Usuwam ostatnio dodana karte"<<endl;
+			if(bkarty.size()!=0) 
+			{
+				bkarty.pop_back(); 	
+				cout<<"Karta usunieta"<<endl;
+			}
+			else
+				cout<<"Brak kart"<<endl;
+		}
+		if(cv::waitKey(20)==32) 
+		{
+			frame.copyTo(l_frame);
+			cout<<"Zaladowano ponownie klatke bazowa!"<<endl;
+		} 
+		if(cv::waitKey(30)==27) break;
 
 		//	player1.Draw();
 		//	player2.Draw();
-		}
-		capture.release();
-		waitKey(0);
-		return 0;
+	}
+	capture.release();
+	cv::waitKey(0);
+	return 0;
 }

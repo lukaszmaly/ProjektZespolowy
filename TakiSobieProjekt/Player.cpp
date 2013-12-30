@@ -1,8 +1,9 @@
 #include "Player.h"
 
 
-Player::Player(string name)
+Player::Player(string name,int markerId)
 {
+	this->markerId=markerId;
 	this->name=name;
 	hp=20;
 	cardsInLib=60;
@@ -10,7 +11,16 @@ Player::Player(string name)
 	cardsOnHand=7;
 	mana=0;
 }
-
+void Player::Init(string name,int markerId)
+{
+		this->markerId=markerId;
+	this->name=name;
+	hp=20;
+	cardsInLib=60;
+	cardsInTomb=0;
+	cardsOnHand=7;
+	mana=0;
+}
 void Player::Draw()
 {
 	Mat img(200,200,CV_64F);

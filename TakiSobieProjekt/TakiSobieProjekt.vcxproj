@@ -89,6 +89,7 @@
     <ClCompile Include="CardB.cpp" />
     <ClCompile Include="cvdrawingutils.cpp" />
     <ClCompile Include="functions.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="marker.cpp" />
     <ClCompile Include="markerdetector.cpp" />
@@ -104,6 +105,7 @@
     <ClInclude Include="CardB.h" />
     <ClInclude Include="cvdrawingutils.h" />
     <ClInclude Include="exports.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="marker.h" />
     <ClInclude Include="markerdetector.h" />
     <ClInclude Include="Player.h" />

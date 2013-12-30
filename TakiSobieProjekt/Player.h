@@ -13,11 +13,14 @@ class Player
 {
 public:
 	Player(void);
-	Player(string name);
+	void Init(string name,int markerId);
+	Player(string name,int markerId);
 	~Player(void);
+	Player &getCurrentPlayer();
 	int hp;
 	string name;
 	int mana;
+	int markerId;
 	int cardsOnHand;
 	int cardsInLib;
 	int cardsInTomb;
