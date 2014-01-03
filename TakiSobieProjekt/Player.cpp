@@ -19,7 +19,7 @@ void Player::Init(string name,int markerId)
 	cardsInLib=60;
 	cardsInTomb=0;
 	cardsOnHand=7;
-	mana=0;
+	mana=10;
 }
 void Player::Draw()
 {

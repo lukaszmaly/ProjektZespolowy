@@ -29,6 +29,7 @@ public:
 	static int ID;
 	int id;
 	bool dead;
+	Point old;
 	bool ready;
 	int att;
 	bool error;
@@ -41,21 +42,27 @@ public:
 	int timer;
 	bool taped;
 	string name;
+	void prepareToBlock();
 	Point a,b,c,d;
 	Mat img;
 	float angle;
 	static const int TTL=10;
 	int ttl;
 	void die();
+	void Clear();
+	bool attack;
+	Point enemy;
+	bool block;
 	void setCardBase(CardB &card);
 	void Compare(Mat &img1,Mat &img2,float tab[3]);
 	Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp);
 	Card(void);
+	void prepareToAttack();
 	float getAngle();
 	int maxC(int a,int b,int c);
 	int minC(int a,int b,int c);
 	string Wynik(int b,int g,int r,int h, int s,int v);
-	void Draw(Mat &img1,vector<CardB>&bkarty);
+	void Draw(Mat &img1,vector<CardB>&bkarty,Game &game);
 	void Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp);
 	Point2f getCenter();
 	static void fastImg(string name,float s)

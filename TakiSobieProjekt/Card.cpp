@@ -153,6 +153,7 @@ Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game
 	taped=false;
 	name="none";
 	this->a=a;
+	old=Point(-1,-1);
 	wantFight=false;
 	this->b=b;
 	this->c=c;
@@ -337,7 +338,7 @@ void Card::Fight(Card &op)
 	if(t2<=0) op.die();
 }
 
-void Card::Draw(Mat &img1,vector<CardB>&bkarty)
+void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 {
 	if(--ttl>0)
 	{
@@ -372,5 +373,28 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty)
 		//putText(img1,"d", Point(d.x,d.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 		putText(img1,cad, getCenter(),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);		
 		putText(img1,cad1, getCenter()+Point2f(0,20),FONT_HERSHEY_SIMPLEX, 0.5,Scalar(0,0,255),2);		
+		if(game.phase==ATAK || game.phase==OBRONA)
+		{
+			if(old.x!=-1) line(img1,old,getCenter(),Scalar(255,0,0),3);
+			if(enemy.x!=-1) line(img1,getCenter(),enemy,Scalar(0,0,255),3);
+		}
 	}
+}
+
+void Card::prepareToAttack()
+{
+	old=getCenter();
+	attack=true;
+}
+void Card::prepareToBlock()
+{
+		old=getCenter();
+	block=true;
+}
+void Card::Clear()
+{
+	attack=false;
+	block=false;
+	old=Point(-1,-1);
+	enemy=Point(-1,-1);
 }

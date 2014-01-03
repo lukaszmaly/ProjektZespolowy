@@ -28,6 +28,6 @@ public:
 	void Update();
 	void Draw();
 
-
+	  int operator==(const Player &p) {return  markerId==p.markerId;}
 };
 
