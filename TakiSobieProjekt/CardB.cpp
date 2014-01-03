@@ -12,8 +12,11 @@ CardB::~CardB(void)
 
 
 
-CardB::CardB(Mat &img,int id,string name,Color color,Type t)
+CardB::CardB(Mat &img,int id,string name,Color color,Type t,int att,int def,int koszt)
 {
+	this->att=att;
+	this->def=def;
+	this->koszt=koszt;
 	this->type=t;
 	this->color = color;
 	this->id = id;

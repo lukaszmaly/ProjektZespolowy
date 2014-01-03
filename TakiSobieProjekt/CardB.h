@@ -15,10 +15,7 @@ enum Color{
 };
 enum Type{
 	CREATURE = 0,
-	INSTANT = 1,
-	SORCERY = 2,
-	ENCHANTMENT = 3,
-	LAND = 4
+	LAND = 1
 };
 
 class CardB
@@ -28,8 +25,10 @@ public:
 	string name;
 	Color color;
 	Mat img;
+	int att,def;
+	int koszt;
 	Type type;
-	CardB(Mat &img1,int id,string name,Color color,Type t);
+	CardB(Mat &img1,int id,string name,Color color,Type t,int att,int def,int koszt);
 	void Update();
 	CardB(void);
 	~CardB(void);

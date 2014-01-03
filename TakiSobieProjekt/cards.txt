@@ -1,4 +1,2 @@
-0 Swamp 4 0
-1 vampir 0 2
-2 prowler 0 4
-3 weight 3 1
+0 Swamp 1 0 0 0
+1 vampire 0 2 2 1

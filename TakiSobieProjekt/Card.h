@@ -23,6 +23,7 @@ using namespace cv;
 class Card
 {
 public:
+	bool wantFight;
 	void Fight(Card &op);
 	CardB cardBase;
 	static int ID;
@@ -30,6 +31,8 @@ public:
 	bool dead;
 	bool ready;
 	int att;
+	bool error;
+	bool nowa;
 	int def;
 	int topIndex;
 	Player owner;
@@ -46,14 +49,14 @@ public:
 	void die();
 	void setCardBase(CardB &card);
 	void Compare(Mat &img1,Mat &img2,float tab[3]);
-	Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game);
+	Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp);
 	Card(void);
 	float getAngle();
 	int maxC(int a,int b,int c);
 	int minC(int a,int b,int c);
 	string Wynik(int b,int g,int r,int h, int s,int v);
-	void Draw(Mat img,vector<CardB>&bkarty);
-	void Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game);
+	void Draw(Mat &img1,vector<CardB>&bkarty);
+	void Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp);
 	Point2f getCenter();
 	static void fastImg(string name,float s)
 	{

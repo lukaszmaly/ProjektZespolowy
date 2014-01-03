@@ -88,12 +88,21 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 	cvtColor(grey_image,a,CV_RGB2GRAY);
 	cvtColor(grey_base,b,CV_RGB2GRAY);
 	absdiff(a,b,diff);
-	Canny(diff,diff,160,160);
-	findContours( diff, contours,hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+	Canny(a,a,160,160);
+	findContours( a, contours,hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+
+
 	for(unsigned int i=0;i<contours.size();i++)
 	{
-		if(contours[i].size()>10) edge_pts.push_back(contours[i]);
+		
+		if(contours[i].size()>5) edge_pts.push_back(contours[i]);
 	}
+	//for(unsigned int i=0;i<contours.size();i++)
+	//{
+	//	
+	//	drawContours(grey_image,contours,i,Scalar(200,00));
+	//}
+		
 	vector<vector<Point> >hull( edge_pts.size() );//tutaj zmiana
 	for(unsigned int i = 0; i < edge_pts.size(); i++ )
 	{  convexHull( Mat(edge_pts[i]), hull[i],true); }
@@ -105,7 +114,7 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 	{
 		approxPolyDP(Mat(edge_pts[i]), approx, arcLength(Mat(edge_pts[i]), true)*0.02, true);
 		if (approx.size() == 4 &&
-			fabs(contourArea(Mat(approx))) > 1000 &&
+			fabs(contourArea(Mat(approx))) > 10 &&
 			isContourConvex(Mat(approx)))
 		{
 			double maxCosine = 0;
@@ -116,7 +125,7 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 				maxCosine = MAX(maxCosine, cosine);
 			}
 
-			if (maxCosine < 0.5)
+			if(maxCosine<=0.4)
 				squares.push_back(approx);
 		}
 	}
@@ -132,7 +141,7 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 		}
 
 	}
-	RemoveSquare(squares);//Ÿle napisane
+	//RemoveSquare(squares);//Ÿle napisane
 	for (unsigned int i = 0; i<squares.size(); i++ ) 
 	{
 		Card::Prepare(squares[i],grey_image);
@@ -143,7 +152,7 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 			if(odleglos(karty[j].getCenter(),Card::getCenter(squares[i][0],squares[i][1],squares[i][2],squares[i][3]))>50) tmp++;
 			else
 			{
-				karty[j].Update(squares[i][0],squares[i][1],squares[i][2],squares[i][3],grey_image,bkarty,game);
+				karty[j].Update(squares[i][0],squares[i][1],squares[i][2],squares[i][3],grey_image,bkarty,game,false);
 			}
 		}
 		if(tmp==karty.size())
@@ -152,7 +161,7 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 			for(unsigned int k=0;k<karty.size();k++)
 			{
 
-				Card ab(squares[i][0],squares[i][1],squares[i][2],squares[i][3],grey_image,bkarty,game);
+				Card ab(squares[i][0],squares[i][1],squares[i][2],squares[i][3],grey_image,bkarty,game,true);
 				if(karty[k].Check(ab)==true) {
 					add=false;
 					break;
@@ -161,7 +170,7 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 
 			char cad[100];
 			sprintf(cad,"Karta: %d %d %d %d P",squares[i][0].x,squares[i][1].x,squares[i][2].x,squares[i][3].x);
-			karty.push_back(Card(squares[i][0],squares[i][1],squares[i][2],squares[i][3],grey_image,bkarty,game));
+			karty.push_back(Card(squares[i][0],squares[i][1],squares[i][2],squares[i][3],grey_image,bkarty,game,false));
 			if (soc.send(cad,strlen(cad)*sizeof(char) , client, port-10) != sf::Socket::Done)
 			{
 				cout<<"Blad podczas wysylania danych"<<endl;
@@ -196,12 +205,12 @@ int main( int argc, char** argv )
 	string dane;
 	while(!plik.eof())
 	{
-		int id=0,t=0,cost=0;
+		int id=0,t=0,cost=0,att,def;
 		char name[10];
 		string name1;
 		char src[10];
 		getline(plik,dane);
-		sscanf(dane.c_str(),"%d %s %d %d",&id,name,&t,&cost);
+		sscanf(dane.c_str(),"%d %s %d %d %d %d",&id,name,&t,&cost,&att,&def);
 		name1=name;
 	Type tt;
 	if(t==0) tt=CREATURE;
@@ -209,7 +218,7 @@ int main( int argc, char** argv )
 		Mat a=imread("C:/umk/"+name1+".jpg");
 		if(!a.data) cout<<"ADS"<<endl;
 	//	imshow("A",a);
-		bkarty.push_back(CardB(a,id,name,Red,tt));
+		bkarty.push_back(CardB(a,id,name,Red,tt,att,def,cost));
 	//cout<<"Karta: "<<id<<" "<<name1<<" "<<t<<" "<<cost<<"|"<<endl;
 		
 
@@ -262,6 +271,9 @@ int main( int argc, char** argv )
 		}
 
 		Wykryj_karty(frame,l_frame,three,karty,bkarty,false,game);
+
+
+		game.Draw();
 		if(cv::waitKey(30)==97) { cout<<"Druga faza"<<endl; bkarty.clear();  }
 
 		if(cv::waitKey(30)==101) 

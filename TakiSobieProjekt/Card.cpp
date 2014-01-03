@@ -95,7 +95,7 @@ void Card::Prepare(vector<Point>&square,Mat &img)
 	//////Poprawianie kolejnoœci punktów
 
 	float a=atan2f(( square[0].y - square[1].y ),( square[0].x - square[1].x ) ) * 180 / M_PI + 180;
-	fastImg("a",a);
+	//fastImg("a",a);
 	if(a>90) 
 	{ 
 		//cout<<"Zamieniam kolejnoœæ punktow"<<endl;
@@ -145,12 +145,15 @@ void Card::Compare(Mat &img1,Mat &img2,float tab[3])
 	}
 }
 
-Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game)
+Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp=false)
 {
+	error=false;
+	nowa=true;
 	owner=game.getCurrentPlayer();
 	taped=false;
 	name="none";
 	this->a=a;
+	wantFight=false;
 	this->b=b;
 	this->c=c;
 	this->d=d;
@@ -162,7 +165,7 @@ Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game
 	dead=false;
 	id=ID++;
 	cout<<"Utworzenie karty id="<<id<<endl;
-	Update(a,b,c,d,img,bkarty,game);
+	Update(a,b,c,d,img,bkarty,game,temp);
 }
 
 bool Card::Check(Card k)
@@ -194,7 +197,7 @@ Point2f Card::getCenter(Point a,Point b,Point c,Point d)
 	return t;
 }
 
-void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game)
+void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp=false)
 {
 	this->a=a;
 	this->b=b;
@@ -238,20 +241,39 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 		float t1=tm[0]+tm[1]+tm[2];
 		if(t1<min) { cardId=i;min=t1;}
 	}
-	imshow("Karta",tmp);
+	if(cardId!=-1)
+	setCardBase(bkarty[cardId]);
+	//imshow("Karta",tmp);
 	if(waitKey(30)==122)
 	{
 		string name;
-		int id;
+		int id,typ,att,def,koszt;
+		Type typek;
 		cout<<"Wpisz nazwe karty:"<<endl;
-		cin>>name;
-		cin >>id;
+		cout<<"Nazwa | Id | koszt | Typ(0-Creature, 1-land) | Atak | Obrna |"<<endl;
+		cin>>name >>id>>koszt>>typ>>att>>def;
+		if(typ==0) typek=CREATURE; else typek=LAND;
 		cout<<"Dodano nowa karte"<<endl;;
 		imshow("Kartadodana"+name,tmp);
 		imwrite( "C:/umk/"+name+".jpg", tmp );
-		bkarty.push_back(CardB(tmp,id,name,Red,CREATURE));
+		bkarty.push_back(CardB(tmp,id,name,Red,typek,att,def,koszt));
 	}
-
+	else if(nowa==true && temp==false)
+	{
+	
+		if(game.getCurrentPlayer().mana<cardBase.koszt)
+		{
+			nowa=true;
+			error=true;
+		}
+		else
+		{
+			game.getCurrentPlayer().mana-=cardBase.koszt;
+				nowa=false;
+		error=false;
+		}
+		
+	}
 }
 int Card::maxC(int a,int b,int c)
 {
@@ -287,7 +309,7 @@ void Card::Untap(Game &game)
 	cout<<"Odtapowano"<<endl;
 	if(this->cardBase.type=LAND)
 	{
-		game.getCurrentPlayer().mana--;
+		if(game.getCurrentPlayer().mana>0)game.getCurrentPlayer().mana--;
 	}
 }
 string Card::Wynik(int b,int g,int r,int h, int s,int v)
@@ -315,17 +337,17 @@ void Card::Fight(Card &op)
 	if(t2<=0) op.die();
 }
 
-void Card::Draw(Mat img,vector<CardB>&bkarty)
+void Card::Draw(Mat &img1,vector<CardB>&bkarty)
 {
 	if(--ttl>0)
 	{
 		char cad[100];
 		char cad1[100];
 
-		line(img,a,b,Scalar(0,0,255),2);
-		line(img,b,c,Scalar(0,0,255),2);
-		line(img,c,d,Scalar(0,0,255),2);
-		line(img,d,a,Scalar(0,0,255),2);
+		line(img1,a,b,Scalar(0,0,255),2);
+		line(img1,b,c,Scalar(0,0,255),2);
+		line(img1,c,d,Scalar(0,0,255),2);
+		line(img1,d,a,Scalar(0,0,255),2);
 
 		if(cardId!=-1)
 		{
@@ -340,11 +362,15 @@ void Card::Draw(Mat img,vector<CardB>&bkarty)
 			sprintf(cad1,"Karta tapnieta(%s)",owner.name.c_str());
 		else
 			sprintf(cad1,"Karta odtapowana(%s)",owner.name.c_str());
-		putText(img,"a", Point(a.x,a.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
-		putText(img,"b", Point(b.x,b.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
-		putText(img,"c", Point(c.x,c.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
-		putText(img,"d", Point(d.x,d.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
-		putText(img,cad, getCenter(),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);		
-		putText(img,cad1, getCenter()+Point2f(0,20),FONT_HERSHEY_SIMPLEX, 0.5,Scalar(0,0,255),2);		
+		if(error==true)
+		{
+			sprintf(cad1,"Brak many. Doplac");
+		}
+		//putText(img1,"a", Point(a.x,a.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+		//putText(img1,"b", Point(b.x,b.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+		//putText(img1,"c", Point(c.x,c.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+		//putText(img1,"d", Point(d.x,d.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+		putText(img1,cad, getCenter(),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);		
+		putText(img1,cad1, getCenter()+Point2f(0,20),FONT_HERSHEY_SIMPLEX, 0.5,Scalar(0,0,255),2);		
 	}
 }
