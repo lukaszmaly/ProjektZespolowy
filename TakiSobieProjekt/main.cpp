@@ -63,9 +63,9 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 	cvtColor(grey_image,a,CV_RGB2GRAY);
 	cvtColor(grey_base,b,CV_RGB2GRAY);
 	absdiff(a,b,diff);
-	Canny(a,a,160,160);
+	Canny(diff,diff,160,160);
 	vector<int> nowododane;
-	findContours( a, contours,hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
+	findContours( diff, contours,hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
 
 
 	for(unsigned int i=0;i<contours.size();i++)
@@ -138,7 +138,7 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 		}
 	}
 
-	if(game.phase==ATAK)
+	if(game.phase==ATAK || game.phase==OBRONA)
 	{
 		for (unsigned int i = 0; i<squares.size(); i++ ) 
 		{
@@ -147,7 +147,7 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 			int minn=10000;
 			for(unsigned int j=0;j< karty.size();j++)
 			{
-				if(odleglos(karty[j].getCenter(),Card::getCenter(squares[i][0],squares[i][1],squares[i][2],squares[i][3]))<minn && karty[j].owner==game.getCurrentPlayer())
+				if(odleglos(karty[j].getCenter(),Card::getCenter(squares[i][0],squares[i][1],squares[i][2],squares[i][3]))<minn)
 				{
 					minn=odleglos(karty[j].getCenter(),Card::getCenter(squares[i][0],squares[i][1],squares[i][2],squares[i][3]));
 					index=j;
@@ -156,29 +156,36 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 			if(index!=-1)
 			{
 				karty[index].Update(squares[i][0],squares[i][1],squares[i][2],squares[i][3],grey_image,bkarty,game,false);
+				if(odleglos(karty[index].getCenter(),karty[index].old)>50) {karty[index].attack==true; }
 			}
-
 		}
 
-		for (unsigned int i = 0; i<karty.size(); i++ ) 
+		if(game.phase==OBRONA)
 		{
-
-			int index=-1;
-			int minn=10000;
-			for(unsigned int j=0;j< karty.size();j++)
+			for (unsigned int i = 0; i<karty.size(); i++ ) 
 			{
-				if(odleglos(karty[j].getCenter(),karty[i].getCenter())<minn && !(karty[j].owner==game.getCurrentPlayer()))
+					if(karty[i].attack==false) continue;
+				if(!(karty[i].owner==game.getCurrentPlayer())) continue;
+				int index=-1;
+				int minn=10000;
+				for(unsigned int j=i+1;j< karty.size();j++)
 				{
-					minn=odleglos(karty[j].getCenter(),karty[i].getCenter());
-					index=j;
+					if(karty[j].attack==false) continue;
+					if(karty[j].owner==game.getCurrentPlayer()) continue;
+					if(odleglos(karty[j].getCenter(),karty[i].getCenter())<minn)
+					{
+						minn=odleglos(karty[j].getCenter(),karty[i].getCenter());
+						index=j;
+					}
 				}
-			}
-			if(index!=-1)
-			{
-				karty[i].enemy=karty[index].getCenter();
-			}
+				if(index!=-1)
+				{
+					karty[i].enemy=karty[index].getCenter();
+				}
 
+			}
 		}
+
 
 	}
 
@@ -237,25 +244,16 @@ int main( int argc, char** argv )
 		cout<<"Utworzono serwer UDP na porcie "<<port<<endl;
 	}
 
-
-
-
-
-
 	VideoCapture capture(0); 
 	Mat frame;
 	Mat l_frame;
-
 	vector<Card> karty;
-
 	capture.set(CV_CAP_PROP_FRAME_WIDTH, 1280 );
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT, 720 );
 	capture.set(CV_CAP_PROP_FOCUS, 13 );
-
-
 	capture.read(frame);
-
 	frame.copyTo(l_frame);
+
 
 	while(1)
 	{

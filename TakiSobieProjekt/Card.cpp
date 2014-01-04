@@ -384,12 +384,12 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 void Card::prepareToAttack()
 {
 	old=getCenter();
-	attack=true;
+	//attack=true;
 }
 void Card::prepareToBlock()
 {
 		old=getCenter();
-	block=true;
+	//block=true;
 }
 void Card::Clear()
 {
