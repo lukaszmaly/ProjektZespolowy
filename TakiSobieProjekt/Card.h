@@ -49,6 +49,7 @@ public:
 	static const int TTL=10;
 	int ttl;
 	void die();
+	bool fresh;
 	void Clear();
 	bool attack;
 	Point enemy;

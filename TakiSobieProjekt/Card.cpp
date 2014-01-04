@@ -10,16 +10,13 @@ Card::~Card(void)
 
 void Card::Prepare(vector<Point>&square,Mat &img)
 {
-	bool f1=false;
-	bool f2=false;
-
 	float ab = Distance(square[0],square[1]);
 	float bc = Distance(square[1],square[2]);
 
 	//Poprawienie bokow
 	if(ab>bc) 
 	{
-		f1=true;
+
 		//cout<<"Poprawianie bokow"<<endl; 
 		Point ta,tb,tc,td;
 		ta=square[0];
@@ -83,7 +80,6 @@ void Card::Prepare(vector<Point>&square,Mat &img)
 	if(tab3[2]<0) r++;
 	if(r>=2)
 	{
-		f2=true;
 		//cout<<"Poprawianie kolwjnoaci"<<endl; 
 		swap(square[0],square[2]);
 		swap(square[1],square[3]);
@@ -151,6 +147,7 @@ Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game
 	nowa=true;
 	owner=game.getCurrentPlayer();
 	taped=false;
+	fresh=false;
 	name="none";
 	this->a=a;
 	old=Point(-1,-1);
@@ -165,17 +162,7 @@ Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game
 	ready=false;
 	dead=false;
 	id=ID++;
-	cout<<"Utworzenie karty id="<<id<<endl;
 	Update(a,b,c,d,img,bkarty,game,temp);
-}
-
-bool Card::Check(Card k)
-{
-	if((a.x<=k.a.x && a.y<=k.a.y) && (b.x>=k.b.x && b.y<=k.b.y) && (c.x>=k.c.x && c.y>=k.c.y) && (d.x<=k.d.x && d.y>=k.d.y))
-	{
-		return true;
-	}
-	return false;
 }
 
 Point2f Card::getCenter()
@@ -367,10 +354,6 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 		{
 			sprintf(cad1,"Brak many. Doplac");
 		}
-		//putText(img1,"a", Point(a.x,a.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
-		//putText(img1,"b", Point(b.x,b.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
-		//putText(img1,"c", Point(c.x,c.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
-		//putText(img1,"d", Point(d.x,d.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 		putText(img1,cad, getCenter(),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);		
 		putText(img1,cad1, getCenter()+Point2f(0,20),FONT_HERSHEY_SIMPLEX, 0.5,Scalar(0,0,255),2);		
 		if(game.phase==ATAK || game.phase==OBRONA)
@@ -384,12 +367,10 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 void Card::prepareToAttack()
 {
 	old=getCenter();
-	//attack=true;
 }
 void Card::prepareToBlock()
 {
 		old=getCenter();
-	//block=true;
 }
 void Card::Clear()
 {

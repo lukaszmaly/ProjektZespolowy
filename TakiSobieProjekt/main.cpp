@@ -19,26 +19,15 @@ using namespace cv;
 using namespace sf;
 using namespace std;
 using namespace aruco;
-const int OD=50;
-int mini=8;
-int maxi=30;
-int three1=1000;
-int three2=1000;
-int three=1800;
-int kernel;
-int biel=1;
 UdpSocket soc;
+int three=1800;
 IpAddress client;
 int port=54000;
-
-
-
 
 int odleglos(Point a,Point b)
 {
 	return std::sqrtf(((b.x-a.x)*(b.x-a.x)+(b.y-a.y)*(b.y-a.y)));
 }
-
 
 double angle( cv::Point pt1, cv::Point pt2, cv::Point pt0 ) {
 	double dx1 = pt1.x - pt0.x;
@@ -49,40 +38,29 @@ double angle( cv::Point pt1, cv::Point pt2, cv::Point pt0 ) {
 }
 
 
-
-void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,vector<CardB> &bkarty,bool first,Game &game)
+void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,vector<CardB> &bkarty,Game &game)
 {
 	Mat a,b;
 	Mat diff;
-	Mat dst;
-	grey_base.copyTo(dst);
+
 	vector<vector<Point> > contours;
 	vector<vector<Point> > edge_pts;
 	vector<Vec4i> hierarchy;
-	grey_image.copyTo(diff);
+	//grey_image.copyTo(diff);
 	cvtColor(grey_image,a,CV_RGB2GRAY);
 	cvtColor(grey_base,b,CV_RGB2GRAY);
 	absdiff(a,b,diff);
 	Canny(diff,diff,160,160);
-	vector<int> nowododane;
 	findContours( diff, contours,hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
-
 
 	for(unsigned int i=0;i<contours.size();i++)
 	{
-
 		if(contours[i].size()>5) edge_pts.push_back(contours[i]);
 	}
-	//for(unsigned int i=0;i<contours.size();i++)
-	//{
-	//	
-	//	drawContours(grey_image,contours,i,Scalar(200,00));
-	//}
 
 	vector<vector<Point> >hull( edge_pts.size() );//tutaj zmiana
 	for(unsigned int i = 0; i < edge_pts.size(); i++ )
 	{  convexHull( Mat(edge_pts[i]), hull[i],true); }
-
 
 	vector<vector<Point> > squares;
 	vector<Point> approx;
@@ -106,9 +84,11 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 	}
 
 	int tmp=0;
+	vector<Card> kartyTemp;
+	
+	//sprawdzenie czy wykryte krawedzie sa rzeczywiscie kartami
 	for (unsigned int i = 0; i<squares.size(); i++ ) 
 	{
-
 		if(Card::Valid(squares[i][0],squares[i][1],squares[i][2],squares[i][3])==false)
 		{
 			squares.erase(squares.begin()+i);
@@ -118,25 +98,46 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 		if(squares[i][1].y>squares[i][3].y) swap(squares[i][1],squares[i][3]);
 	}
 
-	if(game.phase==PIERWSZY || game.phase==DRUGI)
+	//tworzenie tymczaswego wektora z wykrytymi kartami na stole
+	for (unsigned int i = 0; i<squares.size(); i++ ) 
 	{
-		for (unsigned int i = 0; i<squares.size(); i++ ) 
+		kartyTemp.push_back(Card(squares[i][0],squares[i][1],squares[i][2],squares[i][3],grey_image,bkarty,game,true));
+	}
+
+	//aktualizacja kart "ktore powinny znajdowac siê na stole"
+	for (unsigned int i = 0; i<karty.size(); i++ ) 
+	{
+		karty[i].fresh=false;
+		int index=-1;
+		int minn=10000;
+		for(unsigned int j=0;j<kartyTemp.size();j++)
 		{
-			tmp=0;
-			Card::Prepare(squares[i],grey_image);
-			for(unsigned int j=0;j< karty.size();j++)
+			if(karty[i].cardBase.id==kartyTemp[j].cardBase.id && kartyTemp[j].fresh==false)
 			{
-				if(odleglos(karty[j].getCenter(),Card::getCenter(squares[i][0],squares[i][1],squares[i][2],squares[i][3]))>50)
-					tmp++;
-				else
-					karty[j].Update(squares[i][0],squares[i][1],squares[i][2],squares[i][3],grey_image,bkarty,game,false);
+				if(odleglos(karty[i].getCenter(),kartyTemp[j].getCenter())<minn)
+				{
+					minn=odleglos(karty[i].getCenter(),kartyTemp[j].getCenter());
+					index=j;
+				}
 			}
-			if(tmp==karty.size())
+			if(index!=-1)
 			{
-				karty.push_back(Card(squares[i][0],squares[i][1],squares[i][2],squares[i][3],grey_image,bkarty,game,false));
+				kartyTemp[j].fresh=true;
+				karty[i].Update(kartyTemp[index].a,kartyTemp[index].b,kartyTemp[index].c,kartyTemp[index].d,grey_image,bkarty,game,false);
 			}
 		}
 	}
+
+	//dodanie nowych kart, które mog³y siê pojawiæ
+	for(unsigned int i=0;i<kartyTemp.size();i++)
+	{
+		if(kartyTemp[i].fresh==false)
+		{
+			karty.push_back(kartyTemp[i]);
+		}
+	}
+
+
 
 	if(game.phase==ATAK || game.phase==OBRONA)
 	{
@@ -164,7 +165,7 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 		{
 			for (unsigned int i = 0; i<karty.size(); i++ ) 
 			{
-					if(karty[i].attack==false) continue;
+				if(karty[i].attack==false) continue;
 				if(!(karty[i].owner==game.getCurrentPlayer())) continue;
 				int index=-1;
 				int minn=10000;
@@ -189,10 +190,9 @@ void Wykryj_karty(Mat &grey_image,Mat &grey_base, int tresh,vector<Card> &karty,
 
 	}
 
-
+	//wyswietlenie wszytkich kart
 	for(unsigned int i=0;i<karty.size();i++)
 	{
-
 		karty[i].Draw(grey_image,bkarty,game);
 	}
 
@@ -207,7 +207,7 @@ int main( int argc, char** argv )
 	MarkerDetector MDetector;
 	vector<Marker> markers;
 	vector<CardB> bkarty;
-
+	cout<<"Wczytywanie kart"<<endl;
 	fstream plik("cards.txt", ios::in );
 	string dane;
 	while(!plik.eof())
@@ -223,21 +223,17 @@ int main( int argc, char** argv )
 		if(t==0) tt=CREATURE;
 		else tt=LAND;
 		Mat a=imread("C:/umk/"+name1+".jpg");
-		if(!a.data) cout<<"ADS"<<endl;
-		//	imshow("A",a);
+		if(!a.data) {cout<<"Nie znaleziono karty "<< name<<".jpg"<<endl; continue;}
 		bkarty.push_back(CardB(a,id,name,Red,tt,att,def,cost));
-		//cout<<"Karta: "<<id<<" "<<name1<<" "<<t<<" "<<cost<<"|"<<endl;
-
-
 	}
-	cout<<"Koniec"<<endl;
+	cout<<"Wczytalem karty"<<endl;
 
 	client =IpAddress::getLocalAddress();
 
 	if(soc.bind(port) !=Socket::Done)
 	{
 		cout<<"Blad podczas tworzenia socketa"<<endl;
-		//return 1;
+		return 1;
 	}
 	else
 	{
@@ -259,23 +255,23 @@ int main( int argc, char** argv )
 	{
 		markers.clear();
 		capture.read(frame);
-
 		MDetector.detect(frame,markers);
 		for(int i=0;i<markers.size();i++) 
 		{
 			if(markers[i].id==ACTION)
 			{
-				if(action.x==-1) { action=markers[i].getCenter();}
+				if(action.x==-1) 
+				{ 
+					action=markers[i].getCenter();
+				}
 				else
 				{
 					if(odleglos(action,markers[i].getCenter())>=100)
 					{
 						action=markers[i].getCenter();
 						game.nextPhase();
-						if(game.phase==ATAK && game.zmiana==true)
+						if(game.phase==ATAK)
 						{
-							cout<<"Zmian1a"<<endl;
-							game.zmiana=false;
 							for(int j=0;j<karty.size();j++)
 							{
 								if(karty[j].owner==game.getCurrentPlayer())
@@ -284,10 +280,8 @@ int main( int argc, char** argv )
 								}
 							}
 						}
-						if(game.phase==OBRONA && game.zmiana==true)
+						else if(game.phase==OBRONA)
 						{
-							cout<<"Zmian1a"<<endl;
-							game.zmiana=false;
 							for(int j=0;j<karty.size();j++)
 							{
 								if(!(karty[j].owner==game.getCurrentPlayer()))
@@ -296,50 +290,36 @@ int main( int argc, char** argv )
 								}
 							}
 						}
-						if(game.phase==WYMIANA && game.zmiana==true)
+						else if(game.phase==WYMIANA)
 						{
-							game.zmiana=false;
 							for(int j=0;j<karty.size();j++)
 							{
 								karty[j].Clear();
 							}
 						}
-
 					}
 				}
 			}
-			markers[i].draw(frame,Scalar(100,100,100));
+
 			if(game.player1.markerId==markers[i].id && game.aPlayer!=game.player1.markerId) {game.aPlayer=markers[i].id; cout<<"Zmiana gracza"<<endl; break;}
 			if(game.player2.markerId==markers[i].id && game.aPlayer!=game.player2.markerId) {game.aPlayer=markers[i].id; cout<<"Zmiana gracza"<<endl;break;}
-
 		}
 
-		Wykryj_karty(frame,l_frame,three,karty,bkarty,false,game);
+
+		Wykryj_karty(frame,l_frame,three,karty,bkarty,game);
 
 
 		game.Draw();
-		if(cv::waitKey(30)==97) { cout<<"Druga faza"<<endl; bkarty.clear();  }
 
-		if(cv::waitKey(30)==101) 
-		{ 
-			cout<<"Usuwam ostatnio dodana karte"<<endl;
-			if(bkarty.size()!=0) 
-			{
-				bkarty.pop_back(); 	
-				cout<<"Karta usunieta"<<endl;
-			}
-			else
-				cout<<"Brak kart"<<endl;
-		}
-		if(cv::waitKey(20)==32) 
+
+		if(cv::waitKey(20)==32) //spacja
 		{
 			frame.copyTo(l_frame);
 			cout<<"Zaladowano ponownie klatke bazowa!"<<endl;
 		} 
+
 		if(cv::waitKey(30)==27) break;
 
-		//	player1.Draw();
-		//	player2.Draw();
 	}
 	capture.release();
 	cv::waitKey(0);
