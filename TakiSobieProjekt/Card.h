@@ -13,11 +13,11 @@
 #include "CardB.h"
 #include "Game.h"
 #include "Player.h"
-#define MIN_D1 1.37
+#define MIN_D1 1.39
 #define MAX_D1 1.45
 #define M_PI 3.14159265358979323846
 #define MIN_D2 0.67
-#define MAX_D2 0.73
+#define MAX_D2 0.76
 using namespace std;
 using namespace cv;
 class Card
@@ -46,7 +46,7 @@ public:
 	Point a,b,c,d;
 	Mat img;
 	float angle;
-	static const int TTL=10;
+	static const int TTL=30;
 	int ttl;
 	void die();
 	bool fresh;
@@ -68,11 +68,11 @@ public:
 	Point2f getCenter();
 	static void fastImg(string name,float s)
 	{
-		Mat img(200,200,CV_64F);
+		Mat *img = new Mat(200,200,CV_64F);
 		char cad[100];
-		sprintf(cad,"%f",s);
-		putText(img,cad, Point(10,10),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(200,200,200),2);
-		imshow(name,img);
+		sprintf(cad,"%.2f",s);
+		putText(*img,cad, Point(10,10),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(200,200,200),2);
+		imshow(name,*img);
 
 	}
 
@@ -95,6 +95,9 @@ public:
 	{
 		float a1=Distance(a,b)/Distance(b,c);
 		float a2=Distance(b,c)/Distance(c,d);
+		//fastImg("1",a1);
+		//fastImg("2",a2);
+
 		if(((a1>=MIN_D1 && a1<=MAX_D1) || (a1>=MIN_D2 && a1<=MAX_D2)) && ((a2>=MIN_D1 && a2<=MAX_D1) || (a2>=MIN_D2 && a2<=MAX_D2)))
 		{
 			return true;

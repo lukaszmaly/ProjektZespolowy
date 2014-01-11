@@ -187,10 +187,13 @@ Point2f Card::getCenter(Point a,Point b,Point c,Point d)
 
 void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp=false)
 {
+	if(temp==false)
+	{
 	this->a=a;
 	this->b=b;
 	this->c=c;
 	this->d=d;
+	}
 	ttl=TTL;
 	bool taptemp=false;
 	if(getAngle()>45) taptemp=true;
@@ -216,6 +219,7 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 	Point2f c2[4] = {Point2f(0,0), Point2f(251,0), Point2f(251,356),Point2f(0,356)};
 	Mat mmat(3,3,CV_32FC1);
 	mmat=getAffineTransform(c1,c2);
+
 	warpAffine(t,tmp,mmat,Size(251,356));
 
 
@@ -285,7 +289,7 @@ void Card::setCardBase(CardB &card)
 
 void Card::Tap(Game &game)
 {
-	cout<<"Tapnieto"<<endl;
+	//cout<<"Tapnieto"<<endl;
 	if(this->cardBase.type=LAND)
 	{
 		game.getCurrentPlayer().mana++;
@@ -294,7 +298,7 @@ void Card::Tap(Game &game)
 
 void Card::Untap(Game &game)
 {
-	cout<<"Odtapowano"<<endl;
+	//cout<<"Odtapowano"<<endl;
 	if(this->cardBase.type=LAND)
 	{
 		if(game.getCurrentPlayer().mana>0)game.getCurrentPlayer().mana--;
@@ -336,6 +340,10 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 		line(img1,b,c,Scalar(0,0,255),2);
 		line(img1,c,d,Scalar(0,0,255),2);
 		line(img1,d,a,Scalar(0,0,255),2);
+putText(img1,"a", Point(a.x,a.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+putText(img1,"b", Point(b.x,b.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+putText(img1,"c", Point(c.x,c.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+putText(img1,"d", Point(d.x,d.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 
 		if(cardId!=-1)
 		{

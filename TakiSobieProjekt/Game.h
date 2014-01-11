@@ -1,5 +1,8 @@
 #pragma once
 #include "Player.h"
+#include "Server.h"
+
+
 
 enum Phase {
 	PIERWSZY = 0,
@@ -13,11 +16,16 @@ enum Phase {
 class Game
 {
 public:
+Server server;
+
 	int aPlayer;
+	Point action;
 	bool zmiana;
 	Player player1;
 	Player player2;
 	Phase phase;
+
+
 
 	void nextPhase()
 	{
@@ -55,10 +63,14 @@ public:
 
 	void Update()
 	{
-		if(waitKey(20)==116) //t
-		{
-			cout<<"Kolejna faza"<<endl;
-		}
+		
+	
+	
+
+
+
+
+
 	}
 	void Draw()
 	{
@@ -71,13 +83,15 @@ public:
 		if(aPlayer==player1.markerId) return player1;
 		return player2;
 	}
-	Game(string player1s,int player1Id,string player2s,int player2Id)
+	Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port)
 	{
+		
 		zmiana=false;
 		phase=PIERWSZY;
 		player1.Init(player1s,player1Id);
 		player2.Init(player2s,player2Id);
 		aPlayer=player1.markerId;
+		server.Init(ip,port);
 	}
 	~Game()
 	{

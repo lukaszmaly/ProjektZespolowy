@@ -29,7 +29,7 @@ CardB::CardB(Mat &img,int id,string name,Color color,Type t,int att,int def,int 
 }
 void CardB::Update()
 {
-
+	
 	Mat img = imread(name);
 	if(!img.data)
 	{
