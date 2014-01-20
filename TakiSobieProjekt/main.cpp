@@ -23,9 +23,10 @@ using namespace std;
 
 int port=54000;
 
-
+int c=0;
 int three=80;
-
+int maxArea= 25;
+int minArea=9;
 int zmienna=40;
 int white=2800;
 
@@ -45,6 +46,7 @@ double angle( cv::Point pt1, cv::Point pt2, cv::Point pt0 ) {
 
 void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<CardB> &bkarty,Game &game)
 {
+	c++;
 	Mat diff;
 	vector<vector<Point> > contours;
 	vector<vector<Point> > edge_pts;
@@ -72,8 +74,9 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<CardB> &
 	{
 		approxPolyDP(Mat(edge_pts[i]), approx, arcLength(Mat(edge_pts[i]), true)*0.02, true);
 
-		if (approx.size() == 4 && fabs(contourArea(Mat(approx)))>15500)
+		if (approx.size() == 4 && fabs(contourArea(Mat(approx)))>minArea*1000 && fabs(contourArea(Mat(approx)))<maxArea*1000)
 		{
+		//	cout<<"Rozmiar"<<fabs(contourArea(Mat(approx)))<<endl;
 			double maxCosine = 0;
 			for (int j=2; j<5; j++)
 			{
@@ -156,6 +159,10 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<CardB> &
 			{
 				kartyTemp[index].fresh=true;
 				karty[i].Update(kartyTemp[index].a,kartyTemp[index].b,kartyTemp[index].c,kartyTemp[index].d,grey_image,bkarty,game,false);
+						int owner = 1;
+			if(kartyTemp[i].owner==game.player2) owner=2;
+				if(c>5)
+				game.server.UpdateCard(karty[i].id,karty[i].cardBase.id,owner,karty[i].a,karty[i].b,karty[i].c,karty[i].d,karty[i].taped);
 			}
 	}
 
@@ -165,9 +172,15 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<CardB> &
 		if(kartyTemp[i].fresh==false)
 		{
 			karty.push_back(kartyTemp[i]);
+			int owner = 1;
+			if(kartyTemp[i].owner==game.player2) owner=2;
+			game.server.sendNewCard(kartyTemp[i].id,kartyTemp[i].cardBase.id,owner,kartyTemp[i].a,kartyTemp[i].b,kartyTemp[i].c,kartyTemp[i].d,kartyTemp[i].taped);
+			cout<<"Karta("<<karty.size()<<endl;
 		}
 	}
-
+	if(c>5)
+		c=0;
+	
 	///poprawka
 			for (unsigned int i = 0; i<karty.size(); i++ ) 
 	{
@@ -175,7 +188,7 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<CardB> &
 		{
 			if(i!=j && odleglos(karty[i].getCenter(),karty[j].getCenter())<30)
 			{
-				karty.erase(karty.begin()+j);
+				karty.erase(karty.begin()+max(j,i));
 				j=-1;
 				i=-1;
 				break;
@@ -184,32 +197,52 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<CardB> &
 	}
 
 
-			cout<<"Ilosc kart:"<<karty.size()<<endl;
+		//	cout<<"Ilosc kart:"<<karty.size()<<endl;
 
 
 	if(game.phase==ATAK || game.phase==OBRONA)
 	{
 		for (unsigned int i = 0; i<squares.size(); i++ ) 
 		{
-			Card::Prepare(squares[i],grey_image);
-			int index=-1;
-			int minn=10000;
-			for(unsigned int j=0;j< karty.size();j++)
-			{
-				if(odleglos(karty[j].getCenter(),Card::getCenter(squares[i][0],squares[i][1],squares[i][2],squares[i][3]))<minn)
+		
+			
+				if(odleglos(karty[i].getCenter(),karty[i].old)>50) 
 				{
-					minn=odleglos(karty[j].getCenter(),Card::getCenter(squares[i][0],squares[i][1],squares[i][2],squares[i][3]));
-					index=j;
+					if(game.phase==ATAK)
+					karty[i].attack==true; 
+		if(game.phase==OBRONA)
+					karty[i].block==true; 
+
 				}
-			}
-			if(index!=-1)
-			{
-				karty[index].Update(squares[i][0],squares[i][1],squares[i][2],squares[i][3],grey_image,bkarty,game,false);
-				if(odleglos(karty[index].getCenter(),karty[index].old)>50) {karty[index].attack==true; }
-			}
+			
 		}
 
-		if(game.phase==OBRONA)
+			for (unsigned int i = 0; i<squares.size(); i++ ) 
+		{
+			float minn=999999;
+			int index=-1;
+			for (unsigned int j = 0; j<squares.size(); j++ ) 
+		{
+		
+			if(i!=j && ( (karty[i].block==true && karty[j].attack==true) ||  (karty[j].block==true && karty[i].attack==true)) && odleglos(karty[i].getCenter(),karty[j].getCenter())<minn) 
+				{
+		
+					minn=odleglos(karty[i].getCenter(),karty[j].getCenter());
+					index=j;
+				}
+			
+		}
+			if(index!=-1)
+			{
+				karty[i].enemy=karty[index].getCenter();
+				karty[index].enemy=karty[i].getCenter();
+			}
+
+
+
+
+	}
+	/*	if(game.phase==OBRONA)
 		{
 			for (unsigned int i = 0; i<karty.size(); i++ ) 
 			{
@@ -233,7 +266,7 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<CardB> &
 				}
 
 			}
-		}
+		}*/
 
 
 	}
@@ -250,6 +283,43 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<CardB> &
 
 	imshow("Podglad", grey_image);
 }
+int bb=0;
+void draw_s(vector<Marker> markers,Mat &img,Game &game)
+{
+	int t=0;
+	Point a,b,c,d;
+	for(int i=0;i<markers.size();i++)
+	{
+		if(markers[i].id==341) {t++; a=markers[i].getCenter();}
+		if(markers[i].id==1005) {t++; b=markers[i].getCenter();}
+		if(markers[i].id==791) {t++; c=markers[i].getCenter();}
+		if(markers[i].id==977) {t++; d=markers[i].getCenter();}
+	}
+	if(t==4)
+	{
+		line(img,a,b,Scalar(0,0,200),1);
+			line(img,b,c,Scalar(0,0,200),1);
+				line(img,c,d,Scalar(0,0,200),1);
+					line(img,a,d,Scalar(0,0,200),1);
+
+
+						Point2f c1[4] = {a,b,c,d};
+	Point2f c2[4] = {Point2f(0,0), Point2f(800,0), Point2f(800,600),Point2f(0,600)};
+		Mat mmat(3,3,CV_32FC1);
+	mmat=getAffineTransform(c2,c1);
+	if(bb==0){
+		
+		cout<<mmat<<endl; bb=1;
+	game.server.macierz=mmat;
+	
+	}
+	
+
+	}
+	
+
+}
+
 
 int Card::ID=0;
 int main( int argc, char** argv )
@@ -262,11 +332,13 @@ int main( int argc, char** argv )
 	createTrackbar("Threeshold","Ustawienia",&three,200);
 	createTrackbar("Zmienna ","Ustawienia",&zmienna,100);
 	createTrackbar("Balans bieli ","Ustawienia",&white,10000);
+	createTrackbar("Min area ","Ustawienia",&minArea,100);
+			createTrackbar("Max arrea ","Ustawienia",&maxArea,100);
 
 
-
-	Game game("lukasz",985,"daniel",838,"25.172.199.151",6121);
-
+	Game game("lukasz",985,"daniel",838,"25.172.199.151",6121,1280,720);
+//	game.server.addPlayer(1,"lukasz");
+	//game.server.addPlayer(2,"daniel");
 	vector<CardB> bkarty;
 	cout<<"Wczytywanie kart"<<endl;
 	fstream plik("cards.txt", ios::in );
@@ -286,6 +358,7 @@ int main( int argc, char** argv )
 		Mat a=imread("C:/umk/"+name1+".jpg");
 		if(!a.data) {cout<<"Nie znaleziono karty "<< name<<".jpg"<<endl; continue;}
 		bkarty.push_back(CardB(a,id,name,Red,tt,att,def,cost));
+
 	}
 	cout<<"Wczytalem karty"<<endl;
 
@@ -308,6 +381,7 @@ int main( int argc, char** argv )
 		MDetector.detect(frame,markers);
 		for(int i=0;i<markers.size();i++) 
 		{
+			markers[i].draw(frame,Scalar(0,0,255),3);
 			if(markers[i].id==ACTION)
 			{
 				if(action.x==-1) 
@@ -353,6 +427,9 @@ int main( int argc, char** argv )
 
 			if(game.player1.markerId==markers[i].id && game.aPlayer!=game.player1.markerId) {game.aPlayer=markers[i].id; cout<<"Zmiana gracza"<<endl; break;}
 			if(game.player2.markerId==markers[i].id && game.aPlayer!=game.player2.markerId) {game.aPlayer=markers[i].id; cout<<"Zmiana gracza"<<endl;break;}
+	
+		draw_s(markers,frame,game);
+		
 		}
 
 		Wykryj_karty(frame,three,karty,bkarty,game);

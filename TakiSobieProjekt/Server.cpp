@@ -1,12 +1,7 @@
 #include "Server.h"
 
 
-Server::Server()
-{
-	
 
-
-}
 void Server::Init(string ip,int port)
 {
 	client=ip;

@@ -331,7 +331,7 @@ void Card::Fight(Card &op)
 
 void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 {
-	if(--ttl>0)
+	if(--ttl>=0)
 	{
 		char cad[100];
 		char cad1[100];
@@ -340,6 +340,7 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 		line(img1,b,c,Scalar(0,0,255),2);
 		line(img1,c,d,Scalar(0,0,255),2);
 		line(img1,d,a,Scalar(0,0,255),2);
+		line(img1,getCenter()-Point2f(15,0),getCenter()+Point2f(15,0),Scalar(0,0,255),2);
 putText(img1,"a", Point(a.x,a.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 putText(img1,"b", Point(b.x,b.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 putText(img1,"c", Point(c.x,c.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);

@@ -22,9 +22,11 @@ Server server;
 	Point action;
 	bool zmiana;
 	Player player1;
+
 	Player player2;
 	Phase phase;
-
+	int gameWidth;
+	int gameHeight;
 
 
 	void nextPhase()
@@ -83,9 +85,10 @@ Server server;
 		if(aPlayer==player1.markerId) return player1;
 		return player2;
 	}
-	Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port)
+	Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h)
 	{
-		
+		gameWidth=w;
+		gameHeight=h;
 		zmiana=false;
 		phase=PIERWSZY;
 		player1.Init(player1s,player1Id);
