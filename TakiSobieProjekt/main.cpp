@@ -54,6 +54,7 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<CardB> &
 	vector<Vec4i> hierarchy;
 	cvtColor(grey_image,diff,CV_RGB2GRAY);
 	Canny(diff,diff,tresh,tresh);
+	
 	findContours( diff, contours,hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
 
 	for(unsigned int i=0;i<contours.size();i++)
@@ -286,10 +287,14 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<CardB> &
 int bb=0;
 void draw_s(vector<Marker> markers,Mat &img,Game &game)
 {
+	Mat dst;
+	dst.cols=800;
+	dst.rows=600;
 	int t=0;
 	Point a,b,c,d;
 	for(int i=0;i<markers.size();i++)
 	{
+		markers[i].draw(img,Scalar(200,0,0),3);
 		if(markers[i].id==341) {t++; a=markers[i].getCenter();}
 		if(markers[i].id==1005) {t++; b=markers[i].getCenter();}
 		if(markers[i].id==791) {t++; c=markers[i].getCenter();}
@@ -297,26 +302,53 @@ void draw_s(vector<Marker> markers,Mat &img,Game &game)
 	}
 	if(t==4)
 	{
-		line(img,a,b,Scalar(0,0,200),1);
+	/*	line(img,a,b,Scalar(0,0,200),1);
 			line(img,b,c,Scalar(0,0,200),1);
 				line(img,c,d,Scalar(0,0,200),1);
 					line(img,a,d,Scalar(0,0,200),1);
-
+*/
 
 						Point2f c1[4] = {a,b,c,d};
 	Point2f c2[4] = {Point2f(0,0), Point2f(800,0), Point2f(800,600),Point2f(0,600)};
 		Mat mmat(3,3,CV_32FC1);
-	mmat=getAffineTransform(c2,c1);
-	if(bb==0){
-		
-		cout<<mmat<<endl; bb=1;
-	game.server.macierz=mmat;
-	
+	mmat=getPerspectiveTransform(c1,c2);
+	warpPerspective(img,dst,mmat,Size(800,600));
+
+	imshow("Druga",dst);
+
+
+
+	//if(bb==0){
+	//	
+	//	cout<<mmat<<endl; bb=1;
+	//game.server.macierz=mmat;
+	//
+	//}
+		int width=dst.cols;
+	int channels=dst.channels();
+	int height=dst.rows;
+	int r=200;
+	for(int x=0;x<dst.cols;x++)
+for(int y=0;y<dst.rows;y++)
+{
+	if(dst.data[channels*(width*y + x)]>50 &&
+			dst.data[channels*(width*y + x) +1]>50 &&
+			dst.data[channels*(width*y + x) +2]>50)
+	{
+		dst.data[channels*(width*y + x)]=255;
+			dst.data[channels*(width*y + x) +1]=255;
+			dst.data[channels*(width*y + x) +2]=255;
 	}
-	
+}
+
+	//dst=dst/200;
+	//dst=dst*200;
+
 
 	}
-	
+			imshow("Frame",img);
+			
+			img=dst;
 
 }
 
@@ -371,7 +403,22 @@ int main( int argc, char** argv )
 
 
 	capture.read(frame);
+	cout<<"ALA"<<endl;
+	while(1)
+	{
+		capture.read(frame);
+		markers.clear();
+		MDetector.detect(frame,markers);
+		draw_s(markers,frame,game);
+		if(frame.data)
+		Wykryj_karty(frame,three,karty,bkarty,game);
+			if(cv::waitKey(30)==27) break;
 
+	}
+		cout<<"ALA"<<endl;
+		capture.release();
+	cv::waitKey(0);
+	return 0;
 	while(1)
 	{
 
