@@ -5,16 +5,20 @@ import processing.core.*;
 
 import java.util.*;
 
+import MTGPackage.Effect.Type;
+
 
 public class Main extends PApplet
 	{
+	PFont f;
 	int x1,x2,y1,y2;
 	PImage img;
-	SparkSystem ss;
+	SparkSystem ss,start;
 	Board b;
 	UDP udp; 
 	int counter;
 	ArrayList<Card> Cards=new ArrayList<Card>();
+	ArrayList<Effect> Effects=new ArrayList<Effect>();
 
 	int[][] T;
 	
@@ -23,18 +27,83 @@ public class Main extends PApplet
 	public void setup() {	
 		
 	    size(displayWidth,displayHeight);
+	    f=new PFont();
+	    f=createFont("Arial",200,true);
 	    frameRate(60);
 	    udp = new UDP( this,6121);
 	    udp.listen( true );
 	    b=new Board(this);
+	  
+	  Effects.add(new Effect(this));
+	  Effects.get(0).type=Type.START;
+	  Effects.get(0).life=100;
+	  start=new SparkSystem(new PVector(0,0),this);
+  start.sparkType='e';
+	  start.r=220+(int)random(40);
+	  
+			  start.g=220+(int)random(40);
+					  start.b=50+(int)random(40);
+	  
+					  background(0);
+						
 	    
 	  }
 
 	  public void draw() {
-		  //counter++;
-	    stroke(100);
-	    background(0);
-	    b.display();
+		  
+		  
+			   
+		  if(Effects.get(0).type==Type.START && Effects.get(0).life>0)
+			
+		  {
+			 background(0);
+			  
+			  Effects.get(0).life--;
+			  if(start.sparks.isEmpty()!=true) start.run();
+			   
+			   if(Effects.get(0).life>70)
+			   {
+				   start.source=new PVector(random(width),random(height));
+				 start.addParticle();  
+				 start.addParticle(); 
+				 start.addParticle(); 
+				 start.addParticle(); 
+				 
+				
+			   }
+			   if(Effects.get(0).life>60)
+			   {
+				   
+				   start.source=new PVector(random(width),random(height));
+					 start.addParticle(); 
+					 start.addParticle(); 
+					 start.addParticle(); 
+			   }
+			   if(Effects.get(0).life>50)
+			   {
+				   
+				   start.source=new PVector(random(width),random(height));
+					 start.addParticle(); 
+					 start.addParticle(); 
+			   }
+			   
+			   if(Effects.get(0).life<50)
+			   {
+				   textFont(f);
+				   fill(60-Effects.get(0).life,250-4*Effects.get(0).life,30-Effects.get(0).life);
+
+				   textAlign(CENTER);
+				   text("ATMagic",width/2,height/2);
+				 
+			   }
+				
+		  }
+		  else
+		  {
+			  b.display(255,40,4); 
+		  
+	    
+			  
 	    
 	    if(Cards.isEmpty()==false)
 	    {
@@ -77,9 +146,10 @@ public class Main extends PApplet
 	    	}
 	    	
 	    }
-	  //  if(counter>100) counter=0;
+	 
 	    
 	    }
+	  }
 	
 	  public void receive( byte[] data, String ip, int port ) {	 
 		  data = subset(data, 0, data.length);

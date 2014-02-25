@@ -7,12 +7,17 @@ public class SparkSystem {
 	
 	  ArrayList<Spark> sparks;
 	  PVector source;
-
+	  char sparkType='p';
+	  int r,g,b;
+	  
 	  SparkSystem(PVector l,PApplet p) 
 	  	{
 		parent=p;
 	    source = l.get();
 	    sparks = new ArrayList<Spark>();
+	    r=0;
+	    g=0;
+	    b=0;
 	  	}
 	
 	  public void addParticle() 
@@ -25,6 +30,10 @@ public class SparkSystem {
 		    for (int i = sparks.size()-1; i >= 0; i--) 
 		    {
 		      Spark s = sparks.get(i);
+		      s.type=this.sparkType;
+		      s.r=this.r;
+		      s.g=this.g;
+		      s.b=this.b;
 		      s.run();
 		      if (s.isDead()) 
 		      	{
