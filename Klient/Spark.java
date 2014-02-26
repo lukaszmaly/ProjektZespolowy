@@ -26,7 +26,7 @@ public class Spark {
 		 a = new PVector(parent.random(0.2f)-0.1f,parent.random(0.2f)-0.1f);
 		    v = new PVector(parent.random(-5f,5f),parent.random(-5,5));
 		    loc = l.get();
-		    life = 30f;
+		    life = 20f;
 		    r=0;
 		    g=0;
 		    b=0;
@@ -55,7 +55,25 @@ public class Spark {
 		  parent.fill(r,g,b,life*5);
 		  switch(this.type)
 		  {
-		  case 'e': parent.ellipse(loc.x, loc.y,3+ parent.random(7), 3+parent.random(7)); break;
+		  case 'e': 
+			//  parent.stroke(r,g,b,10);
+			//  parent.fill(r,g,b,10);
+			//  parent.ellipse(loc.x, loc.y,500+ parent.random(7), 500+parent.random(7));
+			  if(parent.millis()%2==0)
+			  {
+			  parent.stroke(r-10,g-10,b-10,2);
+			  parent.fill(r-10,g-10,b-10,2);
+			  parent.ellipse(loc.x, loc.y,200, 200);
+			  }
+			
+			  
+			  parent.stroke(r,g,b,life*5);
+			  parent.fill(r,g,b,life*5);
+			  parent.ellipse(loc.x, loc.y,10, 10); 
+			  
+		  
+		  
+		  break;
 		  case 'p': 
 		  			parent.point(loc.x,loc.y); break;
 		  case 'c': parent.line(loc.x-9, loc.y, loc.x+9, loc.y);

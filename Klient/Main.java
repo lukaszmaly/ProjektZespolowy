@@ -16,7 +16,7 @@ public class Main extends PApplet
 	SparkSystem ss,start;
 	Board b;
 	UDP udp; 
-	int counter;
+	int counter=0;
 	ArrayList<Card> Cards=new ArrayList<Card>();
 	ArrayList<Effect> Effects=new ArrayList<Effect>();
 
@@ -27,6 +27,7 @@ public class Main extends PApplet
 	public void setup() {	
 		
 	    size(displayWidth,displayHeight);
+	    background(0);
 	    f=new PFont();
 	    f=createFont("Arial",200,true);
 	    frameRate(60);
@@ -44,20 +45,21 @@ public class Main extends PApplet
 			  start.g=220+(int)random(40);
 					  start.b=50+(int)random(40);
 	  
-					  background(0);
+					 
 						
 	    
 	  }
 
 	  public void draw() {
-		  
+		 if(counter<255) counter++;
 		  
 			   
 		  if(Effects.get(0).type==Type.START && Effects.get(0).life>0)
 			
 		  {
 			 background(0);
-			  
+			// fill(start.r=220+(int)random(40),start.r=220+(int)random(40),start.r=0+(int)random(40),200-4*Effects.get(0).life);
+
 			  Effects.get(0).life--;
 			  if(start.sparks.isEmpty()!=true) start.run();
 			   
@@ -90,17 +92,23 @@ public class Main extends PApplet
 			   if(Effects.get(0).life<50)
 			   {
 				   textFont(f);
-				   fill(60-Effects.get(0).life,250-4*Effects.get(0).life,30-Effects.get(0).life);
+				   fill(start.r=220+(int)random(40),start.r=220+(int)random(40),start.r=50+(int)random(40),200-4*Effects.get(0).life);
 
 				   textAlign(CENTER);
 				   text("ATMagic",width/2,height/2);
+				   
 				 
 			   }
 				
 		  }
 		  else
 		  {
-			  b.display(255,40,4); 
+			  fill(start.r=220+(int)random(40),start.r=220+(int)random(40),start.r=(int)random(40));
+
+				  background(0);
+				  b.display(counter,40,4);
+				  
+
 		  
 	    
 			  
@@ -149,6 +157,16 @@ public class Main extends PApplet
 	 
 	    
 	    }
+	  }
+	  public void keyPressed()
+	  {
+		  
+		 // loop();
+		  
+		  
+
+		  if(key=='s')  Effects.get(0).life=100;
+		  fill(start.r=220+(int)random(40),start.r=220+(int)random(40),start.r=(int)random(40),200-4*Effects.get(0).life);
 	  }
 	
 	  public void receive( byte[] data, String ip, int port ) {	 
