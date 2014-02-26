@@ -145,9 +145,10 @@ Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game
 {
 	error=false;
 	nowa=true;
+	stosCompleted=false;
 	owner=game.getCurrentPlayer();
 	taped=false;
-	fresh=false;
+
 	name="none";
 	this->a=a;
 	old=Point(-1,-1);
@@ -163,6 +164,7 @@ Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game
 	dead=false;
 	id=ID++;
 	Update(a,b,c,d,img,bkarty,game,temp);
+	old=getCenter();
 }
 
 Point2f Card::getCenter()
@@ -194,7 +196,7 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 	this->c=c;
 	this->d=d;
 	}
-	ttl=TTL;
+	if(dead==false)ttl=TTL;
 	bool taptemp=false;
 	if(getAngle()>45) taptemp=true;
 	if(taptemp!=taped)
@@ -209,7 +211,7 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 			Tap(game);
 		}
 	}
-
+	if(game.phase==PIERWSZY || game.phase==DRUGI) {old=getCenter(); enemy=Point(-1,-1);}
 	Mat tmp;
 	Mat t;
 	img.copyTo(t);
@@ -243,17 +245,21 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 		Type typek;
 		cout<<"Wpisz nazwe karty:"<<endl;
 		cout<<"Nazwa | Id | koszt | Typ(0-Creature, 1-land) | Atak | Obrna |"<<endl;
-		cin>>name >>id>>koszt>>typ>>att>>def;
-		if(typ==0) typek=CREATURE; else typek=LAND;
+		//cin>>name >>id>>koszt>>typ>>att>>def;
+			cin>>name;
+		//if(typ==0) typek=CREATURE; else typek=LAND;
 		cout<<"Dodano nowa karte"<<endl;;
 		imshow("Kartadodana"+name,tmp);
 		imwrite( "C:/umk/"+name+".jpg", tmp );
-		bkarty.push_back(CardB(tmp,id,name,Red,typek,att,def,koszt));
+		//bkarty.push_back(CardB(tmp,id,name,Red,typek,att,def,koszt));
 	}
 	else if(nowa==true && temp==false)
 	{
-	
-		if(game.getCurrentPlayer().mana<cardBase.koszt)
+	nowa=false;
+	att=cardBase.att;
+	def=cardBase.def;
+
+		/*if(game.getCurrentPlayer().mana<cardBase.koszt)
 		{
 			nowa=true;
 			error=true;
@@ -263,7 +269,7 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 			game.getCurrentPlayer().mana-=cardBase.koszt;
 				nowa=false;
 		error=false;
-		}
+		}*/
 		
 	}
 }
@@ -325,6 +331,8 @@ void Card::Fight(Card &op)
 {
 	int t1=def-op.att;
 	int t2=op.def-att;
+	def=def-op.att;
+	op.def=op.def-att;
 	if(t1<=0) die();
 	if(t2<=0) op.die();
 }
@@ -340,11 +348,11 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 		line(img1,b,c,Scalar(0,0,255),2);
 		line(img1,c,d,Scalar(0,0,255),2);
 		line(img1,d,a,Scalar(0,0,255),2);
-		line(img1,getCenter()-Point2f(15,0),getCenter()+Point2f(15,0),Scalar(0,0,255),2);
 putText(img1,"a", Point(a.x,a.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 putText(img1,"b", Point(b.x,b.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 putText(img1,"c", Point(c.x,c.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 putText(img1,"d", Point(d.x,d.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+
 
 		if(cardId!=-1)
 		{
@@ -365,11 +373,43 @@ putText(img1,"d", Point(d.x,d.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 		}
 		putText(img1,cad, getCenter(),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);		
 		putText(img1,cad1, getCenter()+Point2f(0,20),FONT_HERSHEY_SIMPLEX, 0.5,Scalar(0,0,255),2);		
-		if(game.phase==ATAK || game.phase==OBRONA)
+	if(att!=-1)
+	{
+		char cad3[100];
+		sprintf(cad3,"Att: %d",att);
+		putText(img1,cad3, d-Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
+	}
+
+		if(def!=-1)
 		{
-			if(old.x!=-1) line(img1,old,getCenter(),Scalar(255,0,0),3);
-			if(enemy.x!=-1) line(img1,getCenter(),enemy,Scalar(0,0,255),3);
+			char cad4[100];
+			sprintf(cad4,"Def: %d",def);
+			putText(img1,cad4, c-Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
 		}
+
+
+		if(game.phase==ATAK || (game.phase==OBRONA && attack==true))
+		{
+			
+			if(attack==true) {line(img1,old,getCenter(),Scalar(255,0,0),3); putText(img1,"Atakuje",getCenter()+Point2f(0,50),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	}
+		}
+
+				if(game.phase==OBRONA)
+		{
+			
+			if(block==true)
+			{
+				line(img1,old,getCenter(),Scalar(255,0,0),3);
+			putText(img1,"Bronie",getCenter()+Point2f(0,50),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
+			if(enemy.x!=-1) {cout<<"RYSUJE"<<endl;line(img1,getCenter(),enemy,Scalar(100,100,100),3);}
+			}
+		}
+				if(dead==true)
+				{
+					line(img1,a,c,Scalar(255,0,0),3);
+					line(img1,b,d,Scalar(255,0,0),3);
+				}
+
 	}
 }
 
@@ -385,6 +425,6 @@ void Card::Clear()
 {
 	attack=false;
 	block=false;
-	old=Point(-1,-1);
+	old=getCenter();
 	enemy=Point(-1,-1);
 }

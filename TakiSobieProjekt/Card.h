@@ -42,6 +42,7 @@ public:
 	int timer;
 	bool taped;
 	string name;
+	bool stosCompleted;
 	void prepareToBlock();
 	Point a,b,c,d;
 	Mat img;
@@ -49,10 +50,9 @@ public:
 	static const int TTL=30;
 	int ttl;
 	void die();
-	bool fresh;
 	void Clear();
 	bool attack;
-	Point enemy;
+	Point2f enemy;
 	bool block;
 	void setCardBase(CardB &card);
 	void Compare(Mat &img1,Mat &img2,float tab[3]);

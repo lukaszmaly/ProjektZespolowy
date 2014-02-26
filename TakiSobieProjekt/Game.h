@@ -1,7 +1,8 @@
 #pragma once
 #include "Player.h"
 #include "Server.h"
-
+#include <string>
+using namespace std;
 
 
 enum Phase {
@@ -27,10 +28,71 @@ Server server;
 	Phase phase;
 	int gameWidth;
 	int gameHeight;
+	Point cardScaner;
 
+	void setFaza(int i)
+	{
+		switch(i)
+		{
+		case 0:
+				
+			phase=PIERWSZY;
+			break;
 
+		case 1:
+			phase=ATAK;
+			break;
+
+		case 2:
+			phase=OBRONA;
+			break;
+
+		case 3:
+			phase=WYMIANA;
+			break;
+
+		case 4:
+			phase=DRUGI;
+			break;
+		}
+	}
+
+	void setPlayer(int i)
+	{
+		aPlayer= player2.markerId;
+		if(i==0) aPlayer= player1.markerId;
+
+	}
+
+	string getCurrentPhase()
+	{
+		switch(phase)
+		{
+		case PIERWSZY:
+				
+			return "Faza pierwsza";
+			break;
+
+		case ATAK:
+			return "Faza ataku";
+			break;
+
+		case OBRONA:
+			return "Faza obrony";
+			break;
+
+		case WYMIANA:
+			return "Faza wymiany obrazen";
+			break;
+
+		case DRUGI:
+			return "Faza druga";
+			break;
+		}
+	}
 	void nextPhase()
 	{
+		
 		zmiana=true;
 	
 		switch(phase)

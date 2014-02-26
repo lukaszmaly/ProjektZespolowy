@@ -1,6 +1,4 @@
 0 Swamp1 1 0 0 0
-1 brawl 0 2 2 1
-2 pajak 0 2 2 1
-3 rat 0 2 2 1
-4 vampire1 0 2 2 1
-5 alley 0 2 2 1
+1 victim 0 2 2 1
+2 pajak 0 2 2 3
+3 vampir 0 2 2 1

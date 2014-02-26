@@ -86,9 +86,9 @@ Server()
 		}
 		else
 		{
-			cout<<"Wyslano wiadomosc:"<<endl;
-			cout<<data<<endl;
-			cout<<"Koniec wiadomosci"<<endl;
+		//	cout<<"Wyslano wiadomosc:"<<endl;
+		//	cout<<data<<endl;
+			//cout<<"Koniec wiadomosci"<<endl;
 		}
 
 				}
@@ -125,9 +125,9 @@ Server()
 		}
 				else
 		{
-			cout<<"Wyslano wiadomosc:"<<endl;
-			cout<<data<<endl;
-			cout<<"Koniec wiadomosci"<<endl;
+			//cout<<"Wyslano wiadomosc:"<<endl;
+		//	cout<<data<<endl;
+		//	cout<<"Koniec wiadomosci"<<endl;
 		}
 	}
 
