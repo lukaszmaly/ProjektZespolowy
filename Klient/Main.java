@@ -46,7 +46,12 @@ public class Main extends PApplet
 			  start.g=220+(int)random(40);
 					  start.b=50+(int)random(40);
 					  start.size=12;
-	  
+					  
+					 // start.v=new PVector(random(0.2f)-0.1f,random(0.2f)-0.1f);
+					 // start.a=new PVector(random(-5f,5f),random(-5,5));
+					  start.v=new PVector(0.3f,0.3f);
+					  start.a=new PVector(3f,3f);
+					 start.life=40;
 					 
 						
 	    
@@ -59,7 +64,7 @@ public class Main extends PApplet
 		  if(Effects.get(0).type==Type.START && Effects.get(0).life>0)
 			
 		  {
-			 background(0);
+			  background(0);
 			// fill(start.r=220+(int)random(40),start.r=220+(int)random(40),start.r=0+(int)random(40),200-4*Effects.get(0).life);
 
 			  Effects.get(0).life--;
@@ -67,10 +72,12 @@ public class Main extends PApplet
 			   
 			   if(Effects.get(0).life>70)
 			   {
-				   start.source=new PVector(random(width),random(height));
+				   
+				 start.source=new PVector(random(width),random(height));
 				 start.addParticle();  
-				 start.addParticle(); 
-				 start.addParticle(); 
+				 start.source=new PVector(random(width),random(height));
+				 start.addParticle();  
+				 start.source=new PVector(random(width),random(height));
 				 start.addParticle(); 
 				 
 				
@@ -80,15 +87,16 @@ public class Main extends PApplet
 				   
 				   start.source=new PVector(random(width),random(height));
 					 start.addParticle(); 
-					 start.addParticle(); 
-					 start.addParticle(); 
+					 start.source=new PVector(random(width),random(height));
+					 start.addParticle();
 			   }
 			   if(Effects.get(0).life>50)
 			   {
 				   
 				   start.source=new PVector(random(width),random(height));
 					 start.addParticle(); 
-					 start.addParticle(); 
+					 
+					 
 			   }
 			   
 			   if(Effects.get(0).life<50)
@@ -98,7 +106,7 @@ public class Main extends PApplet
 
 				   textAlign(CENTER);
 				   text("ATMagic",width/2,height/2);
-				   
+				  
 				 
 			   }
 				
@@ -183,7 +191,7 @@ case 's':  Effects.get(0).life=100;
 case '1': 	Cards.get(1).frame=true; break;
 case '2': 	Cards.get(2).frame=true; break;
 case '3': 	Cards.get(3).frame=true; break;
-case 'm': 	Cards.get(1).move(new PVector(50,50));
+//case 'm': 	Cards.get(1).move(new PVector(50,50));
 
 			
 			
