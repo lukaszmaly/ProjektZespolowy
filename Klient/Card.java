@@ -1,16 +1,20 @@
 package MTGPackage;
 import processing.core.*;
+
 import java.util.*;
 
 public class Card
 {
 	PApplet parent;
+	PVector[] loc;
   int x1, y1, x2, y2, x3, y3, x4, y4;
   ArrayList<SparkEdge> se;
   int sparkTime=40;
   int id;
   int db_id;
   int owner;
+  boolean frame,frameCounter=false;
+  int frameLife=0;
   
   int height()
   {
@@ -27,29 +31,61 @@ public class Card
 	
   }
   
-  void drawEdges(int c)
+  void move(PVector m)
   {
-	  /*
-	  parent.strokeWeight(4);
-	  int counter=c%5;
-	  parent.println(counter);
-	  for(int i=1;i<5;i++)
-	  {
-	  int[][] section=this.divideEdge(i, 5);
-	
+	  this.loc[0].x+=m.x;
+	  this.loc[0].y+=m.y;
+	  this.loc[1].x+=m.x;
+	  this.loc[1].y+=m.y;
+	  this.loc[2].x+=m.x;
+	  this.loc[2].y+=m.y;
+	  this.loc[3].x+=m.x;
+	  this.loc[3].y+=m.y;
+		
 	  
-	  parent.println(section[counter][0]);
-	  if(counter==4) parent.line(section[counter][0],section[counter][1] , section[counter+1][0],section[counter+1][1]);
-		  parent.line(section[counter][0],section[counter][1] , section[counter+1][0],section[counter+1][1]);
+  }
+  
+  void moveTo(PVector m)
+  {
+	  this.loc[0].x=m.x;
+	  this.loc[0].y=m.y;
+	  this.loc[1].x=m.x;
+	  this.loc[1].y=m.y;
+	  this.loc[2].x=m.x;
+	  this.loc[2].y=m.y;
+	  this.loc[3].x=m.x;
+	  this.loc[3].y=m.y;
+		
 	  
-		  
-	  parent.line(section[counter][0],section[counter][1] , section[counter+1][0],section[counter+1][1]);
-	  }
-	*/
-	  parent.line(x1, y1, x2, y2);
-	  parent.line(x2, y2, x3, y3);
-	  parent.line(x3, y3, x4, y4);
-	  parent.line(x4, y4, x1, y1);
+  }
+  void drawEdges(int r,int g, int b,int t)
+  {
+	  if(frameLife==0) frameCounter=true;
+	  if(frameLife>100) frameCounter=false;
+	 
+	  if(frameCounter==true) frameLife++; else frameLife--;
+
+
+  
+  	parent.stroke(r,g,b,frameLife);
+	  parent.line(loc[0].x, loc[0].y, loc[1].x, loc[1].y);
+	  parent.stroke(0);
+	  	parent.point(loc[0].x, loc[0].y);
+	  parent.stroke(0);
+	  parent.point(loc[1].x, loc[1].y);
+	  
+	  parent.stroke(r,g,b,frameLife);
+	  parent.line(loc[1].x, loc[1].y, loc[2].x, loc[2].y);
+	  parent.stroke(0);
+	  parent.point(loc[2].x, loc[2].y);
+	  
+	  parent.stroke(r,g,b,frameLife);
+	  parent.line(loc[2].x, loc[2].y, loc[3].x, loc[3].y);
+	  parent.stroke(0);
+	  parent.point(loc[3].x, loc[3].y);
+	  
+	  parent.stroke(r,g,b,frameLife);
+	  parent.line(loc[3].x, loc[3].y, loc[0].x, loc[0].y);
   }
   
     int[][] divideEdge(int section,int n) //odcinek 1..4, ilosc podzialow
@@ -155,16 +191,24 @@ public class Card
   Card(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,int id,int db_id,int owner,PApplet p)
   {
 	  parent=p;
+	  frame=true;
+	  loc=new PVector[4];
 	  
-    this.x1=x1;
-    this.x2=x2;
-    this.x3=x3;
-    this.x4=x4;
-   
-     this.y1=y1;
-    this.y2=y2;
-    this.y3=y3;
-    this.y4=y4;
+	  loc[0]=new PVector(x1,y1);
+	  loc[1]=new PVector(x2,y2);
+	  loc[2]=new PVector(x3,y3);
+	  loc[3]=new PVector(x4,y4);
+	 
+	      this.x1=x1;
+	      this.x2=x2;
+	      this.x3=x3;
+	      this.x4=x4;
+	     
+	       this.y1=y1;
+	      this.y2=y2;
+	      this.y3=y3;
+	      this.y4=y4;
+
   this.id=id;
   this.db_id=db_id;
   this.owner=owner;
@@ -189,9 +233,15 @@ public class Card
  
  se.add(new SparkEdge(T,p));
  T=this.divideEdge(4, 5);
-/*
+
  se.add(new SparkEdge(T,p));
-*/
+
+	for(int i=0;i<se.size();i++)
+	{
+		SparkEdge e=se.get(i);
+		e.changeSparkType('p',220,225,80,5);
+		
+	}
   
   }
 

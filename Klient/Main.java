@@ -12,6 +12,7 @@ public class Main extends PApplet
 	{
 	PFont f;
 	int x1,x2,y1,y2;
+	
 	PImage img;
 	SparkSystem ss,start;
 	Board b;
@@ -44,6 +45,7 @@ public class Main extends PApplet
 	  
 			  start.g=220+(int)random(40);
 					  start.b=50+(int)random(40);
+					  start.size=12;
 	  
 					 
 						
@@ -118,22 +120,24 @@ public class Main extends PApplet
 	    	for(int i=0;i<Cards.size();i++)
 	    	{
 	    		Card c=Cards.get(i);
-	    		
-	    		img=loadImage(c.db_id+".jpg");
-	    		int h=img.height;
-	    		int w=img.width;
-	    		
-	    		float scaleX=((float)c.height())/h;
-	    		float scaleY=((float)c.width())/w;
-	    		pushMatrix();
-	    		translate(c.x1, c.y1);
-	    		scale(scaleY,scaleX);
-	    		image(img, 0, 0);
-	    		
-	    		popMatrix();
-
 	    		stroke(255,0,0);
-	    		strokeWeight(5);	    		
+	    		strokeWeight(5);
+	    		if(c.frame==true)
+	    			c.drawEdges(255,0,0,50);
+	    		//img=loadImage(c.db_id+".jpg");
+	    		//int h=img.height;
+	    	//	int w=img.width;
+	    		
+	    	//	float scaleX=((float)c.height())/h;
+	    	//	float scaleY=((float)c.width())/w;
+	    	//	pushMatrix();
+	    	//	translate(c.x1, c.y1);
+	    	//	scale(scaleY,scaleX);
+	    	//	image(img, 0, 0);
+	    		
+	    	//	popMatrix();
+
+	    			    		
 	    	//	if(counter%2==0)
 	    		//	c.drawEdges(counter);
 	    		if(c.se.size()>0)
@@ -144,7 +148,13 @@ public class Main extends PApplet
 	    				for(int k=0;k<se.ss.size();k++)
 	    		    	{
 	    		    		SparkSystem ss=se.ss.get(k);
-	    		    		if(c.sparkTime>0 && millis()%2==0) ss.addParticle();
+	    		    		//ss.sparkType='e';
+	    		    		//ss.r=0;
+	    		    		//ss.g=0;
+	    		    		//ss.b=250;
+	    		    		println(ss.source.x,",",ss.source.y);
+	    		    		//if(c.sparkTime>0 && millis()%2==0) ss.addParticle();
+	    		    		if(c.sparkTime>0 ) ss.addParticle();
 	    		    	ss.run();
 	    		    	}
 	    			}
@@ -164,10 +174,25 @@ public class Main extends PApplet
 		 // loop();
 		  
 		  
+switch(key){
+			
 
-		  if(key=='s')  Effects.get(0).life=100;
+case 's':  Effects.get(0).life=100;
 		  fill(start.r=220+(int)random(40),start.r=220+(int)random(40),start.r=(int)random(40),200-4*Effects.get(0).life);
+		  break;
+case '1': 	Cards.get(1).frame=true; break;
+case '2': 	Cards.get(2).frame=true; break;
+case '3': 	Cards.get(3).frame=true; break;
+case 'm': 	Cards.get(1).move(new PVector(50,50));
+
+			
+			
+			
+
+		  
 	  }
+	  }
+
 	
 	  public void receive( byte[] data, String ip, int port ) {	 
 		  data = subset(data, 0, data.length);
@@ -206,7 +231,7 @@ public class Main extends PApplet
 							c.y3=Integer.parseInt(Dane[11]);
 							 c.x4=Integer.parseInt(Dane[12]);
 								c.y4=Integer.parseInt(Dane[13]);
-								c.drawEdges(counter);
+								c.drawEdges(255,0,0,50);
 								
 				 }
 			 }
@@ -215,7 +240,10 @@ public class Main extends PApplet
 	  }
 	  public void mousePressed()
 	  {
-		  Cards.add(new Card(mouseX,mouseY,mouseX+100,mouseY,mouseX+100,mouseY+150,mouseX,mouseY+150,1,1,0,this));
+		  int id=1;
+		  for(int i=0;i<Cards.size();i++)
+			  if(Cards.get(i).id>=id) id=Cards.get(i).id+1;
+		  Cards.add(new Card(mouseX,mouseY,mouseX+100,mouseY,mouseX+100,mouseY+150,mouseX,mouseY+150,id,id,0,this));
 		  
 	  }
 

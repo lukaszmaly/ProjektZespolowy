@@ -11,6 +11,7 @@ public class Spark {
 	
 	//rodzaj czasteczki, predkosc, polozenie, przyspieszenie i czas trwania
 	 char type;
+	 int size;
 	 PVector v;
 	 PVector loc;
 	 PVector a;
@@ -18,6 +19,7 @@ public class Spark {
 	 int r;
 	 int g;
 	 int b;
+	 
 
 	 //Konstruktor z lokalizacja	
 	Spark(PVector l,PApplet p)
@@ -32,7 +34,7 @@ public class Spark {
 		    b=0;
 	}
 	
-	//update polozenia i wyswietlanie
+	
 	public void run() 
 	{
 		update();
@@ -63,18 +65,18 @@ public class Spark {
 			  {
 			  parent.stroke(r-10,g-10,b-10,2);
 			  parent.fill(r-10,g-10,b-10,2);
-			  parent.ellipse(loc.x, loc.y,200, 200);
+			  parent.ellipse(loc.x, loc.y,size*20, size*20);
 			  }
 			
 			  
 			  parent.stroke(r,g,b,life*5);
 			  parent.fill(r,g,b,life*5);
-			  parent.ellipse(loc.x, loc.y,10, 10); 
+			  parent.ellipse(loc.x, loc.y,size, size); 
 			  
 		  
 		  
 		  break;
-		  case 'p': 
+		  case 'p': parent.strokeWeight((int)(size*0.6));
 		  			parent.point(loc.x,loc.y); break;
 		  case 'c': parent.line(loc.x-9, loc.y, loc.x+9, loc.y);
 		  			parent.line(loc.x, loc.y-9, loc.x, loc.y+9);

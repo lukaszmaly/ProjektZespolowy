@@ -8,7 +8,7 @@ public class SparkSystem {
 	  ArrayList<Spark> sparks;
 	  PVector source;
 	  char sparkType='p';
-	  int r,g,b;
+	  int r,g,b,size;
 	  
 	  SparkSystem(PVector l,PApplet p) 
 	  	{
@@ -18,6 +18,7 @@ public class SparkSystem {
 	    r=0;
 	    g=0;
 	    b=0;
+	    size=5;
 	  	}
 	
 	  public void addParticle() 
@@ -34,6 +35,7 @@ public class SparkSystem {
 		      s.r=this.r;
 		      s.g=this.g;
 		      s.b=this.b;
+		      s.size=this.size;
 		      s.run();
 		      if (s.isDead()) 
 		      	{
