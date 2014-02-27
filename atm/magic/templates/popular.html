@@ -1,0 +1,11 @@
+{% extends "stat.html" %}
+
+{% block content %}
+<h1>Popularne karty</h1>
+
+<ul>
+{% for k,i in d.items %}
+  <li> {{ k }} : {{ i }} </li>
+{% endfor %}
+</ul>
+{% endblock %}

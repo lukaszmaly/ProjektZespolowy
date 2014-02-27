@@ -1,0 +1,14 @@
+erwin
+Raziel
+
+time:21
+
+hp:14
+hp:0
+
+erwin <wojownik>
+erwin <lucznik>
+Raziel <wojownik>
+Raziel <lucznik>
+Raziel <zwiadowca>
+
