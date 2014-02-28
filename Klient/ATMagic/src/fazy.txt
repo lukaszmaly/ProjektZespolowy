@@ -1,0 +1,28 @@
+zmiany w klasie board.java
+
+//dodatkowe zmienne globalne 
+Phrases obiekt;
+PImage img;
+int frame_num = 1;
+
+
+
+//wywo³anie w display()
+this.drawPhrase(1200,300);
+
+
+
+//funkcja 
+
+public void drawPhrase(int x, int y)
+{	
+    float stopnie = 0;
+    frame_num += 1; 
+    if(frame_num>600) frame_num=1;
+    stopnie = (float) (0.6 * frame_num);
+    img = parent.loadImage("kolo.png");
+    parent.translate(x+50,y+50);
+    parent.rotate(parent.radians(stopnie));
+    parent.translate(-(x+50),-(y+50)); 
+    parent.image(img,x,y);
+}
