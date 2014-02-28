@@ -2,29 +2,22 @@ package MTGPackage;
 
 import hypermedia.net.UDP;
 import processing.core.*;
-
 import java.util.*;
-
 import MTGPackage.Effect.Type;
-
 
 public class Main extends PApplet
 	{
 	PFont f;
-	int x1,x2,y1,y2;
 	
-	PImage img;
+	PImage skull;
+	int x1,x2,y1,y2,counter=0;
 	SparkSystem ss,start;
 	Board b;
 	UDP udp; 
-	int counter=0;
 	ArrayList<Card> Cards=new ArrayList<Card>();
 	ArrayList<Effect> Effects=new ArrayList<Effect>();
-
 	int[][] T;
-	
-		
-	
+
 	public void setup() {	
 		
 	    size(displayWidth,displayHeight);
@@ -32,122 +25,114 @@ public class Main extends PApplet
 	    f=new PFont();
 	    f=createFont("Arial",200,true);
 	    frameRate(60);
+	    skull=loadImage("skull.jpg");
 	    udp = new UDP( this,6121);
 	    udp.listen( true );
 	    b=new Board(this);
 	  
-	  Effects.add(new Effect(this));
-	  Effects.get(0).type=Type.START;
-	  Effects.get(0).life=100;
-	  start=new SparkSystem(new PVector(0,0),this);
-  start.sparkType='e';
-	  start.r=220+(int)random(40);
-	  
-			  start.g=220+(int)random(40);
-					  start.b=50+(int)random(40);
-					  start.size=12;
-					  
-					 // start.v=new PVector(random(0.2f)-0.1f,random(0.2f)-0.1f);
-					 // start.a=new PVector(random(-5f,5f),random(-5,5));
-					  start.v=new PVector(0.3f,0.3f);
-					  start.a=new PVector(3f,3f);
-					 start.life=40;
-					 
-						
+	    Effects.add(new Effect(this));
+	   // Effects.get(0).type=Type.START;
+	    Effects.get(0).life=100;
+	    start=new SparkSystem(new PVector(0,0),this);
+	    start.sparkType='c';
+	    start.r=220+(int)random(40);
+	    start.g=220+(int)random(40);
+		start.b=50+(int)random(40);
+		start.size=10;
+		start.v=null;
+		start.a=null;
+		
+		start.life=100;
 	    
 	  }
 
-	  public void draw() {
-		 if(counter<255) counter++;
-		  
-			   
-		  if(Effects.get(0).type==Type.START && Effects.get(0).life>0)
+	  public void draw() 
+	  	{
+		if(counter<255) counter++;
+		if(Effects.get(0).type==Type.START && Effects.get(0).life>0)	
+			{
+			start.v=new PVector(0.5f,0.5f);
+			start.a=new PVector(0.05f,0.05f);
+			background(0);
+			Effect e=Effects.get(0);
+			e.life--;
 			
-		  {
-			  background(0);
-			// fill(start.r=220+(int)random(40),start.r=220+(int)random(40),start.r=0+(int)random(40),200-4*Effects.get(0).life);
-
-			  Effects.get(0).life--;
-			  if(start.sparks.isEmpty()!=true) start.run();
-			   
-			   if(Effects.get(0).life>70)
-			   {
-				   
+			if(start.sparks.isEmpty()!=true) start.run();
+			if(e.life>70)
+			   	{				
+				
 				 start.source=new PVector(random(width),random(height));
 				 start.addParticle();  
 				 start.source=new PVector(random(width),random(height));
 				 start.addParticle();  
-				 start.source=new PVector(random(width),random(height));
-				 start.addParticle(); 
-				 
 				
 			   }
-			   if(Effects.get(0).life>60)
-			   {
-				   
-				   start.source=new PVector(random(width),random(height));
-					 start.addParticle(); 
-					 start.source=new PVector(random(width),random(height));
-					 start.addParticle();
+			if(e.life>60)
+				{
+				start.source=new PVector(random(width),random(height));
+				start.addParticle(); 
+				
 			   }
-			   if(Effects.get(0).life>50)
+			   if(e.life>50)
 			   {
-				   
 				   start.source=new PVector(random(width),random(height));
-					 start.addParticle(); 
-					 
-					 
+				   start.addParticle(); 
 			   }
 			   
-			   if(Effects.get(0).life<50)
+			   if(e.life<50)
 			   {
 				   textFont(f);
-				   fill(start.r=220+(int)random(40),start.r=220+(int)random(40),start.r=50+(int)random(40),200-4*Effects.get(0).life);
-
+				   //fill(start.r=220+(int)random(40),start.r=220+(int)random(40),start.r=50+(int)random(40),200-4*Effects.get(0).life);
+				   fill(240,240,70);
 				   textAlign(CENTER);
 				   text("ATMagic",width/2,height/2);
-				  
-				 
+ 
 			   }
 				
 		  }
 		  else
 		  {
-			  fill(start.r=220+(int)random(40),start.r=220+(int)random(40),start.r=(int)random(40));
-
-				  background(0);
-				  b.display(counter,40,4);
-				  
-
-		  
-	    
-			  
-	    
+			  //fill(start.r=220+(int)random(40),start.r=220+(int)random(40),start.r=(int)random(40));
+			  background(0);
+			  b.display(counter,40,4);
+   
 	    if(Cards.isEmpty()==false)
 	    {
 	    	for(int i=0;i<Cards.size();i++)
 	    	{
+	    		
 	    		Card c=Cards.get(i);
+	    		println(c.id+" "+c.frameRate+c.isDead);
+	    		if(c.isDead==true && c.deadCounter<=0)
+	    		{
+	    			Cards.remove(i);
+	    		}
+	    		else
+	    		{
 	    		stroke(255,0,0);
 	    		strokeWeight(5);
 	    		if(c.frame==true)
 	    			c.drawEdges(255,0,0,50);
-	    		//img=loadImage(c.db_id+".jpg");
-	    		//int h=img.height;
-	    	//	int w=img.width;
-	    		
-	    	//	float scaleX=((float)c.height())/h;
-	    	//	float scaleY=((float)c.width())/w;
-	    	//	pushMatrix();
-	    	//	translate(c.x1, c.y1);
-	    	//	scale(scaleY,scaleX);
-	    	//	image(img, 0, 0);
-	    		
-	    	//	popMatrix();
-
-	    			    		
-	    	//	if(counter%2==0)
-	    		//	c.drawEdges(counter);
+	    		if(c.isDead==true)
+	    		{
+	    			c.frameRate=4;
+	    			pushMatrix();
+	    			translate(c.loc[0].x,c.loc[0].y);
+	    			//skull.resize((int)(c.loc[1].x-c.loc[0].x),(int)(c.loc[2].y-c.loc[1].y));
+	    			
+	    			tint(200-c.deadCounter);
+	    			//skull.resize(100, 50);
+	    			image(skull,0,0,c.width(),c.height());
+	    			popMatrix();
+	    			
+	    			
+	    		}
+	    		f=createFont("Arial",10,true);
+	    		textFont(f);
+	    		String s=	"id: "+c.id+"\ndead:"+c.isDead+"\nframeLife:"+c.frameLife+"\nframeRate:"+c.frameRate+"\nsparkTime"+c.sparkTime+"\nframeCounter:"+c.frameCounter+"\ndeadCounter: "+c.deadCounter;
+				   fill(240,240,70);
+				   textAlign(CENTER);
+				   text(s,(c.loc[0].x+c.loc[1].x)/2,c.loc[0].y+20);
 	    		if(c.se.size()>0)
 	    		{
 	    			for(int j=0;j<c.se.size();j++)
@@ -156,12 +141,9 @@ public class Main extends PApplet
 	    				for(int k=0;k<se.ss.size();k++)
 	    		    	{
 	    		    		SparkSystem ss=se.ss.get(k);
-	    		    		//ss.sparkType='e';
-	    		    		//ss.r=0;
-	    		    		//ss.g=0;
-	    		    		//ss.b=250;
-	    		    		println(ss.source.x,",",ss.source.y);
-	    		    		//if(c.sparkTime>0 && millis()%2==0) ss.addParticle();
+	    		    		ss.r=240;
+	    		    		ss.g=240;
+	    		    		ss.b=20;
 	    		    		if(c.sparkTime>0 ) ss.addParticle();
 	    		    	ss.run();
 	    		    	}
@@ -170,6 +152,7 @@ public class Main extends PApplet
 	    		}
 	    		c.sparkTime--;
 	    	}
+	    	}
 	    	
 	    }
 	 
@@ -177,13 +160,8 @@ public class Main extends PApplet
 	    }
 	  }
 	  public void keyPressed()
-	  {
-		  
-		 // loop();
-		  
-		  
+	  {	  
 switch(key){
-			
 
 case 's':  Effects.get(0).life=100;
 		  fill(start.r=220+(int)random(40),start.r=220+(int)random(40),start.r=(int)random(40),200-4*Effects.get(0).life);
@@ -191,14 +169,15 @@ case 's':  Effects.get(0).life=100;
 case '1': 	Cards.get(1).frame=true; break;
 case '2': 	Cards.get(2).frame=true; break;
 case '3': 	Cards.get(3).frame=true; break;
-//case 'm': 	Cards.get(1).move(new PVector(50,50));
-
-			
-			
-			
-
-		  
-	  }
+case 'm': 	for(int i=0;i<Cards.size();i++)
+				{
+				Cards.get(i).moveTo(new PVector(random(width),random(height)));
+				}
+			break;
+case 'd':	if(Cards.isEmpty()==false)
+			Cards.get((int)random(Cards.size())).isDead=true;
+			break;
+	  		}
 	  }
 
 	

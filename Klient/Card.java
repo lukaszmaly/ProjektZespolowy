@@ -9,10 +9,12 @@ public class Card
 	PVector[] loc;							//Polozenie 4 rogow
 	int x1, y1, x2, y2, x3, y3, x4, y4;		//Polozenie 4 rogow
 	ArrayList<SparkEdge> se;				//4 krawedzie x 10 generatorow
-	int sparkTime=20, frameLife=0; 			//sparking po wejsciu karty, jasnosc  frame'a
+	int sparkTime=20, frameLife=100; 			//sparking po wejsciu karty, jasnosc  frame'a
 	int id, db_id, owner;
 	boolean frame,frameCounter=false;		//Czy ma byc ramka, czy ma sie rozjasniac czy zaciemniac
-
+	int frameRate=1;
+	boolean isDead=false;
+	int deadCounter=200;
   
 	int height()
 	{
@@ -40,22 +42,45 @@ public class Card
   
 	void moveTo(PVector m)					//Przesuniecie do
 	{
+		//this.loc[0].x=m.x;
+		//this.loc[0].y=m.y;
+		this.loc[1].x=m.x+this.loc[1].x-loc[0].x;
+		this.loc[1].y=m.y+this.loc[1].y-loc[0].y;
+		this.loc[2].x=m.x+this.loc[2].x-loc[0].x;
+		this.loc[2].y=m.y+this.loc[2].y-loc[0].y;
+		this.loc[3].x=m.x+this.loc[3].x-loc[0].x;
+		this.loc[3].y=m.y+this.loc[3].y-loc[0].y;
 		this.loc[0].x=m.x;
 		this.loc[0].y=m.y;
-		this.loc[1].x=m.x;
-		this.loc[1].y=m.y;
-		this.loc[2].x=m.x;
-		this.loc[2].y=m.y;
-		this.loc[3].x=m.x;
-		this.loc[3].y=m.y;
 	}
 	
 	void drawEdges(int r,int g, int b,int t)//Rysowanie ramki t=transparency
 	{
-		if(frameLife==0) frameCounter=true;//Zaciemnianie lub pojasnianie
+		if(frameLife<0) frameCounter=true;//Zaciemnianie lub pojasnianie
 		if(frameLife>100) frameCounter=false;	
-		if(frameCounter==true) frameLife++; else frameLife--;
-
+		if(frameCounter==true) frameLife+=frameRate; else frameLife-=frameRate;
+		
+		for (int i=16;i>=1;i--)
+			{
+			parent.strokeWeight(2);
+			parent.stroke(r,g,b,(int)(-18+frameLife*0.6f*parent.sqrt((float)(1.0/parent.sqrt(i)))));
+			
+			parent.noFill();
+			parent.beginShape();
+			parent.vertex(loc[0].x-i,loc[0].y-i);
+			parent.vertex(loc[1].x+i,loc[1].y-i);
+			parent.vertex(loc[2].x+i,loc[2].y+i);
+			parent.vertex(loc[3].x-i,loc[3].y+i);
+			parent.vertex(loc[0].x-i,loc[0].y-i);
+			parent.endShape();
+			
+			}
+		if(this.isDead==true)
+		{
+			this.deadCounter--;
+			
+		}
+/*
 		parent.stroke(r,g,b,(int)(frameLife*1.5));
 		parent.strokeWeight(6);
 		parent.noFill();
@@ -67,7 +92,7 @@ public class Card
 		parent.vertex(loc[3].x,loc[3].y);
 		parent.vertex(loc[0].x,loc[0].y);
 		parent.endShape();
-		
+	*/	
   }
   
     int[][] divideEdge(int section,int n) 	//odcinek 1..4, ilosc podzialow
@@ -166,6 +191,7 @@ public class Card
     Card(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,int id,int db_id,int owner,PApplet p)
     {
     	parent=p;
+    	isDead=false;
     	frame=true;							//czy ma byc ramka
     	loc=new PVector[4];					//lokalizacja
 	  
@@ -189,25 +215,24 @@ public class Card
 	    this.owner=owner;
 	    se=new ArrayList<SparkEdge>();
 
-	    int[][] T=this.divideEdge(1, 5);		//dzielenie i tworzenie krawedzi z generatorami
+	    int[][] T=this.divideEdge(1, 10);		//dzielenie i tworzenie krawedzi z generatorami
 	    se.add(new SparkEdge(T,p));
-	    T=this.divideEdge(2, 5);
+	    T=this.divideEdge(2, 10);
 	    se.add(new SparkEdge(T,p));
-	    T=this.divideEdge(3, 5);
+	    T=this.divideEdge(3, 10);
 	    se.add(new SparkEdge(T,p));
-	    T=this.divideEdge(4, 5);
+	    T=this.divideEdge(4, 10);
 	    se.add(new SparkEdge(T,p));
 
-	   // PVector acc=new PVector(0.1f,0.1f);
-	   // PVector vel=new PVector(2,2);
-	    PVector vel=null;
 	    PVector acc=null;
+	    PVector vel=null;
 	    
 	    for(int i=0;i<se.size();i++)
 	    	{
 	    	SparkEdge e=se.get(i);
-	    	e.changeSparkType('e',220,225,80,5,vel,acc);
+	    	e.changeSparkType('c',35,230,80,2,vel,acc);
 	    	}
+	    
     }
 
 }

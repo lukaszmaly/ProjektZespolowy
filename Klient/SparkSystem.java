@@ -20,6 +20,7 @@ public class SparkSystem {
 	    g=0;
 	    b=0;
 	    size=5;
+	    life=45;
 	    v=null;
 	    a=null;
 	  	}
