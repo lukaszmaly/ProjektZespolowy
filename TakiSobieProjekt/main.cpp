@@ -538,7 +538,7 @@ int main( int argc, char** argv )
 		bkarty.push_back(CardB(a,id,name,Red,tt,att,def,cost));
 
 	}
-	cout<<"Wczytalem karty"<<endl;
+	cout<<"Wczytane karty: "<< bkarty.size()<<endl;
 
 	VideoCapture capture(0); 
 	Mat frame;

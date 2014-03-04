@@ -13,11 +13,9 @@ void Card::Prepare(vector<Point>&square,Mat &img)
 	float ab = Distance(square[0],square[1]);
 	float bc = Distance(square[1],square[2]);
 
-	//Poprawienie bokow
+	//Poprawienie bokow.
 	if(ab>bc) 
 	{
-
-		//cout<<"Poprawianie bokow"<<endl; 
 		Point ta,tb,tc,td;
 		ta=square[0];
 		tb=square[1];
@@ -27,11 +25,7 @@ void Card::Prepare(vector<Point>&square,Mat &img)
 		square[1]=tc;
 		square[2]=td;
 		square[3]=ta;
-		float a=atan2f(( square[0].y - square[1].y ),( square[0].x - square[1].x ) ) * 180 / M_PI + 180;
-
-
 	}
-
 	Mat tmp;
 	Mat t;
 	img.copyTo(t);
@@ -80,29 +74,43 @@ void Card::Prepare(vector<Point>&square,Mat &img)
 	if(tab3[2]<0) r++;
 	if(r>=2)
 	{
-		//cout<<"Poprawianie kolwjnoaci"<<endl; 
 		swap(square[0],square[2]);
 		swap(square[1],square[3]);
 	}
 
-
-
 	//////Koniec poprawiania boków
 	//////Poprawianie kolejnoœci punktów
+	Point2f center = getCenter(square[0],square[1],square[2],square[3]);
+	Point2f first;
+	Point2f second;
+	Point2f tab[4]={square[0],square[1],square[2],square[3]};
+	int tabb[4]={0,1,2,3};
+	for(int i=0;i<4;i++)
+	{
+		for(int j=i+1;j<4;j++)
+		{
+			if(tab[j].y<tab[i].y)
+			{
+				int te= tabb[i];
+				tabb[i]=tabb[j];
+				tabb[j]=te;
+				Point2f t= tab[j];
+				tab[j]=tab[i];
+				tab[i]=t;
+			}
+		}
+	}
+	first = square[tabb[0]];
+	second = square[tabb[1]];
 
-	float a=atan2f(( square[0].y - square[1].y ),( square[0].x - square[1].x ) ) * 180 / M_PI + 180;
-	//fastImg("a",a);
-	if(a>90) 
+	float a=atan2f(( first.y - center.y ),( first.x - center.x ) ) * 180 / M_PI + 180;
+	float aa=atan2f(( second.y - center.y ),( second.x - center.x ) ) * 180 / M_PI + 180;
+	
+	if(a>aa) 
 	{ 
-		//cout<<"Zamieniam kolejnoœæ punktow"<<endl;
 		swap(square[0],square[1]);
 		swap(square[2],square[3]);
 	}
-
-
-	//Koniec poprawiania kolejnoœci punktów
-
-
 }
 
 float Card::getAngle()
