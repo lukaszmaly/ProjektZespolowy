@@ -10,10 +10,12 @@ Card::~Card(void)
 
 void Card::Prepare(vector<Point>&square,Mat &img)
 {
+		if(square[1].y>square[3].y) swap(square[1],square[3]);
 	float ab = Distance(square[0],square[1]);
 	float bc = Distance(square[1],square[2]);
 
 	//Poprawienie bokow.
+
 	if(ab>bc) 
 	{
 		Point ta,tb,tc,td;
@@ -35,7 +37,7 @@ void Card::Prepare(vector<Point>&square,Mat &img)
 	Point2f c2[4] = {Point2f(0,0), Point2f(251,0), Point2f(251,356),Point2f(0,356)};
 	Mat mmat(3,3,CV_32FC1);
 	mmat=getAffineTransform(c1,c2);
-	warpAffine(t,tmp,mmat,Size(251,356));
+	cv::warpAffine(t,tmp,mmat,Size(251,356));
 
 	int tab1[3]={0,0,0};
 	int tab2[3]={0,0,0};
@@ -89,7 +91,8 @@ void Card::Prepare(vector<Point>&square,Mat &img)
 	{
 		for(int j=i+1;j<4;j++)
 		{
-			if(tab[j].y<tab[i].y)
+			if(tab[j].y<tab[i].y)//if(tab[j].y<tab[i].y+5)  5 to wskaznik tolerancji(bledy pokazuja siê gdy 2 górne rogi s¹ idealnie równoleg³e.
+				//Nie do konca jeszcze zrobione
 			{
 				int te= tabb[i];
 				tabb[i]=tabb[j];
@@ -101,11 +104,15 @@ void Card::Prepare(vector<Point>&square,Mat &img)
 		}
 	}
 	first = square[tabb[0]];
+	//second = square[(tabb[0]+1)%4];
 	second = square[tabb[1]];
+	// stara wersja square[tabb[1]]; <-- w tej wersji sortowanie jest wymagane
+	//sortowanie jest aktualnie niepotrzebne, ale nie wiem czy wystêpuje nadal b³¹d, dlatego dla pewnoœci zostawiam
 
 	float a=atan2f(( first.y - center.y ),( first.x - center.x ) ) * 180 / M_PI + 180;
 	float aa=atan2f(( second.y - center.y ),( second.x - center.x ) ) * 180 / M_PI + 180;
-	
+	//fastImg("a",a);
+	//fastImg("aa",aa);
 	if(a>aa) 
 	{ 
 		swap(square[0],square[1]);
@@ -115,7 +122,7 @@ void Card::Prepare(vector<Point>&square,Mat &img)
 
 float Card::getAngle()
 {
-	return atan2f(( a.y - b.y ),( a.x - b.x ) ) * 180 / M_PI + 180;
+	return atan2f(( a.y - getCenter().y ),( a.x - getCenter().x ) ) * 180 / M_PI + 180;
 }
 
 void Card::Compare(Mat &img1,Mat &img2,float tab[3])
@@ -195,31 +202,43 @@ Point2f Card::getCenter(Point a,Point b,Point c,Point d)
 	return t;
 }
 
+bool Card::TapUntap()
+{
+
+
+	bool taptemp=true;
+	float t = getAngle();
+	if((t>180 && t<270) || (t>0 && t<90)) taptemp=false;
+	if(taptemp!=taped) return true;
+	return false;
+}
+
 void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp=false)
 {
 	if(temp==false)
 	{
-	this->a=a;
-	this->b=b;
-	this->c=c;
-	this->d=d;
-	}
-	if(dead==false)ttl=TTL;
-	bool taptemp=false;
-	if(getAngle()>45) taptemp=true;
-	if(taptemp!=taped)
-	{
-		taped=taptemp;
-		if(taped==false)
+		this->a=a;
+		this->b=b;
+		this->c=c;
+		this->d=d;
+
+		if(dead==false)ttl=TTL;
+
+
+		if(TapUntap()==true)
 		{
-			Untap(game);
+			if(taped==true)
+			{
+				Untap(game);
+			}
+			else
+			{
+				Tap(game);
+			}
 		}
-		else
-		{
-			Tap(game);
-		}
+		if(game.GetPhase()==PIERWSZY || game.GetPhase()==DRUGI) {old=getCenter(); enemy=Point(-1,-1);}
+
 	}
-	if(game.phase==PIERWSZY || game.phase==DRUGI) {old=getCenter(); enemy=Point(-1,-1);}
 	Mat tmp;
 	Mat t;
 	img.copyTo(t);
@@ -229,7 +248,6 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 	Point2f c2[4] = {Point2f(0,0), Point2f(251,0), Point2f(251,356),Point2f(0,356)};
 	Mat mmat(3,3,CV_32FC1);
 	mmat=getAffineTransform(c1,c2);
-
 	warpAffine(t,tmp,mmat,Size(251,356));
 
 
@@ -244,7 +262,7 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 		if(t1<min) { cardId=i;min=t1;}
 	}
 	if(cardId!=-1)
-	setCardBase(bkarty[cardId]);
+		setCardBase(bkarty[cardId]);
 	//imshow("Karta",tmp);
 	if(waitKey(30)==122)
 	{
@@ -254,7 +272,7 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 		cout<<"Wpisz nazwe karty:"<<endl;
 		cout<<"Nazwa | Id | koszt | Typ(0-Creature, 1-land) | Atak | Obrna |"<<endl;
 		//cin>>name >>id>>koszt>>typ>>att>>def;
-			cin>>name;
+		cin>>name;
 		//if(typ==0) typek=CREATURE; else typek=LAND;
 		cout<<"Dodano nowa karte"<<endl;;
 		imshow("Kartadodana"+name,tmp);
@@ -263,22 +281,22 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 	}
 	else if(nowa==true && temp==false)
 	{
-	nowa=false;
-	att=cardBase.att;
-	def=cardBase.def;
+		nowa=false;
+		att=cardBase.att;
+		def=cardBase.def;
 
 		/*if(game.getCurrentPlayer().mana<cardBase.koszt)
 		{
-			nowa=true;
-			error=true;
+		nowa=true;
+		error=true;
 		}
 		else
 		{
-			game.getCurrentPlayer().mana-=cardBase.koszt;
-				nowa=false;
+		game.getCurrentPlayer().mana-=cardBase.koszt;
+		nowa=false;
 		error=false;
 		}*/
-		
+
 	}
 }
 int Card::maxC(int a,int b,int c)
@@ -303,7 +321,8 @@ void Card::setCardBase(CardB &card)
 
 void Card::Tap(Game &game)
 {
-	//cout<<"Tapnieto"<<endl;
+	cout<<"Tapnieto"<<endl;
+	taped=true;
 	if(this->cardBase.type=LAND)
 	{
 		game.getCurrentPlayer().mana++;
@@ -312,7 +331,8 @@ void Card::Tap(Game &game)
 
 void Card::Untap(Game &game)
 {
-	//cout<<"Odtapowano"<<endl;
+	cout<<"Odtapowano"<<endl;
+	taped=false;
 	if(this->cardBase.type=LAND)
 	{
 		if(game.getCurrentPlayer().mana>0)game.getCurrentPlayer().mana--;
@@ -356,10 +376,10 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 		line(img1,b,c,Scalar(0,0,255),2);
 		line(img1,c,d,Scalar(0,0,255),2);
 		line(img1,d,a,Scalar(0,0,255),2);
-putText(img1,"a", Point(a.x,a.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
-putText(img1,"b", Point(b.x,b.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
-putText(img1,"c", Point(c.x,c.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
-putText(img1,"d", Point(d.x,d.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+		putText(img1,"a", Point(a.x,a.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+		putText(img1,"b", Point(b.x,b.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+		putText(img1,"c", Point(c.x,c.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+		putText(img1,"d", Point(d.x,d.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 
 
 		if(cardId!=-1)
@@ -381,12 +401,12 @@ putText(img1,"d", Point(d.x,d.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 		}
 		putText(img1,cad, getCenter(),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);		
 		putText(img1,cad1, getCenter()+Point2f(0,20),FONT_HERSHEY_SIMPLEX, 0.5,Scalar(0,0,255),2);		
-	if(att!=-1)
-	{
-		char cad3[100];
-		sprintf(cad3,"Att: %d",att);
-		putText(img1,cad3, d-Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
-	}
+		if(att!=-1)
+		{
+			char cad3[100];
+			sprintf(cad3,"Att: %d",att);
+			putText(img1,cad3, d-Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
+		}
 
 		if(def!=-1)
 		{
@@ -396,29 +416,41 @@ putText(img1,"d", Point(d.x,d.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 		}
 
 
-		if(game.phase==ATAK || (game.phase==OBRONA && attack==true))
+		if(game.GetPhase()==ATAK || (game.GetPhase()==OBRONA && attack==true))
 		{
-			
+			if(Distance(getCenter(),old)>50 && attack==false)
+			{
+				putText(img1,"Tapnij zeby zaatakowac",getCenter()-Point2f(0,50),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,200,200),4);
+				line(img1,old,getCenter(),Scalar(255,0,0),3);
+			}
+
+
 			if(attack==true) {line(img1,old,getCenter(),Scalar(255,0,0),3); putText(img1,"Atakuje",getCenter()+Point2f(0,50),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	}
 		}
 
-				if(game.phase==OBRONA)
+		if(game.GetPhase()==OBRONA)
 		{
-			
+
 			if(block==true)
 			{
 				line(img1,old,getCenter(),Scalar(255,0,0),3);
-			putText(img1,"Bronie",getCenter()+Point2f(0,50),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
-			if(enemy.x!=-1) {cout<<"RYSUJE"<<endl;line(img1,getCenter(),enemy,Scalar(100,100,100),3);}
+				putText(img1,"Bronie",getCenter()+Point2f(0,50),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
+				if(enemy.x!=-1) {cout<<"RYSUJE"<<endl;line(img1,getCenter(),enemy,Scalar(100,100,100),3);}
 			}
 		}
-				if(dead==true)
-				{
-					line(img1,a,c,Scalar(255,0,0),3);
-					line(img1,b,d,Scalar(255,0,0),3);
-				}
+		if(dead==true)
+		{
+			line(img1,a,c,Scalar(255,0,0),3);
+			line(img1,b,d,Scalar(255,0,0),3);
+		}
 
 	}
+}
+
+
+void Card::NewRound()
+{
+	def=cardBase.def;
 }
 
 void Card::prepareToAttack()
@@ -427,7 +459,7 @@ void Card::prepareToAttack()
 }
 void Card::prepareToBlock()
 {
-		old=getCenter();
+	old=getCenter();
 }
 void Card::Clear()
 {

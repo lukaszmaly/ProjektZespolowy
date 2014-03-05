@@ -30,6 +30,8 @@ public:
 	Type type;
 	CardB(Mat &img1,int id,string name,Color color,Type t,int att,int def,int koszt);
 	void Update();
+	void OnUntap();
+
 	CardB(void);
 	~CardB(void);
 };

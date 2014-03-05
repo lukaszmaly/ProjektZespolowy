@@ -13,7 +13,7 @@ Player::Player(string name,int markerId)
 }
 void Player::Init(string name,int markerId)
 {
-		this->markerId=markerId;
+	this->markerId=markerId;
 	this->name=name;
 	hp=20;
 	cardsInLib=60;
@@ -23,6 +23,7 @@ void Player::Init(string name,int markerId)
 }
 void Player::Draw()
 {
+
 	Mat img(200,200,CV_64F);
 	char cad[100];
 	char cad1[100];

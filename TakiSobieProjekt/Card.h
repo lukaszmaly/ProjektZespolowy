@@ -55,10 +55,12 @@ public:
 	Point2f enemy;
 	bool block;
 	void setCardBase(CardB &card);
+	void NewRound();
 	void Compare(Mat &img1,Mat &img2,float tab[3]);
 	Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp);
 	Card(void);
 	void prepareToAttack();
+	bool TapUntap();
 	float getAngle();
 	int maxC(int a,int b,int c);
 	int minC(int a,int b,int c);
