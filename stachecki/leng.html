@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script>
+$(document).ready(function() {
+
+	var chart1 = new Highcharts.Chart({
+           chart: {
+		   renderTo: 'container',
+                type: 'line'
+            },
+       
+          title: {
+                text: 'Dlugosc gier',
+            },
+
+            xAxis: {
+                categories: [{% for el,i in d.iteritems %}
+                        [
+                            '{{ el }}', 
+
+                        ],
+                        {% endfor %}]
+
+            },
+            yAxis: {
+                title: {
+                    text: 'Dlugosc gry'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+			legend: {
+                enabled: false
+            },
+            tooltip: {
+                valueSuffix: 'min'
+            },
+ 
+        series: [{
+			name:'Dlugosc gry',
+            data: [{% for el,k in d.iteritems %}
+                        [
+                            {{k}}, 
+
+                        ],
+                        {% endfor %}]
+        }]
+    });
+});
+</script>
+</head>
+<body>
+<div id="container" style="width = 100px; height:300;"></div>
+
+</body>
+</html>
