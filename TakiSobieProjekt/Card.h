@@ -1,5 +1,4 @@
 #pragma once
-
 #include "opencv2\imgproc\imgproc.hpp"
 #include <opencv2\core\core.hpp>
 #include <opencv2\highgui\highgui.hpp>
@@ -23,30 +22,23 @@ using namespace cv;
 class Card
 {
 public:
-	bool wantFight;
 	void Fight(Card &op);
 	CardB cardBase;
 	static int ID;
 	int id;
+	int sendTime;
 	bool dead;
 	Point old;
-	bool ready;
 	int att;
 	bool error;
 	bool nowa;
 	int def;
-	int topIndex;
 	Player owner;
 	int cardId;
-	int count;
-	int timer;
 	bool taped;
-	string name;
-	bool stosCompleted;
 	void prepareToBlock();
 	Point a,b,c,d;
 	Mat img;
-	float angle;
 	static const int TTL=30;
 	int ttl;
 	void die();
@@ -54,20 +46,19 @@ public:
 	bool attack;
 	Point2f enemy;
 	bool block;
+	int blocking;
+	void Unlock();
 	void setCardBase(CardB &card);
 	void NewRound();
 	void Compare(Mat &img1,Mat &img2,float tab[3]);
 	Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp);
 	Card(void);
-	void prepareToAttack();
 	bool TapUntap();
 	float getAngle();
-	int maxC(int a,int b,int c);
-	int minC(int a,int b,int c);
-	string Wynik(int b,int g,int r,int h, int s,int v);
 	void Draw(Mat &img1,vector<CardB>&bkarty,Game &game);
 	void Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp);
 	Point2f getCenter();
+	bool TrySend(Game &game);
 	static void fastImg(string name,float s)
 	{
 		Mat *img = new Mat(200,200,CV_64F);
@@ -88,18 +79,13 @@ public:
 
 	static Point2f getCenter(Point a,Point b,Point c,Point d);
 
-	bool Check(Card k);
 	void Tap(Game &game);
 	void Untap(Game &game);
-	int MinusCount(int a,int b,int c);
 	static void Prepare(vector<Point> &square,Mat &img);
 	static bool Valid(Point a,Point b,Point c,Point d)
 	{
 		float a1=Distance(a,b)/Distance(b,c);
 		float a2=Distance(b,c)/Distance(c,d);
-		//fastImg("1",a1);
-		//fastImg("2",a2);
-
 		if(((a1>=MIN_D1 && a1<=MAX_D1) || (a1>=MIN_D2 && a1<=MAX_D2)) && ((a2>=MIN_D1 && a2<=MAX_D1) || (a2>=MIN_D2 && a2<=MAX_D2)))
 		{
 			return true;

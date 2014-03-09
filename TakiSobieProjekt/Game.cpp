@@ -126,6 +126,7 @@ Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip
 	gameHeight = h;
 	zmiana = false;
 	phase = PIERWSZY;
+	t=false;
 	server.Init(ip,port,interval);
 	player1.Init(player1s,player1Id);
 	player2.Init(player2s,player2Id);

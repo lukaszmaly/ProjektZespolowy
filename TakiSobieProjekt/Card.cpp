@@ -2,20 +2,21 @@
 
 Card::Card(void)
 {
+
 }
 
 Card::~Card(void)
 {
+
 }
 
 void Card::Prepare(vector<Point>&square,Mat &img)
 {
-		if(square[1].y>square[3].y) swap(square[1],square[3]);
+	if(square[1].y>square[3].y) swap(square[1],square[3]);
 	float ab = Distance(square[0],square[1]);
 	float bc = Distance(square[1],square[2]);
 
 	//Poprawienie bokow.
-
 	if(ab>bc) 
 	{
 		Point ta,tb,tc,td;
@@ -104,16 +105,15 @@ void Card::Prepare(vector<Point>&square,Mat &img)
 		}
 	}
 	first = square[tabb[0]];
-	//second = square[(tabb[0]+1)%4];
-	second = square[tabb[1]];
+	second = square[(tabb[0]+1)%4];
+	//second = square[tabb[1]];
 	// stara wersja square[tabb[1]]; <-- w tej wersji sortowanie jest wymagane
 	//sortowanie jest aktualnie niepotrzebne, ale nie wiem czy wystêpuje nadal b³¹d, dlatego dla pewnoœci zostawiam
 
-	float a=atan2f(( first.y - center.y ),( first.x - center.x ) ) * 180 / M_PI + 180;
-	float aa=atan2f(( second.y - center.y ),( second.x - center.x ) ) * 180 / M_PI + 180;
-	//fastImg("a",a);
-	//fastImg("aa",aa);
-	if(a>aa) 
+	float a = atan2f(( first.y - center.y ),( first.x - center.x ) ) * 180 / M_PI + 180;
+	float aa = atan2f(( second.y - center.y ),( second.x - center.x ) ) * 180 / M_PI + 180;
+
+	if(a > aa) 
 	{ 
 		swap(square[0],square[1]);
 		swap(square[2],square[3]);
@@ -155,31 +155,43 @@ void Card::Compare(Mat &img1,Mat &img2,float tab[3])
 		tab[0]=blue2/(float)n;
 	}
 }
+void Card::Unlock()
+{
+	id=ID++;
+}
 
 Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp=false)
 {
 	error=false;
 	nowa=true;
-	stosCompleted=false;
+	sendTime=0;
+	blocking=-1;
 	owner=game.getCurrentPlayer();
 	taped=false;
-
-	name="none";
+	attack=block=false;
 	this->a=a;
 	old=Point(-1,-1);
-	wantFight=false;
 	this->b=b;
 	this->c=c;
 	this->d=d;
 	ttl=TTL;
-	timer=0;
+
 	att=-1;
 	def=-1;
-	ready=false;
 	dead=false;
-	id=ID++;
+	if(temp==false)		id=ID++;
 	Update(a,b,c,d,img,bkarty,game,temp);
 	old=getCenter();
+}
+bool Card::TrySend(Game &game)
+{
+	sendTime++;
+	if(sendTime>=game.server.interval)
+	{
+		sendTime=0;
+		return true;
+	}
+	return false;
 }
 
 Point2f Card::getCenter()
@@ -204,18 +216,16 @@ Point2f Card::getCenter(Point a,Point b,Point c,Point d)
 
 bool Card::TapUntap()
 {
-
-
-	bool taptemp=true;
+	bool taptemp = true;
 	float t = getAngle();
-	if((t>180 && t<270) || (t>0 && t<90)) taptemp=false;
-	if(taptemp!=taped) return true;
+	if((t > 180 && t < 270) || (t > 0 && t < 90))	taptemp = false;
+	if(taptemp != taped) return true;
 	return false;
 }
 
 void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp=false)
 {
-	if(temp==false)
+	if(temp == false)
 	{
 		this->a=a;
 		this->b=b;
@@ -236,9 +246,10 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 				Tap(game);
 			}
 		}
-		if(game.GetPhase()==PIERWSZY || game.GetPhase()==DRUGI) {old=getCenter(); enemy=Point(-1,-1);}
 
+		if(game.GetPhase()==PIERWSZY || game.GetPhase()==DRUGI) {old=getCenter(); enemy=Point(-1,-1);}
 	}
+
 	Mat tmp;
 	Mat t;
 	img.copyTo(t);
@@ -249,8 +260,6 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 	Mat mmat(3,3,CV_32FC1);
 	mmat=getAffineTransform(c1,c2);
 	warpAffine(t,tmp,mmat,Size(251,356));
-
-
 
 	float tm[3];
 	float min=256*256;
@@ -264,7 +273,7 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 	if(cardId!=-1)
 		setCardBase(bkarty[cardId]);
 	//imshow("Karta",tmp);
-	if(waitKey(30)==122)
+	if(waitKey(10)==122)
 	{
 		string name;
 		int id,typ,att,def,koszt;
@@ -299,20 +308,6 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 
 	}
 }
-int Card::maxC(int a,int b,int c)
-{
-	int m=max(a,max(b,c));
-	if(m==a) return 1;
-	if(m==b) return 2;
-	return 3;
-}
-int Card::minC(int a,int b,int c)
-{
-	int m=min(a,min(b,c));
-	if(m==a) return 1;
-	if(m==b) return 2;
-	return 3;
-}
 
 void Card::setCardBase(CardB &card)
 {
@@ -338,19 +333,7 @@ void Card::Untap(Game &game)
 		if(game.getCurrentPlayer().mana>0)game.getCurrentPlayer().mana--;
 	}
 }
-string Card::Wynik(int b,int g,int r,int h, int s,int v)
-{
-	int max1 = maxC(b,g,r);
-	int max2 = maxC(h,s,v);
-	int min1 = minC(b,g,r);
-	int min2 = minC(h,s,v);
-	if(max1==3 && max2==3 && min1==1 && min2==1) return "czerwony";
-	if(max1==2 && max2==3 && min1==3 && min2==2) return "czarny";
-	if(max1==1 && max2==3 && min1==3 && min2==2) return "niebieski";
-	//if(max1==2 && max2==3 && abs(b-r)<10) return "zielony";
-	//if(max1==2 && max2==3 && (abs(g-b)<20 || abs(g-r)<20 )) return "bialy";
-	return "false";
-}
+
 void Card::die()
 {
 	dead=true;
@@ -395,10 +378,12 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 			sprintf(cad1,"Karta tapnieta(%s)",owner.name.c_str());
 		else
 			sprintf(cad1,"Karta odtapowana(%s)",owner.name.c_str());
+
 		if(error==true)
 		{
 			sprintf(cad1,"Brak many. Doplac");
 		}
+
 		putText(img1,cad, getCenter(),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);		
 		putText(img1,cad1, getCenter()+Point2f(0,20),FONT_HERSHEY_SIMPLEX, 0.5,Scalar(0,0,255),2);		
 		if(att!=-1)
@@ -424,18 +409,28 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 				line(img1,old,getCenter(),Scalar(255,0,0),3);
 			}
 
-
-			if(attack==true) {line(img1,old,getCenter(),Scalar(255,0,0),3); putText(img1,"Atakuje",getCenter()+Point2f(0,50),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	}
+			if(attack==true) {
+				line(img1,old,getCenter(),Scalar(255,0,0),3); putText(img1,"Atakuje",getCenter()+Point2f(0,50),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
+			
+				int owner1 = 1;
+			if(owner==game.player2) owner1=2;
+				game.server.Attack(id,cardBase.id,owner1,a,b,c,d,taped);
+		
+			}
 		}
 
 		if(game.GetPhase()==OBRONA)
 		{
-
 			if(block==true)
 			{
 				line(img1,old,getCenter(),Scalar(255,0,0),3);
 				putText(img1,"Bronie",getCenter()+Point2f(0,50),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
-				if(enemy.x!=-1) {cout<<"RYSUJE"<<endl;line(img1,getCenter(),enemy,Scalar(100,100,100),3);}
+				if(enemy.x!=-1) {
+					
+						int owner1 = 1;
+			if(owner==game.player2) owner1=2;
+				game.server.Block(id,cardBase.id,owner1,a,b,c,d,taped,blocking);
+				}
 			}
 		}
 		if(dead==true)
@@ -443,28 +438,19 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 			line(img1,a,c,Scalar(255,0,0),3);
 			line(img1,b,d,Scalar(255,0,0),3);
 		}
-
 	}
 }
-
 
 void Card::NewRound()
 {
 	def=cardBase.def;
 }
 
-void Card::prepareToAttack()
-{
-	old=getCenter();
-}
-void Card::prepareToBlock()
-{
-	old=getCenter();
-}
 void Card::Clear()
 {
 	attack=false;
 	block=false;
 	old=getCenter();
 	enemy=Point(-1,-1);
+	blocking=-1;
 }

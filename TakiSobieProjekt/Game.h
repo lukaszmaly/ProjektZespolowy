@@ -30,6 +30,8 @@ private:
 	Point action;
 	
 public:
+	Point a,b,c,d;
+	bool t;
 	Player player1;
 	Player player2;
 	Phase GetPhase();
