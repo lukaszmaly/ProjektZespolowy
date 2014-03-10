@@ -15,6 +15,10 @@ public class Card
 	int frameRate=1;
 	boolean isDead=false;
 	int deadCounter=200;
+	int r,g,b;
+	PVector[] loc2;							//Polozenie przed atakiem
+	boolean attack=false;
+	//Polozenie przed atakiem
   
 	int height()
 	{
@@ -54,7 +58,9 @@ public class Card
 		this.loc[0].y=m.y;
 	}
 	
-	void drawEdges(int r,int g, int b,int t)//Rysowanie ramki t=transparency
+
+	
+	void drawEdges(int t)//Rysowanie ramki t=transparency
 	{
 		if(frameLife<0) frameCounter=true;//Zaciemnianie lub pojasnianie
 		if(frameLife>100) frameCounter=false;	
@@ -63,8 +69,9 @@ public class Card
 		for (int i=16;i>=1;i--)
 			{
 			parent.strokeWeight(2);
-			parent.stroke(r,g,b,(int)(-18+frameLife*0.6f*parent.sqrt((float)(1.0/parent.sqrt(i)))));
-			
+			//parent.stroke(this.r,this.g,this.b,(int)(-18+frameLife*0.6f*parent.sqrt((float)(1.0/parent.sqrt(i)))));
+			parent.stroke(this.r,this.g,this.b,(100-4*i)*0.01f*frameLife);
+			//parent.println(this.frameLife+" "+(int)(-18+frameLife*0.6f*parent.sqrt((float)(1.0/parent.sqrt(i)))));
 			parent.noFill();
 			parent.beginShape();
 			parent.vertex(loc[0].x-i,loc[0].y-i);
@@ -193,12 +200,18 @@ public class Card
     	parent=p;
     	isDead=false;
     	frame=true;							//czy ma byc ramka
-    	loc=new PVector[4];					//lokalizacja
-	  
+    	loc=new PVector[4];	
+    	loc2=new PVector[4];	//lokalizacja
+    	r=255;g=0;b=0;
     	loc[0]=new PVector(x1,y1);
     	loc[1]=new PVector(x2,y2);
     	loc[2]=new PVector(x3,y3);
     	loc[3]=new PVector(x4,y4);
+    	
+    	loc2[0]=new PVector(x1,y1);
+    	loc2[1]=new PVector(x2,y2);
+    	loc2[2]=new PVector(x3,y3);
+    	loc2[3]=new PVector(x4,y4);
 	 
     	this.x1=x1;
 	    this.x2=x2;
@@ -226,11 +239,14 @@ public class Card
 
 	    PVector acc=null;
 	    PVector vel=null;
+	    //PVector vel=new PVector(0.5f,2);
+	    //PVector acc=new PVector(0.1f,0.1f);
 	    
 	    for(int i=0;i<se.size();i++)
 	    	{
 	    	SparkEdge e=se.get(i);
-	    	e.changeSparkType('c',35,230,80,2,vel,acc);
+	    	//e.changeSparkType('b',35,230,80,2,vel,acc);
+	    	e.changeSparkType('c',150,40,230,6,vel,acc);
 	    	}
 	    
     }

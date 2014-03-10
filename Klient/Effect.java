@@ -15,5 +15,6 @@ public class Effect
 		parent=p;
 		this.life=0;		
 	}
+	
 }
 

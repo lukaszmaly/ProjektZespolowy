@@ -3,6 +3,7 @@ import processing.core.*;
 
 public class Board 
 {
+	PVector graveyard1;
 	 PApplet parent;
 	 Board(PApplet p)
 	 {
@@ -10,13 +11,33 @@ public class Board
 	 }
 	 public void display(int color,int t, int w)         //Wyswietlanie pol
 	 {
-		 this.drawFrame(color,2*w);
+		 
+		// this.drawFrame(color,2*w);
 		 this.drawGraveyardExile(color,w);
-		 this.drawManaFields(t+60);
-		 this.drawBattlefield(t);
-		 this.drawCombat(t);	  
+		 //this.drawManaFields(t+60);
+		// this.drawBattlefield(t);
+		 //this.drawCombat(t);
+		 this.drawStack(color, w);
+		 this.drawField();
+		 
 	 }
-	 
+	 public void drawField()
+	 {
+		 parent.fill(255);
+		 parent.stroke(255);
+		 parent.rectMode(parent.CORNERS);
+		 parent.rect(225, 10, parent.width-225, parent.height-10, 10, 10, 10, 10);
+		 parent.rectMode(parent.CORNER);
+		 
+	 }
+	 public void drawStack(int color, int weigth)
+	 {
+		 
+		 parent.strokeWeight(weigth);
+		 parent.stroke(color);
+		 parent.fill(255);
+		 parent.rect(0.83f*parent.width,0.35f*parent.height,150,200);
+	 }
 	 public void drawFrame(int color, int weigth)
 	 {
 		 parent.strokeWeight(weigth);
@@ -30,7 +51,7 @@ public class Board
 	 
 	 public void drawGraveyardExile(int color, int weight)
 	 {
-		 
+		 this.graveyard1=new PVector(0.07f*parent.width,0.05f*parent.height);
 		 parent.stroke(color);
 		 parent.strokeWeight(weight);
 		 
@@ -40,6 +61,9 @@ public class Board
 
 		 parent.rect(0.07f*parent.width,0.95f*parent.height-0.125f*parent.height,0.06f*parent.width,0.125f*parent.height,7,7,7,7);
 		 parent.rect(0.07f*parent.width,0.8f*parent.height-0.125f*parent.height,0.06f*parent.width,0.125f*parent.height,7,7,7,7); 
+		 parent.line(0.07f*parent.width,0.05f*parent.height,0.07f*parent.width+100,0.05f*parent.height);
+		 parent.fill(255,0,0);
+		 parent.rect(0, 0, 250, 250);
 	 }
 	 
 	 public void drawManaFields(int t)
