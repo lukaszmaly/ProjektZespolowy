@@ -18,6 +18,7 @@ public:
 	~Player(void);
 	Player &getCurrentPlayer();
 	int hp;
+	
 	string name;
 	int mana;
 	int markerId;

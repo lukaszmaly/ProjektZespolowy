@@ -25,11 +25,12 @@ void Server::Markers()
 	}
 }
 
-void Server::Init(string ip,int port,int interval)
+void Server::Init(string ip,int port,int interval,bool showLog)
 {
 	client = ip;
 	this->port = port;
 	this->interval = interval;
+	this->showLog=showLog;
 	if(soc.bind(port) != Socket::Done)
 	{
 		cout<<"Blad podczas tworzenia socketa"<<endl;
@@ -50,8 +51,6 @@ Server::Server()
 
 void Server::Attack(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bool taped)
 {
-	if(time==0)
-	{
 		char data[100];
 
 		int n = sprintf(data,"| ATTACK %d %d %d %d %d %d %d %d %d %d %d %d |",id,idb,gracz,taped,a.x,a.y,b.x,b.y,c.x,c.y,d.x,d.y);	
@@ -59,12 +58,45 @@ void Server::Attack(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bo
 		{
 			cout<<"Blad podczas wysylanie aktualnych danych o karcie"<<endl;
 		}
-		else
+		else if(showLog)
 		{
 			cout<< data <<endl;
 		}
+	
+}
+
+void Server::AddMana(int id,int count)
+{
+		ile++;
+		char data[100];
+	int n = sprintf_s(data,"| ADDMANA %d %d |",id,count);	
+
+	if(soc.send(data, n, client, port) != sf::Socket::Done)
+	{
+		cout<<"Blad podczas wysylanie danych o nowej karcie"<<endl;
+	}
+	else if(showLog)
+	{
+		cout<< data <<endl;
 	}
 }
+
+void Server::SubMana(int id,int count)
+{
+		ile++;
+		char data[100];
+	int n = sprintf_s(data,"| SUBMANA %d %d |",id,count);	
+
+	if(soc.send(data, n, client, port) != sf::Socket::Done)
+	{
+		cout<<"Blad podczas wysylanie danych o nowej karcie"<<endl;
+	}
+	else if(showLog)
+	{
+		cout<< data <<endl;
+	}
+}
+
 void Server::Dead(int id)
 {
 	ile++;
@@ -75,7 +107,7 @@ void Server::Dead(int id)
 	{
 		cout<<"Blad podczas wysylanie danych o nowej karcie"<<endl;
 	}
-	else
+	else if(showLog)
 	{
 		cout<< data <<endl;
 	}
@@ -84,8 +116,7 @@ void Server::Dead(int id)
 
 void Server::Block(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bool taped,int id2)
 {
-	if(time==0)
-	{
+
 			ile++;
 		char data[100];
 
@@ -94,11 +125,11 @@ void Server::Block(int id,int idb,int gracz,Point a, Point b,Point c,Point d,boo
 		{
 			cout<<"Blad podczas wysylanie aktualnych danych o karcie"<<endl;
 		}
-		else
+		else if(showLog)
 		{
 			cout<< data <<endl;
 		}
-	}
+	
 }
 
 
@@ -111,7 +142,7 @@ void Server::SendNewCard(int id,int idb,int gracz,Point a, Point b,Point c,Point
 	{
 		cout<<"Blad podczas wysylanie danych o nowej karcie"<<endl;
 	}
-	else
+	else if(showLog)
 	{
 		cout<< data <<endl;
 	}
@@ -120,8 +151,7 @@ void Server::SendNewCard(int id,int idb,int gracz,Point a, Point b,Point c,Point
 
 void Server::UpdateCard(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bool taped)
 {
-	if(time==0)
-	{
+
 			ile++;
 		char data[100];
 
@@ -130,14 +160,16 @@ void Server::UpdateCard(int id,int idb,int gracz,Point a, Point b,Point c,Point 
 		{
 			cout<<"Blad podczas wysylanie aktualnych danych o karcie"<<endl;
 		}
-		else
+		else if(showLog)
 		{
 			cout<< data <<endl;
-			cout<<ile<<endl;
 		}
-	}
+	
 }
-
+int Server::GetInterval()
+{
+	return interval;
+}
 void Server::AddPlayer(int id,const char name[])
 {	ile++;
 	char data[100];
@@ -146,7 +178,7 @@ void Server::AddPlayer(int id,const char name[])
 	{
 		cout<<"Nie wyslano"<<endl;
 	}
-	else
+	else if(showLog)
 	{
 		cout<<data<<endl;
 	}

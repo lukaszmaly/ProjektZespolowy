@@ -11,6 +11,9 @@ Player::Player(string name,int markerId)
 	cardsOnHand=7;
 	mana=0;
 }
+
+
+
 void Player::Init(string name,int markerId)
 {
 	this->markerId=markerId;
@@ -19,7 +22,7 @@ void Player::Init(string name,int markerId)
 	cardsInLib=60;
 	cardsInTomb=0;
 	cardsOnHand=7;
-	mana=10;
+	mana=0;
 }
 void Player::Draw()
 {

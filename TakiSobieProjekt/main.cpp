@@ -3,6 +3,9 @@ Znane błędy:
 -jeśli karta jest idealnie równolegle(abs(a.y-d.y)~=0) to wystepuje problem z wyznaczeniem orientacji karty
 położenie problemu: metoda Card::Valid();
 (dokonałem poprawki, ale nie mam na 100% pewnosci że problem zniknął, dlatego zostawiam ten punkt)
+
+-jeśli są 2 karty tego samego rodzaju, i jeśli 1 z nich jest tapniety to wystepują błędy z duplikacją(POWAŻNE)
+
 */
 
 #include <stdio.h>
@@ -33,7 +36,8 @@ int port=54000;
 
 int c=0;
 int three=80;
-int maxArea= 21;
+//int maxArea= 21;
+int maxArea = 51;
 int minArea=10;
 int zmienna=21;
 int white=2800;
@@ -152,10 +156,7 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 		if(index!=-1)
 		{
 			stos[i].Update(kartyTemp[index].a,kartyTemp[index].b,kartyTemp[index].c,kartyTemp[index].d,grey_image,bkarty,game,false);
-			int owner = 1;
-			if(kartyTemp[index].owner==game.player2) owner=2;
-			//game.server.UpdateCard(karty[i].id,karty[i].cardBase.id,owner,karty[i].a,karty[i].b,karty[i].c,karty[i].d,karty[i].taped);
-			kartyTemp.erase(kartyTemp.begin()+index);
+	kartyTemp.erase(kartyTemp.begin()+index);
 		}
 	}
 
@@ -215,10 +216,7 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 		if(index!=-1)
 		{
 			karty[i].Update(kartyTemp[index].a,kartyTemp[index].b,kartyTemp[index].c,kartyTemp[index].d,grey_image,bkarty,game,false);
-			int owner = 1;
-			if(karty[i].owner==game.player2) owner=2;
-			if(karty[i].attack==false && karty[i].block==false)
-			game.server.UpdateCard(karty[i].id,karty[i].cardBase.id,owner,karty[i].a,karty[i].b,karty[i].c,karty[i].d,karty[i].taped);
+
 			kartyTemp.erase(kartyTemp.begin()+index);	
 		}
 	}
@@ -231,10 +229,11 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 	{
 		if(kartyTemp[i].cardBase.type==LAND)
 		{
-			//karty.push_back(kartyTemp[i]);
-			int owner = 1;
-			if(kartyTemp[i].owner==game.player2) owner=2;
-				//game.server.SendNewCard(kartyTemp[i].id,kartyTemp[i].cardBase.id,owner,kartyTemp[i].a,kartyTemp[i].b,kartyTemp[i].c,kartyTemp[i].d,kartyTemp[i].taped);
+				kartyTemp[i].Unlock();
+			karty.push_back(kartyTemp[i]);
+			kartyTemp.erase(kartyTemp.begin()+i);
+			i=-1;
+		
 		}
 	}
 
@@ -242,10 +241,14 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 	{
 		for(unsigned int j=0;j<kartyTemp.size();j++)
 		{
-			if(stos[i].cardBase.id==kartyTemp[j].cardBase.id && kartyTemp[j].getCenter().x<SAFEREGION) 
+			if(stos[i].owner.mana>=stos[i].cardBase.koszt && stos[i].cardBase.id==kartyTemp[j].cardBase.id && kartyTemp[j].getCenter().x<SAFEREGION) 
 			{
+				stos[i].owner.mana-=stos[i].cardBase.koszt;
+				
 				int owner = 1;
 				if(stos[i].owner==game.player2) owner=2;
+				game.server.SubMana(owner,stos[i].cardBase.koszt);
+
 				kartyTemp[j].Unlock();
 				stos[i].id=kartyTemp[j].id;
 				game.server.SendNewCard(kartyTemp[j].id,kartyTemp[j].cardBase.id,owner,kartyTemp[j].a,kartyTemp[j].b,kartyTemp[j].c,kartyTemp[j].d,kartyTemp[j].taped);
@@ -262,8 +265,9 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 	{
 		for(unsigned int j=0;j<karty.size();j++)
 		{
-			if(i!=j && odleglos(karty[i].getCenter(),karty[j].getCenter())<30)
+			if(i!=j && odleglos(karty[i].getCenter(),karty[j].getCenter())<30 && karty[i].cardBase.id == karty[j].cardBase.id)
 			{
+				cout<<"USUWAM DUPLIKAT"<<endl;
 				karty.erase(karty.begin()+max(j,i));
 				j=-1;
 				i=-1;
@@ -271,6 +275,31 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 			}
 		}
 	}
+
+	for(unsigned int i=0;i<karty.size();i++)
+	{
+		if(!karty[i].TrySend(game)) continue;
+		
+			int owner = 1;
+			if(karty[i].owner==game.player2) owner=2;
+		if(karty[i].attack==true)
+		{
+				game.server.Attack(karty[i].id,karty[i].cardBase.id,owner,karty[i].a,karty[i].b,karty[i].c,karty[i].d,karty[i].taped);
+		
+		}
+		else if(karty[i].block == true)
+		{
+			game.server.Block(karty[i].id,karty[i].cardBase.id,owner,karty[i].a,karty[i].b,karty[i].c,karty[i].d,karty[i].taped,karty[i].blocking);
+		
+		}
+		else
+		{
+			game.server.UpdateCard(karty[i].id,karty[i].cardBase.id,owner,karty[i].a,karty[i].b,karty[i].c,karty[i].d,karty[i].taped);
+		
+		}
+
+	}
+
 
 	if(game.GetPhase()==ATAK)
 	{
@@ -406,7 +435,7 @@ void draw_s(vector<Marker> markers,Mat &img,Game &game)
 	for(int i=0;i<markers.size();i++)
 	{
 		circle(img,markers[i][0],4,Scalar(0,0,200),3);
-	//	markers[i].draw(img,Scalar(200,0,0),3);
+		//markers[i].draw(img,Scalar(200,0,0),3);
 		if(markers[i].id==341) {t++; game.a=markers[i][0] + Point2f(-10,-10);}
 		if(markers[i].id==1005) {t++; game.b=markers[i][0] + Point2f(10,-10);}
 		if(markers[i].id==791) {t++; game.c=markers[i][0]+Point2f(10,10);}
@@ -447,7 +476,8 @@ int main( int argc, char** argv )
 
 
 
-	Game game("lukasz",985,"daniel",838,"25.172.199.151",6121,1024,768,2);
+	Game game("lukasz",1,"daniel",2,"25.172.199.151",6121,1024,768,12,false);
+
 	game.server.AddPlayer(1,"lukasz");
 	game.server.AddPlayer(2,"daniel");
 	vector<CardB> bkarty;
@@ -494,7 +524,11 @@ int main( int argc, char** argv )
 		draw_s(game.markers,frame,game);
 		if(frame.data)
 			Wykryj_karty(frame,three,karty,stos,bkarty,game);
+			game.Draw();
 		if(cv::waitKey(20)==27) break;
+	
+
+
 	//	if(cv::waitKey(10)==99) stos.clear();
 	}
 	capture.release();

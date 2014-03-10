@@ -30,6 +30,7 @@ private:
 	Point action;
 	
 public:
+	int GetPlayer(int id);
 	Point a,b,c,d;
 	bool t;
 	Player player1;
@@ -48,6 +49,6 @@ public:
 	void Update();
 	void Draw();
 	Player &getCurrentPlayer();
-	Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h,int interval);
+	Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h,int interval,bool showLog);
 	~Game();
 };

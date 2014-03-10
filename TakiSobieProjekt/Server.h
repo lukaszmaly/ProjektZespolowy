@@ -13,6 +13,7 @@ class Server
 private:
 	int port;
 	int ile;
+	bool showLog;
 	int interval;
 	int time;
 	UdpSocket soc;
@@ -20,12 +21,15 @@ private:
 public:
 	Server();
 	void Markers();
+	int GetInterval();
+	void AddMana(int id,int count=1);
+		void SubMana(int id,int count=1);
 	void Dead(int id);
 	void Block(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bool taped,int id2);
 	~Server();
 	void Update();
 	void Attack(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bool taped);
-	void Init(string ip,int port,int interval);
+	void Init(string ip,int port,int interval,bool showLog);
 	void SendNewCard(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bool taped);
 	void UpdateCard(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bool taped);
 	void AddPlayer(int id,const char name[]);

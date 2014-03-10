@@ -186,7 +186,7 @@ Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game
 bool Card::TrySend(Game &game)
 {
 	sendTime++;
-	if(sendTime>=game.server.interval)
+	if(sendTime>=game.server.GetInterval())
 	{
 		sendTime=0;
 		return true;
@@ -225,6 +225,8 @@ bool Card::TapUntap()
 
 void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp=false)
 {
+	if(game.GetPlayer(owner.markerId)==1) owner = game.player1;
+	else owner = game.player2;
 	if(temp == false)
 	{
 		this->a=a;
@@ -320,6 +322,9 @@ void Card::Tap(Game &game)
 	taped=true;
 	if(this->cardBase.type=LAND)
 	{
+						int owner1 = 1;
+			if(owner==game.player2) owner1=2;
+				game.server.AddMana(owner1);
 		game.getCurrentPlayer().mana++;
 	}
 }
@@ -330,7 +335,13 @@ void Card::Untap(Game &game)
 	taped=false;
 	if(this->cardBase.type=LAND)
 	{
-		if(game.getCurrentPlayer().mana>0)game.getCurrentPlayer().mana--;
+		if(game.getCurrentPlayer().mana>0)
+			{
+					int owner1 = 1;
+			if(owner==game.player2) owner1=2;
+				game.server.SubMana(owner1);
+				game.getCurrentPlayer().mana--;
+		}
 	}
 }
 
@@ -412,9 +423,7 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 			if(attack==true) {
 				line(img1,old,getCenter(),Scalar(255,0,0),3); putText(img1,"Atakuje",getCenter()+Point2f(0,50),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
 			
-				int owner1 = 1;
-			if(owner==game.player2) owner1=2;
-				game.server.Attack(id,cardBase.id,owner1,a,b,c,d,taped);
+		
 		
 			}
 		}
@@ -426,12 +435,17 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 				line(img1,old,getCenter(),Scalar(255,0,0),3);
 				putText(img1,"Bronie",getCenter()+Point2f(0,50),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
 				if(enemy.x!=-1) {
-					
-						int owner1 = 1;
-			if(owner==game.player2) owner1=2;
-				game.server.Block(id,cardBase.id,owner1,a,b,c,d,taped,blocking);
+		//rysuj linie miedzy kartami
 				}
 			}
+		}
+		if(cardBase.koszt>owner.mana)
+		{
+			line(img1,a,c,Scalar(255,0,0),3);
+					char cad4[100];
+					sprintf(cad4,"Brakuje: %d",cardBase.koszt-owner.mana);
+			putText(img1,cad4, c+Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
+			
 		}
 		if(dead==true)
 		{

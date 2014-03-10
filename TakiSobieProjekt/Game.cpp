@@ -119,15 +119,20 @@ Phase Game::GetPhase()
 {
 	return phase;
 }
+int Game::GetPlayer(int id)
+{
+	if(id == player1.markerId) return 1;
+	return 2;
+}
 
-Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h,int interval)
+Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h,int interval,bool showLog)
 {
 	gameWidth = w;
 	gameHeight = h;
 	zmiana = false;
 	phase = PIERWSZY;
 	t=false;
-	server.Init(ip,port,interval);
+	server.Init(ip,port,interval,showLog);
 	player1.Init(player1s,player1Id);
 	player2.Init(player2s,player2Id);
 	aPlayer = player1.markerId;
