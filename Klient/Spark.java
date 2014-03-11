@@ -7,12 +7,10 @@ public class Spark
 
 	//rodzaj czasteczki, predkosc, polozenie, przyspieszenie,kolor, rozmiar, czas zycia
 	char type;
-	int size;
 	PVector v,loc,a;
 	float life;
-	int r,g,b;
-	//PImage star=parent.loadImage("star.png");
-	//PImage star;
+	int r,g,b,size;
+	
 
 	Spark(PVector l,PApplet p, PVector a,PVector v,int life)
 	{
@@ -132,12 +130,10 @@ public class Spark
 		  		parent.fill(r,g,b,life*5);
 		  		parent.point(loc.x,loc.y); 
 		  		break;
-		  		
-			
-		  			
-		  
+  
 		}  
 	}
+	
 	boolean isDead() 
 	  	{
 		if (life < 0.0) 

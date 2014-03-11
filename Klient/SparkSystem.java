@@ -24,8 +24,7 @@ public class SparkSystem {
 	    v=null;
 	    a=null;
 	  	}
-	  
-	
+	  	
 	  public void addParticle() 
 	  	{
 		    sparks.add(new Spark(source,parent,a,v,life));

@@ -6,20 +6,17 @@ import java.util.*;
 public class Card
 {
 	PApplet parent;
-	PVector[] loc;							//Polozenie 4 rogow
-	int x1, y1, x2, y2, x3, y3, x4, y4;		//Polozenie 4 rogow
-	ArrayList<SparkEdge> se;				//4 krawedzie x 10 generatorow
-	int sparkTime=20, frameLife=100; 			//sparking po wejsciu karty, jasnosc  frame'a
-	int id, db_id, owner;
-	boolean frame,frameCounter=false;		//Czy ma byc ramka, czy ma sie rozjasniac czy zaciemniac
-	int frameRate=1;
-	boolean isDead=false;
-	int deadCounter=200;
-	int r,g,b;
-	PVector[] loc2;							//Polozenie przed atakiem
-	boolean attack=false;
-	//Polozenie przed atakiem
-  
+	
+	PVector[] loc;													//Polozenie 4 rogow
+	PVector LG,PG,LD,PD;											//Polozenie 4 rogow
+	PVector[] loc2;													//Polozenie przed atakiem	
+	ArrayList<SparkEdge> se;										//4 krawedzie x 10 generatorow	
+	int sparkTime=20, frameLife=100,frameRate=1,deadCounter=200; 	//sparking po wejsciu karty, jasnosc  frame'a	
+	boolean frame,frameCounter=false,isDead=false,attack=false;		//Czy ma byc ramka, czy ma sie rozjasniac czy zaciemniac
+	int r,g,b,id, db_id, owner,manaCost;
+	
+	
+	
 	int height()
 	{
 		int[] Y= {(int)loc[0].y,(int)loc[1].y,(int)loc[2].y,(int)loc[3].y};
@@ -58,9 +55,9 @@ public class Card
 		this.loc[0].y=m.y;
 	}
 	
+	void drawEdges(int t)					//Rysowanie ramki t=transparency
 
-	
-	void drawEdges(int t)//Rysowanie ramki t=transparency
+
 	{
 		if(frameLife<0) frameCounter=true;//Zaciemnianie lub pojasnianie
 		if(frameLife>100) frameCounter=false;	
@@ -69,9 +66,12 @@ public class Card
 		for (int i=16;i>=1;i--)
 			{
 			parent.strokeWeight(2);
+			
+			
 			//parent.stroke(this.r,this.g,this.b,(int)(-18+frameLife*0.6f*parent.sqrt((float)(1.0/parent.sqrt(i)))));
 			parent.stroke(this.r,this.g,this.b,(100-4*i)*0.01f*frameLife);
 			//parent.println(this.frameLife+" "+(int)(-18+frameLife*0.6f*parent.sqrt((float)(1.0/parent.sqrt(i)))));
+			/*
 			parent.noFill();
 			parent.beginShape();
 			parent.vertex(loc[0].x-i,loc[0].y-i);
@@ -80,6 +80,18 @@ public class Card
 			parent.vertex(loc[3].x-i,loc[3].y+i);
 			parent.vertex(loc[0].x-i,loc[0].y-i);
 			parent.endShape();
+			*/
+			
+			parent.noFill();
+			parent.beginShape();
+			parent.vertex(LG.x-i,LG.y-i);
+			parent.vertex(PG.x+i,PG.y-i);
+			parent.vertex(PD.x+i,PD.y+i);
+			parent.vertex(LD.x-i,LD.y+i);
+			parent.vertex(LG.x-i,LG.y-i);
+			parent.endShape();
+			
+			
 			
 			}
 		if(this.isDead==true)
@@ -102,7 +114,10 @@ public class Card
 	*/	
   }
   
-    int[][] divideEdge(int section,int n) 	//odcinek 1..4, ilosc podzialow
+	/*
+ 
+
+   int[][] divideEdge(int section,int n) 	//odcinek 1..4, ilosc podzialow
     {
     	if(section >4 || section<1) 
     		{
@@ -193,7 +208,103 @@ public class Card
     		}
     	return Points;
     }
+*/
+	
+	int[][] divideEdge(int section,int n) 	//odcinek 1..4, ilosc podzialow
+	    {
+	    	if(section >4 || section<1) 
+	    		{
+	    		return null;
+	    		}
+	    	int xx1=0;
+	    	int xx2=0;
+	    	int yy1=0;
+	    	int yy2=0;
+	    	if(section==1)
+			  	{
+		  		xx1=(int)this.loc[0].x;
+		  		xx2=(int)this.loc[1].x;
+		  		yy1=(int)this.loc[0].y;
+		  		yy2=(int)this.loc[1].y;
+			  	}
+	    	if(section==2)
+	    		{
+	    		xx1=(int)this.loc[1].x;
+		  		xx2=(int)this.loc[2].x;
+		  		yy1=(int)this.loc[1].y;
+		  		yy2=(int)this.loc[2].y;
+	    		}
+	    	if(section==3)
+	    		{
+	    	
+	    		
+	    		xx1=(int)this.loc[2].x;
+		  		xx2=(int)this.loc[3].x;
+		  		yy1=(int)this.loc[2].y;
+		  		yy2=(int)this.loc[3].y;
+	    		}
+	    	if(section==4)
+	    		{
+	    		
+	    		
+	    		xx1=(int)this.loc[3].x;
+		  		xx2=(int)this.loc[0].x;
+		  		yy1=(int)this.loc[3].y;
+		  		yy2=(int)this.loc[0].y;
+	    		}
+	  
+	    	int[] PointsX=new int[n];
+	    	int[] PointsY=new int[n];
+		
+	    	int xDif=parent.abs(xx1-xx2);
+	    	int yDif=parent.abs(yy1-yy2);
+	    	int mx=parent.min(xx1,xx2);
+	    	int my=parent.min(yy1,yy2);
 
+	    	if(mx==xx1 && my==yy1)
+	    		{
+	    		for(int i=0;i<n;i++)
+	    			{
+	    			PointsX[i]=(xDif/n)*(i+1)+mx;
+	    			PointsY[i]=(yDif/n)*(i+1)+my;
+	    			}
+	    		}
+	  
+	    	if(mx==xx1 && my==yy2)
+	    		{
+	    		for(int i=0;i<n;i++)
+	    			{
+	    			PointsX[i]=(xDif/n)*(i+1)+mx;
+	    			PointsY[i]=yy1-(yDif/n)*(i+1);
+	    			}
+	    		}
+	  
+	    	if(mx==xx2 && my==yy1)
+	    		{
+	    		for(int i=0;i<n;i++)
+	    			{
+	    			PointsX[i]=(xDif/n)*(i+1)+mx;
+	    			PointsY[i]=yy2-(yDif/n)*(i+1);
+	    			}
+	    		}
+	  
+	    	if(mx==xx2 && my==yy2)
+	    		{
+	    		for(int i=0;i<n;i++)
+	    			{
+	    			PointsX[i]=(xDif/n)*(i+1)+mx;
+	    			PointsY[i]=(yDif/n)*(i+1)+my;
+	    			}
+	    		}
+	  
+	    	int[][] Points=new int[n][2];
+	    	for(int i=0;i<n;i++)
+	    		{
+	    		Points[i][0]=PointsX[i];
+	    		Points[i][1]=PointsY[i];
+	    		}
+	    	return Points;
+	    }
   
     Card(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,int id,int db_id,int owner,PApplet p)
     {
@@ -202,17 +313,23 @@ public class Card
     	frame=true;							//czy ma byc ramka
     	loc=new PVector[4];	
     	loc2=new PVector[4];	//lokalizacja
-    	r=255;g=0;b=0;
+    	r=0;g=0;b=255;
+    	
+    
+    	
+    	
     	loc[0]=new PVector(x1,y1);
     	loc[1]=new PVector(x2,y2);
     	loc[2]=new PVector(x3,y3);
     	loc[3]=new PVector(x4,y4);
     	
+    	
+    	
     	loc2[0]=new PVector(x1,y1);
     	loc2[1]=new PVector(x2,y2);
     	loc2[2]=new PVector(x3,y3);
     	loc2[3]=new PVector(x4,y4);
-	 
+	 /*
     	this.x1=x1;
 	    this.x2=x2;
 	    this.x3=x3;
@@ -222,7 +339,78 @@ public class Card
 	    this.y2=y2;
 	    this.y3=y3;
 	    this.y4=y4;
-
+	   */ 
+	    
+		float dist[]=new float[4];
+		float mindist;
+		int i;
+    	for(i=0;i<4;i++)
+    	{
+    		
+    		dist[i]=parent.dist(this.loc[i].x, this.loc[i].y, 0, 0);
+    		
+    	}
+    	mindist=parent.min(dist);
+    	
+    	for(i=0;i<4;i++)
+    	{
+    		if(parent.dist(this.loc[i].x, this.loc[i].y, 0, 0)==mindist) {LG=loc[i]; break;}
+    	}
+    	i++;
+    	PG=loc[i%4];
+    	i++;
+    	PD=loc[i%4];
+    	i++;
+    	LD=loc[i%4];
+    	/*
+    	for(int i=0;i<4;i++)
+    	{
+    		
+    		dist[i]=parent.dist(this.loc[i].x, this.loc[i].y,parent.width, 0);
+    		
+    	}
+    	
+    	mindist=parent.min(dist);
+    	
+    	for(int i=0;i<4;i++)
+    	{
+    		if(parent.dist(this.loc[i].x, this.loc[i].y, parent.width, 0)==mindist) PG=loc[i];
+    	}
+    	
+    	
+    	
+    	
+    	for(int i=0;i<4;i++)
+    	{
+    		
+    		dist[i]=parent.dist(this.loc[i].x, this.loc[i].y, parent.width, parent.height);
+    		
+    	}
+    	mindist=parent.min(dist);
+    	
+    	for(int i=0;i<4;i++)
+    	{
+    		if(parent.dist(this.loc[i].x, this.loc[i].y, parent.width, parent.height)==mindist) PD=loc[i];
+    	}
+    	
+    	
+    	
+    	
+    	
+    	for(int i=0;i<4;i++)
+    	{
+    		
+    		dist[i]=parent.dist(this.loc[i].x, this.loc[i].y, 0, parent.height);
+    		
+    	}
+    	mindist=parent.min(dist);
+    	for(int i=0;i<4;i++)
+    	{
+    		if(parent.dist(this.loc[i].x, this.loc[i].y, 0, parent.height)==mindist) LD=loc[i];
+    	}
+    	*/
+    	
+    	//parent.ellipse(LG.x, LG.y, 20, 20);
 	    this.id=id;
 	    this.db_id=db_id;
 	    this.owner=owner;
@@ -241,12 +429,12 @@ public class Card
 	    PVector vel=null;
 	    //PVector vel=new PVector(0.5f,2);
 	    //PVector acc=new PVector(0.1f,0.1f);
-	    
-	    for(int i=0;i<se.size();i++)
+	    this.manaCost=2;
+	    for(i=0;i<se.size();i++)
 	    	{
 	    	SparkEdge e=se.get(i);
 	    	//e.changeSparkType('b',35,230,80,2,vel,acc);
-	    	e.changeSparkType('c',150,40,230,6,vel,acc);
+	    	e.changeSparkType('c',0,40,230,6,vel,acc);
 	    	}
 	    
     }
