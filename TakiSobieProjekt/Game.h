@@ -32,6 +32,9 @@ private:
 public:
 	bool oneAttack;
 	int GetPlayer(int id);
+	int GetPlayer(Player &player);
+
+
 	Point a,b,c,d;
 	bool t;
 	Player player1;

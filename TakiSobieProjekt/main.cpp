@@ -465,12 +465,71 @@ void draw_s(vector<Marker> markers,Mat &img,Game &game)
 	{
 	for(int i=0;i<markers.size();i++)
 	{
-		circle(img,markers[i][0],4,Scalar(0,0,200),3);
+		circle(img,markers[i][0],4,Scalar(0,0,200),2);
 		//markers[i].draw(img,Scalar(200,0,0),3);
-		if(markers[i].id==341) {t++; game.a=markers[i][0] + Point2f(-10,-10);}
-		if(markers[i].id==1005) {t++; game.b=markers[i][0] + Point2f(10,-10);}
-		if(markers[i].id==791) {t++; game.c=markers[i][0]+Point2f(10,10);}
-		if(markers[i].id==977) {t++; game.d=markers[i][0]+Point2f(-10,10);}
+		if(markers[i].id==341) 
+		{
+			float constans = 212.13f; // stała oznaczająca długość przekątnej w markerze wyświetlanym przez Olka
+
+			float distance = Card::Distance(markers[i][0],markers[i][2]);
+			float rel = distance/constans;
+			float xx = markers[i][0].x - markers[i][2].x;
+			float yy = markers[i][0].y - markers[i][2].y;
+			float xxx = xx/(float)150;
+			float yyy = yy/(float)150;
+			Point2f movement(xxx*25,yyy*25);
+			
+			t++; 
+			game.a=markers[i][0] + movement;
+				circle(img,game.a,4,Scalar(0,0,200),3);
+	
+		}
+		if(markers[i].id==1005) 
+		{
+						float constans = 212.13f; // stała oznaczająca długość przekątnej w markerze wyświetlanym przez Olka
+
+			float distance = Card::Distance(markers[i][0],markers[i][2]);
+			float rel = distance/constans;
+			float xx = markers[i][0].x - markers[i][2].x;
+			float yy = markers[i][0].y - markers[i][2].y;
+			float xxx = xx/(float)150;
+			float yyy = yy/(float)150;
+			Point2f movement(xxx*25,yyy*25);
+			
+			t++; 
+			game.b=markers[i][0] +movement;
+			circle(img,game.b,4,Scalar(0,0,200),3);
+		}
+		if(markers[i].id==791) {
+						float constans = 212.13f; // stała oznaczająca długość przekątnej w markerze wyświetlanym przez Olka
+
+			float distance = Card::Distance(markers[i][0],markers[i][2]);
+			float rel = distance/constans;
+			float xx = markers[i][0].x - markers[i][2].x;
+			float yy = markers[i][0].y - markers[i][2].y;
+			float xxx = xx/(float)150;
+			float yyy = yy/(float)150;
+			Point2f movement(xxx*25,yyy*25);
+			
+			t++;
+			game.c=markers[i][0]+movement;
+			circle(img,game.c,4,Scalar(0,0,200),3);
+		}
+		if(markers[i].id==977) {
+						float constans = 212.13f; // stała oznaczająca długość przekątnej w markerze wyświetlanym przez Olka
+
+			float distance = Card::Distance(markers[i][0],markers[i][2]);
+			float rel = distance/constans;
+			float xx = markers[i][0].x - markers[i][2].x;
+			float yy = markers[i][0].y - markers[i][2].y;
+			float xxx = xx/(float)150;
+			float yyy = yy/(float)150;
+			Point2f movement(xxx*25,yyy*25);
+			
+			t++; 
+			game.d=markers[i][0]+movement;
+			circle(img,game.d,4,Scalar(0,0,200),3);
+		}
 	}
 	if(t==4)
 	{

@@ -131,6 +131,12 @@ int Game::GetPlayer(int id)
 	return 2;
 }
 
+int Game::GetPlayer(Player& player)
+{
+	if(player.markerId == player1.markerId) return 1;
+	return 2;
+}
+
 Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h,int interval,bool showLog)
 {
 	gameWidth = w;
