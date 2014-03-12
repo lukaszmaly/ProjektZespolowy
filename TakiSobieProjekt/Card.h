@@ -12,11 +12,18 @@
 #include "CardB.h"
 #include "Game.h"
 #include "Player.h"
-#define MIN_D1 1.39
-#define MAX_D1 1.45
+#define MIN_D1 1.3
+#define MAX_D1 1.5
 #define M_PI 3.14159265358979323846
-#define MIN_D2 0.67
-#define MAX_D2 0.76
+#define MIN_D2 0.6
+#define MAX_D2 0.8
+//
+//#define MIN_D1 1.39
+//#define MAX_D1 1.45
+//#define M_PI 3.14159265358979323846
+//#define MIN_D2 0.67
+//#define MAX_D2 0.76
+
 using namespace std;
 using namespace cv;
 class Card
@@ -24,9 +31,25 @@ class Card
 public:
 	void Fight(Card &op);
 	CardB cardBase;
+
+	static void Draw(Mat &img)
+	{
+		int x,y;
+		x=y=100;
+		int width = 100 *MIN_D1;
+		int height = 75 * MIN_D2;
+		Point a(x,y);
+		Point b(x+width,y);
+		Point c(x+width,y+height);
+		Point d(x,y+height);
+		rectangle(img,a,c,Scalar(255,0,0));
+		imshow("Costam",img);
+	}
+
 	static int ID;
 	int id;
 	int sendTime;
+	bool canUntap;
 	bool dead;
 	Point old;
 	int att;

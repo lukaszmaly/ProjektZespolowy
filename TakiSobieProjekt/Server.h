@@ -3,7 +3,7 @@
 #include <string>
 #include "opencv2/core/core.hpp"
 #include "SFML/Network.hpp"
-
+#include <fstream>
 using namespace std;
 using namespace sf;
 using namespace cv;
@@ -20,6 +20,8 @@ private:
 	IpAddress client;
 public:
 	Server();
+	void NextPhase();
+	void Write(const char tab[100]);
 	void Markers();
 	int GetInterval();
 	void AddMana(int id,int count=1);

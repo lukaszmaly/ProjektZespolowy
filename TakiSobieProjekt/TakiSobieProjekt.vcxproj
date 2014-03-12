@@ -94,6 +94,7 @@
     <ClCompile Include="marker.cpp" />
     <ClCompile Include="markerdetector.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="ScriptsManager.cpp" />
     <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -110,6 +111,7 @@
     <ClInclude Include="marker.h" />
     <ClInclude Include="markerdetector.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="ScriptsManager.h" />
     <ClInclude Include="Server.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

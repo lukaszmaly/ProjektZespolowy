@@ -36,7 +36,7 @@ using namespace std;
 int port=54000;
 
 int c=0;
-int three=80;
+int three=100;
 int maxArea= 21;
 //int maxArea = 51;
 int minArea=10;
@@ -114,7 +114,14 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 	}
 
 	imshow("Kontury",diff);
-
+	for(unsigned int i=0;i<squares.size();i++)
+	{
+		if(Card::Valid(squares[i][0],squares[i][1],squares[i][2],squares[i][3])==false)
+		{
+			squares.erase(squares.begin()+i);
+			--i;
+		}
+	}
 
 	//tworzenie tymczaswego wektora z wykrytymi kartami na stole
 	for (unsigned int i = 0; i<squares.size(); i++ ) 
@@ -130,7 +137,8 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 			if(i!=j && odleglos(kartyTemp[i].getCenter(),kartyTemp[j].getCenter())<40)
 			{
 				kartyTemp.erase(kartyTemp.begin()+j);
-				i=-1;
+				//i=-1;
+				--i;
 				break;
 			}
 		}
@@ -174,7 +182,8 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 			kartyTemp[i].owner=game.getCurrentPlayer();
 			stos.push_back(kartyTemp[i]);
 			kartyTemp.erase(kartyTemp.begin()+i);
-			i=-1;
+			//i=-1
+			--i;
 		}
 	}
 
@@ -188,7 +197,8 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 			{
 				stos.erase(stos.begin()+max(j,i));
 				j=-1;
-				i=-1;
+				//i=-1;
+				--i;
 				break;
 			}
 		}
@@ -230,15 +240,12 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 	{
 		if(kartyTemp[i].cardBase.type==LAND)
 		{
-				kartyTemp[i].Unlock();
+			kartyTemp[i].Unlock();
 			karty.push_back(kartyTemp[i]);
-			int owner = 1;
-			if(kartyTemp[i].owner==game.player2) owner=2;
-			game.server.SendNewCard(kartyTemp[i].id,kartyTemp[i].cardBase.id,owner,kartyTemp[i].a,kartyTemp[i].b,kartyTemp[i].c,kartyTemp[i].d,kartyTemp[i].taped);
-			
+			game.server.SendNewCard(kartyTemp[i].id,kartyTemp[i].cardBase.id,game.GetPlayer(kartyTemp[i].owner),kartyTemp[i].a,kartyTemp[i].b,kartyTemp[i].c,kartyTemp[i].d,kartyTemp[i].taped);
 			kartyTemp.erase(kartyTemp.begin()+i);
-			i=-1;
-		
+			//i=-1;
+			--i;
 		}
 	}
 
@@ -250,19 +257,20 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 			//if(stos[i].cardBase.id==kartyTemp[j].cardBase.id && kartyTemp[j].getCenter().x<SAFEREGION) 
 			if(stos[i].owner.mana>=stos[i].cardBase.koszt && stos[i].cardBase.id==kartyTemp[j].cardBase.id && kartyTemp[j].getCenter().x<SAFEREGION) 
 			{
-				//stos[i].owner.mana-=stos[i].cardBase.koszt;
-				
-				int owner = 1;
-				if(stos[i].owner==game.player2) owner=2;
-				game.server.SubMana(owner,stos[i].cardBase.koszt);
-
+				stos[i].owner.mana-=stos[i].cardBase.koszt;
+				game.server.SubMana(game.GetPlayer(stos[i].owner),stos[i].cardBase.koszt);
 				kartyTemp[j].Unlock();
 				stos[i].id=kartyTemp[j].id;
-				game.server.SendNewCard(kartyTemp[j].id,kartyTemp[j].cardBase.id,owner,kartyTemp[j].a,kartyTemp[j].b,kartyTemp[j].c,kartyTemp[j].d,kartyTemp[j].taped);
+				game.server.SendNewCard(kartyTemp[j].id,kartyTemp[j].cardBase.id,game.GetPlayer(kartyTemp[j].owner),kartyTemp[j].a,kartyTemp[j].b,kartyTemp[j].c,kartyTemp[j].d,kartyTemp[j].taped);
 				karty.push_back(stos[i]);
 				stos.erase(stos.begin()+i);
 				kartyTemp.erase(kartyTemp.begin()+j);
-				i=j=-1;
+				//i=j=-1;
+				--i;
+				j=-1;
+				break;
+
+
 			}
 		}
 	}
@@ -277,7 +285,8 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 				cout<<"USUWAM DUPLIKAT"<<endl;
 				karty.erase(karty.begin()+max(j,i));
 				j=-1;
-				i=-1;
+				//i=-1;
+				--i;
 				break;
 			}
 		}
@@ -286,22 +295,19 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 	for(unsigned int i=0;i<karty.size();i++)
 	{
 		if(!karty[i].TrySend(game)) continue;
-		
-			int owner = 1;
-			if(karty[i].owner==game.player2) owner=2;
 		if(karty[i].attack==true)
 		{
-				game.server.Attack(karty[i].id,karty[i].cardBase.id,owner,karty[i].a,karty[i].b,karty[i].c,karty[i].d,karty[i].taped);
+				game.server.Attack(karty[i].id,karty[i].cardBase.id,game.GetPlayer(karty[i].owner),karty[i].a,karty[i].b,karty[i].c,karty[i].d,karty[i].taped);
 		
 		}
 		else if(karty[i].block == true)
 		{
-			game.server.Block(karty[i].id,karty[i].cardBase.id,owner,karty[i].a,karty[i].b,karty[i].c,karty[i].d,karty[i].taped,karty[i].blocking);
+			game.server.Block(karty[i].id,karty[i].cardBase.id,game.GetPlayer(karty[i].owner),karty[i].a,karty[i].b,karty[i].c,karty[i].d,karty[i].taped,karty[i].blocking);
 		
 		}
 		else
 		{
-			game.server.UpdateCard(karty[i].id,karty[i].cardBase.id,owner,karty[i].a,karty[i].b,karty[i].c,karty[i].d,karty[i].taped);
+			game.server.UpdateCard(karty[i].id,karty[i].cardBase.id,game.GetPlayer(karty[i].owner),karty[i].a,karty[i].b,karty[i].c,karty[i].d,karty[i].taped);
 		
 		}
 
@@ -309,10 +315,7 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 		for(unsigned int i=0;i<stos.size();i++)
 	{
 		if(!stos[i].TrySend(game) || stos[i].cardBase.type==LAND) continue;
-		
-			int owner = 1;
-			if(stos[i].owner==game.player2) owner=2;
-			game.server.Cost(owner,stos[i].cardBase.koszt);
+			game.server.Cost(game.GetPlayer(stos[i].owner),stos[i].cardBase.koszt);
 
 	}
 
@@ -396,6 +399,7 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 			}
 			karty[i].Clear();
 		}
+		game.nextPhase();
 		setTrackbarPos("Faza gry ","Ustawienia",4);
 	}
 
@@ -552,7 +556,10 @@ void draw_s(vector<Marker> markers,Mat &img,Game &game)
 int Card::ID=0;
 int main( int argc, char** argv )
 {
+	//cout<<Card::Distance(Point(724,533),Point(828,529))<<endl;
+	//cout<<Card::Distance(Point(828,664),Point(828,529))<<endl;
 
+	//return 0;
 	Point action(-1,-1);
 
 	namedWindow("Ustawienia",CV_WINDOW_NORMAL);
@@ -565,8 +572,8 @@ int main( int argc, char** argv )
 	createTrackbar("Faza gry ","Ustawienia",&faza,4);
 
 
-
-	Game game("lukasz",1,"daniel",2,"25.172.199.151",6121,1366,768,8,true);
+	
+	Game game("lukasz",1,"daniel",2,"10.10.0.1",6121,1366,768,8,true);
 
 	game.server.AddPlayer(1,"lukasz");
 	game.server.AddPlayer(2,"daniel");
@@ -606,25 +613,30 @@ int main( int argc, char** argv )
 
 	capture.set(CV_CAP_PROP_FRAME_WIDTH, 1280 );
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT, 720 );
-	capture.set(CV_CAP_PROP_FOCUS, 11 );
+	capture.set(CV_CAP_PROP_FOCUS, 12 );
 
 	capture.read(frame);
 	while(1)
 	{
+			
 		game.Update();
 		game.setPlayer(gracz);
 		game.setFaza(faza);
 		capture.read(frame);
+		//	Card::Draw(frame);
+
 		game.CheckMarkers(frame);
 		draw_s(game.markers,frame,game);
 		if(frame.data)
+		{
 			Wykryj_karty(frame,three,karty,stos,bkarty,game);
+		
+
+		}
 			game.Draw();
 		if(cv::waitKey(20)==27) break;
 	
-
-
-	//	if(cv::waitKey(10)==99) stos.clear();
+		if(cv::waitKey(10)==97) game.nextPhase();
 	}
 	capture.release();
 	cv::waitKey(0);

@@ -59,6 +59,7 @@ string Game::getCurrentPhase()
 
 void Game::nextPhase()
 {
+	server.NextPhase();
 	zmiana=true;
 	switch(phase)
 	{
@@ -125,11 +126,7 @@ Phase Game::GetPhase()
 {
 	return phase;
 }
-int Game::GetPlayer(int id)
-{
-	if(id == player1.markerId) return 1;
-	return 2;
-}
+
 
 int Game::GetPlayer(Player& player)
 {

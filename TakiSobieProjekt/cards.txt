@@ -1,5 +1,5 @@
 1 victim 0 2 2 1
 2 weight 0 2 2 2
-4 pajak 0 2 2 2
+4 Pajak 0 2 2 2
 5 swamp1 1 2 2 2
 6 swamp2 1 2 2 2
