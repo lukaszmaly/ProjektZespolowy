@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"> </script>
+
+<script>
+
+$(document).ready(function(){
+	for (var i = 0, limit = 5; i <= limit; i++) {
+
+    var string = "div"+i;
+	$('.'+string).hide();
+	}
+
+  var licznik=0;
+  var string;
+  $('.nastepny').click(function(){
+	licznik++;
+	string = "div"+licznik;
+	$('.'+string).prepend('<img id="theImg" src="http://upload.wikimedia.org/wikipedia/commons/e/eb/Ash_Tree_-_geograph.org.uk_-_590710.jpg" width=/>');
+	$('.'+string).show();
+    });
+	
+	$('.poprzedni').click(function(){
+	
+	string = "div"+licznik;
+	 $('.'+string).empty();
+	 $('.'+string).hide();
+	 if (licznik!=0)
+	licznik = licznik-1;
+    });
+});
+</script>
+</head>
+<body>
+
+<button class ="poprzedni">Previous</button>
+<button class ="nastepny">Next</button>
+<div class="div1"></div>
+<div class="div2"></div>
+<div class="div3"></div>
+<div class="div4"></div>
+<div class="div5"></div>
+
+</body>
+</html>
