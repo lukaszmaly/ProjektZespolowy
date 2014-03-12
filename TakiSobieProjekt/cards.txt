@@ -1,3 +1,5 @@
 1 victim 0 2 2 1
-2 weight 0 2 2 3
-3 Swamp 1 0 0 0
+2 weight 0 2 2 2
+4 pajak 0 2 2 2
+5 swamp1 1 2 2 2
+6 swamp2 1 2 2 2

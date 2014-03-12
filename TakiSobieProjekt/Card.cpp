@@ -355,8 +355,11 @@ void Card::Fight(Card &op)
 	int t2=op.def-att;
 	def=def-op.att;
 	op.def=op.def-att;
+	Clear();
+	op.Clear();
 	if(t1<=0) die();
 	if(t2<=0) op.die();
+
 }
 
 void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
@@ -444,7 +447,7 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 			line(img1,a,c,Scalar(255,0,0),3);
 					char cad4[100];
 					sprintf(cad4,"Brakuje: %d",cardBase.koszt-owner.mana);
-			putText(img1,cad4, c+Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
+			putText(img1,cad4, d+Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
 			
 		}
 		if(dead==true)

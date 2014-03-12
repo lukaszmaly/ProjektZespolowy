@@ -30,6 +30,7 @@ private:
 	Point action;
 	
 public:
+	bool oneAttack;
 	int GetPlayer(int id);
 	Point a,b,c,d;
 	bool t;

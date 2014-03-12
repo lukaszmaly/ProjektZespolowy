@@ -6,18 +6,24 @@ void Game::setFaza(int i)
 	switch(i)
 	{
 	case 0:
+		oneAttack=true;
 		phase=PIERWSZY;
+
 		break;
 	case 1:
+		oneAttack=false;
 		phase=ATAK;
 		break;
 	case 2:
+		oneAttack=false;
 		phase=OBRONA;
 		break;
 	case 3:
+		oneAttack=false;
 		phase=WYMIANA;
 		break;
 	case 4:
+		oneAttack=true;
 		phase=DRUGI;
 		break;
 	case 5:
@@ -128,6 +134,7 @@ int Game::GetPlayer(int id)
 Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h,int interval,bool showLog)
 {
 	gameWidth = w;
+	oneAttack=false;
 	gameHeight = h;
 	zmiana = false;
 	phase = PIERWSZY;

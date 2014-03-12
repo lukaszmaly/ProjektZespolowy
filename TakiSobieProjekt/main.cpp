@@ -19,14 +19,15 @@ położenie problemu: metoda Card::Valid();
 #include "Player.h"
 #include "CardB.h"
 #include "aruco.h"
+
 #include "marker.h"
 #include "cvdrawingutils.h"
 #include <fstream>
 #include "Game.h"
 
 using namespace aruco;
-#define SAFEREGION 820
-#define SAFEREGIONMAX 1200
+#define SAFEREGION 1100
+#define SAFEREGIONMAX 1366
 using namespace cv;
 
 using namespace std;
@@ -36,14 +37,14 @@ int port=54000;
 
 int c=0;
 int three=80;
-//int maxArea= 21;
-int maxArea = 51;
+int maxArea= 21;
+//int maxArea = 51;
 int minArea=10;
 int zmienna=21;
 int white=2800;
 int gracz=0;
 int faza=0;
-
+bool oneAttack=false;
 
 
 
@@ -231,6 +232,10 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 		{
 				kartyTemp[i].Unlock();
 			karty.push_back(kartyTemp[i]);
+			int owner = 1;
+			if(kartyTemp[i].owner==game.player2) owner=2;
+			game.server.SendNewCard(kartyTemp[i].id,kartyTemp[i].cardBase.id,owner,kartyTemp[i].a,kartyTemp[i].b,kartyTemp[i].c,kartyTemp[i].d,kartyTemp[i].taped);
+			
 			kartyTemp.erase(kartyTemp.begin()+i);
 			i=-1;
 		
@@ -241,9 +246,11 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 	{
 		for(unsigned int j=0;j<kartyTemp.size();j++)
 		{
+			
+			//if(stos[i].cardBase.id==kartyTemp[j].cardBase.id && kartyTemp[j].getCenter().x<SAFEREGION) 
 			if(stos[i].owner.mana>=stos[i].cardBase.koszt && stos[i].cardBase.id==kartyTemp[j].cardBase.id && kartyTemp[j].getCenter().x<SAFEREGION) 
 			{
-				stos[i].owner.mana-=stos[i].cardBase.koszt;
+				//stos[i].owner.mana-=stos[i].cardBase.koszt;
 				
 				int owner = 1;
 				if(stos[i].owner==game.player2) owner=2;
@@ -299,6 +306,15 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 		}
 
 	}
+		for(unsigned int i=0;i<stos.size();i++)
+	{
+		if(!stos[i].TrySend(game) || stos[i].cardBase.type==LAND) continue;
+		
+			int owner = 1;
+			if(stos[i].owner==game.player2) owner=2;
+			game.server.Cost(owner,stos[i].cardBase.koszt);
+
+	}
 
 
 	if(game.GetPhase()==ATAK)
@@ -347,9 +363,9 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 			}
 		}
 	}
-	if(game.GetPhase()==WYMIANA)
+	if(game.GetPhase()==WYMIANA && game.oneAttack==false)
 	{
-
+		game.oneAttack=true;
 		for(int i=0;i<karty.size();i++)
 		{
 			if(karty[i].block==false) continue;
@@ -363,6 +379,21 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 
 		for(int i=0;i<karty.size();i++)
 		{
+			if(karty[i].attack==true)
+			{
+				if(karty[i].owner==game.player1)
+				{
+					game.player2.hp-=karty[i].att;
+			
+			
+					game.server.SubLife(2,karty[i].att);
+				}
+				else
+				{
+						game.player1.hp-=karty[i].att;
+					game.server.SubLife(1,karty[i].att);
+				}
+			}
 			karty[i].Clear();
 		}
 		setTrackbarPos("Faza gry ","Ustawienia",4);
@@ -476,7 +507,7 @@ int main( int argc, char** argv )
 
 
 
-	Game game("lukasz",1,"daniel",2,"25.172.199.151",6121,1024,768,12,false);
+	Game game("lukasz",1,"daniel",2,"25.172.199.151",6121,1366,768,8,true);
 
 	game.server.AddPlayer(1,"lukasz");
 	game.server.AddPlayer(2,"daniel");
@@ -503,6 +534,11 @@ int main( int argc, char** argv )
 	}
 	cout<<"Wczytane karty: "<< bkarty.size()<<endl;
 
+
+	for(int i=0;i<bkarty.size();i++)
+	{
+		cout<< bkarty[i].name<<" "<<bkarty[i].koszt<<endl;
+	}
 	VideoCapture capture(0); 
 	Mat frame;
 	vector<Card> karty;
@@ -511,7 +547,7 @@ int main( int argc, char** argv )
 
 	capture.set(CV_CAP_PROP_FRAME_WIDTH, 1280 );
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT, 720 );
-	capture.set(CV_CAP_PROP_FOCUS, 12 );
+	capture.set(CV_CAP_PROP_FOCUS, 11 );
 
 	capture.read(frame);
 	while(1)

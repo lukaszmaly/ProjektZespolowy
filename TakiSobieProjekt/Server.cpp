@@ -38,7 +38,7 @@ void Server::Init(string ip,int port,int interval,bool showLog)
 	}
 	else
 	{
-		cout<<"Utworzono serwer UDP na porcie "<<port<<endl;
+		cout<<"Utworzono serwer UDP na porcie "<<port<<" z interval = "<<this->interval<<endl;
 	}
 }
 
@@ -86,6 +86,37 @@ void Server::SubMana(int id,int count)
 		ile++;
 		char data[100];
 	int n = sprintf_s(data,"| SUBMANA %d %d |",id,count);	
+
+	if(soc.send(data, n, client, port) != sf::Socket::Done)
+	{
+		cout<<"Blad podczas wysylanie danych o nowej karcie"<<endl;
+	}
+	else if(showLog)
+	{
+		cout<< data <<endl;
+	}
+}
+
+void Server::SubLife(int id,int count)
+{
+		ile++;
+		char data[100];
+	int n = sprintf_s(data,"| SUBLIFE %d %d |",id,count);	
+
+	if(soc.send(data, n, client, port) != sf::Socket::Done)
+	{
+		cout<<"Blad podczas wysylanie danych o nowej karcie"<<endl;
+	}
+	else if(showLog)
+	{
+		cout<< data <<endl;
+	}
+}
+void Server::Cost(int owner,int cost)
+{
+		ile++;
+		char data[100];
+	int n = sprintf_s(data,"| COST %d %d |",owner,cost);	
 
 	if(soc.send(data, n, client, port) != sf::Socket::Done)
 	{
