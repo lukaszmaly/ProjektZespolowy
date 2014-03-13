@@ -1,0 +1,20 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if gracze.count > 0 %}
+<h1>Lista graczy:</h1>
+{% for gracz in gracze %}
+<div>
+<h2><a href = "/gracze/{{gracz.id}}/">{{ gracz.imie }}</a></h2>
+</div>
+{% endfor %}
+
+
+{% else %}
+
+<p>Nic!</p>
+
+{% endif%}
+
+{% endblock %}
