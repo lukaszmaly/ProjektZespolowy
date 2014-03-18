@@ -5,20 +5,27 @@ class Game:
 	count = 0;
 	nicklist=[];
 	cardlist=[];
+	actionlist=[];
 #otwieramy plik itworzymy obiekt gry
 fo=open("C:\\abc.txt", "r");
 obiekt = Game();
+
 #pierwsza petla - czytamy podstawowe bzdury
 for x in range (0, 6):
 	line = fo.readline();
-	if x==0: obiekt.nick1 = line;
-	if x==1: obiekt.nick2 = line;
+	if x==0: obiekt.nick1=line;
+	if x==1: obiekt.nick2=line;
 	if x==3: obiekt.winner= line;
 	if x==5: obiekt.count=line;	
 #indeks naszej listy
 i=0;
+print obiekt.nick1;
+print obiekt.nick2;
+print obiekt.winner;
+print obiekt.count;
+
 #ogr to numer ostatniej linijki pliku
-ogr = int( int(obiekt.count)+8);
+ogr = int( int(obiekt.count)+8)*100;
 #wczytujemy przebieg gry
 for y in range (7,ogr):
 	line = fo.readline();
@@ -26,30 +33,38 @@ for y in range (7,ogr):
 	if line == "\n":
 		continue;
 	elif not line:break;
+	else:
 	#dzielimy funkcja split dana linie
-	else: 	list=line.split ("#")
-	#stad otrzymujeym nick i nazwe karty, ale trza nad tym popracowac
-	obiekt.nicklist.append( list[0]);
-	obiekt.cardlist.append(list[1]);
-	#wyswietlamy i zwiekszamy indeks
-	print (obiekt.nicklist[i]+" "+obiekt.cardlist[i]);
-	i= i+1;
+		list=line.split (" ");
+	
+		if (list[0]=="Smierc"):
+			obiekt.actionlist.append(line);			
+		elif (list[0]=="Obrazenia"):
+			obiekt.actionlist.append(line);
+		elif (list[0]=="Brak"):
+			obiekt.actionlist.append(line);
+			#CZEMU TO NIE DZIALA !!!! 
+		elif (list[0] == obiekt.nick1) or (list[0] == obiekt.nick2):
+			
+			if(list[3]=="mana"):
+				dolacz="";
+				dolacz.join(list[2]);
+				dolacz.join(" ");
+				dolacz.join(list[3]);
+				obiekt.cardlist.append(dolacz);
+				obiekt.actionlist.append(line);
+			else: 
+				dolacz="";
+				for j in range (2,len(list)):
+					dolacz.join(list[j]);
+					dolacz.join(" ");
+				obiekt.cardlist.append(dolacz);
+				obiekt.actionlist.append(line);
+		else:
+			print(list[0]);
+			obiekt.actionlist.append(line);
 #zamykamy plik
 fo.close();
-#wyswietlanie danych
-print obiekt.nick1;
-print obiekt.nick2;
-print obiekt.winner;
-print obiekt.count;
 
-#sprawdzenie maksa
-tablecount=[];
-for j in range (0, len(obiekt.cardlist)):
-	tablecount.append(obiekt.cardlist.count(obiekt.cardlist[j]));
 
-for k in range (0, len(tablecount)):
-	if (obiekt.cardlist.count(obiekt.cardlist[k])== max(tablecount)):
-		mx=k;
-
-print (obiekt.cardlist[mx].lstrip()+" "+str(obiekt.cardlist.count(obiekt.cardlist[mx])).lstrip());
 
