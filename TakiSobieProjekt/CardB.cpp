@@ -12,7 +12,7 @@ CardB::~CardB(void)
 
 
 
-CardB::CardB(Mat &img,int id,string name,Color color,Type t,int att,int def,int koszt)
+CardB::CardB(Mat &img,int id,string name,Color color,Type t,int att,int def,int koszt,int ableToTarget)
 {
 	this->att=att;
 	this->def=def;
@@ -22,6 +22,7 @@ CardB::CardB(Mat &img,int id,string name,Color color,Type t,int att,int def,int 
 	this->id = id;
 	this->name = name;
 	this->img = img;
+	this->ableToTarget=ableToTarget;
 	if(!img.data)
 	{
 		cout<<"Blad podczas ³adowania pliku: "<<endl;

@@ -15,7 +15,8 @@ enum Color{
 };
 enum Type{
 	CREATURE = 0,
-	LAND = 1
+	LAND = 1,
+	INSTANT = 2,
 };
 
 class CardB
@@ -28,7 +29,8 @@ public:
 	int att,def;
 	int koszt;
 	Type type;
-	CardB(Mat &img1,int id,string name,Color color,Type t,int att,int def,int koszt);
+	int ableToTarget;
+	CardB(Mat &img1,int id,string name,Color color,Type t,int att,int def,int koszt,int ableToTarget=0);
 	void Update();
 	void OnUntap();
 

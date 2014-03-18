@@ -10,6 +10,8 @@ using namespace std;
 using namespace cv;
 using namespace aruco;
 #define ACTION 428
+#define TARGETMARKER 985
+#define M_PI 3.14159265358979323846
 enum Phase {
 	PIERWSZY = 0,
 	ATAK = 1,
@@ -28,8 +30,19 @@ private:
 	int gameHeight;
 	bool zmiana;
 	Point action;
-	
+	bool checkCardsProp;
+	bool bgrMode;
 public:
+	bool IsBgrMode();
+	bool CheckCardsProp();
+Point target;
+bool beAbleMarker;
+float targetAngle;
+float targetOldAngle;
+	void StopMarker();
+		static float getangle( cv::Point pt1, cv::Point pt2, cv::Point pt0 ) {
+	return atan2f( (pt1.y - pt2.y ),( pt1.x - pt2.x ) ) * 180 / M_PI + 180;
+	}
 	bool oneAttack;
 	int GetPlayer(Player &player);
 	Point a,b,c,d;

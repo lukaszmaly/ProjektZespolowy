@@ -1,6 +1,9 @@
 #include "Game.h"
 
-
+	bool Game::CheckCardsProp()
+	{
+		return checkCardsProp;
+	}
 void Game::setFaza(int i)
 {
 	switch(i)
@@ -31,7 +34,10 @@ void Game::setFaza(int i)
 		break;
 	}
 }
-
+bool Game::IsBgrMode()
+{
+	return bgrMode;
+}
 string Game::getCurrentPhase()
 {
 	switch(phase)
@@ -88,6 +94,7 @@ void Game::Draw()
 {
 	player1.Draw();
 	player2.Draw();
+	
 }
 
 void Game::setPlayer(int i)
@@ -109,7 +116,16 @@ int Game::GetGameWidth()
 
 void Game::Update()
 {
+	if(beAbleMarker==false)
+	{
+		if(abs(targetAngle-targetOldAngle)>45)
+		{
+			beAbleMarker=true;
+			targetOldAngle = targetAngle;
+		}
+	}
 	server.Update();
+
 }
 
 Game::~Game()
@@ -136,6 +152,9 @@ int Game::GetPlayer(Player& player)
 
 Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h,int interval,bool showLog)
 {
+	bgrMode=true;
+	checkCardsProp=false;
+	beAbleMarker=true;
 	gameWidth = w;
 	oneAttack=false;
 	gameHeight = h;
@@ -162,7 +181,14 @@ void Game::CheckMarkers(Mat &frame)
 
 	for(int i = 0; i < markers.size(); i++) 
 	{
+		
+		if(markers[i].id == TARGETMARKER)
+		{
+		continue;
+		}
+
 		markers[i].draw(frame,Scalar(0,0,255));
+
 		if(markers[i].id == ACTION)
 		{
 			if(action.x == -1) 

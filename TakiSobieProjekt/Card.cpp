@@ -10,6 +10,15 @@ Card::~Card(void)
 
 }
 
+void Card::SetTarget(int id)
+{
+	target = id;
+}
+
+int Card::GetTarget()
+{
+	return target;
+}
 void Card::Prepare(vector<Point>&square,Mat &img)
 {
 	if(square[1].y>square[3].y) swap(square[1],square[3]);
@@ -125,10 +134,15 @@ float Card::getAngle()
 	return atan2f(( a.y - getCenter().y ),( a.x - getCenter().x ) ) * 180 / M_PI + 180;
 }
 
-void Card::Compare(Mat &img1,Mat &img2,float tab[3])
+void Card::Compare(Mat &img1,Mat &img2,float tab[3],Game &game)
 {
 	if(img1.data && img2.data)
 	{
+		if(game.IsBgrMode()==false)
+		{
+		cvtColor(img1,img1,COLOR_BGR2HSV);
+		cvtColor(img2,img2,COLOR_BGR2HSV);
+		}
 		int width=img1.cols;
 		int height=img1.rows;
 		int n=width*height;
@@ -162,10 +176,11 @@ void Card::Unlock()
 
 Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp=false)
 {
+	canUntap=true;
+	target=-1;
 	error=false;
 	nowa=true;
 	sendTime=0;
-	canUntap=true;
 	blocking=-1;
 	owner=game.getCurrentPlayer();
 	taped=false;
@@ -182,6 +197,7 @@ Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game
 	dead=false;
 	if(temp==false)		id=ID++;
 	Update(a,b,c,d,img,bkarty,game,temp);
+	cardBase.type==LAND ? gaveMana=false : gaveMana=true;
 	old=getCenter();
 }
 bool Card::TrySend(Game &game)
@@ -270,7 +286,7 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 	cardId=-1;
 	for(unsigned int i=0;i<bkarty.size();i++)
 	{
-		Compare(tmp,bkarty[i].img,tm);
+		Compare(tmp,bkarty[i].img,tm,game);
 		float t1=tm[0]+tm[1]+tm[2];
 		if(t1<min) { cardId=i;min=t1;}
 	}

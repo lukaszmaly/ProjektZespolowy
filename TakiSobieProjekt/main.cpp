@@ -24,10 +24,13 @@ położenie problemu: metoda Card::Valid();
 #include "cvdrawingutils.h"
 #include <fstream>
 #include "Game.h"
+#include "ScriptsManager.h"
 
 using namespace aruco;
-#define SAFEREGION 1100
-#define SAFEREGIONMAX 1366
+#define SAFEREGIONX 100
+#define SAFEREGIONY 100
+#define SAFEREGIONWIDTH 300
+#define SAFEREGIONHEIGHT 600
 using namespace cv;
 
 using namespace std;
@@ -37,9 +40,10 @@ int port=54000;
 
 int c=0;
 int three=100;
-int maxArea= 21;
-//int maxArea = 51;
-int minArea=10;
+//int maxArea= 21;
+int maxArea = 51;
+int minArea=20;
+//int minArea=10;
 int zmienna=21;
 int white=2800;
 int gracz=0;
@@ -47,6 +51,18 @@ int faza=0;
 bool oneAttack=false;
 
 
+
+bool IsInRectFast(Point p,Point a = Point(SAFEREGIONX,SAFEREGIONY) ,Point c = Point(SAFEREGIONX+SAFEREGIONWIDTH,SAFEREGIONHEIGHT+SAFEREGIONHEIGHT))
+{
+	if(p.x<a.x || p.x>c.x || p.y<a.y || p.y>c.y) return false;
+	return true;
+
+}
+
+void DrawSafeRegion(Mat &img)
+{
+	rectangle(img,Point(SAFEREGIONX,SAFEREGIONY),Point(SAFEREGIONX+SAFEREGIONWIDTH,SAFEREGIONHEIGHT),Scalar(0,0,255));
+}
 
 int odleglos(Point a,Point b)
 {
@@ -116,7 +132,7 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 	imshow("Kontury",diff);
 	for(unsigned int i=0;i<squares.size();i++)
 	{
-		if(Card::Valid(squares[i][0],squares[i][1],squares[i][2],squares[i][3])==false)
+		if(game.CheckCardsProp()==true && Card::Valid(squares[i][0],squares[i][1],squares[i][2],squares[i][3])==false)
 		{
 			squares.erase(squares.begin()+i);
 			--i;
@@ -153,7 +169,7 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 		int minn=90000;
 		for(unsigned int j=0;j<kartyTemp.size();j++)
 		{
-			if(kartyTemp[j].getCenter().x>SAFEREGION )//&& stos[i].cardBase.id==kartyTemp[j].cardBase.id
+			if(IsInRectFast(kartyTemp[j].getCenter())==true)//&& stos[i].cardBase.id==kartyTemp[j].cardBase.id
 			{
 				if(odleglos(stos[i].getCenter(),kartyTemp[j].getCenter())<minn)
 				{
@@ -177,7 +193,7 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 	//dodanie nowych kart do stosu
 	for(unsigned int i=0;i<kartyTemp.size();i++)
 	{
-		if(kartyTemp[i].getCenter().x>SAFEREGION && kartyTemp[i].getCenter().x<SAFEREGIONMAX) 
+		if(IsInRectFast(kartyTemp[i].getCenter())==true) 
 		{
 			kartyTemp[i].owner=game.getCurrentPlayer();
 			stos.push_back(kartyTemp[i]);
@@ -255,7 +271,7 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 		{
 			
 			//if(stos[i].cardBase.id==kartyTemp[j].cardBase.id && kartyTemp[j].getCenter().x<SAFEREGION) 
-			if(stos[i].owner.mana>=stos[i].cardBase.koszt && stos[i].cardBase.id==kartyTemp[j].cardBase.id && kartyTemp[j].getCenter().x<SAFEREGION) 
+			if(stos[i].owner.mana>=stos[i].cardBase.koszt && stos[i].cardBase.id==kartyTemp[j].cardBase.id && IsInRectFast(kartyTemp[j].getCenter())==false) 
 			{
 				stos[i].owner.mana-=stos[i].cardBase.koszt;
 				game.server.SubMana(game.GetPlayer(stos[i].owner),stos[i].cardBase.koszt);
@@ -428,13 +444,13 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 		stos[i].Draw(grey_image,bkarty,game);
 	}
 
-	line(grey_image,Point(SAFEREGION,0),Point(SAFEREGION,600),Scalar(0,0,200),3);
-		line(grey_image,Point(SAFEREGIONMAX,0),Point(SAFEREGIONMAX,600),Scalar(0,0,200),3);
+	DrawSafeRegion(grey_image);
 	char cad[100];
 	char cad1[100];
 	char cad2[100];
 	char cad3[100];
 	char cad4[100];
+
 	sprintf(cad,"Kart niedozwolonych: %d",kartyTemp.size());
 	sprintf(cad1,"Kart na polu bitwy: %d",karty.size());
 	sprintf(cad2,"Kart na stosie: %d",stos.size());
@@ -447,7 +463,8 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 	putText(grey_image,cad3, Point(10,55),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 	putText(grey_image,cad4, Point(10,70),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 	putText(grey_image,cad5, Point(10,85),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
-	imshow("Podglad", grey_image);
+
+
 	if(game.t==false)
 	{
 		stos.clear();
@@ -549,6 +566,7 @@ void draw_s(vector<Marker> markers,Mat &img,Game &game)
 		mmat=getPerspectiveTransform(c1,c2);
 		warpPerspective(img,dst,mmat,Size(game.GetGameWidth(),game.GetGameHeight()));
 	}
+
 	imshow("Frame",img);
 	img=dst;
 }
@@ -574,7 +592,7 @@ int main( int argc, char** argv )
 
 	
 	Game game("lukasz",1,"daniel",2,"10.10.0.1",6121,1366,768,8,true);
-
+	ScriptsManager scriptManager;
 	game.server.AddPlayer(1,"lukasz");
 	game.server.AddPlayer(2,"daniel");
 	vector<CardB> bkarty;
@@ -601,10 +619,7 @@ int main( int argc, char** argv )
 	cout<<"Wczytane karty: "<< bkarty.size()<<endl;
 
 
-	for(int i=0;i<bkarty.size();i++)
-	{
-		cout<< bkarty[i].name<<" "<<bkarty[i].koszt<<endl;
-	}
+
 	VideoCapture capture(0); 
 	Mat frame;
 	vector<Card> karty;
@@ -630,12 +645,13 @@ int main( int argc, char** argv )
 		if(frame.data)
 		{
 			Wykryj_karty(frame,three,karty,stos,bkarty,game);
-		
-
+			scriptManager.Update(frame,game,karty,stos);
+			
+			imshow("Podglad", frame);
 		}
 			game.Draw();
 		if(cv::waitKey(20)==27) break;
-	
+
 		if(cv::waitKey(10)==97) game.nextPhase();
 	}
 	capture.release();

@@ -29,6 +29,8 @@ using namespace cv;
 class Card
 {
 public:
+	bool gaveMana;
+
 	void Fight(Card &op);
 	CardB cardBase;
 
@@ -45,7 +47,9 @@ public:
 		rectangle(img,a,c,Scalar(255,0,0));
 		imshow("Costam",img);
 	}
-
+	void SetTarget(int id);
+	int GetTarget();
+	int target;
 	static int ID;
 	int id;
 	int sendTime;
@@ -73,7 +77,7 @@ public:
 	void Unlock();
 	void setCardBase(CardB &card);
 	void NewRound();
-	void Compare(Mat &img1,Mat &img2,float tab[3]);
+	void Compare(Mat &img1,Mat &img2,float tab[3],Game &game);
 	Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp);
 	Card(void);
 	bool TapUntap();
@@ -113,6 +117,7 @@ public:
 		{
 			return true;
 		}
+		cout<<"Niepoprawne rozmiary karty:\n"<<a1<<" "<<a2<<endl;
 		return false;
 
 
