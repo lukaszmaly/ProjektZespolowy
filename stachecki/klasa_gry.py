@@ -5,29 +5,28 @@ class Game:
 	count = 0;
 	nicklist=[];
 	cardlist=[];
+	manalist=[];
 	actionlist=[];
+#HP poczatkowe 20
 #otwieramy plik itworzymy obiekt gry
 fo=open("C:\\abc.txt", "r");
 obiekt = Game();
 
 #pierwsza petla - czytamy podstawowe bzdury
-for x in range (0, 6):
+for x in range (0, 2):
 	line = fo.readline();
 	if x==0: obiekt.nick1=line;
 	if x==1: obiekt.nick2=line;
-	if x==3: obiekt.winner= line;
-	if x==5: obiekt.count=line;	
+	
 #indeks naszej listy
 i=0;
-print obiekt.nick1;
-print obiekt.nick2;
-print obiekt.winner;
-print obiekt.count;
+obiekt.nick1 = obiekt.nick1[:-1];
+obiekt.nick2 = obiekt.nick2[:-2];
 
 #ogr to numer ostatniej linijki pliku
-ogr = int( int(obiekt.count)+8)*100;
+ogr = int( int(obiekt.count)+3)*100;
 #wczytujemy przebieg gry
-for y in range (7,ogr):
+for y in range (3,ogr):
 	line = fo.readline();
 	#gdy linijka odstepu to nie wczytujemy
 	if line == "\n":
@@ -35,36 +34,39 @@ for y in range (7,ogr):
 	elif not line:break;
 	else:
 	#dzielimy funkcja split dana linie
-		list=line.split (" ");
-	
-		if (list[0]=="Smierc"):
-			obiekt.actionlist.append(line);			
-		elif (list[0]=="Obrazenia"):
-			obiekt.actionlist.append(line);
-		elif (list[0]=="Brak"):
-			obiekt.actionlist.append(line);
-			#CZEMU TO NIE DZIALA !!!! 
-		elif (list[0] == obiekt.nick1) or (list[0] == obiekt.nick2):
-			
-			if(list[3]=="mana"):
-				dolacz="";
-				dolacz.join(list[2]);
-				dolacz.join(" ");
-				dolacz.join(list[3]);
-				obiekt.cardlist.append(dolacz);
+		list=line.split (" ");	
+		#CZEMU TO NIE DZIALA !!!!
+		if("win" in list[0]):
+			obiekt.winner=list[1];
+		elif (obiekt.nick1 in list[1]) or (obiekt.nick2 in list[1]):
+			obiekt.nicklist.append(list[1][:-1]);
+		elif ("play:" in list[0] or "tap:" in list[0]):			
+			if("mana" in list[1]):
+				obiekt.manalist.append(list[1][:-1]);
 				obiekt.actionlist.append(line);
 			else: 
 				dolacz="";
-				for j in range (2,len(list)):
-					dolacz.join(list[j]);
-					dolacz.join(" ");
+				for j in range (1,len(list)):
+					dolacz=dolacz+" "+list[j];
 				obiekt.cardlist.append(dolacz);
 				obiekt.actionlist.append(line);
-		else:
-			print(list[0]);
+		elif("HP" in list[0]):
+			continue;
+
+		elif("counter:" in list[0] or "dead:"in list[0] or "skill:" in list[0] or "block:" in list[0]):
 			obiekt.actionlist.append(line);
+		else:
+			obiekt.actionlist.append(line);
+			
 #zamykamy plik
 fo.close();
 
+for k in range (0,len(obiekt.nicklist)):
+	print(obiekt.nicklist[k]);
 
+for k in range (0,len(obiekt.manalist)):
+	print(obiekt.manalist[k]);
+	
+for k in range (0,len(obiekt.cardlist)):
+	print(obiekt.cardlist[k]);
 
