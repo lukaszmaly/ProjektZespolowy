@@ -27,10 +27,10 @@ położenie problemu: metoda Card::Valid();
 #include "ScriptsManager.h"
 
 using namespace aruco;
-#define SAFEREGIONX 100
-#define SAFEREGIONY 100
-#define SAFEREGIONWIDTH 300
-#define SAFEREGIONHEIGHT 600
+#define SAFEREGIONX 1100
+#define SAFEREGIONY 150
+#define SAFEREGIONWIDTH 230
+#define SAFEREGIONHEIGHT 560
 using namespace cv;
 
 using namespace std;
@@ -41,8 +41,8 @@ int port=54000;
 int c=0;
 int three=100;
 //int maxArea= 21;
-int maxArea = 51;
-int minArea=20;
+int maxArea = 21;
+int minArea=10;
 //int minArea=10;
 int zmienna=21;
 int white=2800;
@@ -50,7 +50,12 @@ int gracz=0;
 int faza=0;
 bool oneAttack=false;
 
+void LoadCardDatabase(vector<CardB> &cards)
+{
 
+
+
+}
 
 bool IsInRectFast(Point p,Point a = Point(SAFEREGIONX,SAFEREGIONY) ,Point c = Point(SAFEREGIONX+SAFEREGIONWIDTH,SAFEREGIONHEIGHT+SAFEREGIONHEIGHT))
 {
@@ -80,7 +85,7 @@ double angle( cv::Point pt1, cv::Point pt2, cv::Point pt0 ) {
 
 void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&stos,vector<CardB> &bkarty,Game &game)
 {
-	
+
 	Mat diff;
 	vector<vector<Point> > contours;
 	vector<vector<Point> > edge_pts;
@@ -108,9 +113,13 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 	for (size_t i = 0; i < edge_pts.size(); i++)
 	{
 		approxPolyDP(Mat(edge_pts[i]), approx, arcLength(Mat(edge_pts[i]), true)*0.02, true);
-
+		if(game.showCardArea==true)
+		{
+			cout<<"Pole karty: "<<fabs(contourArea(Mat(approx)))<<endl;
+		}
 		if (approx.size() == 4 && fabs(contourArea(Mat(approx)))>minArea*1000 && fabs(contourArea(Mat(approx)))<maxArea*1000)
 		{
+
 			double maxCosine = 0;
 			for (int j=2; j<5; j++)
 			{
@@ -129,6 +138,9 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 		Card::Prepare(squares[i],grey_image);
 	}
 
+
+
+
 	imshow("Kontury",diff);
 	for(unsigned int i=0;i<squares.size();i++)
 	{
@@ -138,6 +150,31 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 			--i;
 		}
 	}
+	if(game.firstCardChecked==false)
+	{
+		int t=0;
+		//	cout<<"Square "<<squares.size()<<endl;
+		rectangle(grey_image,game.firsCardPoint,game.firsCardPoint+Point(game.firstCardWidth,game.firstCardHeight),Scalar(0,0,255),4);
+		for(unsigned int i=0;i<squares.size();i++)
+		{
+			if(IsInRectFast(Card::getCenter(squares[i][0],squares[i][1],squares[i][2],squares[i][3]),game.firsCardPoint,game.firsCardPoint+Point(game.firstCardWidth,game.firstCardHeight))==true)
+			{
+				int w = (int)Card::Distance(squares[i][0],squares[i][1]);
+				int h = (int)Card::Distance(squares[i][1],squares[i][2]);
+			//	game.firstCardChecked=true;
+				game.MakeDiffImage(grey_image,squares[i][0],squares[i][1],squares[i][2],squares[i][3]);
+				//game.server.Markers(w,h);
+				break;
+			}
+
+		}
+	
+		return;
+	}
+
+
+
+
 
 	//tworzenie tymczaswego wektora z wykrytymi kartami na stole
 	for (unsigned int i = 0; i<squares.size(); i++ ) 
@@ -153,8 +190,10 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 			if(i!=j && odleglos(kartyTemp[i].getCenter(),kartyTemp[j].getCenter())<40)
 			{
 				kartyTemp.erase(kartyTemp.begin()+j);
-				//i=-1;
-				--i;
+				i=-1;
+				j=-1;
+				//	cout<<"REDDDDDDDDD"<<endl;
+				//--i;
 				break;
 			}
 		}
@@ -181,7 +220,7 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 		if(index!=-1)
 		{
 			stos[i].Update(kartyTemp[index].a,kartyTemp[index].b,kartyTemp[index].c,kartyTemp[index].d,grey_image,bkarty,game,false);
-	kartyTemp.erase(kartyTemp.begin()+index);
+			kartyTemp.erase(kartyTemp.begin()+index);
 		}
 	}
 
@@ -198,8 +237,8 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 			kartyTemp[i].owner=game.getCurrentPlayer();
 			stos.push_back(kartyTemp[i]);
 			kartyTemp.erase(kartyTemp.begin()+i);
-			//i=-1
-			--i;
+			i=-1;
+			//--i;
 		}
 	}
 
@@ -213,14 +252,14 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 			{
 				stos.erase(stos.begin()+max(j,i));
 				j=-1;
-				//i=-1;
-				--i;
+				i=-1;
+				//--i;
 				break;
 			}
 		}
 	}
 
-	
+
 
 
 	///Tutaj mamy pewność że w bezpiecznej strefie nie znajdują się karty ze stosu
@@ -260,8 +299,8 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 			karty.push_back(kartyTemp[i]);
 			game.server.SendNewCard(kartyTemp[i].id,kartyTemp[i].cardBase.id,game.GetPlayer(kartyTemp[i].owner),kartyTemp[i].a,kartyTemp[i].b,kartyTemp[i].c,kartyTemp[i].d,kartyTemp[i].taped);
 			kartyTemp.erase(kartyTemp.begin()+i);
-			//i=-1;
-			--i;
+			i=-1;
+			//--i;
 		}
 	}
 
@@ -269,9 +308,9 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 	{
 		for(unsigned int j=0;j<kartyTemp.size();j++)
 		{
-			
-			//if(stos[i].cardBase.id==kartyTemp[j].cardBase.id && kartyTemp[j].getCenter().x<SAFEREGION) 
-			if(stos[i].owner.mana>=stos[i].cardBase.koszt && stos[i].cardBase.id==kartyTemp[j].cardBase.id && IsInRectFast(kartyTemp[j].getCenter())==false) 
+
+			if(stos[i].cardBase.id==kartyTemp[j].cardBase.id && IsInRectFast(kartyTemp[j].getCenter())==false) 
+				//	if(stos[i].owner.mana>=stos[i].cardBase.koszt && stos[i].cardBase.id==kartyTemp[j].cardBase.id && IsInRectFast(kartyTemp[j].getCenter())==false) 
 			{
 				stos[i].owner.mana-=stos[i].cardBase.koszt;
 				game.server.SubMana(game.GetPlayer(stos[i].owner),stos[i].cardBase.koszt);
@@ -301,8 +340,8 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 				cout<<"USUWAM DUPLIKAT"<<endl;
 				karty.erase(karty.begin()+max(j,i));
 				j=-1;
-				//i=-1;
-				--i;
+				i=-1;
+				//--i;
 				break;
 			}
 		}
@@ -313,25 +352,25 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 		if(!karty[i].TrySend(game)) continue;
 		if(karty[i].attack==true)
 		{
-				game.server.Attack(karty[i].id,karty[i].cardBase.id,game.GetPlayer(karty[i].owner),karty[i].a,karty[i].b,karty[i].c,karty[i].d,karty[i].taped);
-		
+			game.server.Attack(karty[i].id,karty[i].cardBase.id,game.GetPlayer(karty[i].owner),karty[i].a,karty[i].b,karty[i].c,karty[i].d,karty[i].taped);
+
 		}
 		else if(karty[i].block == true)
 		{
 			game.server.Block(karty[i].id,karty[i].cardBase.id,game.GetPlayer(karty[i].owner),karty[i].a,karty[i].b,karty[i].c,karty[i].d,karty[i].taped,karty[i].blocking);
-		
+
 		}
 		else
 		{
 			game.server.UpdateCard(karty[i].id,karty[i].cardBase.id,game.GetPlayer(karty[i].owner),karty[i].a,karty[i].b,karty[i].c,karty[i].d,karty[i].taped);
-		
+
 		}
 
 	}
-		for(unsigned int i=0;i<stos.size();i++)
+	for(unsigned int i=0;i<stos.size();i++)
 	{
 		if(!stos[i].TrySend(game) || stos[i].cardBase.type==LAND) continue;
-			game.server.Cost(game.GetPlayer(stos[i].owner),stos[i].cardBase.koszt);
+		game.server.Cost(game.GetPlayer(stos[i].owner),stos[i].cardBase.koszt);
 
 	}
 
@@ -403,13 +442,13 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 				if(karty[i].owner==game.player1)
 				{
 					game.player2.hp-=karty[i].att;
-			
-			
+
+
 					game.server.SubLife(2,karty[i].att);
 				}
 				else
 				{
-						game.player1.hp-=karty[i].att;
+					game.player1.hp-=karty[i].att;
 					game.server.SubLife(1,karty[i].att);
 				}
 			}
@@ -476,7 +515,7 @@ void Wykryj_karty(Mat &grey_image, int tresh,vector<Card> &karty,vector<Card>&st
 
 void draw_s(vector<Marker> markers,Mat &img,Game &game)
 {
-	
+
 	Mat dst;
 	dst.cols=game.GetGameWidth();
 	dst.rows=game.GetGameHeight();
@@ -484,79 +523,79 @@ void draw_s(vector<Marker> markers,Mat &img,Game &game)
 	Point a,b,c,d;
 	if(game.t==false)
 	{
-	for(int i=0;i<markers.size();i++)
-	{
-		circle(img,markers[i][0],4,Scalar(0,0,200),2);
-		//markers[i].draw(img,Scalar(200,0,0),3);
-		if(markers[i].id==341) 
+		for(int i=0;i<markers.size();i++)
 		{
-			float constans = 212.13f; // stała oznaczająca długość przekątnej w markerze wyświetlanym przez Olka
+			circle(img,markers[i][0],4,Scalar(0,0,200),2);
+			//markers[i].draw(img,Scalar(200,0,0),3);
+			if(markers[i].id==341) 
+			{
+				float constans = 212.13f; // stała oznaczająca długość przekątnej w markerze wyświetlanym przez Olka
 
-			float distance = Card::Distance(markers[i][0],markers[i][2]);
-			float rel = distance/constans;
-			float xx = markers[i][0].x - markers[i][2].x;
-			float yy = markers[i][0].y - markers[i][2].y;
-			float xxx = xx/(float)150;
-			float yyy = yy/(float)150;
-			Point2f movement(xxx*25,yyy*25);
-			
-			t++; 
-			game.a=markers[i][0] + movement;
+				float distance = Card::Distance(markers[i][0],markers[i][2]);
+				float rel = distance/constans;
+				float xx = markers[i][0].x - markers[i][2].x;
+				float yy = markers[i][0].y - markers[i][2].y;
+				float xxx = xx/(float)150;
+				float yyy = yy/(float)150;
+				Point2f movement(xxx*25,yyy*25);
+
+				t++; 
+				game.a=markers[i][0] + movement;
 				circle(img,game.a,4,Scalar(0,0,200),3);
-	
+
+			}
+			if(markers[i].id==1005) 
+			{
+				float constans = 212.13f; // stała oznaczająca długość przekątnej w markerze wyświetlanym przez Olka
+
+				float distance = Card::Distance(markers[i][0],markers[i][2]);
+				float rel = distance/constans;
+				float xx = markers[i][0].x - markers[i][2].x;
+				float yy = markers[i][0].y - markers[i][2].y;
+				float xxx = xx/(float)150;
+				float yyy = yy/(float)150;
+				Point2f movement(xxx*25,yyy*25);
+
+				t++; 
+				game.b=markers[i][0] +movement;
+				circle(img,game.b,4,Scalar(0,0,200),3);
+			}
+			if(markers[i].id==791) {
+				float constans = 212.13f; // stała oznaczająca długość przekątnej w markerze wyświetlanym przez Olka
+
+				float distance = Card::Distance(markers[i][0],markers[i][2]);
+				float rel = distance/constans;
+				float xx = markers[i][0].x - markers[i][2].x;
+				float yy = markers[i][0].y - markers[i][2].y;
+				float xxx = xx/(float)150;
+				float yyy = yy/(float)150;
+				Point2f movement(xxx*25,yyy*25);
+
+				t++;
+				game.c=markers[i][0]+movement;
+				circle(img,game.c,4,Scalar(0,0,200),3);
+			}
+			if(markers[i].id==977) {
+				float constans = 212.13f; // stała oznaczająca długość przekątnej w markerze wyświetlanym przez Olka
+
+				float distance = Card::Distance(markers[i][0],markers[i][2]);
+				float rel = distance/constans;
+				float xx = markers[i][0].x - markers[i][2].x;
+				float yy = markers[i][0].y - markers[i][2].y;
+				float xxx = xx/(float)150;
+				float yyy = yy/(float)150;
+				Point2f movement(xxx*25,yyy*25);
+
+				t++; 
+				game.d=markers[i][0]+movement;
+				circle(img,game.d,4,Scalar(0,0,200),3);
+			}
 		}
-		if(markers[i].id==1005) 
+		if(t==4)
 		{
-						float constans = 212.13f; // stała oznaczająca długość przekątnej w markerze wyświetlanym przez Olka
+			game.t=true;
 
-			float distance = Card::Distance(markers[i][0],markers[i][2]);
-			float rel = distance/constans;
-			float xx = markers[i][0].x - markers[i][2].x;
-			float yy = markers[i][0].y - markers[i][2].y;
-			float xxx = xx/(float)150;
-			float yyy = yy/(float)150;
-			Point2f movement(xxx*25,yyy*25);
-			
-			t++; 
-			game.b=markers[i][0] +movement;
-			circle(img,game.b,4,Scalar(0,0,200),3);
 		}
-		if(markers[i].id==791) {
-						float constans = 212.13f; // stała oznaczająca długość przekątnej w markerze wyświetlanym przez Olka
-
-			float distance = Card::Distance(markers[i][0],markers[i][2]);
-			float rel = distance/constans;
-			float xx = markers[i][0].x - markers[i][2].x;
-			float yy = markers[i][0].y - markers[i][2].y;
-			float xxx = xx/(float)150;
-			float yyy = yy/(float)150;
-			Point2f movement(xxx*25,yyy*25);
-			
-			t++;
-			game.c=markers[i][0]+movement;
-			circle(img,game.c,4,Scalar(0,0,200),3);
-		}
-		if(markers[i].id==977) {
-						float constans = 212.13f; // stała oznaczająca długość przekątnej w markerze wyświetlanym przez Olka
-
-			float distance = Card::Distance(markers[i][0],markers[i][2]);
-			float rel = distance/constans;
-			float xx = markers[i][0].x - markers[i][2].x;
-			float yy = markers[i][0].y - markers[i][2].y;
-			float xxx = xx/(float)150;
-			float yyy = yy/(float)150;
-			Point2f movement(xxx*25,yyy*25);
-			
-			t++; 
-			game.d=markers[i][0]+movement;
-			circle(img,game.d,4,Scalar(0,0,200),3);
-		}
-	}
-	if(t==4)
-	{
-		game.t=true;
-		game.server.Markers();
-	}
 	}
 	if(game.t==true)
 	{
@@ -590,8 +629,9 @@ int main( int argc, char** argv )
 	createTrackbar("Faza gry ","Ustawienia",&faza,4);
 
 
-	
-	Game game("lukasz",1,"daniel",2,"10.10.0.1",6121,1366,768,8,true);
+
+	//Game game("lukasz",1,"daniel",2,"10.10.0.1",6121,1366,768,8,true);
+	Game game("lukasz",1,"daniel",2,"10.10.0.1",6121,800,600,8,true);
 	ScriptsManager scriptManager;
 	game.server.AddPlayer(1,"lukasz");
 	game.server.AddPlayer(2,"daniel");
@@ -615,7 +655,10 @@ int main( int argc, char** argv )
 		if(!a.data) {cout<<"Nie znaleziono karty "<< name<<".jpg"<<endl; continue;}
 		bkarty.push_back(CardB(a,id,name,Red,tt,att,def,cost));
 
+
 	}
+	bkarty[0].img.copyTo(game.diff);
+	imshow("KartaWBazie",bkarty[0].img);
 	cout<<"Wczytane karty: "<< bkarty.size()<<endl;
 
 
@@ -633,23 +676,24 @@ int main( int argc, char** argv )
 	capture.read(frame);
 	while(1)
 	{
-			
+
 		game.Update();
 		game.setPlayer(gracz);
 		game.setFaza(faza);
 		capture.read(frame);
 		//	Card::Draw(frame);
-
+		bkarty[0].img.copyTo(game.diff);
 		game.CheckMarkers(frame);
 		draw_s(game.markers,frame,game);
 		if(frame.data)
 		{
 			Wykryj_karty(frame,three,karty,stos,bkarty,game);
 			scriptManager.Update(frame,game,karty,stos);
-			
+
 			imshow("Podglad", frame);
+
 		}
-			game.Draw();
+		game.Draw();
 		if(cv::waitKey(20)==27) break;
 
 		if(cv::waitKey(10)==97) game.nextPhase();

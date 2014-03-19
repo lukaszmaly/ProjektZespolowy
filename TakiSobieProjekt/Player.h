@@ -14,11 +14,15 @@ class Player
 public:
 	Player(void);
 	void Init(string name,int markerId);
-	Player(string name,int markerId);
+	Player(string name,int markerId,int idmarkera);
 	~Player(void);
 	Player &getCurrentPlayer();
 	int hp;
-	
+	int angle;
+	bool agree;
+	int idmarkera;
+	float oldangle;
+
 	string name;
 	int mana;
 	int markerId;

@@ -169,6 +169,8 @@ void Card::Compare(Mat &img1,Mat &img2,float tab[3],Game &game)
 		tab[0]=blue2/(float)n;
 	}
 }
+
+
 void Card::Unlock()
 {
 	id=ID++;
@@ -176,6 +178,7 @@ void Card::Unlock()
 
 Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp=false)
 {
+	area=0;
 	canUntap=true;
 	target=-1;
 	error=false;
@@ -386,7 +389,7 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 	{
 		char cad[100];
 		char cad1[100];
-
+		char cad2[100];
 		line(img1,a,b,Scalar(0,0,255),2);
 		line(img1,b,c,Scalar(0,0,255),2);
 		line(img1,c,d,Scalar(0,0,255),2);
@@ -395,6 +398,12 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 		putText(img1,"b", Point(b.x,b.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 		putText(img1,"c", Point(c.x,c.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 		putText(img1,"d", Point(d.x,d.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+		
+
+
+			sprintf(cad2,"%f",area);
+			putText(img1,cad2, Point(d.x,d.y)+Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+		
 
 
 		if(cardId!=-1)

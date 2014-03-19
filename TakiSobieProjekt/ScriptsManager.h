@@ -102,7 +102,7 @@ public:
 
 		for(unsigned int i=0;i<stos.size();i++)
 		{
-			if(stos[i].owner.mana>=stos[i].cardBase.koszt)
+			if(stos[i].owner.mana>=stos[i].cardBase.koszt && stos[i].cardBase.type==INSTANT)
 			{
 				stos[i].owner.mana-=stos[i].cardBase.koszt;
 				DestroyCreature(targetId,cards);

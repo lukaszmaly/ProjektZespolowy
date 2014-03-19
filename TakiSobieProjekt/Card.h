@@ -52,6 +52,7 @@ public:
 	int target;
 	static int ID;
 	int id;
+	float area;
 	int sendTime;
 	bool canUntap;
 	bool dead;
@@ -122,6 +123,43 @@ public:
 
 
 	}
+
+
+	static float Card::Compare(Mat &img1,Mat &img2,Game &game)
+{
+	if(img1.data && img2.data)
+	{
+		if(game.IsBgrMode()==false)
+		{
+		cvtColor(img1,img1,COLOR_BGR2HSV);
+		cvtColor(img2,img2,COLOR_BGR2HSV);
+		}
+		int width=img1.cols;
+		int height=img1.rows;
+		int n=width*height;
+		int channels=img1.channels();
+		long int red=0,green=0,blue=0;
+		long int red2=0,green2=0,blue2=0;
+		unsigned int wsk=0;
+
+		for(int y=0;y<height;y++)
+		{
+			for(int x=0;x<width;x++)
+			{
+				wsk=channels*(width*y + x);
+				blue=img1.data[wsk]-img2.data[wsk];
+				blue2+=blue*blue;
+				green=img1.data[wsk+1]-img2.data[wsk+1];
+				green2+=green*green;
+				red=img1.data[wsk+2]-img2.data[wsk +2];
+				red2+=red*red;
+			}
+		}
+		return red2/(float)n + green2/(float)n+blue2/(float)n;
+	}
+}
+
+
 	static float Distance(Point a,Point b)
 	{
 		return std::sqrtf(((b.x-a.x)*(b.x-a.x)+(b.y-a.y)*(b.y-a.y)));

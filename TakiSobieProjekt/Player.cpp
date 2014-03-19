@@ -1,10 +1,11 @@
 #include "Player.h"
 
 
-Player::Player(string name,int markerId)
+Player::Player(string name,int markerId,int idmarkera)
 {
 	this->markerId=markerId;
 	this->name=name;
+	this->idmarkera = idmarkera;
 	hp=20;
 	cardsInLib=60;
 	cardsInTomb=0;
@@ -16,6 +17,9 @@ Player::Player(string name,int markerId)
 
 void Player::Init(string name,int markerId)
 {
+	oldangle=-1;
+	agree=false;
+	angle=-1;
 	this->markerId=markerId;
 	this->name=name;
 	hp=20;

@@ -6,6 +6,7 @@
 #include "opencv2/nonfree/nonfree.hpp"
 #include <iostream>
 #include <vector>
+#include <string>
 using namespace std;
 using namespace cv;
 enum Color{
@@ -17,6 +18,9 @@ enum Type{
 	CREATURE = 0,
 	LAND = 1,
 	INSTANT = 2,
+	ENCHANTMENT = 3,
+	SORCERY = 4,
+	ARTIFACT = 5
 };
 
 class CardB
@@ -29,11 +33,33 @@ public:
 	int att,def;
 	int koszt;
 	Type type;
-	int ableToTarget;
-	CardB(Mat &img1,int id,string name,Color color,Type t,int att,int def,int koszt,int ableToTarget=0);
-	void Update();
-	void OnUntap();
+	
+	bool targetsCreature;
+	bool targetsPlayer;
 
+	bool hasHexproof;
+	bool hasDeatchtuch;
+	bool hasLifelink;
+	bool hasDefender;
+	bool hasFlying;
+	bool hasReach;
+	bool hasHaste;
+	bool hasFirstStrike;
+
+	vector<pair<int,int>> enterAbilities;
+	vector<pair<int,int>> upkeepAbilities;
+	vector<pair<int,int>> passiveAbilities;
+	void Init(int id,string name,int type,int att,int def,int redCost,int whiteCost,int greenCost,int blackCost,int blueCost,int lessCost,bool hasDefender,bool hasLifelink,bool hasDeatchtuch,bool hasHaste,bool hasFlying,bool hasReach,bool hasFirstStrike,bool hasHexproof);
+	int redCost;
+	int blueCost;
+	int greenCost;
+	int whiteCost;
+	int blackCost;
+	int lessCost;
+	string GetTypeToString();
+	CardB(Mat &img1);
+	void Update();
+	void PrintStats();
 	CardB(void);
 	~CardB(void);
 };

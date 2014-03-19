@@ -21,18 +21,32 @@ enum Phase {
 	UPKEEP = 5
 };
 
+
+
 class Game
 {
 private:
 	int aPlayer;
 	Phase phase;
+	
 	int gameWidth;
 	int gameHeight;
 	bool zmiana;
 	Point action;
 	bool checkCardsProp;
 	bool bgrMode;
+	bool targetMode;
 public:
+	Mat diff;
+
+	
+	bool IsTargerMode();
+	void SetTargerMode(bool value);
+	Point firsCardPoint;
+	int firstCardWidth;
+	int firstCardHeight;
+	bool firstCardChecked;
+		bool showCardArea;
 	bool IsBgrMode();
 	bool CheckCardsProp();
 Point target;
@@ -40,6 +54,7 @@ bool beAbleMarker;
 float targetAngle;
 float targetOldAngle;
 	void StopMarker();
+	void MakeDiffImage(Mat &img1,Point a,Point b,Point c,Point d);
 		static float getangle( cv::Point pt1, cv::Point pt2, cv::Point pt0 ) {
 	return atan2f( (pt1.y - pt2.y ),( pt1.x - pt2.x ) ) * 180 / M_PI + 180;
 	}

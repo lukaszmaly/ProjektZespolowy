@@ -10,27 +10,113 @@ CardB::~CardB(void)
 {
 }
 
-
-
-CardB::CardB(Mat &img,int id,string name,Color color,Type t,int att,int def,int koszt,int ableToTarget)
+string CardB::GetTypeToString()
 {
+	switch(type)
+	{
+	case CREATURE:
+		return "Creature";
+		break;
+	case ENCHANTMENT:
+		return "Enchantment";
+		break;
+	case SORCERY:
+		return "Sorcery";
+		break;
+	case INSTANT:
+		return "Instant";
+		break;
+	case ARTIFACT:
+		return "Artifact";
+		break;
+	}
+}
+
+void CardB::PrintStats()
+{
+	cout<<"----"<<endl;
+	cout<<"Id: "<< id<<endl;
+	cout<<"Nazwa: "<<name<<endl;
+	cout<<"Typ: "<<GetTypeToString()<<endl;
+	if(blueCost!=0) cout<<"Blue: "<<blueCost<<endl;
+	if(greenCost!=0) cout<<"Green: "<<blueCost<<endl;
+	if(blackCost!=0) cout<<"Black: "<<blueCost<<endl;
+	if(whiteCost!=0) cout<<"White: "<<blueCost<<endl;
+	if(redCost!=0) cout<<"Red: "<<blueCost<<endl;
+	if(lessCost!=0) cout<<"Colorless: "<<blueCost<<endl;
+	cout<<"Static abilities: ";
+	if(hasHexproof) cout<<"Hexproof";
+	if(hasDeatchtuch) cout<<"Deatchtuch";
+	if(hasLifelink) cout<<"Lifelink";
+	if(hasDefender) cout<<"Defender";
+	if(hasFlying) cout<<"Flying";
+	if(hasReach) cout<<"Reach";
+	if(hasHaste) cout<<"Haste";
+	if(hasFirstStrike) cout<<"FirstStrike";
+	cout<<endl;
+	cout<<"Enter battlefield abb: "<<enterAbilities.size()<<endl;
+	cout<<"Upkeep  abb: "<<upkeepAbilities.size()<<endl;
+	cout<<"Passive abb: "<<passiveAbilities.size()<<endl;
+}
+
+
+void CardB::Init(int id,string name,int type,int att,int def,int redCost,int whiteCost,int greenCost,int blackCost,int blueCost,int lessCost,bool hasDefender,bool hasLifelink,bool hasDeatchtuch,bool hasHaste,bool hasFlying,bool hasReach,bool hasFirstStrike,bool hasHexproof)
+{
+
+	this->id=id;
+	this->name=name;
+	
+	switch(type)
+	{
+	case 0:
+		this->type=ENCHANTMENT;
+		break;
+	case 1:
+		this->type=INSTANT;
+		break;
+	case 2:
+		this->type=SORCERY;
+		break;
+	case 3:
+		this->type=CREATURE;
+		break;
+	case 4:
+		this->type=LAND;
+		break;
+		case 5:
+		this->type= ARTIFACT;
+		break;
+	}
+
 	this->att=att;
 	this->def=def;
-	this->koszt=koszt;
-	this->type=t;
-	this->color = color;
-	this->id = id;
-	this->name = name;
+	this->redCost=redCost;
+	this->whiteCost=whiteCost;
+	this->greenCost=greenCost;
+	this->blueCost=blueCost;
+	this->blackCost=blackCost;
+	this->lessCost=lessCost;
+	this->hasHexproof=hasHexproof;
+	this->hasHaste= hasHaste;
+	this->hasDefender=hasDefender;
+	this->hasDeatchtuch=hasDeatchtuch;
+	this->hasFlying=hasFlying;
+	this->hasReach=hasReach;
+	this->hasFirstStrike=hasFirstStrike;
+	this->hasLifelink=hasLifelink;
+}
+
+CardB::CardB(Mat &img)
+{
 	this->img = img;
-	this->ableToTarget=ableToTarget;
-	if(!img.data)
+	if(!this->img.data)
 	{
-		cout<<"Blad podczas ³adowania pliku: "<<endl;
+		cout<<"File does not exist!"<<endl;
 	}
 }
 void CardB::Update()
 {
-	
+
 	Mat img = imread(name);
 	if(!img.data)
 	{

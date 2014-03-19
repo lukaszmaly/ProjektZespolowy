@@ -22,7 +22,7 @@ public:
 	Server();
 	void NextPhase();
 	void Write(const char tab[100]);
-	void Markers();
+	void Markers(int w,int h);
 	int GetInterval();
 	void AddMana(int id,int count=1);
 		void SubMana(int id,int count=1);

@@ -18,10 +18,10 @@ void Server::Write(const char tab[100])
 	plik.close();
 }
 
-void Server::Markers()
+void Server::Markers(int w,int h)
 {	ile++;
 char data[100];
-int n = sprintf_s(data,"| MARKERS |");	
+int n = sprintf_s(data,"| MARKERS %d %d |",w,h);	
 
 if(soc.send(data, n, client, port) != sf::Socket::Done)
 {
