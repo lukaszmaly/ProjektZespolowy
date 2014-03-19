@@ -16,7 +16,7 @@ class Game:
 fo=open("C:\\abc.txt", "r");
 obiekt = Game();
 
-#pierwsza petla - czytamy podstawowe bzdury
+#pierwsza petla - czytamy nicki
 for x in range (0, 2):
 	line = fo.readline();
 	if x==0: obiekt.nick1=line;
