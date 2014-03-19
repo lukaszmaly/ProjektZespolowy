@@ -140,8 +140,8 @@ void Card::Compare(Mat &img1,Mat &img2,float tab[3],Game &game)
 	{
 		if(game.IsBgrMode()==false)
 		{
-		cvtColor(img1,img1,COLOR_BGR2HSV);
-		cvtColor(img2,img2,COLOR_BGR2HSV);
+			cvtColor(img1,img1,COLOR_BGR2HSV);
+			cvtColor(img2,img2,COLOR_BGR2HSV);
 		}
 		int width=img1.cols;
 		int height=img1.rows;
@@ -370,17 +370,57 @@ void Card::die()
 {
 	dead=true;
 }
-void Card::Fight(Card &op)
+
+void Card::GiveLifeToPlayer(int value,Game &game)
 {
-	int t1=def-op.att;
-	int t2=op.def-att;
-	def=def-op.att;
-	op.def=op.def-att;
+	owner.hp=owner.hp+value;
+	game.server.AddLife(game.GetPlayer(owner),value);
+}
+
+void Card::Fight(Card &op,Game &game)
+{
+	if((this->cardBase.hasFirstStrike && op.cardBase.hasFirstStrike) || (!this->cardBase.hasFirstStrike && !op.cardBase.hasFirstStrike))
+	{
+		def=def-op.att;
+		op.def=op.def-att;
+		if(this->cardBase.hasLifelink)	this->GiveLifeToPlayer(this->att,game);
+		if(op.cardBase.hasLifelink)	op.GiveLifeToPlayer(op.att,game);
+		if(def<=0 || op.cardBase.hasDeatchtuch) die();
+		if(op.def<=0 || this->cardBase.hasDeatchtuch) op.die();
+	}
+	else if(this->cardBase.hasFirstStrike)
+	{
+		op.def=op.def-att;
+		if(this->cardBase.hasLifelink)	this->GiveLifeToPlayer(this->att,game);
+		if(op.def<=0 || this->cardBase.hasDeatchtuch) 
+		{
+			op.die(); 
+		}
+		else
+		{
+			def=def-op.att;
+			if(op.cardBase.hasLifelink)	op.GiveLifeToPlayer(op.att,game);
+			if(def<=0 || op.cardBase.hasDeatchtuch) die();
+		}
+	}
+	else if(op.cardBase.hasFirstStrike)
+	{
+		def=def-op.att;
+		if(op.cardBase.hasLifelink)	op.GiveLifeToPlayer(op.att,game);
+		if(def<=0 || op.cardBase.hasDeatchtuch) 
+		{
+			die(); 
+		}
+		else
+		{
+			op.def=op.def-att;
+			if(this->cardBase.hasLifelink)	this->GiveLifeToPlayer(this->att,game);
+			if(op.def<=0 || this->cardBase.hasDeatchtuch) die();
+		}
+	}
+
 	Clear();
 	op.Clear();
-	if(t1<=0) die();
-	if(t2<=0) op.die();
-
 }
 
 void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
@@ -398,12 +438,12 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 		putText(img1,"b", Point(b.x,b.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 		putText(img1,"c", Point(c.x,c.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 		putText(img1,"d", Point(d.x,d.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
-		
 
 
-			sprintf(cad2,"%f",area);
-			putText(img1,cad2, Point(d.x,d.y)+Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
-		
+
+		sprintf(cad2,"%f",area);
+		putText(img1,cad2, Point(d.x,d.y)+Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+
 
 
 		if(cardId!=-1)
@@ -494,4 +534,19 @@ void Card::Clear()
 	old=getCenter();
 	enemy=Point(-1,-1);
 	blocking=-1;
+}
+
+bool Card::CanBlock(Card card)
+{
+	if(card.cardBase.hasFlying==true && this->cardBase.hasFlying==false && this->cardBase.hasReach==false)
+	{
+		return true;
+	}
+	return true;
+}
+bool Card::CanAttack()
+{
+	if(this->cardBase.hasDefender==true) return false;
+
+	return true;
 }

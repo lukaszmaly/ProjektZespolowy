@@ -27,6 +27,8 @@ class CardB
 {
 public:
 	int id;
+
+
 	string name;
 	Color color;
 	Mat img;

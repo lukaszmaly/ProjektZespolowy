@@ -58,7 +58,7 @@ public:
 	{
 		for(unsigned int i=0;i<cards.size();i++)
 		{
-			if(game.distance(cards[i].getCenter(),p)<20)
+			if(game.distance(cards[i].getCenter(),p)<20 && !cards[i].cardBase.hasHexproof)
 			{
 				return cards[i].id;
 			}
@@ -97,22 +97,25 @@ public:
 
 	
 
-		if(targetId==-1) return;
-	
-
 		for(unsigned int i=0;i<stos.size();i++)
 		{
 			if(stos[i].owner.mana>=stos[i].cardBase.koszt && stos[i].cardBase.type==INSTANT)
 			{
 				stos[i].owner.mana-=stos[i].cardBase.koszt;
-				DestroyCreature(targetId,cards);
+				Resolve(stos[i],cards);
 				canUseMarker=true;
 				targetId=-1;
 			}
 		}
 	}
 
+	bool Resolve(Card &card,vector<Card> &cards)
+	{
+		//sprawdz czy karta bêdzie targetowa³a i uzale¿nij od tego dalsz¹ czêœæ programu
 
+
+
+	}
 
 	~ScriptsManager(void);
 };

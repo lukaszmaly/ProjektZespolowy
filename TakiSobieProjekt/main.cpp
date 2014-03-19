@@ -425,7 +425,7 @@ void MainGameLogic(Mat &frame, int tresh,vector<Card> &cards,vector<Card>&stack,
 			{
 				if(cards[j].attack==false || i==j) continue;
 				tempDistance=Game::Distance(cards[j].getCenter(),cards[i].getCenter());
-				if(tempDistance<minn)
+				if(tempDistance<minn && cards[i].CanBlock(cards[j]))
 				{
 					minn=tempDistance;
 					index=j;
@@ -447,7 +447,7 @@ void MainGameLogic(Mat &frame, int tresh,vector<Card> &cards,vector<Card>&stack,
 			for(int j=0;j<cards.size();j++)
 			{
 				if(cards[j].attack==false || i==j) continue;
-				cards[i].Fight(cards[j]);
+				cards[i].Fight(cards[j],game);
 				cout<<"WALKA"<<endl;
 			}
 		}

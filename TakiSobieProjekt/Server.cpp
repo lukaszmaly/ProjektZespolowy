@@ -131,6 +131,22 @@ void Server::SubLife(int id,int count)
 		cout<< data <<endl;Write(data);
 	}
 }
+
+void Server::AddLife(int id,int count)
+{
+	char data[100];
+	int n = sprintf_s(data,"| ADDLIFE %d %d |",id,count);	
+
+	if(soc.send(data, n, client, port) != sf::Socket::Done)
+	{
+		cout<<"Blad podczas wysylanie danych o nowej karcie"<<endl;
+	}
+	else if(showLog)
+	{
+		cout<< data <<endl;Write(data);
+	}
+}
+
 void Server::Cost(int owner,int cost)
 {
 	char data[100];

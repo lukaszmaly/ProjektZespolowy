@@ -29,9 +29,12 @@ using namespace cv;
 class Card
 {
 public:
+		bool CanBlock(Card card);
+		bool CanAttack();
 	bool gaveMana;
 
-	void Fight(Card &op);
+	void Fight(Card &op,Game &game);
+	void GiveLifeToPlayer(int value,Game &game);
 	CardB cardBase;
 
 	static void Draw(Mat &img)
