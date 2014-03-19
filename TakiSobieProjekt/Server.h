@@ -12,7 +12,6 @@ class Server
 {
 private:
 	int port;
-	int ile;
 	bool showLog;
 	int interval;
 	int time;
@@ -25,6 +24,7 @@ public:
 	void Markers(int w,int h);
 	int GetInterval();
 	void AddMana(int id,int count=1);
+	void Played(int id);
 		void SubMana(int id,int count=1);
 		void SubLife(int id,int count=1);
 	void Dead(int id);

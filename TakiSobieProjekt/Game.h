@@ -38,10 +38,13 @@ private:
 	bool targetMode;
 public:
 	Mat diff;
-
+	static int Distance(Point a,Point b)
+	{
+		return std::sqrtf(((b.x-a.x)*(b.x-a.x)+(b.y-a.y)*(b.y-a.y)));
+	}
 	
-	bool IsTargerMode();
-	void SetTargerMode(bool value);
+	bool IsTargetMode();
+	void SetTargetMode(bool value);
 	Point firsCardPoint;
 	int firstCardWidth;
 	int firstCardHeight;

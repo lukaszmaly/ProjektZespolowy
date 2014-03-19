@@ -38,12 +38,12 @@ void CardB::PrintStats()
 	cout<<"Id: "<< id<<endl;
 	cout<<"Nazwa: "<<name<<endl;
 	cout<<"Typ: "<<GetTypeToString()<<endl;
-	if(blueCost!=0) cout<<"Blue: "<<blueCost<<endl;
-	if(greenCost!=0) cout<<"Green: "<<blueCost<<endl;
-	if(blackCost!=0) cout<<"Black: "<<blueCost<<endl;
-	if(whiteCost!=0) cout<<"White: "<<blueCost<<endl;
-	if(redCost!=0) cout<<"Red: "<<blueCost<<endl;
-	if(lessCost!=0) cout<<"Colorless: "<<blueCost<<endl;
+	if(blueCost>0) cout<<"Blue: "<<blueCost<<endl;
+	if(greenCost>0) cout<<"Green: "<<greenCost<<endl;
+	if(blackCost>0) cout<<"Black: "<<blackCost<<endl;
+	if(whiteCost>0) cout<<"White: "<<whiteCost<<endl;
+	if(redCost>0) cout<<"Red: "<<redCost<<endl;
+	if(lessCost>0) cout<<"Colorless: "<<lessCost<<endl;
 	cout<<"Static abilities: ";
 	if(hasHexproof) cout<<"Hexproof";
 	if(hasDeatchtuch) cout<<"Deatchtuch";
@@ -60,12 +60,12 @@ void CardB::PrintStats()
 }
 
 
-void CardB::Init(int id,string name,int type,int att,int def,int redCost,int whiteCost,int greenCost,int blackCost,int blueCost,int lessCost,bool hasDefender,bool hasLifelink,bool hasDeatchtuch,bool hasHaste,bool hasFlying,bool hasReach,bool hasFirstStrike,bool hasHexproof)
+void CardB::Init(int id,string name,int type,int att,int def,int redCost,int whiteCost,int greenCost,int blackCost,int blueCost,int lessCost,bool hasDefender,bool hasLifelink,bool hasDeatchtuch,bool hasHaste,bool hasFlying,bool hasReach,bool hasFirstStrike,bool hasHexproof,vector<pair<int,int>> enterList,vector<pair<int,int>> upkeepList,vector<pair<int,int>> passiveList)
 {
 
 	this->id=id;
 	this->name=name;
-	
+
 	switch(type)
 	{
 	case 0:
@@ -83,7 +83,7 @@ void CardB::Init(int id,string name,int type,int att,int def,int redCost,int whi
 	case 4:
 		this->type=LAND;
 		break;
-		case 5:
+	case 5:
 		this->type= ARTIFACT;
 		break;
 	}
@@ -104,6 +104,9 @@ void CardB::Init(int id,string name,int type,int att,int def,int redCost,int whi
 	this->hasReach=hasReach;
 	this->hasFirstStrike=hasFirstStrike;
 	this->hasLifelink=hasLifelink;
+	this->enterAbilities=enterList;
+	this->upkeepAbilities=upkeepList;
+	this->passiveAbilities=passiveList;
 }
 
 CardB::CardB(Mat &img)
@@ -112,15 +115,6 @@ CardB::CardB(Mat &img)
 	if(!this->img.data)
 	{
 		cout<<"File does not exist!"<<endl;
-	}
-}
-void CardB::Update()
-{
-
-	Mat img = imread(name);
-	if(!img.data)
-	{
-		cout<<"Blad podczas ³adowania pliku: "<<name<<endl;
 	}
 }
 

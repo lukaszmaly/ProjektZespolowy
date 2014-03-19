@@ -19,9 +19,23 @@ void Server::Write(const char tab[100])
 }
 
 void Server::Markers(int w,int h)
-{	ile++;
+{	
 char data[100];
 int n = sprintf_s(data,"| MARKERS %d %d |",w,h);	
+
+if(soc.send(data, n, client, port) != sf::Socket::Done)
+{
+	cout<<"Blad podczas wysylanie danych o nowej karcie"<<endl;
+}
+else
+{
+	cout<< data <<endl;Write(data);
+}
+}
+void Server::Played(int id)
+{	
+char data[100];
+int n = sprintf_s(data,"| PLAYED %d |",id);	
 
 if(soc.send(data, n, client, port) != sf::Socket::Done)
 {
@@ -54,7 +68,6 @@ void Server::Init(string ip,int port,int interval,bool showLog)
 Server::Server()
 {
 	time = 0;
-	ile=0;
 }
 
 
@@ -76,7 +89,6 @@ void Server::Attack(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bo
 
 void Server::AddMana(int id,int count)
 {
-	ile++;
 	char data[100];
 	int n = sprintf_s(data,"| ADDMANA %d %d |",id,count);	
 
@@ -92,7 +104,6 @@ void Server::AddMana(int id,int count)
 
 void Server::SubMana(int id,int count)
 {
-	ile++;
 	char data[100];
 	int n = sprintf_s(data,"| SUBMANA %d %d |",id,count);	
 
@@ -108,7 +119,6 @@ void Server::SubMana(int id,int count)
 
 void Server::SubLife(int id,int count)
 {
-	ile++;
 	char data[100];
 	int n = sprintf_s(data,"| SUBLIFE %d %d |",id,count);	
 
@@ -123,7 +133,6 @@ void Server::SubLife(int id,int count)
 }
 void Server::Cost(int owner,int cost)
 {
-	ile++;
 	char data[100];
 	int n = sprintf_s(data,"| COST %d %d |",owner,cost);	
 
@@ -138,7 +147,6 @@ void Server::Cost(int owner,int cost)
 }
 void Server::NextPhase()
 {
-	ile++;
 	char data[100];
 	int n = sprintf_s(data,"| NEXTPHASE |");	
 
@@ -154,7 +162,6 @@ void Server::NextPhase()
 
 void Server::Dead(int id)
 {
-	ile++;
 	char data[100];
 	int n = sprintf_s(data,"| DEAD %d |",id);	
 
@@ -171,8 +178,6 @@ void Server::Dead(int id)
 
 void Server::Block(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bool taped,int id2)
 {
-
-	ile++;
 	char data[100];
 
 	int n = sprintf(data,"| BLOCK %d %d %d %d %d %d %d %d %d %d %d %d %d |",id,idb,gracz,taped,a.x,a.y,b.x,b.y,c.x,c.y,d.x,d.y,id2);	
@@ -192,7 +197,6 @@ void Server::SendNewCard(int id,int idb,int gracz,Point a, Point b,Point c,Point
 {
 	char data[100];
 	int n = sprintf_s(data,"| ADD %d %d %d %d %d %d %d %d %d %d %d %d |",id,idb,gracz,taped,a.x,a.y,b.x,b.y,c.x,c.y,d.x,d.y);	
-	ile++;
 	if(soc.send(data, n, client, port) != sf::Socket::Done)
 	{
 		cout<<"Blad podczas wysylanie danych o nowej karcie"<<endl;
@@ -206,8 +210,6 @@ void Server::SendNewCard(int id,int idb,int gracz,Point a, Point b,Point c,Point
 
 void Server::UpdateCard(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bool taped)
 {
-
-	ile++;
 	char data[100];
 
 	int n = sprintf(data,"| UPDATE %d %d %d %d %d %d %d %d %d %d %d %d |",id,idb,gracz,taped,a.x,a.y,b.x,b.y,c.x,c.y,d.x,d.y);	
@@ -228,7 +230,6 @@ int Server::GetInterval()
 
 void Server::AddPlayer(int id,const char name[])
 {	
-	ile++;
 	char data[100];
 	int n = sprintf(data,"| PLAYER %d %s |",id,name);	
 	if (soc.send(data, n, client, port) != sf::Socket::Done)

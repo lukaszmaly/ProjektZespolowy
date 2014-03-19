@@ -4841,3 +4841,6 @@ Utworzono serwer
 | PLAYER 1 lukasz |
 | PLAYER 2 daniel |
 Zamknieto serwer
+Utworzono serwer
+| PLAYER 1 lukasz |
+| PLAYER 2 daniel |
