@@ -17,13 +17,25 @@ public:
 	bool canUseMarker;
 	int targetId;
 	MarkerDetector MDetector;
-
+	int lastId;
 
 	ScriptsManager(void)
 	{
 		canUseMarker=true;
 		target=Point(-1,-1);
 		targetId=-1;
+		lastId=-1;
+	}
+	void AddEOT(int id,vector<Card> &cards,int attack,int defense)
+	{
+		for(unsigned int i=0;i<cards.size();i++)
+		{
+			if(cards[i].id==id)
+			{
+				cards[i].AddEOT(attack,defense);
+				return;
+			}
+		}
 	}
 
 	void DestroyCreature(int id,vector<Card> &cards)
@@ -32,14 +44,21 @@ public:
 		{
 			if(cards[i].id==id)
 			{
-				cards.erase(cards.begin()+i);
+				cards[i].die();
 				return;
 			}
 		}
 	}
-	void AddDamage(int id, int n)
+	void AddDamage(int id,vector<Card> &cards,int value)
 	{
-
+		for(unsigned int i=0;i<cards.size();i++)
+		{
+			if(cards[i].id==id)
+			{
+				cards[i].Damage(value);
+				return;
+			}
+		}
 	}
 
 	void SubLife(int id,int n)
@@ -67,9 +86,12 @@ public:
 	}
 	void Update(Mat &img,Game &game,vector<Card> &cards,vector<Card> &stos)
 	{
-					char cad6[100];
-	sprintf(cad6,"Aktualna cel:%d (%d,%d)",targetId,target.x,target.y);
-	putText(img,cad6, Point(10,100),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+		char cad6[100];
+		sprintf(cad6,"Aktualna cel:%d (%d,%d)",targetId,target.x,target.y);
+		putText(img,cad6, Point(10,100),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+		sprintf(cad6,"Aktualna faza %s",game.getCurrentPhase().c_str());
+		putText(img,cad6, Point(10,130),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+
 		MDetector.setMinMaxSize(0.01f);
 		vector<Marker> markers;
 		MDetector.detect(img,markers);
@@ -95,14 +117,17 @@ public:
 
 
 
-	
+
 
 		for(unsigned int i=0;i<stos.size();i++)
 		{
-			if(stos[i].owner.mana>=stos[i].cardBase.koszt && stos[i].cardBase.type==INSTANT)
+			if(stos[i].owner.mana>=stos[i].cardBase.koszt && stos[i].cardBase.type==INSTANT && stos[i].cardBase.id!=lastId)
 			{
 				stos[i].owner.mana-=stos[i].cardBase.koszt;
-				Resolve(stos[i],cards);
+				if(Resolve(stos[i],cards)==true)
+				{
+					lastId=stos[i].cardBase.id;
+				}
 				canUseMarker=true;
 				targetId=-1;
 			}
@@ -112,8 +137,35 @@ public:
 	bool Resolve(Card &card,vector<Card> &cards)
 	{
 		//sprawdz czy karta bêdzie targetowa³a i uzale¿nij od tego dalsz¹ czêœæ programu
+		vector<pair<int,int>> ab = card.cardBase.enterAbilities;
+		if((ab.size())!=0)
+		{
+			for(int i=0;i<ab.size();i++)
+			{
+				if(ab[i].first==2 && targetId!=-1) 
+				{
+					AddDamage(targetId,cards,ab[i].second);
+					return true;
+				}
+				else if(ab[i].first==4 && targetId!=-1) 
+				{
+					AddEOT(targetId,cards,ab[i].second,ab[i].second);
+					return true;
+				}
+				else if(ab[i].first==6  && targetId!=-1)
+				{
+					DestroyCreature(targetId,cards);
+					return true;
+				}
+				else
+				{
+					return false;
+				}
+			}
+		}
 
 
+		return false;
 
 	}
 

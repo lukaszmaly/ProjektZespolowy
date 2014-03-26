@@ -1,11 +1,11 @@
 #include "Player.h"
 
 
-Player::Player(string name,int markerId,int idmarkera)
+Player::Player(string name,int markerId)
 {
 	this->markerId=markerId;
 	this->name=name;
-	this->idmarkera = idmarkera;
+
 	hp=20;
 	cardsInLib=60;
 	cardsInTomb=0;
@@ -30,8 +30,7 @@ void Player::Init(string name,int markerId)
 }
 void Player::Draw()
 {
-
-	Mat img(200,200,CV_64F);
+	img = Scalar(0,0,0);
 	char cad[100];
 	char cad1[100];
 	sprintf(cad,"Gracz: %s",name.c_str());
@@ -43,21 +42,23 @@ void Player::Draw()
 	sprintf(cad1,"Karty(dlon): %d",this->cardsOnHand);
 	putText(img,cad1, Point(10,50),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(200,200,200),2);
 
-	sprintf(cad1,"Karty(cmentarz): %d",this->cardsInTomb);
+	sprintf(cad1,"OldAngle: %d",this->oldangle);
 	putText(img,cad1, Point(10,70),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(200,200,200),2);
 
-	sprintf(cad1,"Karty(biblioteka): %d",this->cardsInLib);
+	sprintf(cad1,"Angle: %d",this->angle);
 	putText(img,cad1, Point(10,90),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(200,200,200),2);
 
 	sprintf(cad1,"Mana: %d",this->mana);
 	putText(img,cad1, Point(10,120),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(200,200,200),2);
-
+	sprintf(cad1,"NExt phase: %s",this->agree ? "true":"false");
+	putText(img,cad1, Point(10,150),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(200,200,200),2);
 	imshow(name,img);
 
 }
 
 Player::Player(void)
 {
+	img =Mat(200,200,CV_64F);
 }
 
 

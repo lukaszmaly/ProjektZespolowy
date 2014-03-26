@@ -32,6 +32,8 @@ or implied, of Rafael Muñoz Salinas.
 #include <opencv2/opencv.hpp>
 #include "exports.h"
 #include "cameraparameters.h"
+
+#define M_PI 3.14159265358979323846
 using namespace std;
 namespace aruco {
 /**\brief This class represents a marker. It is a vector of the fours corners ot the marker
@@ -112,6 +114,11 @@ public:
      */
     /**
      */
+
+		int getAngle()const;
+	
+
+
     friend bool operator<(const Marker &M1,const Marker&M2)
     {
         return M1.id<M2.id;

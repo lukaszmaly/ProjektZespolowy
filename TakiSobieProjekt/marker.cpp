@@ -216,7 +216,10 @@ void Marker::OgreGetPoseParameters(double position[3], double orientation[4]) th
     
 }
 
-
+int Marker::getAngle()const
+	{
+			return (int)(atan2(( (*this)[0].y-(*this)[1].y ),( (*this)[0].x-(*this)[1].x ) ) * 180 / M_PI + 180);
+		}
 
 void Marker::draw(Mat &in, Scalar color, int lineWidth ,bool writeId)const
 {
@@ -230,7 +233,7 @@ void Marker::draw(Mat &in, Scalar color, int lineWidth ,bool writeId)const
     cv::rectangle( in,(*this)[2]-Point2f(2,2),(*this)[2]+Point2f(2,2),Scalar(255,0,0,255),lineWidth,CV_AA);
     if (writeId) {
         char cad[100];
-        sprintf(cad,"id=%d",id);
+		sprintf(cad,"id=%d an = %d",id,getAngle());
         //determine the centroid
         Point cent(0,0);
         for (int i=0;i<4;i++)

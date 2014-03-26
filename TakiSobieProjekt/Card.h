@@ -52,6 +52,13 @@ public:
 	}
 	void SetTarget(int id);
 	int GetTarget();
+	int additionalAttack;
+	int additionalDefense;
+	void AddEOT(int attack,int defense);
+	int attEOT;
+	int defEOT;
+	int GetAttack();
+	int GetDefense();
 	int target;
 	static int ID;
 	int id;
@@ -90,6 +97,7 @@ public:
 	void Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp);
 	Point2f getCenter();
 	bool TrySend(Game &game);
+	void Damage(int value);
 	static void fastImg(string name,float s)
 	{
 		Mat *img = new Mat(200,200,CV_64F);

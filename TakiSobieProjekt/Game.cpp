@@ -6,6 +6,7 @@ bool Game::CheckCardsProp()
 }
 void Game::setFaza(int i)
 {
+	return;
 	switch(i)
 	{
 	case 0:
@@ -118,6 +119,7 @@ string Game::getCurrentPhase()
 		return "Faza ataku";
 		break;
 	case OBRONA:
+
 		return "Faza obrony";
 		break;
 	case WYMIANA:
@@ -140,15 +142,19 @@ void Game::nextPhase()
 	{
 	case PIERWSZY:
 		phase=ATAK;
+			this->oneAttack=false;
 		break;
 	case ATAK:
+			this->oneAttack=false;
 		phase=OBRONA;
 		break;
 	case OBRONA:
+			this->oneAttack=false;
 		phase=WYMIANA;
 		break;
 	case WYMIANA:
 		phase=DRUGI;
+			this->oneAttack=false;
 		break;
 	case DRUGI:
 		phase=UPKEEP;
@@ -161,9 +167,9 @@ void Game::nextPhase()
 
 void Game::Draw()
 {
-	//player1.Draw();
-	//player2.Draw();
-	imshow("DiffCard",diff);
+	player1.Draw();
+	player2.Draw();
+	//imshow("DiffCard",diff);
 
 }
 
@@ -191,8 +197,8 @@ void Game::Update()
 		player1.agree=false; 
 		player2.agree=false;
 		nextPhase();
-		server.NextPhase();
 	}
+
 	if(beAbleMarker==false)
 	{
 		if(abs(targetAngle-targetOldAngle)>45)
@@ -266,38 +272,36 @@ void Game::CheckMarkers(Mat &frame)
 	for(int i = 0; i < markers.size(); i++) 
 	{
 
-		if(markers[i].id==player1.idmarkera)
+		if(markers[i].id==player1.markerId)
 		{
-			if(player1.angle==-1)
-			{
-				player1.angle = getangle(markers[i][0],markers[i][1],markers[i].getCenter());
-
-			}
-			else
-			{
-				if(abs(player1.angle-getangle(markers[i][0],markers[i][1],markers[i].getCenter()))>80)
+		
+		
+					player1.angle =markers[i].getAngle();
+					if(player1.oldangle<0) { player1.oldangle=player1.angle;}
+		
+		
+				if(abs(player1.oldangle-markers[i].getAngle())>80)
 				{
 					player1.agree=true;
 					player1.oldangle=player1.angle;
 				}
 
-			}
+			
 
 		}
-		if(markers[i].id==player2.idmarkera)
+		if(markers[i].id==player2.markerId)
 		{
-			if(player2.angle==-1)
-			{
-				player2.angle = getangle(markers[i][0],markers[i][1],markers[i].getCenter());
-			}
-			else
-			{
-				if(abs(player2.angle-getangle(markers[i][0],markers[i][1],markers[i].getCenter()))>80)
+		
+			
+					player2.angle =markers[i].getAngle();
+					if(player2.oldangle<0) { player2.oldangle=player2.angle;}
+		
+				if(abs(player2.oldangle-markers[i].getAngle())>80)
 				{
 					player2.agree=true;
-					player1.oldangle=player1.angle;
+					player2.oldangle=player2.angle;
 				}
-			}
+			
 		}
 
 
@@ -327,16 +331,16 @@ void Game::CheckMarkers(Mat &frame)
 			}
 		}
 
-		if(player1.markerId == markers[i].id && aPlayer != player1.markerId) 
-		{
-			aPlayer = markers[i].id;
-			break;
-		}
+		//if(player1.markerId == markers[i].id && aPlayer != player1.markerId) 
+		//{
+		//	aPlayer = markers[i].id;
+		//	break;
+		//}
 
-		if(player2.markerId == markers[i].id && aPlayer != player2.markerId)
+	/*	if(player2.markerId == markers[i].id && aPlayer != player2.markerId)
 		{
 			aPlayer=markers[i].id;
 			break;
-		}
+		}*/
 	}
 }

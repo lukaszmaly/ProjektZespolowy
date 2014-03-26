@@ -9,7 +9,11 @@ Card::~Card(void)
 {
 
 }
-
+void Card::Damage(int value)
+{
+	this->defEOT-=value;
+	if(GetDefense()<=0) this->die();
+}
 void Card::SetTarget(int id)
 {
 	target = id;
@@ -176,8 +180,25 @@ void Card::Unlock()
 	id=ID++;
 }
 
+int Card::GetAttack()
+{
+	return (att+attEOT+additionalAttack);
+}
+int Card::GetDefense()
+{
+	return (def+defEOT+additionalDefense);
+}
+
+void Card::AddEOT(int attack,int defense)
+{
+	attEOT+=attack;
+	defEOT+=defense;
+	if(GetDefense()<=0) die();
+}
 Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp=false)
 {
+	attEOT=defEOT=0;
+	additionalAttack=additionalDefense=0;
 	area=0;
 	canUntap=true;
 	target=-1;
@@ -198,7 +219,6 @@ Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game
 	att=-1;
 	def=-1;
 	dead=false;
-	if(temp==false)		id=ID++;
 	Update(a,b,c,d,img,bkarty,game,temp);
 	cardBase.type==LAND ? gaveMana=false : gaveMana=true;
 	old=getCenter();
@@ -299,8 +319,7 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 	if(waitKey(10)==122)
 	{
 		string name;
-		int id,typ,att,def,koszt;
-		Type typek;
+
 		cout<<"Wpisz nazwe karty:"<<endl;
 		cout<<"Nazwa | Id | koszt | Typ(0-Creature, 1-land) | Atak | Obrna |"<<endl;
 		//cin>>name >>id>>koszt>>typ>>att>>def;
@@ -381,41 +400,41 @@ void Card::Fight(Card &op,Game &game)
 {
 	if((this->cardBase.hasFirstStrike && op.cardBase.hasFirstStrike) || (!this->cardBase.hasFirstStrike && !op.cardBase.hasFirstStrike))
 	{
-		def=def-op.att;
-		op.def=op.def-att;
+		Damage(op.GetAttack());
+		op.Damage(GetAttack());
 		if(this->cardBase.hasLifelink)	this->GiveLifeToPlayer(this->att,game);
 		if(op.cardBase.hasLifelink)	op.GiveLifeToPlayer(op.att,game);
-		if(def<=0 || op.cardBase.hasDeatchtuch) die();
-		if(op.def<=0 || this->cardBase.hasDeatchtuch) op.die();
+		if(GetDefense()<=0 || op.cardBase.hasDeatchtuch) die();
+		if(op.GetDefense()<=0 || this->cardBase.hasDeatchtuch) op.die();
 	}
 	else if(this->cardBase.hasFirstStrike)
 	{
-		op.def=op.def-att;
+		op.Damage(GetAttack());
 		if(this->cardBase.hasLifelink)	this->GiveLifeToPlayer(this->att,game);
-		if(op.def<=0 || this->cardBase.hasDeatchtuch) 
+		if(op.GetDefense()<=0 || this->cardBase.hasDeatchtuch) 
 		{
 			op.die(); 
 		}
 		else
 		{
-			def=def-op.att;
+			Damage(op.GetAttack());
 			if(op.cardBase.hasLifelink)	op.GiveLifeToPlayer(op.att,game);
-			if(def<=0 || op.cardBase.hasDeatchtuch) die();
+			if(GetDefense()<=0 || op.cardBase.hasDeatchtuch) die();
 		}
 	}
 	else if(op.cardBase.hasFirstStrike)
 	{
-		def=def-op.att;
+		Damage(op.GetAttack());
 		if(op.cardBase.hasLifelink)	op.GiveLifeToPlayer(op.att,game);
-		if(def<=0 || op.cardBase.hasDeatchtuch) 
+		if(GetDefense()<=0 || op.cardBase.hasDeatchtuch) 
 		{
 			die(); 
 		}
 		else
 		{
-			op.def=op.def-att;
+			op.Damage(GetAttack());
 			if(this->cardBase.hasLifelink)	this->GiveLifeToPlayer(this->att,game);
-			if(op.def<=0 || this->cardBase.hasDeatchtuch) die();
+			if(op.GetDefense()<=0 || this->cardBase.hasDeatchtuch) die();
 		}
 	}
 
@@ -441,7 +460,7 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 
 
 
-		sprintf(cad2,"%f",area);
+		sprintf(cad2,"ID:%d",id);
 		putText(img1,cad2, Point(d.x,d.y)+Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 
 
@@ -467,14 +486,14 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 		if(att!=-1)
 		{
 			char cad3[100];
-			sprintf(cad3,"Att: %d",att);
+			sprintf(cad3,"Att: %d",GetAttack());
 			putText(img1,cad3, d-Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
 		}
 
 		if(def!=-1)
 		{
 			char cad4[100];
-			sprintf(cad4,"Def: %d",def);
+			sprintf(cad4,"Def: %d",GetDefense());
 			putText(img1,cad4, c-Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
 		}
 
@@ -502,7 +521,7 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 				line(img1,old,getCenter(),Scalar(255,0,0),3);
 				putText(img1,"Bronie",getCenter()+Point2f(0,50),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
 				if(enemy.x!=-1) {
-					//rysuj linie miedzy kartami
+					line(img1,enemy,getCenter(),Scalar(255,0,200),3);
 				}
 			}
 		}
@@ -525,6 +544,9 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 void Card::NewRound()
 {
 	def=cardBase.def;
+	att=cardBase.att;
+	defEOT=0;
+	attEOT=0;
 }
 
 void Card::Clear()
