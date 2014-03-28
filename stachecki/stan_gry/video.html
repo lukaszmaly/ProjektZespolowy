@@ -1,0 +1,108 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"> </script>
+
+<script>
+
+$(document).ready(function(){
+	
+	var licznik=0;
+	var string;
+	//pierwszy wczytany nick to pierwszy gracz
+	var nickname;
+	//nazwy kart rowniez pobierane z pliku, poki co wpisane na sztywno
+	var card = "Golden Dragon.jpg";
+	var card2 ="Butcher Ghoul.jpg";
+	var ile = 5;
+	
+	//limit na sztywno - ilosc "divow"
+	for (var i = 0, limit = 5; i <= limit; i++) 
+	{
+		string = "gracz1div"+i;
+		$("#"+string).appendTo('.gracz1');
+		$("#"+string).hide();
+		string = "gracz2div"+i;		
+		$("#"+string).appendTo('.gracz2');		
+		$("#"+string).hide();
+	}
+	
+	//wyswietla "plansze", czyli obie ramki do gry
+	$('.gracz1').show();
+	$('.gracz2').show();
+	$('.nastepny').click(function()
+	{
+		if (licznik<ile)	
+		{			
+			licznik++;	
+	
+			if (nickname=="Olek")			
+			{
+				string = "gracz1div"+licznik;
+				//chce, aby tutaj czytac linijke, przypisac card=karty[licznik] i wyswietlic odpowiednia karte
+				$('<img id="theImg" src="{% static "assets/images/'+card+' " %}" />').appendTo("#"+string);
+				$("#"+string).show();
+			}
+			else if (nickname=="Jacek")
+			{
+				string = "gracz2div"+licznik;
+				$('<img id="theImg" src="{% static "assets/images/'+card2+' " %}" />').appendTo("#"+string);			
+				$("#"+string).show();
+			}
+			//wczytujemy jakas akcje
+			else 
+			{
+				var p=0;
+				$("#tekst").empty();					
+					$("#tekst").append(""+{{karty.licznik}});
+				p=0;
+			}
+		
+		}
+	
+    });
+	
+	$('.poprzedni').click(function(){
+	
+	string1 = "gracz1div"+licznik;
+	string2 = "gracz2div"+licznik;
+	$("#"+string1).empty();
+	$("#"+string1).hide();
+	$("#"+string2).empty();
+	$("#"+string2).hide();
+	
+	 
+	if (licznik!=0)
+		licznik = licznik-1;
+	$("#tekst").empty();
+	$("#tekst").append("Tekst"+licznik);
+    });
+});
+</script>
+</head>
+<body>
+
+<button class ="poprzedni">Previous</button>
+<button class ="nastepny">Next</button>
+<div id="tekst"><h2></div></h2>
+<div class="pole">
+<div class="gracz1" style="height:300px; width:1000px; border:1px solid green; overflow:auto;">
+	<ul id="gracz1div1" style="width:50px;"></ul>
+	<ul id="gracz1div2" style="width:50px;"></ul>
+	<ul id="gracz1div3" style="width:50px;"></ul>
+	<ul id="gracz1div4" style="width:50px;"></ul>
+	<ul id="gracz1div5" style="width:50px;"></ul>
+</div>
+
+<div class="gracz2" style="height:300px; width:1000px; border:1px solid blue;overflow:auto; ">	
+	<ul id="gracz2div1" style="width:50px;"></ul>
+	<ul id="gracz2div2" style="width:50px;"></ul>
+	<ul id="gracz2div3" style="width:50px;"></ul>
+	<ul id="gracz2div4" style="width:50px;"></ul>
+	<ul id="gracz2div5" style="width:50px;"></ul>
+</div>
+
+</div>
+</body>
+</html>
