@@ -363,7 +363,8 @@ void Card::Tap(Game &game)
 	if(this->cardBase.type==LAND && canUntap==true)
 	{
 		game.server.AddMana(game.GetPlayer(owner));
-		game.getCurrentPlayer().mana++;
+
+		game.getCurrentPlayer().mana.Add(cardBase.landColor);
 	}
 }
 
@@ -373,10 +374,11 @@ void Card::Untap(Game &game)
 	taped=false;
 	if(this->cardBase.type=LAND)
 	{
-		if(owner.mana>0 && canUntap==true)
+		if(owner.mana.IsMana(cardBase.landColor) && canUntap==true)
 		{
 			game.server.SubMana(game.GetPlayer(owner));
-			owner.mana--;
+		
+			owner.mana.AddMana(cardBase.landColor);
 		}
 		else
 		{
@@ -525,14 +527,14 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 				}
 			}
 		}
-		if(cardBase.koszt>owner.mana && cardBase.type!=LAND)
-		{
-			line(img1,a,c,Scalar(255,0,0),3);
-			char cad4[100];
-			sprintf(cad4,"Brakuje: %d",cardBase.koszt-owner.mana);
-			putText(img1,cad4, d+Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
+		//if(cardBase.koszt>owner.mana && cardBase.type!=LAND)
+		//{
+		//	line(img1,a,c,Scalar(255,0,0),3);
+		//	char cad4[100];
+		////	sprintf(cad4,"Brakuje: %d",cardBase.koszt-owner.mana);
+		//	putText(img1,cad4, d+Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
 
-		}
+		//}
 		if(dead==true)
 		{
 			line(img1,a,c,Scalar(255,0,0),3);

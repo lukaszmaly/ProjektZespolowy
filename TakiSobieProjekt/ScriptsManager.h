@@ -84,6 +84,21 @@ public:
 		}
 		return -1;
 	}
+
+	void Upkeep(Game &game,vector<Card> &cards)
+	{
+
+		for(unsigned int i=0;i<cards.size();i++)
+		{
+			for(unsigned int j =0; j<cards[i].cardBase.upkeepAbilities.size();j++)
+			{
+				//triggery
+			}
+		}
+
+
+	}
+
 	void Update(Mat &img,Game &game,vector<Card> &cards,vector<Card> &stos)
 	{
 		char cad6[100];
@@ -121,9 +136,9 @@ public:
 
 		for(unsigned int i=0;i<stos.size();i++)
 		{
-			if(stos[i].owner.mana>=stos[i].cardBase.koszt && stos[i].cardBase.type==INSTANT && stos[i].cardBase.id!=lastId)
+			if(stos[i].cardBase.type==INSTANT && stos[i].cardBase.id!=lastId 
+				&& stos[i].owner.mana.Pay(stos[i].cardBase.whiteCost,stos[i].cardBase.blueCost,stos[i].cardBase.blackCost,stos[i].cardBase.redCost,stos[i].cardBase.greenCost,stos[i].cardBase.lessCost))
 			{
-				stos[i].owner.mana-=stos[i].cardBase.koszt;
 				if(Resolve(stos[i],cards)==true)
 				{
 					lastId=stos[i].cardBase.id;

@@ -113,6 +113,7 @@
     <ClInclude Include="Player.h" />
     <ClInclude Include="ScriptsManager.h" />
     <ClInclude Include="Server.h" />
+    <ClInclude Include="settings.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

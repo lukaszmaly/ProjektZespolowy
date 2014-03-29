@@ -5,12 +5,12 @@ Player::Player(string name,int markerId)
 {
 	this->markerId=markerId;
 	this->name=name;
-
+	angleDiff=0;
 	hp=20;
 	cardsInLib=60;
 	cardsInTomb=0;
 	cardsOnHand=7;
-	mana=0;
+	
 }
 
 
@@ -26,7 +26,7 @@ void Player::Init(string name,int markerId)
 	cardsInLib=60;
 	cardsInTomb=0;
 	cardsOnHand=7;
-	mana=0;
+
 }
 void Player::Draw()
 {
@@ -39,7 +39,7 @@ void Player::Draw()
 	putText(img,cad, Point(10,10),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(200,200,200),2);
 	putText(img,cad1, Point(10,30),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(200,200,200),2);
 
-	sprintf(cad1,"Karty(dlon): %d",this->cardsOnHand);
+	sprintf(cad1,"Diff: %d",abs(this->angleDiff));
 	putText(img,cad1, Point(10,50),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(200,200,200),2);
 
 	sprintf(cad1,"OldAngle: %d",this->oldangle);
