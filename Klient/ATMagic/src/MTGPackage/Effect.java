@@ -25,6 +25,11 @@ public class Effect
 		{
 			img=parent.loadImage("arrows_up.png");
 		}
+		
+		if(t==Type.BOLT)
+		{
+			img=parent.loadImage("lightning-single1.png");
+		}
 	}
 	
 	public void drawEffect()
@@ -51,33 +56,93 @@ public class Effect
 	 if(v1.x<=v2.x && v1.y<=v2.y)  
 	 {
 		 parent.rotate(parent.PI-asin);
-	  
+	//  parent.tint(255,127);
 	    parent.image(img,-w/2,0,w,d);
 	 }
 	 else
 		 if(v1.x<=v2.x && v1.y>=v2.y)  
 		 {
 			 parent.rotate(asin);
-		  
+			 //parent.tint(255,127);
 		    parent.image(img,-w/2,0,w,d);
 		 } 
 		 else
 			 if(v1.x>=v2.x && v1.y>=v2.y)  
 			 {
 				 parent.rotate(-asin);
-			  
+				// parent.tint(255,127);
 			    parent.image(img,-w/2,0,w,d);
 			 }
 			 else
 				 if(v1.x>=v2.x && v1.y<=v2.y)  
 				 {
 					 parent.rotate(parent.PI+asin);
-				  
+					// parent.tint(255,127);
 				    parent.image(img,-w/2,0,w,d);
 				 }
 	    parent.popMatrix();
 
 	}
+		
+		if(this.type==Type.BOLT)
+		{
+			
+			float d=parent.dist(v1.x, v1.y, v2.x, v2.y);
+		    if(life>0) life--;
+		    
+		    int h=(int)d;
+		    int w=(int)(d/10);
+		   // if(w>80) w=80;
+		    float sin=(parent.abs(v1.x-v2.x))/d;
+		    float asin=parent.asin(sin);
+		    parent.image(img,100,100,500,600);
+		/*	
+			float d=parent.dist(v1.x, v1.y, v2.x, v2.y);
+		    if(life>0) life--;
+		    
+		    int h=(int)d;
+		    int w=(int)(d/10);
+		   // if(w>80) w=80;
+		    float sin=(parent.abs(v1.x-v2.x))/d;
+		    float asin=parent.asin(sin);
+		   
+		    parent.stroke(0,0,255);
+		    //parent.line(v1.x, v1.y, v2.x, v2.y);
+		    
+		    
+		    parent.pushMatrix();
+		    parent.translate(v2.x, v2.y);
+		  //  parent.rotate(parent.radians(135));
+		 if(v1.x<=v2.x && v1.y<=v2.y)  
+		 {
+			 parent.rotate(parent.PI-asin);
+		 // parent.tint(255,127);
+		    parent.image(img,-w/2,0,w,d);
+		 }
+		 else
+			 if(v1.x<=v2.x && v1.y>=v2.y)  
+			 {
+				 parent.rotate(asin);
+				 //parent.tint(255,127);
+			    parent.image(img,-w/2,0,w,d);
+			 } 
+			 else
+				 if(v1.x>=v2.x && v1.y>=v2.y)  
+				 {
+					 parent.rotate(-asin);
+					// parent.tint(255,127);
+				    parent.image(img,-w/2,0,w,d);
+				 }
+				 else
+					 if(v1.x>=v2.x && v1.y<=v2.y)  
+					 {
+						 parent.rotate(parent.PI+asin);
+						// parent.tint(255,127);
+					    parent.image(img,-w/2,0,w,d);
+					 }
+		    parent.popMatrix();
+*/
+		}
 	}
 	
 }

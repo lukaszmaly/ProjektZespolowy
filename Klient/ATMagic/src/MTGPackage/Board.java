@@ -111,8 +111,10 @@ parent.rectMode(parent.CENTER);
 		 {
 			 parent.stroke(255-i*10);
 			 //parent.rect(0.035f*parent.width-i,0.07f*parent.height-i,0.1f*parent.width+i,0.25f*parent.height+i,20,20,20,20);
-			 parent.rect(0.035f*parent.width-i,0.07f*parent.height-i,0.1f*parent.width+2*i,0.25f*parent.height+2*i,20,20,20,20);
-			 parent.rect(0.035f*parent.width-i,0.68f*parent.height-i,0.1f*parent.width+2*i,0.25f*parent.height+2*i,20,20,20,20);
+			 //parent.rect(0.035f*parent.width-i,0.07f*parent.height-i,0.1f*parent.width+2*i,0.25f*parent.height+2*i,20,20,20,20);
+			 //parent.rect(0.035f*parent.width-i,0.68f*parent.height-i,0.1f*parent.width+2*i,0.25f*parent.height+2*i,20,20,20,20);
+			 parent.rect(0.035f*parent.width-i,0.07f*parent.height-i,1.1f*width+2*i,1.1f*height+2*i,20,20,20,20);
+			 parent.rect(0.035f*parent.width-i,0.68f*parent.height-i,1.1f*width+2*i,1.1f*height+2*i,20,20,20,20);
 		 }
 			 /*
 		 parent.rect(0.07f*parent.width,0.05f*parent.height,0.06f*parent.width,0.125f*parent.height);
@@ -253,12 +255,12 @@ parent.rectMode(parent.CENTER);
 			parent.textAlign(parent.CENTER);
 			
 			parent.pushMatrix();
-			parent.translate(parent.width*0.86f,10);
+			parent.translate(parent.width*0.85f,10);
 			parent.rotate(parent.PI);
 			parent.text(String.valueOf(P1.life),0,0);
 			parent.popMatrix();
 			
-			parent.text(String.valueOf(P2.life),parent.width*0.86f,parent.height-10);
+			parent.text(String.valueOf(P2.life),parent.width*0.85f,parent.height-10);
 			
 	 
 	 }
@@ -268,7 +270,8 @@ parent.rectMode(parent.CENTER);
 		 
 			f=parent.createFont("Comic Sans", 25,true);
 		 	parent.textFont(f);
-			parent.fill(0,0,255);
+			//parent.fill(0,0,255);
+		 	parent.fill(255);
 			parent.textAlign(parent.CENTER);
 			
 			parent.pushMatrix();

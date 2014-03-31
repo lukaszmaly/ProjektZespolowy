@@ -17,14 +17,15 @@ public class Main extends PApplet {
 			edge3=loadImage("PD.png"), 
 			edge4=loadImage("LD.png"),
 			skull = loadImage("skull.jpg"),
-			upArrow=loadImage("arrows_up.png");
+			upArrow=loadImage("arrows_up.png"),
+			bolt=loadImage("lightning-single1.png");
 	int 	manaPool1=0,
 			manaPool2=0,
 	 		life1=20,
 			life2=20,
 			log=0,
 			window,
-			cardHeight=180,cardWidth=120;
+			cardHeight=135,cardWidth=120;
 	Player 	P1=new Player(this,1),
 			P2=new Player(this,2);
 	PVector[] T=new PVector[4];
@@ -40,7 +41,7 @@ public class Main extends PApplet {
 	boolean tokens = true,arrow=false;	
 	float angle=PI/8;
 	String[] lines = loadStrings("log.txt");
-	Effect e=new Effect(this, Type.ARROW, 100,new PVector(100,100),new PVector(200,200));
+	//Effect e=new Effect(this, Type.ARROW, 1000,new PVector(100,100),new PVector(200,200));
 	public void setup()
 		{		
 		size(displayWidth, displayHeight);
@@ -58,7 +59,7 @@ public class Main extends PApplet {
 		//edge4 = loadImage("LD.png");
 		
 		// skull=loadImage("star.png");
-		udp = new UDP(this, 6121);
+		udp = new UDP(this, 600);
 		udp.listen(true);
 		if(tokens==true) window=0; else window=1;
 		//b = new Board(this);
@@ -89,7 +90,7 @@ public class Main extends PApplet {
 	public void draw() {
 		if(window==0)
 		{
-			println("@@@@@@ "+frameRate);
+			//println("@@@@@@ "+frameRate);
 			background(0);
 			if (tokens == true) {
 				image(edge1, 0, 0, 200, 200);
@@ -179,6 +180,7 @@ public class Main extends PApplet {
 			background(0);
 			// b.display(counter,40,4);
 			b.display(255, 40, 4,P1,P2,cardWidth,cardHeight);
+			image(bolt, 300, 200,200,200);
 			fazy.rysuj();
 			//stroke(255,0,0);
 			//rect(width/2, height/2,cardWidth,cardHeight);
@@ -599,25 +601,31 @@ public class Main extends PApplet {
 					
 				case "ADDMANA":
 				{
+					
 					int id=Integer.parseInt(Dane[2]);
 					int q=Integer.parseInt(Dane[3]);
+					char c=Dane[4].charAt(0);
 					//if(id==1) manaPool1+=q; else manaPool2+=q;
-					if(id==1) P1.manaPool+=q; else P2.manaPool+=q;
+					//if(id==1) P1.manaPool+=q; else P2.manaPool+=q;
+					if(id==1) P1.addMana(c); else P2.addMana(c);
 					break;
 					
 				}
 				case "SUBMANA":
 				{
+					char c=Dane[4].charAt(0);
 					int id=Integer.parseInt(Dane[2]);
 					int q=Integer.parseInt(Dane[3]);
 					//if(id==1) manaPool1-=q; else manaPool2-=q;
 					if(id==1)
 						{
-						if(P1.manaPool-q>=0) P1.manaPool-=q; else P1.manaPool=0;
+						//if(P1.manaPool-q>=0) P1.manaPool-=q; else P1.manaPool=0;
+						P1.subtractMana(c); 
 						} 
 					else 
 					{
-						if(P2.manaPool-q>=0) P2.manaPool-=q; else P2.manaPool=0;
+						//if(P2.manaPool-q>=0) P2.manaPool-=q; else P2.manaPool=0;
+						 P2.subtractMana(c);
 					
 					}
 					break;
@@ -865,6 +873,9 @@ public class Main extends PApplet {
 
 	public void mousePressed() {
 		if (mouseButton == RIGHT) {
+			 Effects.add(new Effect(this,Type.ARROW,100,new PVector(width/2,height/2),new PVector(mouseX,mouseY)));
+			
+			/*
 			int id = 1;
 			for (int i = 0; i < Cards.size(); i++)
 				if (Cards.get(i).id >= id)
@@ -891,11 +902,11 @@ public class Main extends PApplet {
 		//	Cards.add(new Card(mouseX, mouseY, mouseX - 100, mouseY,
 				//	mouseX - 100, mouseY - 150, mouseX, mouseY - 150, id, id,
 				//	0, this));
-		}
+		*/}
 		if (mouseButton == LEFT) 
 		{
 			
-			 Effects.add(new Effect(this,Type.ARROW,100,new PVector(width/2,height/2),new PVector(mouseX,mouseY)));
+			 Effects.add(new Effect(this,Type.BOLT,100,new PVector(width/2,height/2),new PVector(mouseX,mouseY)));
 		//	 Effects.get(Effects.size()-1).arrowType=1;
 		}
 	}
