@@ -71,6 +71,19 @@ Server::Server()
 }
 
 
+void Server::DrawCard(int id,int value)
+{
+	char data[100];
+	int n = sprintf(data,"| DRAW %d %d |",id,value);	
+	if (soc.send(data, n, client, port) != sf::Socket::Done)
+	{
+		cout<<"Blad podczas wysylanie aktualnych danych o karcie"<<endl;
+	}
+	else if(showLog)
+	{
+		cout<< data <<endl;Write(data);
+	}
+}
 void Server::Attack(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bool taped)
 {
 	char data[100];

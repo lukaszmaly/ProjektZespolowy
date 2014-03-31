@@ -6,9 +6,151 @@
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/nonfree/nonfree.hpp"
 #include <iostream>
+#include "settings.h"
 #include <vector>
 using namespace std;
 using namespace cv;
+
+
+class Mana
+{
+private:
+	int white;
+	int blue;
+	int black;
+	int red;
+	int green;
+	int all;
+public:
+	void Add(Color color)
+	{
+		switch(color)
+		{
+		case WHITE:
+			Add(1,0,0,0,0);
+			break;
+		case GREEN:
+			Add(0,0,0,0,1);
+			break;
+		case RED:
+			Add(0,0,0,1,0);
+			break;
+		case BLUE:
+			Add(0,1,0,0,0);
+			break;
+		case BLACK:
+			Add(0,0,1,0,0);
+		}
+	}
+	void AddMana(Color color,int value=1)
+	{
+		switch(color)
+		{
+		case WHITE:
+			this->white+=value;
+			break;
+		case GREEN:
+			this->green+=value;
+			break;
+		case RED:
+			this->red+=value;
+			break;
+		case BLUE:
+			this->blue+=value;
+			break;
+		case BLACK:
+			this->black+=value;
+		}
+	}
+	bool IsMana(Color color)
+	{
+		switch(color)
+		{
+		case WHITE:
+			return this->white>0;
+			break;
+		case GREEN:
+			return this->green>0;
+			break;
+		case RED:
+			return this->red>0;
+			break;
+		case BLUE:
+			return this->blue>0;
+			break;
+		case BLACK:
+			return this->black>0;
+		}
+	}
+	void Add(int white,int blue,int black,int red,int green)
+	{
+	
+		this->white+=white;
+		this->black+=black;
+		this->blue+=blue;
+		this->green+=green;
+		this->red+=red;
+		this->all=this->all+white+blue+black+red+green;
+	}
+	void Print()
+	{
+	
+		cout<<"White: "<<this->white<<endl;
+		cout<<"Blue: "<<this->blue<<endl;
+		cout<<"Black: "<<this->black<<endl;
+		cout<<"Red: "<<this->red<<endl;
+		cout<<"GReen: "<<this->green<<endl;
+	}
+	Mana()
+	{
+		white=blue=black=red=green=0;
+	}
+	void Sub(int &colorless,int &color)
+	{
+		if(color>=colorless)
+		{
+			color-=colorless;
+			colorless=0;
+		}
+		else
+		{
+			colorless-=color;
+			color=0;
+		}
+	
+	}
+	bool CanPay(int white, int blue,int black,int red,int green,int colorless)
+	{
+			if( this->white >= white && this->blue >= blue && this->black >= black && this->red >= red && this->green >= green
+			&& all >= (white+blue+black+red+green+colorless) ) return true;
+			return false;
+	}
+	bool Pay(int white, int blue,int black,int red,int green,int colorless)
+	{
+		if( this->white >= white && this->blue >= blue && this->black >= black && this->red >= red && this->green >= green
+			&& all >= (white+blue+black+red+green+colorless) )
+		{
+			this->white-=white;
+			this->black-=black;
+			this->blue-=blue;
+			this->green-=green;
+			this->red-=red;
+			if(colorless<=0) return true;
+			Sub(colorless,this->white);
+			if(colorless<=0) return true;
+			Sub(colorless,this->black);
+			if(colorless<=0) return true;
+			Sub(colorless,this->blue);
+			if(colorless<=0) return true;
+			Sub(colorless,this->green);
+			if(colorless<=0) return true;
+			Sub(colorless,this->red);
+			return true;
+		}
+		return false;
+	}
+};
+
 class Player
 {
 public:
@@ -20,11 +162,12 @@ public:
 	int hp;
 	int angle;
 	bool agree;
-Mat img;
+	int angleDiff;
+	Mat img;
 	int oldangle;
-
+	Mana mana;
 	string name;
-	int mana;
+
 	int markerId;
 	int cardsOnHand;
 	int cardsInLib;
@@ -33,6 +176,6 @@ Mat img;
 	void Update();
 	void Draw();
 
-	  int operator==(const Player &p) {return  markerId==p.markerId;}
+	int operator==(const Player &p) {return  markerId==p.markerId;}
 };
 

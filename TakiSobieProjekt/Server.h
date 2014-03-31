@@ -25,10 +25,11 @@ public:
 	int GetInterval();
 	void AddMana(int id,int count=1);
 	void Played(int id);
-		void SubMana(int id,int count=1);
-		void SubLife(int id,int count=1);
-		void AddLife(int id,int count=1);
+	void SubMana(int id,int count=1);
+	void SubLife(int id,int count=1);
+	void AddLife(int id,int count=1);
 	void Dead(int id);
+	void DrawCard(int id,int value);
 	void Block(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bool taped,int id2);
 	~Server();
 	void Update();

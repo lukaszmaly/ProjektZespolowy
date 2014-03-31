@@ -7,13 +7,10 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include "settings.h"
 using namespace std;
 using namespace cv;
-enum Color{
-	Red = 0,
-	Black = 1,
-	Land = 2
-};
+
 enum Type{
 	CREATURE = 0,
 	LAND = 1,
@@ -27,7 +24,7 @@ class CardB
 {
 public:
 	int id;
-
+	Color landColor;
 
 	string name;
 	Color color;

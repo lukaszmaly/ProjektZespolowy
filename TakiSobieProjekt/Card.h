@@ -125,11 +125,17 @@ public:
 	{
 		float a1=Distance(a,b)/Distance(b,c);
 		float a2=Distance(b,c)/Distance(c,d);
-		if(((a1>=MIN_D1 && a1<=MAX_D1) || (a1>=MIN_D2 && a1<=MAX_D2)) && ((a2>=MIN_D1 && a2<=MAX_D1) || (a2>=MIN_D2 && a2<=MAX_D2)))
+
+		if(a1>=MIN_D1 && a1<=MAX_D1 && a2>=MIN_D2 && a2<=MAX_D2)
 		{
 			return true;
 		}
-		cout<<"Niepoprawne rozmiary karty:\n"<<a1<<" "<<a2<<endl;
+		else if(a1>=MIN_D2 && a1<=MAX_D2 && a2>=MIN_D1 && a2<=MAX_D1)
+		{
+			return true;
+		}
+
+		//cout<<"Niepoprawne rozmiary karty:\n"<<a1<<" "<<a2<<endl;
 		return false;
 
 

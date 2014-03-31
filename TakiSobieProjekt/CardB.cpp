@@ -96,6 +96,14 @@ void CardB::Init(int id,string name,int type,int att,int def,int redCost,int whi
 	this->blueCost=blueCost;
 	this->blackCost=blackCost;
 	this->lessCost=lessCost;
+	landColor=NONE;
+	if(redCost==-1) landColor = RED;
+	if(blueCost==-1) landColor = BLUE;
+	if(blackCost==-1) landColor = BLACK;
+	if(whiteCost==-1) landColor = WHITE;
+	if(greenCost==-1) landColor = GREEN;
+
+
 	this->hasHexproof=hasHexproof;
 	this->hasHaste= hasHaste;
 	this->hasDefender=hasDefender;

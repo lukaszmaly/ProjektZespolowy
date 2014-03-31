@@ -11,6 +11,7 @@ public class SparkSystem {
 	  char sparkType='p';
 	  int r,g,b,size,life;
 	  
+	  
 	  SparkSystem(PVector l,PApplet p) 
 	  	{
 		parent=p;
@@ -24,8 +25,7 @@ public class SparkSystem {
 	    v=null;
 	    a=null;
 	  	}
-	  
-	
+	  	
 	  public void addParticle() 
 	  	{
 		    sparks.add(new Spark(source,parent,a,v,life));

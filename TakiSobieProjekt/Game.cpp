@@ -44,10 +44,10 @@ bool Game::IsTargetMode()
 {
 	return targetMode;
 }
-	void Game::SetTargetMode(bool value)
-	{
-		targetMode=value;
-	}
+void Game::SetTargetMode(bool value)
+{
+	targetMode=value;
+}
 
 
 void Game::MakeDiffImage(Mat &img1,Point a,Point b,Point c,Point d)
@@ -67,7 +67,7 @@ void Game::MakeDiffImage(Mat &img1,Point a,Point b,Point c,Point d)
 	warpAffine(t,img,mmat,Size(251,356));
 	/*cvtColor(img,img,CV_BGR2HSV);
 	cvtColor(diff,diff,CV_BGR2HSV);*/
-	
+
 	imshow("SprawdzanaKarta",img);
 
 	img.copyTo(after);
@@ -136,27 +136,32 @@ string Game::getCurrentPhase()
 
 void Game::nextPhase()
 {
-	server.NextPhase();
+	
 	zmiana=true;
 	switch(phase)
 	{
 	case PIERWSZY:
 		phase=ATAK;
-			this->oneAttack=false;
+		server.NextPhase();
+		this->oneAttack=false;
 		break;
 	case ATAK:
-			this->oneAttack=false;
+		server.NextPhase();
+		this->oneAttack=false;
 		phase=OBRONA;
 		break;
 	case OBRONA:
-			this->oneAttack=false;
+		server.NextPhase();
+		this->oneAttack=false;
 		phase=WYMIANA;
 		break;
 	case WYMIANA:
+		server.NextPhase();
 		phase=DRUGI;
-			this->oneAttack=false;
+		this->oneAttack=false;
 		break;
 	case DRUGI:
+		server.NextPhase();
 		phase=UPKEEP;
 		break;
 	case UPKEEP:
@@ -243,7 +248,7 @@ Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip
 	showCardArea=false;
 	bgrMode=true;
 	firstCardChecked=false;
-	checkCardsProp=false;
+	checkCardsProp=true;
 	beAbleMarker=true;
 	gameWidth = w;
 	oneAttack=false;
@@ -274,34 +279,52 @@ void Game::CheckMarkers(Mat &frame)
 
 		if(markers[i].id==player1.markerId)
 		{
-		
-		
-					player1.angle =markers[i].getAngle();
-					if(player1.oldangle<0) { player1.oldangle=player1.angle;}
-		
-		
-				if(abs(player1.oldangle-markers[i].getAngle())>80)
-				{
-					player1.agree=true;
-					player1.oldangle=player1.angle;
-				}
 
-			
 
+			player1.angle =markers[i].getAngle();
+			if(player1.oldangle<0) { player1.oldangle=player1.angle;}
+
+			player1.angleDiff=player1.angle-player1.oldangle;
+			if(player1.angleDiff>100)
+			{
+				player1.angleDiff=360-player1.angleDiff;
+			}
+			if(player1.angleDiff<-100) 
+			{
+				player1.angleDiff=-360-player1.angleDiff;
+			}
+
+
+			if(abs(player1.angleDiff)>80)
+			{
+				player1.agree=true;
+				player1.oldangle=player1.angle;
+			}
 		}
+
 		if(markers[i].id==player2.markerId)
 		{
-		
-			
-					player2.angle =markers[i].getAngle();
-					if(player2.oldangle<0) { player2.oldangle=player2.angle;}
-		
-				if(abs(player2.oldangle-markers[i].getAngle())>80)
-				{
-					player2.agree=true;
-					player2.oldangle=player2.angle;
-				}
-			
+
+
+			player2.angle =markers[i].getAngle();
+			if(player2.oldangle<0) { player2.oldangle=player2.angle;}
+
+			player2.angleDiff=player2.angle-player2.oldangle;
+			if(player2.angleDiff>100)
+			{
+				player2.angleDiff=360-player2.angleDiff;
+			}
+			if(player2.angleDiff<-100) 
+			{
+				player2.angleDiff=-360-player2.angleDiff;
+			}
+
+			if(abs(player2.angleDiff)>80)
+			{
+				player2.agree=true;
+				player2.oldangle=player2.angle;
+			}
+
 		}
 
 
@@ -337,10 +360,10 @@ void Game::CheckMarkers(Mat &frame)
 		//	break;
 		//}
 
-	/*	if(player2.markerId == markers[i].id && aPlayer != player2.markerId)
+		/*	if(player2.markerId == markers[i].id && aPlayer != player2.markerId)
 		{
-			aPlayer=markers[i].id;
-			break;
+		aPlayer=markers[i].id;
+		break;
 		}*/
 	}
 }
