@@ -30,7 +30,6 @@ public:
 	Color color;
 	Mat img;
 	int att,def;
-	int koszt;
 	Type type;
 
 	bool targetsCreature;

@@ -205,6 +205,7 @@ Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game
 	error=false;
 	nowa=true;
 	sendTime=0;
+	id=-1;
 	blocking=-1;
 	owner=game.getCurrentPlayer();
 	taped=false;
@@ -362,9 +363,9 @@ void Card::Tap(Game &game)
 	taped=true;
 	if(this->cardBase.type==LAND && canUntap==true)
 	{
-		game.server.AddMana(game.GetPlayer(owner));
+		game.server.AddMana(game.GetPlayer(owner),cardBase.landColor);
 
-		game.getCurrentPlayer().mana.Add(cardBase.landColor);
+		game.GetPlayer(game.GetPlayer(owner)).mana.Add(cardBase.landColor);
 	}
 }
 
@@ -374,9 +375,9 @@ void Card::Untap(Game &game)
 	taped=false;
 	if(this->cardBase.type=LAND)
 	{
-		if(owner.mana.IsMana(cardBase.landColor) && canUntap==true)
+		if(game.GetPlayer(game.GetPlayer(owner)).mana.IsMana(cardBase.landColor) && canUntap==true)
 		{
-			game.server.SubMana(game.GetPlayer(owner));
+			game.server.SubMana(game.GetPlayer(owner),cardBase.landColor);
 		
 			owner.mana.AddMana(cardBase.landColor);
 		}

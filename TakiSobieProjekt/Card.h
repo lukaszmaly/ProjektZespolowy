@@ -54,6 +54,11 @@ public:
 	int GetTarget();
 	int additionalAttack;
 	int additionalDefense;
+
+	bool hasFirstStrikeEOT;
+	bool hasLifelinkEOT;
+	bool hasFlyingEOT;
+
 	void AddEOT(int attack,int defense);
 	int attEOT;
 	int defEOT;

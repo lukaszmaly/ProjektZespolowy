@@ -65,6 +65,7 @@ float targetOldAngle;
 	int GetPlayer(Player &player);
 	Point a,b,c,d;
 	bool t;
+	Player & GetPlayer(int id);
 	Player player1;
 	Player player2;
 	Phase GetPhase();

@@ -7,3 +7,11 @@ enum Color{
 	GREEN = 4,
 	NONE = 5
 };
+
+enum State
+{
+	DENY = 0,
+	OK = 1,
+	NEUTRAL =2
+
+};

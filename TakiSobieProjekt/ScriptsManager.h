@@ -38,6 +38,9 @@ public:
 		}
 	}
 
+
+	
+
 	void DestroyCreature(int id,vector<Card> &cards)
 	{
 		for(unsigned int i=0;i<cards.size();i++)
@@ -61,28 +64,50 @@ public:
 		}
 	}
 
-	void SubLife(int id,int n)
+	void SubLife(int id,int n,Game &game)
+	{
+		
+	}
+
+	void DrawCard(int id,int n,Game &game)
 	{
 
 	}
 
-	void DrawCard(int id,int n)
+	void ScryCard(int id,int n,Game &game)
 	{
 
 	}
 
-
-
-	int GetCardId(Point p,vector<Card> &cards,Game &game)
+	void PutPermanentOnDeck(int id,vector<Card> &cards,Game &game)
 	{
 		for(unsigned int i=0;i<cards.size();i++)
 		{
-			if(game.distance(cards[i].getCenter(),p)<20 && !cards[i].cardBase.hasHexproof)
+			if(cards[i].id==id)
 			{
-				return cards[i].id;
+				game.server.PutPermanentOnLibrary(id);
+				cards.erase(cards.begin()+i);
+				return;
 			}
 		}
-		return -1;
+	}
+
+	int GetCardId(Point p,vector<Card> &cards,Game &game)
+	{
+		int index =-1;
+		int distance = 10000000;
+		for(unsigned int i=0;i<cards.size();i++)
+		{
+			int d = game.distance(cards[i].getCenter(),p);
+			if(d<distance && !cards[i].cardBase.hasHexproof)
+			{
+				distance = d;
+				index = cards[i].id;
+			}
+				
+			}
+		
+		return index;
 	}
 
 	void Upkeep(Game &game,vector<Card> &cards)
@@ -139,7 +164,7 @@ public:
 			if(stos[i].cardBase.type==INSTANT && stos[i].cardBase.id!=lastId 
 				&& stos[i].owner.mana.Pay(stos[i].cardBase.whiteCost,stos[i].cardBase.blueCost,stos[i].cardBase.blackCost,stos[i].cardBase.redCost,stos[i].cardBase.greenCost,stos[i].cardBase.lessCost))
 			{
-				if(Resolve(stos[i],cards)==true)
+				if(Resolve(stos[i],cards,game)==true)
 				{
 					lastId=stos[i].cardBase.id;
 				}
@@ -149,7 +174,7 @@ public:
 		}
 	}
 
-	bool Resolve(Card &card,vector<Card> &cards)
+	bool Resolve(Card &card,vector<Card> &cards,Game &game)
 	{
 		//sprawdz czy karta bêdzie targetowa³a i uzale¿nij od tego dalsz¹ czêœæ programu
 		vector<pair<int,int>> ab = card.cardBase.enterAbilities;
@@ -159,7 +184,9 @@ public:
 			{
 				if(ab[i].first==2 && targetId!=-1) 
 				{
+					
 					AddDamage(targetId,cards,ab[i].second);
+					game.server.VisualEffect("BOLT",-1,targetId);
 					return true;
 				}
 				else if(ab[i].first==4 && targetId!=-1) 

@@ -69,19 +69,19 @@ void CardB::Init(int id,string name,int type,int att,int def,int redCost,int whi
 	switch(type)
 	{
 	case 0:
-		this->type=ENCHANTMENT;
-		break;
-	case 1:
-		this->type=INSTANT;
-		break;
-	case 2:
-		this->type=SORCERY;
-		break;
-	case 3:
 		this->type=CREATURE;
 		break;
-	case 4:
+	case 1:
+		this->type=ENCHANTMENT;
+		break;
+	case 2:
 		this->type=LAND;
+		break;
+	case 3:
+		this->type=INSTANT;
+		break;
+	case 4:
+		this->type=SORCERY;
 		break;
 	case 5:
 		this->type= ARTIFACT;

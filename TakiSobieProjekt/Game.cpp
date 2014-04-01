@@ -4,6 +4,14 @@ bool Game::CheckCardsProp()
 {
 	return checkCardsProp;
 }
+Player & Game::GetPlayer(int id)
+{
+	if(id==1)
+	{
+		return this->player1;
+	}
+	return this->player2;
+}
 void Game::setFaza(int i)
 {
 	return;

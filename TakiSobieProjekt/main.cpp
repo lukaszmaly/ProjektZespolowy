@@ -3,9 +3,6 @@ Znane błędy:
 -jeśli karta jest idealnie równolegle(abs(a.y-d.y)~=0) to wystepuje problem z wyznaczeniem orientacji cardsInPlay
 położenie problemu: metoda Card::Valid();
 (dokonałem poprawki, ale nie mam na 100% pewnosci że problem zniknął, dlatego zostawiam ten punkt)
-
--jeśli są 2 cardsInPlay tego samego rodzaju, i jeśli 1 z nich jest tapniety to wystepują błędy z duplikacją(POWAŻNE)
-
 */
 
 #include <stdio.h>
@@ -15,6 +12,7 @@ położenie problemu: metoda Card::Valid();
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/highgui/highgui.hpp"
 #include "opencv2/nonfree/nonfree.hpp"
+#include "settings.h"
 #include "Card.h"
 #include "Player.h"
 #include "CardB.h"
@@ -50,6 +48,7 @@ int gracz=0;
 int faza=0;
 int borderMethod = 0;
 bool oneAttack=false;
+int updateTime = 8;
 
 void LoadCardDatabase(vector<CardB> &cards)
 {
@@ -189,20 +188,28 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 	}
 
 	imshow("Kontury",diff);
+	int erased =0;
 	for(unsigned int i=0;i<squares.size();i++)
-	{
+	{	
+		if(IsInRectFast(Card::getCenter(squares[i][0],squares[i][1],squares[i][2],squares[i][3]),game.firsCardPoint,game.firsCardPoint+Point(game.firstCardWidth,game.firstCardHeight))==true)
+		{
+			continue;
+		}
 		if(game.CheckCardsProp()==true && Card::Valid(squares[i][0],squares[i][1],squares[i][2],squares[i][3])==false)
 		{
 			squares.erase(squares.begin()+i);
 			i=-1;
+			erased++;
 		}
 	}
+	if(erased!=0) cout<<erased <<" kart nie spelnialo norm"<<endl;
+	
 	//tworzenie tymczaswego wektora z wykrytymi kartami na stole
 	for (unsigned int i = 0; i<squares.size(); i++ ) 
 	{
 		tcard.push_back(Card(squares[i][0],squares[i][1],squares[i][2],squares[i][3],frame,bcards,game,true));
 	}
-	//cout<<"Przed : "<<tcard.size();
+	//	
 	//redukcja powtórzeń
 	for (unsigned int i = 0; i<tcard.size(); i++) 
 	{
@@ -217,7 +224,7 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 			}
 		}
 	}
-	//cout<<" Po: "<<tcard.size()<<endl;
+	//
 	if(game.firstCardChecked==false)
 	{
 		rectangle(frame,game.firsCardPoint,game.firsCardPoint+Point(game.firstCardWidth,game.firstCardHeight),Scalar(0,0,255),4);
@@ -281,6 +288,7 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 			if(i!=j && Game::Distance(stack[i].getCenter(),stack[j].getCenter())<30)
 			{
 				cout<<"BŁĄD: Usunieto  duplikat karty na stosie!"<<endl;
+				game.server.Write("BLAD1");
 				stack.erase(stack.begin()+max(j,i));
 				j=-1;
 				i=-1;
@@ -346,17 +354,19 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 		for(unsigned int j=0;j<tcard.size();j++)
 		{
 
-			if(stack[i].cardBase.id==tcard[j].cardBase.id && IsInRectFast(tcard[j].getCenter())==false) 
-				//	if(stack[i].owner.mana>=stack[i].cardBase.koszt && stack[i].cardBase.id==tcard[j].cardBase.id && IsInRectFast(tcard[j].getCenter())==false) 
+			if(stack[i].cardBase.id==tcard[j].cardBase.id && IsInRectFast(tcard[j].getCenter())==false && stack[i].owner.mana.CanPay(stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost)) 
 			{
-				stack[i].owner.mana-=stack[i].cardBase.koszt;
-				game.server.SubMana(game.GetPlayer(stack[i].owner),stack[i].cardBase.koszt);
+		
+				stack[i].owner.mana.Pay(stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost);
+				game.server.SubMana(game.GetPlayer(stack[i].owner),stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost);
+
 				tcard[j].Unlock();
 				stack[i].id=tcard[j].id;
 				game.server.SendNewCard(tcard[j].id,tcard[j].cardBase.id,game.GetPlayer(tcard[j].owner),tcard[j].a,tcard[j].b,tcard[j].c,tcard[j].d,tcard[j].taped);
 				cards.push_back(stack[i]);
 				stack.erase(stack.begin()+i);
 				tcard.erase(tcard.begin()+j);
+				game.server.StackColor(1,NEUTRAL);
 				i=j=-1;
 				break;
 			}
@@ -371,6 +381,7 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 			if(i!=j && Game::Distance(cards[i].getCenter(),cards[j].getCenter())<30 && cards[i].cardBase.id == cards[j].cardBase.id)
 			{
 				cout<<"BLAD:USUWAM DUPLIKAT"<<endl;
+				game.server.Write("BLAD2");
 				cards.erase(cards.begin()+max(j,i));
 				j=-1;
 				i=-1;
@@ -384,22 +395,29 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 		if(!cards[i].TrySend(game)) continue;
 		if(cards[i].attack==true)
 		{
-			game.server.Attack(cards[i].id,cards[i].cardBase.id,game.GetPlayer(cards[i].owner),cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped);
+			game.server.Attack(cards[i].id,cards[i].cardBase.id,game.GetPlayer(cards[i].owner),cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense());
 		}
 		else if(cards[i].block == true)
 		{
-			game.server.Block(cards[i].id,cards[i].cardBase.id,game.GetPlayer(cards[i].owner),cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].blocking);
+			game.server.Block(cards[i].id,cards[i].cardBase.id,game.GetPlayer(cards[i].owner),cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].blocking,cards[i].GetAttack(),cards[i].GetDefense());
 		}
 		else
 		{
-			game.server.UpdateCard(cards[i].id,cards[i].cardBase.id,game.GetPlayer(cards[i].owner),cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped);
+			game.server.UpdateCard(cards[i].id,cards[i].cardBase.id,game.GetPlayer(cards[i].owner),cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense());
 		}
 	}
-
+	//WYSYLANIE Kosztu karty/lepiej zastapic oblsuga stosu(wymaga bazy kart)
 	for(unsigned int i=0;i<stack.size();i++)
 	{
 		if(!stack[i].TrySend(game) || stack[i].cardBase.type==LAND) continue;
-		game.server.Cost(game.GetPlayer(stack[i].owner),stack[i].cardBase.koszt);
+		if(stack[i].owner.mana.CanPay(stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost)==true)
+		{
+			game.server.StackColor(1,OK);
+		}
+		else
+		{
+			game.server.StackColor(1,DENY);
+		}
 	}
 }
 
@@ -499,7 +517,7 @@ void MainGameLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 
 	for(int i=0;i<cards.size();i++)
 	{
-		if(cards[i].dead==true && cards[i].ttl<=0) {game.server.Dead(cards[i].id); cards.erase(cards.begin() +i); i=-1; }
+		if(cards[i].dead==true ) {game.server.Dead(cards[i].id); cards.erase(cards.begin() +i); i=-1; }
 	}
 
 	//wyswietlenie wszytkich kart
@@ -605,21 +623,25 @@ int Card::ID=0;
 
 int main( int argc, char** argv )
 {
-	//Game game("lukasz",977,"daniel",341,"10.10.0.1",6121,1366,768,8,true);
-	Game game("lukasz",977,"daniel",341,"10.10.0.1",6121,800,600,8,false);
+	bool presed = false;
+
+	Game game("lukasz",977,"daniel",341,"192.168.0.103",600,1366,768,8,true);
+	//	Game game("lukasz",177,"daniel",341,"25.83.48.69",6121,800,600,8,false);
 	ScriptsManager scriptManager;
 	vector<CardB> dataBaseCards;
 	vector<Card> cardsInPlay;
 	vector<Card> cardsOnStack;
+
+
+
 	Mat frame;	
 	VideoCapture capture(0);
-	game.player1.mana+=100;
-	game.player2.mana+=100;
-	game.server.AddMana(1,100);
-	game.server.AddMana(2,100);
+
 	LoadCardDatabase(dataBaseCards);
-	//game.server.AddPlayer(1,"lukasz");
-	//game.server.AddPlayer(2,"daniel");
+	for(int i=0;i<dataBaseCards.size();i++)
+	{
+	//	dataBaseCards[i].PrintStats();
+	}
 	game.server.AddPlayer(1,"lukasz");
 	game.server.AddPlayer(2,"daniel");
 	namedWindow("Settings",CV_WINDOW_NORMAL);
@@ -630,7 +652,7 @@ int main( int argc, char** argv )
 	createTrackbar("Gracz ","Settings",&gracz,1);
 	createTrackbar("Faza gry ","Settings",&faza,4);
 	createTrackbar("Metoda ","Settings",&borderMethod,1);
-
+	createTrackbar("UpdateTime ","Settings",&updateTime,10);
 	capture.set(CV_CAP_PROP_FRAME_WIDTH, 1280 );
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT, 720 );
 	capture.set(CV_CAP_PROP_FOCUS, 12 );
@@ -639,6 +661,7 @@ int main( int argc, char** argv )
 	while(1)
 	{
 		game.Update();
+		game.server.SetInterval(updateTime);
 		game.setPlayer(gracz);
 		game.setFaza(faza);
 		capture.read(frame);
@@ -650,10 +673,13 @@ int main( int argc, char** argv )
 			scriptManager.Update(frame,game,cardsInPlay,cardsOnStack);
 			line(frame,Point(10,10),Point(10,40),Scalar(200,0,0),3);
 			imshow("Preview", frame);
-			game.Draw();
+			//game.Draw();
 		}
+	
 		if(cv::waitKey(30)==27) break;
-		if(cv::waitKey(10)==97) game.nextPhase();
+		if(cv::waitKey(10)==113) presed = false;
+		if(cv::waitKey(10)==97 && presed==false) { game.nextPhase(); presed=true; }
+		if(cv::waitKey(10)==99) cardsOnStack.clear();
 	}
 	capture.release();
 	cv::waitKey(0);
