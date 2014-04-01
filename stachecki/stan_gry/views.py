@@ -91,7 +91,6 @@ def info(request):
 def graf(request):
     return render_to_response('graf.html')
 
-#ANALIZA PLIKU TEKSTOWEGO
 def video(request):
 	#klasa gry, zmodyfikowana o ilosc akcji wykonana przez gracza
 	class Game:
@@ -101,11 +100,14 @@ def video(request):
 		nick2hp=20;
 		winner = "";
 		count=0;
-		nicklist=[];
-		cardlist=[];
+		cardcount=0;
+		#licznik do nickow
+		othercount=0;
+		nicklist={};
+		cardlist={};
 		manalist=[];
-		actionlist=[];
-		liczniklist=[];
+		actionlist={};
+		liczniklist={};
 	#HP poczatkowe 20
 	#otwieramy plik itworzymy obiekt gry
 	fo=open('C:\\Users\\np550\\Desktop\\atm\\magic\\history\\newfile.txt', 'r');
@@ -144,13 +146,17 @@ def video(request):
 		#dzielimy funkcja split dana linie
 			list=line.split (" ");
 		#wczytujemy akcje
-			obiekt.actionlist.append(line[:-1]);
+			obiekt.actionlist.update({obiekt.count: line[:-1]});
+			obiekt.count = obiekt.count +1;
 			if("win" in list[0]):
 				obiekt.winner=list[1];
-				print(licznik);
+				obiekt.liczniklist.update({obiekt.othercount : licznik } );
+				obiekt.othercount+=1;
 			elif (obiekt.nick1 in list[1] or obiekt.nick2 in list[1]):
-				obiekt.nicklist.append(list[1][:-1]);
-				obiekt.liczniklist.append(licznik);
+				obiekt.nicklist.update({obiekt.othercount : list[1][:-1] } );
+				if (licznik != 0):
+					obiekt.liczniklist.update({obiekt.othercount : licznik } );
+					obiekt.othercount+=1;
 				licznik=0;
 			#jeszcze nie wiem, co blok mialby robic przy wizualizacji
 			elif ("block:" in list[0]):
@@ -170,7 +176,8 @@ def video(request):
 					dolacz="";
 					for j in range (1,len(list)):
 						dolacz=dolacz+" "+list[j];
-					obiekt.cardlist.append(dolacz);
+					obiekt.cardlist.update({obiekt.cardcount : dolacz});
+					obiekt.cardcount=obiekt.cardcount+1;	
 				
 				licznik +=1;
 			elif("HP_"+obiekt.nick1 in list[0]):
@@ -195,7 +202,8 @@ def video(request):
 						dolacz=dolacz+" "+list[j];
 					if (dolacz[len(dolacz)-1]==",") or (dolacz[len(dolacz)-1] == "\n"):
 						dolacz=dolacz[:-1];
-					obiekt.cardlist.append(dolacz);
+					obiekt.cardlist.update({obiekt.cardcount : dolacz});
+					obiekt.cardcount=obiekt.cardcount+1;	
 				
 				else:
 					dolacz="";
@@ -203,22 +211,13 @@ def video(request):
 						dolacz=dolacz+" "+list[j];
 					if (dolacz[len(dolacz)-1]==",") or (dolacz[len(dolacz)-1] == "\n"):
 						dolacz=dolacz[:-1];			
-						obiekt.cardlist.append(dolacz);
-					
-					
+					obiekt.cardlist.update({obiekt.cardcount : dolacz});
+					obiekt.cardcount=obiekt.cardcount+1;				
 				licznik +=1;
-		obiekt.count = obiekt.count + 1;
 	#zamykamy plik
 	fo.close();
-
-	for k in range (0,len(obiekt.cardlist)):
-		if (obiekt.cardlist[k][len(obiekt.cardlist[k])-1] == "\n"):
-			obiekt.cardlist[k]=obiekt.cardlist[k][:-1];
-		obiekt.cardlist[k]=obiekt.cardlist[k][1:];		
-		if (obiekt.cardlist[k][0]==" "):
-			obiekt.cardlist[k]=obiekt.cardlist[k][1:];
-	#tu probuje zwracac obiekt z nazwami kart
-	return render_to_response('video.html', {'karty':obiekt.cardlist})
+	dlugosc = len (obiekt.nicklist)-1;
+	return render_to_response ('video.html', {'akcje':obiekt.actionlist, 'liczba_akcji':obiekt.count})
 
 def popular(request):
     
