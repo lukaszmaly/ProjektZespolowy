@@ -14,7 +14,6 @@ $(document).ready(function(){
 	var nickname;
 	//nazwy kart rowniez pobierane z pliku, poki co wpisane na sztywno
 	var card;
-	var newcard;
 	var gracz1='{{nick1}}';
 	var gracz2='{{nick2}}';
 	var ile = {{liczba_akcji}};
@@ -25,7 +24,8 @@ $(document).ready(function(){
 	var tury = 1;
 	//ilewykonac akcji
 	var ile_wykonac = 0;
-	var wartosc1,wartosc2;
+	var wartosc1;
+	var ind=0;
 	
 	//limit na sztywno - ilosc "divow"
 	for (var i = 0, limit = 5; i <= limit; i++) 
@@ -48,6 +48,7 @@ $(document).ready(function(){
 		if (licznik<ile)	
 		{			
 			licznik++;
+		
 			//szukamy nicka
 			{% for key,value in nicki.iteritems %}
 					wartosc1 = {{key}};
@@ -61,48 +62,55 @@ $(document).ready(function(){
 						ile_wykonac={{value}};						
 			{% endfor %}
 			
-			if (nickname==gracz1)			
-			{
-				{% for key,value in karty.iteritems %}
-					wartosc1 = {{key}};
-					if (wartosc1 == licznik)
-					{
-						card='{{value}}';
-						string = "gracz2div"+licznik;
-						var replaced = card.replace(/%20/g, " ");
-						$('<img id="theImg" src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);	
-						$("#"+string).show();
-		
-					}
-				{% endfor %}
-				
-				
-			}
-			else if (nickname==gracz2)
-			{
-				
-				{% for key,value in karty.iteritems %}
-					wartosc = {{key}};
-					if (wartosc == licznik)
-					{
-						card='{{value}}';
-						string = "gracz2div"+licznik;
-						var replaced = card.replace(/%20/g, " ");
-						$('<img id="theImg" src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);			
-						$("#"+string).show();
-					}
-				{% endfor %}
-				
-	
-			}
-			//wczytujemy jakas akcje
-			$("#tekst").empty();	
-			{% for key,value in akcje.iteritems %}
+			
+			if (ind<=ile_wykonac)
+			{	
+				if (nickname==gracz1)			
+				{
+					{% for key,value in karty.iteritems %}
+						wartosc1 = {{key}};
+						if (wartosc1 == licznik)
+						{
+							card='{{value}}';
+							string = "gracz1div1";
+							var replaced = card.replace(/%20/g, " ");
+							$('<img id="theImg" src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);	
+							$("#"+string).show();
+			
+						}
+					{% endfor %}
+			
+				}
+				else if (nickname==gracz2)
+				{				
+					{% for key,value in karty.iteritems %}
+						wartosc1 = {{key}};
+						if (wartosc1 == licznik)
+						{
+							card='{{value}}';
+							string = "gracz2div"+i;
+							var replaced = card.replace(/%20/g, " ");
+							$('<img id="theImg" src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);			
+							$("#"+string).show();
+						}
+					{% endfor %}
+
+				}
+				//wczytujemy jakas akcje
+				$("#tekst").empty();	
+				{% for key,value in akcje.iteritems %}
 					wartosc1 = {{key}};
 					if (wartosc1 == licznik-1)
 						$("#tekst").append('{{value}}');					
-			{% endfor %}
-
+				{% endfor %}
+				
+			}
+			else 
+			{
+				tury = tury + 1;
+				ind = 0;
+			}
+			ind ++;
 		}
 	
     });
