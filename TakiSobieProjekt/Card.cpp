@@ -207,7 +207,7 @@ Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game
 	sendTime=0;
 	id=-1;
 	blocking=-1;
-	owner=game.getCurrentPlayer();
+	owner=game.GetCurrentPlayer();
 	taped=false;
 	attack=block=false;
 	this->a=a;
@@ -266,8 +266,6 @@ bool Card::TapUntap()
 
 void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp=false)
 {
-	if(game.GetPlayer(owner)==1) owner = game.player1;
-	else owner = game.player2;
 
 	if(temp == false)
 	{
@@ -363,9 +361,7 @@ void Card::Tap(Game &game)
 	taped=true;
 	if(this->cardBase.type==LAND && canUntap==true)
 	{
-		game.server.AddMana(game.GetPlayer(owner),cardBase.landColor);
-
-		game.GetPlayer(game.GetPlayer(owner)).mana.Add(cardBase.landColor);
+		game.AddMana(this->owner,this->cardBase.landColor);
 	}
 }
 
@@ -375,11 +371,9 @@ void Card::Untap(Game &game)
 	taped=false;
 	if(this->cardBase.type=LAND)
 	{
-		if(game.GetPlayer(game.GetPlayer(owner)).mana.IsMana(cardBase.landColor) && canUntap==true)
+		if(game.IsMana(this->owner,this->cardBase.landColor) && canUntap==true)
 		{
-			game.server.SubMana(game.GetPlayer(owner),cardBase.landColor);
-		
-			owner.mana.AddMana(cardBase.landColor);
+			game.SubMana(this->owner,this->cardBase.landColor);
 		}
 		else
 		{
@@ -395,8 +389,7 @@ void Card::die()
 
 void Card::GiveLifeToPlayer(int value,Game &game)
 {
-	owner.hp=owner.hp+value;
-	game.server.AddLife(game.GetPlayer(owner),value);
+	game.AddLife(owner,value);
 }
 
 void Card::Fight(Card &op,Game &game)
@@ -478,9 +471,9 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 		}
 
 		if(taped==true)
-			sprintf(cad1,"Taped(%s)",owner.name.c_str());
+			sprintf(cad1,"Taped(%s)",game.GetPlayer(this->owner).name.c_str());
 		else
-			sprintf(cad1,"Untaped(%s)",owner.name.c_str());
+			sprintf(cad1,"Untaped(%s)",game.GetPlayer(this->owner).name.c_str());
 
 
 

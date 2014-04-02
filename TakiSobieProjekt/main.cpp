@@ -273,7 +273,7 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 	{
 		if(IsInRectFast(tcard[i].getCenter())==true) 
 		{
-			tcard[i].owner=game.getCurrentPlayer();
+			tcard[i].owner=game.GetCurrentPlayer();
 			stack.push_back(tcard[i]);
 			tcard.erase(tcard.begin()+i);
 			i=-1;
@@ -343,7 +343,7 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 			tcard[i].Unlock();
 			cards.push_back(tcard[i]);
 			cout<<"Dodaje karte"<<endl;
-			game.server.SendNewCard(tcard[i].id,tcard[i].cardBase.id,game.GetPlayer(tcard[i].owner),tcard[i].a,tcard[i].b,tcard[i].c,tcard[i].d,tcard[i].taped);
+			game.server.SendNewCard(tcard[i].id,tcard[i].cardBase.id,tcard[i].owner,tcard[i].a,tcard[i].b,tcard[i].c,tcard[i].d,tcard[i].taped);
 			tcard.erase(tcard.begin()+i);
 			i=-1;
 		}
@@ -354,15 +354,14 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 		for(unsigned int j=0;j<tcard.size();j++)
 		{
 
-			if(stack[i].cardBase.id==tcard[j].cardBase.id && IsInRectFast(tcard[j].getCenter())==false && stack[i].owner.mana.CanPay(stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost)) 
+			if(stack[i].cardBase.id==tcard[j].cardBase.id && IsInRectFast(tcard[j].getCenter())==false && game.CanPay(stack[i].owner,stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost)) 
 			{
 		
-				stack[i].owner.mana.Pay(stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost);
-				game.server.SubMana(game.GetPlayer(stack[i].owner),stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost);
+				game.Pay(stack[i].owner,stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost);
 
 				tcard[j].Unlock();
 				stack[i].id=tcard[j].id;
-				game.server.SendNewCard(tcard[j].id,tcard[j].cardBase.id,game.GetPlayer(tcard[j].owner),tcard[j].a,tcard[j].b,tcard[j].c,tcard[j].d,tcard[j].taped);
+				game.server.SendNewCard(tcard[j].id,tcard[j].cardBase.id,tcard[j].owner,tcard[j].a,tcard[j].b,tcard[j].c,tcard[j].d,tcard[j].taped);
 				cards.push_back(stack[i]);
 				stack.erase(stack.begin()+i);
 				tcard.erase(tcard.begin()+j);
@@ -395,22 +394,22 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 		if(!cards[i].TrySend(game)) continue;
 		if(cards[i].attack==true)
 		{
-			game.server.Attack(cards[i].id,cards[i].cardBase.id,game.GetPlayer(cards[i].owner),cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense());
+			game.server.Attack(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense());
 		}
 		else if(cards[i].block == true)
 		{
-			game.server.Block(cards[i].id,cards[i].cardBase.id,game.GetPlayer(cards[i].owner),cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].blocking,cards[i].GetAttack(),cards[i].GetDefense());
+			game.server.Block(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].blocking,cards[i].GetAttack(),cards[i].GetDefense());
 		}
 		else
 		{
-			game.server.UpdateCard(cards[i].id,cards[i].cardBase.id,game.GetPlayer(cards[i].owner),cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense());
+			game.server.UpdateCard(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense());
 		}
 	}
 	//WYSYLANIE Kosztu karty/lepiej zastapic oblsuga stosu(wymaga bazy kart)
 	for(unsigned int i=0;i<stack.size();i++)
 	{
 		if(!stack[i].TrySend(game) || stack[i].cardBase.type==LAND) continue;
-		if(stack[i].owner.mana.CanPay(stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost)==true)
+		if(game.CanPay(stack[i].owner,stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost)==true)
 		{
 			game.server.StackColor(1,OK);
 		}
@@ -429,7 +428,7 @@ void MainGameLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 		for (unsigned int i = 0; i<cards.size(); i++ ) 
 		{
 			cards[i].attack=false; 
-			if(cards[i].owner==game.getCurrentPlayer() && Game::Distance(cards[i].getCenter(),cards[i].old)>50 && cards[i].taped==true) 
+			if(cards[i].owner==game.GetCurrentPlayer() && Game::Distance(cards[i].getCenter(),cards[i].old)>50 && cards[i].taped==true) 
 			{
 				cards[i].attack=true; 
 			}
@@ -440,7 +439,7 @@ void MainGameLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 		for (unsigned int i = 0; i<cards.size(); i++ ) 
 		{
 			cards[i].block=false; 
-			if(!(cards[i].owner==game.getCurrentPlayer()) && Game::Distance(cards[i].getCenter(),cards[i].old)>50) 
+			if(!(cards[i].owner==game.GetCurrentPlayer()) && Game::Distance(cards[i].getCenter(),cards[i].old)>50) 
 			{
 				cards[i].block=true; 
 			}
@@ -489,15 +488,13 @@ void MainGameLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 		{
 			if(cards[i].attack==true)
 			{
-				if(cards[i].owner==game.player1)
+				if(cards[i].owner==1)
 				{
-					game.player2.hp-=cards[i].att;
-					game.server.SubLife(2,cards[i].att);
+					game.SubLife(2,cards[i].GetAttack());
 				}
 				else
 				{
-					game.player1.hp-=cards[i].att;
-					game.server.SubLife(1,cards[i].att);
+				game.SubLife(1,cards[i].GetAttack());
 				}
 			}
 			cards[i].Clear();

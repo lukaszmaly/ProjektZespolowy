@@ -11,7 +11,7 @@
 #include <cmath>
 #include "CardB.h"
 #include "Game.h"
-#include "Player.h"
+
 #define MIN_D1 1.3
 #define MAX_D1 1.5
 #define M_PI 3.14159265358979323846
@@ -76,7 +76,7 @@ public:
 	bool error;
 	bool nowa;
 	int def;
-	Player owner;
+	int owner;
 	int cardId;
 	bool taped;
 	void prepareToBlock();

@@ -22,6 +22,14 @@ private:
 	int green;
 	int all;
 public:
+	void CopyMana(int &white,int &blue,int &black,int &red, int &green)
+	{
+		white=this->white;
+		blue=this->blue;
+		black=this->black;
+		red=this->red;
+		green=this->green;
+	}
 	void Add(Color color)
 	{
 		switch(color)
@@ -62,6 +70,26 @@ public:
 			this->black+=value;
 		}
 	}
+	void SubMana(Color color,int value=1)
+	{
+		switch(color)
+		{
+		case WHITE:
+			this->white+=value;
+			break;
+		case GREEN:
+			this->green+=value;
+			break;
+		case RED:
+			this->red+=value;
+			break;
+		case BLUE:
+			this->blue+=value;
+			break;
+		case BLACK:
+			this->black+=value;
+		}
+	}
 	bool IsMana(Color color)
 	{
 		switch(color)
@@ -81,6 +109,7 @@ public:
 		case BLACK:
 			return this->black>0;
 		}
+		return false;
 	}
 	void Add(int white,int blue,int black,int red,int green)
 	{

@@ -62,7 +62,7 @@ float targetOldAngle;
 	return atan2f( (pt1.y - pt2.y ),( pt1.x - pt2.x ) ) * 180 / M_PI + 180;
 	}
 	bool oneAttack;
-	int GetPlayer(Player &player);
+
 	Point a,b,c,d;
 	bool t;
 	Player & GetPlayer(int id);
@@ -81,7 +81,18 @@ float targetOldAngle;
 	void nextPhase();
 	void Update();
 	void Draw();
+	int GetCurrentPlayer();
 	Player &getCurrentPlayer();
 	Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h,int interval,bool showLog);
 	~Game();
+
+
+
+	void AddMana(int id,Color color);
+	void SubMana(int id,Color color);
+	void Pay(int id,int white, int blue,int black,int red,int green,int colorless);
+	bool CanPay(int id,int white, int blue,int black,int red,int green,int colorless);
+	void SubLife(int id,int value);
+	void AddLife(int id,int value);
+	bool IsMana(int id,Color color);
 };

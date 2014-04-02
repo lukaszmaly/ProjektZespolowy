@@ -162,10 +162,11 @@ public:
 		for(unsigned int i=0;i<stos.size();i++)
 		{
 			if(stos[i].cardBase.type==INSTANT && stos[i].cardBase.id!=lastId 
-				&& stos[i].owner.mana.Pay(stos[i].cardBase.whiteCost,stos[i].cardBase.blueCost,stos[i].cardBase.blackCost,stos[i].cardBase.redCost,stos[i].cardBase.greenCost,stos[i].cardBase.lessCost))
+				&& game.CanPay(stos[i].owner,stos[i].cardBase.whiteCost,stos[i].cardBase.blueCost,stos[i].cardBase.blackCost,stos[i].cardBase.redCost,stos[i].cardBase.greenCost,stos[i].cardBase.lessCost))
 			{
 				if(Resolve(stos[i],cards,game)==true)
 				{
+					 game.Pay(stos[i].owner,stos[i].cardBase.whiteCost,stos[i].cardBase.blueCost,stos[i].cardBase.blackCost,stos[i].cardBase.redCost,stos[i].cardBase.greenCost,stos[i].cardBase.lessCost);
 					lastId=stos[i].cardBase.id;
 				}
 				canUseMarker=true;

@@ -1,5 +1,105 @@
 #include "Game.h"
 
+bool Game::IsMana(int id,Color color)
+{
+	if(id==1)
+	{
+		return this->player1.mana.IsMana(color);
+	}
+	else
+	{
+		return this->player2.mana.IsMana(color);
+	}
+return false;
+}
+void Game::AddMana(int id,Color color)
+{
+	if(id==1)
+	{
+		this->player1.mana.AddMana(color);
+	}
+	else
+	{
+		this->player2.mana.AddMana(color);
+	}
+	this->server.AddMana(id,color);
+}
+
+void Game::SubMana(int id,Color color)
+{
+	if(id==1)
+	{
+		this->player1.mana.SubMana(color);
+	}
+	else
+	{
+		this->player2.mana.SubMana(color);
+	}
+	this->server.SubMana(id,color);
+}
+void Game::AddLife(int id,int value)
+{
+	if(id==1)
+	{
+		this->player1.hp+=value;
+	}
+	else
+	{
+		this->player2.hp+=value;
+	}
+	this->server.SubLife(id,value);
+}
+void Game::SubLife(int id,int value)
+{
+	if(id==1)
+	{
+		this->player1.hp-=value;
+	}
+	else
+	{
+		this->player2.hp-=value;
+	}
+	this->server.SubLife(id,value);
+}
+bool Game::CanPay(int id,int white, int blue,int black,int red,int green,int colorless)
+{
+	if(id==1)
+	{
+		return this->player1.mana.CanPay(white,blue,black,red,green,colorless);
+	}
+	else
+	{
+		return this->player2.mana.CanPay(white,blue,black,red,green,colorless);
+	}
+	return false;
+}
+void Game::Pay(int id,int white, int blue,int black,int red,int green,int colorless)
+{
+	int w,u,b,r,g;
+	int aw,au,ab,ar,ag;
+	if(id==1)
+	{
+		this->player1.mana.CopyMana(w,u,b,r,g);
+		if(this->player1.mana.CanPay(white,blue,black,red,green,colorless)==true)
+		{
+			this->player1.mana.Pay(white,blue,black,red,green,colorless);
+			this->player1.mana.CopyMana(aw,au,ab,ar,ag);
+			this->server.SubMana(id,w-aw,u-au,b-ab,r-ar,g-ag);
+		}
+	}
+	else
+	{
+		this->player2.mana.CopyMana(w,u,b,r,g);
+		if(this->player2.mana.CanPay(white,blue,black,red,green,colorless)==true)
+		{
+			this->player2.mana.Pay(white,blue,black,red,green,colorless);
+			this->player2.mana.CopyMana(aw,au,ab,ar,ag);
+			this->server.SubMana(id,w-aw,u-au,b-ab,r-ar,g-ag);
+		}
+	}
+}
+
+
 bool Game::CheckCardsProp()
 {
 	return checkCardsProp;
@@ -140,11 +240,12 @@ string Game::getCurrentPhase()
 		return "Faza upkeepu";
 		break;
 	}
+	return "INCORRECT";
 }
 
 void Game::nextPhase()
 {
-	
+
 	zmiana=true;
 	switch(phase)
 	{
@@ -234,17 +335,20 @@ Player& Game::getCurrentPlayer()
 	return player2;
 }
 
+int Game::GetCurrentPlayer()
+{
+	if(aPlayer == player1.markerId) return 1;
+	return 2;
+}
+
+
+
 Phase Game::GetPhase()
 {
 	return phase;
 }
 
 
-int Game::GetPlayer(Player& player)
-{
-	if(player.markerId == player1.markerId) return 1;
-	return 2;
-}
 
 Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h,int interval,bool showLog)
 {
