@@ -10,6 +10,7 @@ public class Board
 	int stackCost=9999;
 	PFont f;
 	PImage img;
+	Game game;
 	
 	Board(PApplet p)
 	 {
@@ -27,8 +28,45 @@ public class Board
 		 this.drawLife(P1, P2);
 		 this.drawMana(P1, P2);
 		 this.drawMarkersDetector();
-		 
+		 this.game.fazy.rysuj();
 	 }
+	 public void displayLog()
+	 {
+		game.f=parent.createFont("Arial", 20);
+		parent.textFont(game.f);
+		parent.fill(100);
+		parent.textAlign(parent.CENTER);
+		if(game.log>0) parent.text(game.lines[game.log-1], 500,250);
+	 }
+	 
+	 public void displayTokens()
+	 {
+		 parent.image(game.edge1, 0, 0, 200, 200);
+		 parent.image(game.edge2, parent.width - 200, 0, 200, 200);
+		 parent.image(game.edge3, parent.width - 200, parent.height - 200, 200, 200);
+		 parent.image(game.edge4, 0, parent.height - 200, 200, 200); 
+	 
+		 parent.textFont(game.calibr);
+		 parent.textAlign(parent.CENTER);
+		 parent.text("Trwa kalibracja...", parent.width / 2, parent.height*0.35f);
+			
+		 parent.pushMatrix();
+		 parent.translate(parent.width/2,parent.height*0.55f);
+		 parent.strokeWeight(1);
+		 parent.fill(255);
+		 parent.ellipse(0,0,180,200);
+		 parent.noFill( );
+			for(int i=0;i<=50;i++)
+			{
+				parent.stroke(240,240,70,200-4*i);
+				parent.ellipseMode(parent.CENTER);
+				parent.ellipse(0,0,180+1f*i,200+1f*i);
+				
+				
+			}
+			parent.popMatrix();
+	 }
+	 
 	 
 	 public void drawField()
 	 {

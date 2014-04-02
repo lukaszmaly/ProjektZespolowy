@@ -119,7 +119,6 @@ public class Card
 					parent.stroke(240,240,70,(100-4*i)*frameLife*0.01f);
 					parent.ellipse(returnCenter.x, returnCenter.y, i*10, i*10);
 					
-					
 				}
 			}
 			
