@@ -4,34 +4,38 @@ import processing.core.*;
 public class Player {
 	PApplet parent;
 	int id,life,manaPool;
-	int w,b,u,r,g;
+	int w=0,b=0,u=0,r=0,g=0;
+	String name;
+	//int cardHeight,cardWidth;
 	
-	Player(PApplet p, int id)
+	Player(PApplet p, int id,String name)
 	{
 		parent=p;
+		this.name=name;
 		this.life=20;
 		this.manaPool=0;
 		this.id=id;
 		w=b=u=r=g=0;
-		
+		//this.cardHeight=cardHeight;
+		//this.cardWidth=cardWidth;
 	}
 	
 	void addMana(char c)
 	{
 		switch (c) {
-		case 'b': this.b++; 
+		case 'B': this.b++; 
 			
 			break;
-		case 'r': this.r++; 
+		case 'R': this.r++; 
 		
 		break;
-		case 'g': this.g++; 
+		case 'G': this.g++; 
 		
 		break;
-		case 'u': this.u++; 
+		case 'U': this.u++; 
 		
 		break;
-		case 'w': this.w++; 
+		case 'W': this.w++; 
 		
 		break;
 
@@ -40,23 +44,30 @@ public class Player {
 		}
 		
 	}
-	
+	 void subtractMana(int w, int u, int b,int r , int g)
+	{
+	this.w-=w;
+	this.u-=u;
+	this.b-=b;
+	this.g-=g;
+	this.r-=r;
+		}
 	void subtractMana(char c)
 	{
 		switch (c) {
-		case 'b': this.b++; 
+		case 'B': this.b--; 
 			
 			break;
-		case 'r': this.r++; 
+		case 'R': this.r--; 
 		
 		break;
-		case 'g': this.g++; 
+		case 'G': this.g--; 
 		
 		break;
-		case 'u': this.u++; 
+		case 'U': this.u--; 
 		
 		break;
-		case 'w': this.w++; 
+		case 'W': this.w--; 
 		
 		break;
 

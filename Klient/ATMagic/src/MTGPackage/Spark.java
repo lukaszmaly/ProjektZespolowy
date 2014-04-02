@@ -99,17 +99,12 @@ public class Spark
 		  		
 			case 'f': 
 				parent.strokeWeight(2);
-		  		//parent.stroke(r,g,b,life*5);		  		
+		  		  		
 		  		parent.noFill();
-		  		//parent.ellipse(loc.x, loc.y,size, size);
-		  		//parent.stroke(r,g,b,life*4);
-		  		//parent.ellipse(loc.x-10, loc.y-10,size-2, size-2);
-		  		//parent.stroke(r,g,b,life*3);
-		  		//parent.ellipse(loc.x-20, loc.y-20,size-4, size-4);
+		  	
 		  		parent.stroke(r,g,b,life*2);
 		  		parent.ellipse(loc.x, loc.y,size, size);
-		  		//parent.stroke(r,g,b,life*1);
-		  		//parent.ellipse(loc.x-40, loc.y-40,size-8, size-8);
+
 		  		break;
 		  		
 			case 'g':
