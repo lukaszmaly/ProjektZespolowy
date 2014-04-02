@@ -110,7 +110,7 @@ public class Main extends PApplet {
 						if(game.T[3]==null) 
 							{
 							game.T[3]=new PVector(mouseX,mouseY); 
-							game.Cards.add(new Card((int)game.T[0].x,(int)game.T[0].y,(int)game.T[1].x,(int)game.T[1].y,(int)game.T[2].x,(int)game.T[2].y,(int)game.T[3].x,(int)game.T[3].y,id,id,0,this));
+							game.Cards.add(new Card((int)game.T[0].x,(int)game.T[0].y,(int)game.T[1].x,(int)game.T[1].y,(int)game.T[2].x,(int)game.T[2].y,(int)game.T[3].x,(int)game.T[3].y,id,id,0,this,game));
 							game.T[0]=null;
 							game.T[1]=null;
 							game.T[2]=null;

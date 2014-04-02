@@ -15,10 +15,10 @@ public class Card
 	boolean frame,frameCounter=false,isDead=false,attack=false,block=false,isBlocked=false;		//Czy ma byc ramka, czy ma sie rozjasniac czy zaciemniac
 	int r,g,b,id, db_id, owner,manaCost;
 	float a=0,c=0;
-	int wCost=0,bCost=0,uCost=0,rCost=0,gCost=0;
+	int wCost=0,bCost=0,uCost=0,rCost=0,gCost=0,power,toughness;
 	float sin=0,asin=0;
 	PImage skull;
-	
+	Game game;
 	
 	int height()
 	{
@@ -106,21 +106,22 @@ public class Card
 				//parent.ellipse(0,0,100+2*i,150+2*i);
 				
 			}
+			
 		
 			parent.popMatrix();
 			
 			if(this.attack==true)
 			{
 				PVector returnCenter=new PVector((loc2[0].x+loc2[1].x+loc2[2].x+loc2[3].x)/4,(loc2[0].y+loc2[1].y+loc2[2].y+loc2[3].y)/4);
-				for(int i=0;i<20;i++)
-				{
-					parent.fill(240,240,70,(100-4*i)*frameLife*0.01f);
+			
+					parent.fill(240,240,70,(100f*frameLife*0.01f));
 					parent.ellipseMode(parent.CENTER);
-					parent.stroke(240,240,70,(100-4*i)*frameLife*0.01f);
-					parent.ellipse(returnCenter.x, returnCenter.y, i*10, i*10);
-					
-				}
+					//parent.stroke(240,240,70,(100-4*i)*frameLife*0.01f);
+					parent.stroke(240,240,70,(100)*frameLife*0.01f);
+					parent.ellipse(returnCenter.x, returnCenter.y, 100, 100);
+			
 			}
+			
 			
 			parent.strokeWeight(1);
 			parent.stroke(255);
@@ -133,9 +134,46 @@ public class Card
 			parent.vertex(loc[0].x,loc[0].y);
 			parent.endShape();
 			 
+			parent.pushMatrix();
+			parent.translate(this.loc[3].x,this.loc[3].y);
 			
-		
-		
+			
+			switch(direction)
+			{
+			case 1:
+				parent.rotate(asin);
+				break;
+				
+			case 2:
+				parent.rotate(-asin+parent.PI);
+				break;
+				
+			case 3:
+				parent.rotate(asin+parent.PI);
+				break;
+				
+			case 4:
+				parent.rotate(-asin);
+				break;
+				
+			default: break;
+			}
+			parent.translate(-0.1f*game.cardWidth,0.1f*game.cardHeight);
+			parent.stroke(255,0,0);
+			parent.fill(255);
+			parent.ellipse(0,0,0.25f*game.cardHeight,0.25f*game.cardWidth);
+			game.f=parent.createFont("Arial", 20);
+			parent.textFont(game.f);
+			parent.fill(255,0,0);
+			parent.textAlign(parent.CENTER,parent.CENTER);
+			parent.text(this.power, 0,0);
+			parent.translate(game.cardWidth*1.1f,0);
+			parent.stroke(0,0,255);
+			parent.fill(255);
+			parent.ellipse(0,0,0.25f*game.cardHeight,0.25f*game.cardWidth);
+			parent.fill(0,0,255);
+			parent.text(this.toughness, 0,0);
+			parent.popMatrix();
 			
 			//}
 		if(this.isDead==true)
@@ -277,7 +315,7 @@ public class Card
 	    	return Points;
 	    }
   
-    Card(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,int id,int db_id,int owner,PApplet p)
+    Card(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,int id,int db_id,int owner,PApplet p,Game gm)
     {
     	parent=p;
     	isDead=false;
@@ -286,7 +324,7 @@ public class Card
     	loc2=new PVector[4];	//lokalizacja
     	r=0;g=0;b=255;
     	skull = parent.loadImage("xbones-black.png");
-    
+    	this.game=gm;
     	
     	
     	loc[0]=new PVector(x1,y1);

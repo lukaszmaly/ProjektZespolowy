@@ -141,7 +141,7 @@ public class Game {
 									.parseFloat(Dane[13])), Integer
 									.parseInt(Dane[2]), Integer
 									.parseInt(Dane[3]), Integer
-									.parseInt(Dane[4]), parent));
+									.parseInt(Dane[4]), parent,this));
 					break;
 
 					
