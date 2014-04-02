@@ -61,8 +61,7 @@ $(document).ready(function(){
 					if (wartosc1 == tury)
 						ile_wykonac={{value}};						
 			{% endfor %}
-			
-			
+	
 			if (ind<=ile_wykonac)
 			{	
 				if (nickname==gracz1)			
@@ -88,7 +87,7 @@ $(document).ready(function(){
 						if (wartosc1 == licznik)
 						{
 							card='{{value}}';
-							string = "gracz2div"+i;
+							string = "gracz2div2";
 							var replaced = card.replace(/%20/g, " ");
 							$('<img id="theImg" src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);			
 							$("#"+string).show();
@@ -96,21 +95,21 @@ $(document).ready(function(){
 					{% endfor %}
 
 				}
-				//wczytujemy jakas akcje
-				$("#tekst").empty();	
-				{% for key,value in akcje.iteritems %}
-					wartosc1 = {{key}};
-					if (wartosc1 == licznik-1)
-						$("#tekst").append('{{value}}');					
-				{% endfor %}
 				
+				ind ++;
 			}
 			else 
 			{
 				tury = tury + 1;
 				ind = 0;
 			}
-			ind ++;
+			
+			$("#tekst").empty();	
+			{% for key,value in akcje.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik-1)
+					$("#tekst").append('{{value}}');					
+			{% endfor %}
 		}
 	
     });
@@ -118,16 +117,20 @@ $(document).ready(function(){
 	$('.poprzedni').click(function()
 	{
 	
-		string1 = "gracz1div"+licznik;
-		string2 = "gracz2div"+licznik;
+		string1 = "gracz1div1"
+		string2 = "gracz2div1"
 		$("#"+string1).empty();
 		$("#"+string1).hide();
 		$("#"+string2).empty();
 		$("#"+string2).hide();
 	
-	 
+		ind = ind - 1;
 		if (licznik!=0)
 			licznik = licznik-1;
+			
+		if (ind == 0)
+			tury = tury - 1;
+			
 		$("#tekst").empty();
 		{% for key,value in akcje.iteritems %}
 			wartosc = {{key}};
