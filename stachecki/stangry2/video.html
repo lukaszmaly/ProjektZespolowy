@@ -8,7 +8,7 @@
 
 $(document).ready(function(){
 	
-
+	
 	var string;
 	//pierwszy wczytany nick to pierwszy gracz
 	var nickname;
@@ -16,7 +16,7 @@ $(document).ready(function(){
 	var card;
 	var gracz1='{{gracz1}}';
 	var gracz2='{{gracz2}}';
-	var ile =100;
+	var ile ={{ileakcji}};
 	//licznik akcji
 	var licznik=0;
 	//licznik tur
@@ -24,6 +24,13 @@ $(document).ready(function(){
 	var wartosc1;
 	var kartynastole = new Array();
 	var ind =0;
+	//ktora karte usunac
+	var cousunac;
+	//slownik, ktory zapamieta gdzie dana karta zostala wczytana
+	var slownik = new Array();
+	//ostatni zapamietany div 
+	var ostatnidiv=0;
+
 	
 	//limit na sztywno - ilosc "divow"
 	for (var i = 0, limit = 5; i <= limit; i++) 
@@ -45,7 +52,9 @@ $(document).ready(function(){
 	{
 		if (licznik<ile)	
 		{			
+			//zwiekszamy licznik akcji
 			licznik++;
+			//szukamy, ktory gracz gra
 			{% for key,value in ktogra.iteritems %}
 				wartosc1 = {{key}};
 				if (wartosc1 == licznik)
@@ -54,8 +63,19 @@ $(document).ready(function(){
 				}
 			{% endfor %}
 			
+			//szukamy, jesli trzeba bedzie usunac karte
+			{% for key,value in deads.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					cousunac={{value}};
+				}
+			{% endfor %}
+			
+			//zaleznie od nicku, wczytujemy karte do danego pola
 			if (nickname==gracz1)			
-			{
+			{					
+					//szukamy, ktora karte wczytac
 					{% for key,value in karty.iteritems %}
 						wartosc1 = {{key}};
 						if (wartosc1 == licznik)
@@ -64,12 +84,19 @@ $(document).ready(function(){
 							string = "gracz1div1";
 							$('<img id="theImg" src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);	
 							$("#"+string).show();
-							kartynastole[ind]=replaced;
-							ind++;
 						}
 					{% endfor %}
-			
+					//zapamietujemy wczytana karte
+					{% for key,value in idlist.iteritems %}
+						wartosc1 = {{key}};
+						if (wartosc1==licznik)
+							kartynastole[ind]='{{value}}';							
+					{% endfor %}
+					ind++;
+					slownik[string]=kartynastole[ind-1];
 			}
+			
+			//analogicznie jak wyzej
 			else if (nickname==gracz2)
 			{				
 					{% for key,value in karty.iteritems %}
@@ -81,19 +108,38 @@ $(document).ready(function(){
 							var replaced = card.replace(/%20/g, " ");
 							$('<img id="theImg" src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);			
 							$("#"+string).show();
-							kartynastole[ind]=replaced;
-							ind++;
 						}
 					{% endfor %}
-
+					
+					{% for key,value in idlist.iteritems %}
+						wartosc1 = {{key}};
+						if (wartosc1==licznik)
+							kartynastole[ind]='{{value}}';							
+					{% endfor %}
+					ind++;
+					slownik[kartynastole[ind-1]]=string;
 			}
-
-				$("#tekst").empty();	
-				{% for key,value in akcje.iteritems %}
-					wartosc1 = {{key}};
-					if (wartosc1 == licznik)
-						$("#tekst").append('{{value}}');					
-				{% endfor %}
+			//jesli trzeba cos usunac
+			else if (cousunac!="")
+			{
+				for (var i =0, limit = kartynastole.length; i<limit; i++)
+				{
+					if (kartynastole[i]==cousunac)
+					{
+						kartynastole[i]="";						
+						$("#"+slownik[kartynastole[i]]).empty();
+						slownik[kartynastole[i]]="";
+					}
+				}
+ 			}
+			
+			//wczytujemy kolejna akcje
+			$("#tekst").empty();	
+			{% for key,value in akcje.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+					$("#tekst").append('{{value}}');					
+			{% endfor %}
 			
 		}
 	

@@ -101,7 +101,9 @@ def video(request):
 		winner = "";
 		count=0;
 		cardlist={};
+		idlist={};
 		actionlist={};
+		deadlist={};
 		#ktory gracz gra
 		ktogra={};
 		#HP poczatkowe 20
@@ -148,6 +150,7 @@ def video(request):
 						dolacz=dolacz+" "+list[i-1];				
 					dolacz=dolacz[1:];
 					obiekt.cardlist.update({obiekt.count : dolacz});
+					obiekt.idlist.update({obiekt.count : list[2]});
 					obiekt.ktogra.update({obiekt.count : list[1]});
 				else:
 					for i in range (4,len(list)+1):
@@ -155,6 +158,7 @@ def video(request):
 					dolacz=dolacz[1:];
 					dolacz=dolacz[:-1];		
 					obiekt.cardlist.update({obiekt.count : dolacz});
+					obiekt.idlist.update({obiekt.count : list[2]});
 					obiekt.ktogra.update({obiekt.count : list[1]});
 		elif ("SUBLIFE" in list[0]):
 			if ("1" in list[1]):
@@ -164,11 +168,10 @@ def video(request):
 		elif ("DEFENCE" in list[0] or "STATS" in list[0] or "ADDDAMAGE" in list[0]):
 			continue;
 		elif ("DEAD" in list[0]):
-			#del obiekt.cardlist[list[1][:-1]];
-			continue;
+			obiekt.deadlist.update({obiekt.count : list[1][:-1]});
 		#zamykamy plik
 	fo.close();
-	return render_to_response ('video.html',{'karty':obiekt.cardlist, 'licznik':obiekt.count, 'gracz1': 1, 'gracz2': 2, 'ktogra':obiekt.ktogra, 'akcje':obiekt.actionlist})
+	return render_to_response ('video.html',{'karty':obiekt.cardlist, 'licznik':obiekt.count, 'gracz1': 1, 'gracz2': 2, 'ktogra':obiekt.ktogra, 'akcje':obiekt.actionlist, 'deads':obiekt.deadlist, 'idlist':obiekt.idlist, 'ileakcji':obiekt.count})
 
 def popular(request):
     
