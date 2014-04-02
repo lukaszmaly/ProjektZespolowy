@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"> </script>
+
+<script>
+
+$(document).ready(function(){
+	
+
+	var string;
+	//pierwszy wczytany nick to pierwszy gracz
+	var nickname;
+	//nazwy kart rowniez pobierane z pliku, poki co wpisane na sztywno
+	var card;
+	var gracz1='{{gracz1}}';
+	var gracz2='{{gracz2}}';
+	var ile =100;
+	//licznik akcji
+	var licznik=0;
+	//licznik tur
+	//ilewykonac akcji
+	var wartosc1;
+	var kartynastole = new Array();
+	var ind =0;
+	
+	//limit na sztywno - ilosc "divow"
+	for (var i = 0, limit = 5; i <= limit; i++) 
+	{
+		string = "gracz1div"+i;
+		$("#"+string).appendTo('.gracz1');
+		$("#"+string).hide();
+		string = "gracz2div"+i;		
+		$("#"+string).appendTo('.gracz2');		
+		$("#"+string).hide();
+	}
+	
+	//wyswietla "plansze", czyli obie ramki do gry
+	$('.gracz1').show();
+	$('.gracz2').show();
+
+	$('.nastepny').click(function()
+	
+	{
+		if (licznik<ile)	
+		{			
+			licznik++;
+			{% for key,value in ktogra.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					nickname={{value}};
+				}
+			{% endfor %}
+			
+			if (nickname==gracz1)			
+			{
+					{% for key,value in karty.iteritems %}
+						wartosc1 = {{key}};
+						if (wartosc1 == licznik)
+						{
+							card='{{value}}';
+							string = "gracz1div1";
+							$('<img id="theImg" src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);	
+							$("#"+string).show();
+							kartynastole[ind]=replaced;
+							ind++;
+						}
+					{% endfor %}
+			
+			}
+			else if (nickname==gracz2)
+			{				
+					{% for key,value in karty.iteritems %}
+						wartosc1 = {{key}};
+						if (wartosc1 == licznik)
+						{
+							card='{{value}}';
+							string = "gracz2div2";
+							var replaced = card.replace(/%20/g, " ");
+							$('<img id="theImg" src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);			
+							$("#"+string).show();
+							kartynastole[ind]=replaced;
+							ind++;
+						}
+					{% endfor %}
+
+			}
+
+				$("#tekst").empty();	
+				{% for key,value in akcje.iteritems %}
+					wartosc1 = {{key}};
+					if (wartosc1 == licznik)
+						$("#tekst").append('{{value}}');					
+				{% endfor %}
+			
+		}
+	
+    });
+	
+	$('.poprzedni').click(function()
+	{
+	
+		string1 = "gracz1div1"
+		string2 = "gracz2div1"
+		$("#"+string1).empty();
+		$("#"+string1).hide();
+		$("#"+string2).empty();
+		$("#"+string2).hide();
+	
+		if (licznik!=0)
+			licznik = licznik-1;
+			
+			
+		$("#tekst").empty();
+		{% for key,value in akcje.iteritems %}
+			wartosc = {{key}};
+			if (licznik-1 == wartosc)
+				$("#tekst").append('{{value}}');							
+		{% endfor %}			
+    });
+});
+</script>
+</head>
+<body>
+
+<button class ="poprzedni">Previous</button>
+<button class ="nastepny">Next</button>
+<div id="tekst"><h2></div></h2>
+<div class="pole">
+<div class="gracz1" style="height:300px; width:1000px; border:1px solid green; overflow:auto;">
+<div style="display: table-row">
+        <div style="display: table-cell;" id ="gracz1div1"> </div>
+		<div style="display: table-cell;" id ="gracz1div2"> </div>
+		<div style="display: table-cell;" id ="gracz1div3"> </div>
+		<div style="display: table-cell;" id ="gracz1div4"> </div>
+		<div style="display: table-cell;" id ="gracz1div5"> </div>
+    </div>
+
+</div>
+
+<div class="gracz2" style="height:300px; width:1000px; border:1px solid blue;overflow:auto; ">	
+<div style="display: table-row">
+        <div style="display: table-cell;" id ="gracz2div1"> </div>
+		<div style="display: table-cell;" id ="gracz2div2"> </div>
+		<div style="display: table-cell;" id ="gracz2div3"> </div>
+		<div style="display: table-cell;" id ="gracz2div4"> </div>
+		<div style="display: table-cell;" id ="gracz2div5"> </div>
+    </div>
+
+</div>
+
+</div>
+</body>
+</html>
