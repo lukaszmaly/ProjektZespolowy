@@ -107,7 +107,7 @@ public class Game {
 								for (int k = 0; k < se.ss.size(); k++) 
 								{
 									SparkSystem ss = se.ss.get(k);
-									if (c.sparkTime > 0)
+									if (c.sparkTime%3==1)
 										ss.addParticle();
 									ss.run();
 								}
@@ -169,7 +169,7 @@ public class Game {
 						int playerId=Integer.parseInt(Dane[3]);
 						int cardId=Integer.parseInt(Dane[4]);
 						
-						if(cardId>=0) this.Effects.add(new Effect(parent,Type.BOLT,8,cardId,this.cardWidth,this.cardHeight,this.Cards));
+						if(cardId>=0) this.Effects.add(new Effect(parent,Type.BOLT,10,cardId,this.cardWidth,this.cardHeight,this.Cards));
 					}
 					
 					
@@ -235,42 +235,55 @@ public class Game {
 					
 				}
 				
-				case "COST":
-				
-				
-					int id=Integer.parseInt(Dane[2]);
-					int mana;
-					if(id==1) mana=this.P1.manaPool;
-					else  mana=this.P2.manaPool;
-					if(this.board.stackCost > mana) {this.board.stack1R=255; this.board.stack1G=0; this.board.stack1B=0;}
-					else {this.board.stack1R=0; this.board.stack1G=255; this.board.stack1B=0;}
-				break;
+		
 				
 				case "STACK":
-					 id=Integer.parseInt(Dane[2]);
+					int id=Integer.parseInt(Dane[2]);
 					 char color=Dane[3].charAt(0);
-					 if(id==1) {
+					 if(id==0) {
 						 switch(color)
 						 {
 						 case 'R':
-							 this.board.stack1R=255;
-							 this.board.stack1G=0;
-							 this.board.stack1B=0;
+							 this.board.stack1.r=255;
+							 this.board.stack1.g=0;
+							 this.board.stack1.b=0;
 							 break;
 						 case 'G':
-							 this.board.stack1R=0;
-							 this.board.stack1G=255;
-							 this.board.stack1B=0;
+							 this.board.stack1.r=0;
+							 this.board.stack1.g=255;
+							 this.board.stack1.b=0;
 							 break;
 						 
 						 case 'B':
-							 this.board.stack1R=0;
-							 this.board.stack1G=0;
-							 this.board.stack1B=255;
+							 this.board.stack1.r=0;
+							 this.board.stack1.g=0;
+							 this.board.stack1.b=255;
 							 break;
-						 
-						 
 						 }
+					 }
+						 else
+							 if(id==1) {
+								 switch(color)
+								 {
+								 case 'R':
+									 this.board.stack2.r=255;
+									 this.board.stack2.g=0;
+									 this.board.stack2.b=0;
+									 break;
+								 case 'G':
+									 this.board.stack2.r=0;
+									 this.board.stack2.g=255;
+									 this.board.stack2.b=0;
+									 break;
+								 
+								 case 'B':
+									 this.board.stack2.r=0;
+									 this.board.stack2.g=0;
+									 this.board.stack2.b=255;
+									 break;
+								 
+								 
+								 }
 					 }
 					
 					break;

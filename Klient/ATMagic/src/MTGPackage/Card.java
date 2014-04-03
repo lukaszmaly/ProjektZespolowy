@@ -159,20 +159,36 @@ public class Card
 			default: break;
 			}
 			parent.translate(-0.1f*game.cardWidth,0.1f*game.cardHeight);
-			parent.stroke(255,0,0);
+			parent.noStroke();
 			parent.fill(255);
 			parent.ellipse(0,0,0.25f*game.cardHeight,0.25f*game.cardWidth);
-			game.f=parent.createFont("Arial", 20);
+			parent.noFill();
+			for(int i=10;i>0;i--)
+			{
+				parent.stroke(0,0,255,i*10);
+				parent.ellipse(0,0,0.25f*game.cardHeight+10-1*i,0.25f*game.cardWidth+10-1*i);
+				
+			}
+				game.f=parent.createFont("Arial", 28);
 			parent.textFont(game.f);
 			parent.fill(255,0,0);
 			parent.textAlign(parent.CENTER,parent.CENTER);
-			parent.text(this.power, 0,0);
+			parent.text(this.power, 0,-3);
 			parent.translate(game.cardWidth*1.1f,0);
-			parent.stroke(0,0,255);
+			//parent.stroke(0,0,255);
+			parent.noStroke();
 			parent.fill(255);
 			parent.ellipse(0,0,0.25f*game.cardHeight,0.25f*game.cardWidth);
+			parent.noFill();
+			for(int i=10;i>0;i--)
+			{
+				parent.stroke(255,0,0,i*10);
+				parent.ellipse(0,0,0.25f*game.cardHeight+10-1*i,0.25f*game.cardWidth+10-1*i);
+				
+			}
+			
 			parent.fill(0,0,255);
-			parent.text(this.toughness, 0,0);
+			parent.text(this.toughness, 0,-3);
 			parent.popMatrix();
 			
 			//}
@@ -392,7 +408,7 @@ public class Card
 	    	//parent.println("SE");
 	    	SparkEdge e=se.get(i);
 	    
-	    	e.changeSparkType('c',0,40,230,6,vel,acc);
+	    	e.changeSparkType('c',255,0,0,6,vel,acc);
 	    	}
 	    
     }

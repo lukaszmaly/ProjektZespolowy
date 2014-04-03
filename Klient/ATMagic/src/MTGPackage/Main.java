@@ -119,7 +119,7 @@ public class Main extends PApplet {
 				}
 		if (mouseButton == LEFT) 
 		{		
-			 game.Effects.add(new Effect(this,Type.BOLT,8,1,game.cardWidth,game.cardHeight,game.Cards));	
+			 game.Effects.add(new Effect(this,Type.BOLT,12,1,game.cardWidth,game.cardHeight,game.Cards));	
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////	

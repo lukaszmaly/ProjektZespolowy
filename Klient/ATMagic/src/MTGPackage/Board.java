@@ -5,9 +5,10 @@ public class Board
 {
 	PVector graveyard1;
 	PApplet parent;
-	int stack1R=0, stack1G=0,stack1B=255;
-	int stack2R=0, stack2G=0,stack2B=255;
-	int stackCost=9999;
+	//int stack1R=0, stack1G=0,stack1B=255;
+	//int stack2R=0, stack2G=0,stack2B=255;
+	//int stackCost=9999;
+	Stack stack1,stack2;
 	PFont f;
 	PImage img;
 	Game game;
@@ -16,6 +17,8 @@ public class Board
 	 {
 		 parent=p;
 		 img = parent.loadImage("mana-symbols.png");
+		 stack1=new Stack(parent,new PVector(0.92f,0.3f));
+		 stack2=new Stack(parent,new PVector(0.92f,0.7f));
 	 }
 	 
 	 public void display(int color,int t, int w, Player P1,Player P2,int width, int height)         //Wyswietlanie pol
@@ -23,11 +26,13 @@ public class Board
 		 
 		 this.drawFrame(color,2*w);
 		 this.drawGraveyardExile(color,w,width,height);
-		 this.drawStack(color, w,width,height);
+		 stack1.drawStack();
+		 stack2.drawStack();
+		// this.drawStack(color, w,width,height);
 		 this.drawField();
 		 this.drawLife(P1, P2);
 		 this.drawMana(P1, P2);
-		 this.drawMarkersDetector();
+		// this.drawMarkersDetector();
 		 this.game.fazy.rysuj();
 	 }
 	 public void displayLog()
@@ -84,8 +89,8 @@ public class Board
 		 parent.stroke(255);
 		 parent.strokeWeight(1);
 		 parent.fill(255);
-		 parent.rect(0.88f*parent.width,0.12f*parent.height,90,90,20,20,20,20);
-		 parent.rect(0.88f*parent.width,0.75f*parent.height,90,90,20,20,20,20);
+		 parent.rect(0.75f*parent.width,0.05f*parent.height,90,90,20,20,20,20);
+		 parent.rect(0.75f*parent.width,0.83f*parent.height,90,90,20,20,20,20);
 		
 		 
 		 parent.noFill();
@@ -93,12 +98,12 @@ public class Board
 		 {
 			 parent.stroke(255-i*10);
 			 
-			 parent.rect(0.88f*parent.width-i,0.12f*parent.height-i,90+2*i,90+2*i,20,20,20,20);
-			 parent.rect(0.88f*parent.width-i,0.75f*parent.height-i,90+2*i,90+2*i,20,20,20,20);
+			 parent.rect(0.75f*parent.width-i,0.05f*parent.height-i,90+2*i,90+2*i,20,20,20,20);
+			 parent.rect(0.75f*parent.width-i,0.83f*parent.height-i,90+2*i,90+2*i,20,20,20,20);
 			
 		 }
 	 }
-	 
+	 /*
 	 public void drawStack(int color, int weigth,int width, int height)
 	 {
 	
@@ -119,7 +124,7 @@ parent.rectMode(parent.CENTER);
 		 }
 		
 	 }
-	 
+	 */
 	 public void drawFrame(int color, int weigth)
 	 {
 		 parent.strokeWeight(weigth);
@@ -216,4 +221,50 @@ parent.rectMode(parent.CENTER);
 			parent.popMatrix();
 
 	 }
+	 public class Stack
+	 {
+	 	PApplet parent;
+	 	int r,g,b,
+	 		costW,costB,costU,costG,costR,cost;
+	 	PVector position;
+	 	
+	 	
+	 	Stack(PApplet p,PVector pos)
+	 	{
+	 		parent=p;
+	 		position=pos;
+	 		r=0;g=0;b=255;
+	 		
+	 		
+	 	}
+	 	public void drawStack()
+	 	{
+	 	//	public void drawStack(int color, int weigth,int width, int height)
+	 		 {
+	 		
+	 			 parent.strokeWeight(1);
+	 			 parent.stroke(r,g, b );
+	 			 
+	 		
+	 			 
+	 	parent.rectMode(parent.CENTER);
+	 			 
+	 			 parent.fill(255);
+	 			 int i;
+	 			 for(i=20;i>0;i--)
+	 			 {
+	 				 parent.stroke(r,g, b,20+i*8);
+	 				 parent.pushMatrix();
+	 				 parent.translate(parent.width*position.x,parent.height*position.y);
+	 				// parent.rotate(parent.PI/2);
+	 				 parent.rect(0,0,game.cardWidth*1.6f-2*i,game.cardHeight*1.6f-2*i,100,100,100,100);
+	 				 parent.noFill();
+	 				 parent.popMatrix();
+	 			 }
+	 			
+	 		 }
+	 	}
+
+	 }
 }
+

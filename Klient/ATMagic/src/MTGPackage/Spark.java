@@ -59,11 +59,11 @@ public class Spark
 				parent.strokeWeight(3);
 				parent.fill(r,g,b,4);
 				parent.stroke(0,0,0,(int)(life*0.5));
-				parent.ellipse(loc.x, loc.y,size*5, size*5);
+				parent.ellipse(loc.x, loc.y,size, size);
 				break;
 				
 			case 'c': 
-			  	parent.strokeWeight(3);
+			  	parent.strokeWeight(2);
 		  		parent.stroke(r,g,b,life);
 		  		parent.fill(r,g,b,life);
 			  	parent.line(loc.x-(int)(0.1*life), loc.y, loc.x+(int)(0.1*life), loc.y);
