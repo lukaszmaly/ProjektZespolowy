@@ -216,7 +216,7 @@ Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game
 	this->c=c;
 	this->d=d;
 	ttl=TTL;
-
+	hasCantAttack=hasCantBlock=false;
 	att=-1;
 	def=-1;
 	dead=false;
@@ -363,6 +363,7 @@ void Card::Tap(Game &game)
 	{
 		game.AddMana(this->owner,this->cardBase.landColor);
 	}
+	game.GHTap(this->id);
 }
 
 void Card::Untap(Game &game)
@@ -380,6 +381,7 @@ void Card::Untap(Game &game)
 			canUntap=false;
 		}
 	}
+		game.GHTap(this->id);
 }
 
 void Card::die()
@@ -394,6 +396,9 @@ void Card::GiveLifeToPlayer(int value,Game &game)
 
 void Card::Fight(Card &op,Game &game)
 {
+	game.GHAtack(op.id);
+	game.GHDefense(op.id,this->id);
+
 	if((this->cardBase.hasFirstStrike && op.cardBase.hasFirstStrike) || (!this->cardBase.hasFirstStrike && !op.cardBase.hasFirstStrike))
 	{
 		Damage(op.GetAttack());
@@ -539,8 +544,15 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 
 void Card::NewRound()
 {
-	def=cardBase.def;
-	att=cardBase.att;
+
+	if(this->attack==false)
+	{
+		this->canUntap=true;
+	}
+	this->attack=false;
+	this->block=false;
+	def=cardBase.def+this->additionalAttack;
+	att=cardBase.att+this->additionalDefense;
 	defEOT=0;
 	attEOT=0;
 }
@@ -556,15 +568,15 @@ void Card::Clear()
 
 bool Card::CanBlock(Card card)
 {
-	if(card.cardBase.hasFlying==true && this->cardBase.hasFlying==false && this->cardBase.hasReach==false)
+	if(this->hasCantBlock==false && card.cardBase.hasFlying==true && (this->cardBase.hasFlying==true || this->cardBase.hasReach==true))
 	{
 		return true;
 	}
-	return true;
+	return false;
 }
 bool Card::CanAttack()
 {
-	if(this->cardBase.hasDefender==true) return false;
+	if(this->cardBase.hasDefender==true || this->hasCantAttack==true) return false;
 
 	return true;
 }

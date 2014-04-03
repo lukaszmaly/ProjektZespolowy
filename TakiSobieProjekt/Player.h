@@ -14,14 +14,14 @@ using namespace cv;
 
 class Mana
 {
-private:
+	public:
 	int white;
 	int blue;
 	int black;
 	int red;
 	int green;
 	int all;
-public:
+
 	void CopyMana(int &white,int &blue,int &black,int &red, int &green)
 	{
 		white=this->white;

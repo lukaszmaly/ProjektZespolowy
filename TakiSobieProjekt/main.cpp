@@ -28,7 +28,7 @@ using namespace aruco;
 #define SAFEREGIONX 1100
 #define SAFEREGIONY 150
 #define SAFEREGIONWIDTH 230
-#define SAFEREGIONHEIGHT 560
+#define SAFEREGIONHEIGHT 660
 using namespace cv;
 
 using namespace std;
@@ -243,9 +243,18 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 		return;
 	}
 
+	//for(unsigned int i=0;i<stack.size();i++)
+	//{
+	//	if(stack[i].id==game.lastId)
+	//	{
+	//	//	stack.erase(stack.begin()+i);
+	//	//	game.ChangeStackState(NEUTRAL);
+	//		i=-1;
+	//	}
+	//}
+
+
 	///Sprawdzanie czy są cards na stackie
-	///BLAD NAPRAW GO .BLAD WAZNY
-	///mozna naprawić poprzez poprawienie warunku. nie szukaj najblizszego sasiada, tylko porównaj odległości między środkami
 	for (unsigned int i = 0; i<stack.size(); i++ ) 
 	{
 		int index=-1;
@@ -344,6 +353,7 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 			cards.push_back(tcard[i]);
 			cout<<"Dodaje karte"<<endl;
 			game.server.SendNewCard(tcard[i].id,tcard[i].cardBase.id,tcard[i].owner,tcard[i].a,tcard[i].b,tcard[i].c,tcard[i].d,tcard[i].taped);
+			game.GHPlay(tcard[i].owner,tcard[i].id,tcard[i].cardBase.name,-1,-1);
 			tcard.erase(tcard.begin()+i);
 			i=-1;
 		}
@@ -351,21 +361,29 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 
 	for(unsigned int i=0;i<stack.size();i++)
 	{
+		
 		for(unsigned int j=0;j<tcard.size();j++)
 		{
-
-			if(stack[i].cardBase.id==tcard[j].cardBase.id && IsInRectFast(tcard[j].getCenter())==false && game.CanPay(stack[i].owner,stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost)) 
+			///Stara wersja. -podczas zagrania wstawiło karte w miejsce innej karty(nie wpływa to na rozgrywkę(bug wizualny)
+			//if(stack[i].cardBase.id==tcard[j].cardBase.id && IsInRectFast(tcard[j].getCenter())==false && game.CanPay(stack[i].owner,stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost)) 
+			
+			if(stack[i].cardBase.id==tcard[j].cardBase.id && IsTheProperlyCard(tcard[j],cards)==true && IsInRectFast(tcard[j].getCenter())==false && game.CanPay(stack[i].owner,stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost)) 
 			{
 		
 				game.Pay(stack[i].owner,stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost);
 
 				tcard[j].Unlock();
 				stack[i].id=tcard[j].id;
+			/*	stack[i].a = tcard[j].a;
+				stack[i].b = tcard[j].b;
+				stack[i].c = tcard[j].c;
+				stack[i].d = tcard[j].d;*/
 				game.server.SendNewCard(tcard[j].id,tcard[j].cardBase.id,tcard[j].owner,tcard[j].a,tcard[j].b,tcard[j].c,tcard[j].d,tcard[j].taped);
 				cards.push_back(stack[i]);
+				game.ChangeStackState(stack[i].owner,NEUTRAL);
 				stack.erase(stack.begin()+i);
 				tcard.erase(tcard.begin()+j);
-				game.server.StackColor(1,NEUTRAL);
+				
 				i=j=-1;
 				break;
 			}
@@ -389,34 +407,44 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 		}
 	}
 
-	for(unsigned int i=0;i<cards.size();i++)
-	{
-		if(!cards[i].TrySend(game)) continue;
-		if(cards[i].attack==true)
-		{
-			game.server.Attack(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense());
-		}
-		else if(cards[i].block == true)
-		{
-			game.server.Block(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].blocking,cards[i].GetAttack(),cards[i].GetDefense());
-		}
-		else
-		{
-			game.server.UpdateCard(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense());
-		}
-	}
+	//for(unsigned int i=0;i<cards.size();i++)
+	//{
+	//	if(!cards[i].TrySend(game)) continue;
+	//	if(cards[i].attack==true)
+	//	{
+	//		game.server.Attack(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense());
+	//	}
+	//	else if(cards[i].block == true)
+	//	{
+	//		game.server.Block(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].blocking,cards[i].GetAttack(),cards[i].GetDefense());
+	//	}
+	//	else
+	//	{
+	//		game.server.UpdateCard(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense());
+	//	}
+	//}
 	//WYSYLANIE Kosztu karty/lepiej zastapic oblsuga stosu(wymaga bazy kart)
 	for(unsigned int i=0;i<stack.size();i++)
 	{
-		if(!stack[i].TrySend(game) || stack[i].cardBase.type==LAND) continue;
+		if(stack[i].cardBase.type==LAND) continue;
 		if(game.CanPay(stack[i].owner,stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost)==true)
 		{
-			game.server.StackColor(1,OK);
+			game.ChangeStackState(stack[i].owner,OK);
 		}
 		else
 		{
-			game.server.StackColor(1,DENY);
+			game.ChangeStackState(stack[i].owner,DENY);
 		}
+	}
+}
+
+void NewRound(Game &game,vector<Card> &cards,vector<Card>&stack,ScriptsManager &scriptManager)
+{
+	//stack.clear();
+	//game.clear();
+	for(unsigned int i=0;i<cards.size();i++)
+	{
+		cards[i].NewRound();
 	}
 }
 
@@ -514,13 +542,29 @@ void MainGameLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 
 	for(int i=0;i<cards.size();i++)
 	{
-		if(cards[i].dead==true ) {game.server.Dead(cards[i].id); cards.erase(cards.begin() +i); i=-1; }
+		if(cards[i].dead==true ) {game.server.Dead(cards[i].id);game.GHDie(cards[i].id); cards.erase(cards.begin() +i); i=-1; }
 	}
 
 	//wyswietlenie wszytkich kart
 	for(unsigned int i=0;i<cards.size();i++)
 	{
 		cards[i].Draw(frame,bcards,game);
+	}
+	for(unsigned int i=0;i<cards.size();i++)
+	{
+		if(!cards[i].TrySend(game)) continue;
+		if(cards[i].attack==true)
+		{
+			game.server.Attack(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense());
+		}
+		else if(cards[i].block == true)
+		{
+			game.server.Block(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].blocking,cards[i].GetAttack(),cards[i].GetDefense());
+		}
+		else
+		{
+			game.server.UpdateCard(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense());
+		}
 	}
 
 	for(unsigned int i=0;i<stack.size();i++)
@@ -617,12 +661,18 @@ void FirstCalibration(vector<Marker> markers,Mat &img,Game &game)
 }
 
 int Card::ID=0;
+int Card::width=-1;
+int Card::height=-1;
 
 int main( int argc, char** argv )
 {
 	bool presed = false;
 
-	Game game("lukasz",977,"daniel",341,"192.168.0.103",600,1366,768,8,true);
+
+
+	
+
+	Game game("lukasz",977,"daniel",341,"192.168.0.100",600,1366,768,8,true);
 	//	Game game("lukasz",177,"daniel",341,"25.83.48.69",6121,800,600,8,false);
 	ScriptsManager scriptManager;
 	vector<CardB> dataBaseCards;
@@ -631,6 +681,7 @@ int main( int argc, char** argv )
 
 
 
+	
 	Mat frame;	
 	VideoCapture capture(0);
 
@@ -670,7 +721,7 @@ int main( int argc, char** argv )
 			scriptManager.Update(frame,game,cardsInPlay,cardsOnStack);
 			line(frame,Point(10,10),Point(10,40),Scalar(200,0,0),3);
 			imshow("Preview", frame);
-			//game.Draw();
+			game.Draw();
 		}
 	
 		if(cv::waitKey(30)==27) break;

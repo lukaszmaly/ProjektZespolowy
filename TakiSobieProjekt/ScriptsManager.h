@@ -16,15 +16,17 @@ public:
 	Point target;
 	bool canUseMarker;
 	int targetId;
+	int targetPlayerId;
 	MarkerDetector MDetector;
-	int lastId;
+
 
 	ScriptsManager(void)
 	{
 		canUseMarker=true;
 		target=Point(-1,-1);
 		targetId=-1;
-		lastId=-1;
+		targetPlayerId=-1;
+	
 	}
 	void AddEOT(int id,vector<Card> &cards,int attack,int defense)
 	{
@@ -94,6 +96,8 @@ public:
 
 	int GetCardId(Point p,vector<Card> &cards,Game &game)
 	{
+		if(p.y<350) targetPlayerId=1;
+		else targetPlayerId=2;
 		int index =-1;
 		int distance = 10000000;
 		for(unsigned int i=0;i<cards.size();i++)
@@ -161,13 +165,13 @@ public:
 
 		for(unsigned int i=0;i<stos.size();i++)
 		{
-			if(stos[i].cardBase.type==INSTANT && stos[i].cardBase.id!=lastId 
+			if(stos[i].cardBase.type==INSTANT && stos[i].cardBase.id!=game.lastId 
 				&& game.CanPay(stos[i].owner,stos[i].cardBase.whiteCost,stos[i].cardBase.blueCost,stos[i].cardBase.blackCost,stos[i].cardBase.redCost,stos[i].cardBase.greenCost,stos[i].cardBase.lessCost))
 			{
 				if(Resolve(stos[i],cards,game)==true)
 				{
 					 game.Pay(stos[i].owner,stos[i].cardBase.whiteCost,stos[i].cardBase.blueCost,stos[i].cardBase.blackCost,stos[i].cardBase.redCost,stos[i].cardBase.greenCost,stos[i].cardBase.lessCost);
-					lastId=stos[i].cardBase.id;
+					 game.lastId=stos[i].cardBase.id;
 				}
 				canUseMarker=true;
 				targetId=-1;
@@ -188,6 +192,8 @@ public:
 					
 					AddDamage(targetId,cards,ab[i].second);
 					game.server.VisualEffect("BOLT",-1,targetId);
+					game.GHPlay(card.owner,card.id,card.cardBase.name,targetId,-1);
+					game.ChangeStackState(card.owner,NEUTRAL);
 					return true;
 				}
 				else if(ab[i].first==4 && targetId!=-1) 

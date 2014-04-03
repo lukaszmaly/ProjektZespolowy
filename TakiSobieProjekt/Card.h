@@ -29,6 +29,8 @@ using namespace cv;
 class Card
 {
 public:
+	static int width;
+	static int height;
 		bool CanBlock(Card card);
 		bool CanAttack();
 	bool gaveMana;
@@ -58,6 +60,9 @@ public:
 	bool hasFirstStrikeEOT;
 	bool hasLifelinkEOT;
 	bool hasFlyingEOT;
+
+	bool hasCantAttack;
+	bool hasCantBlock;
 
 	void AddEOT(int attack,int defense);
 	int attEOT;
@@ -128,8 +133,16 @@ public:
 	static void Prepare(vector<Point> &square,Mat &img);
 	static bool Valid(Point a,Point b,Point c,Point d)
 	{
+		float w1 = Distance(a,b);
+		float w2 = Distance(b,c);
 		float a1=Distance(a,b)/Distance(b,c);
 		float a2=Distance(b,c)/Distance(c,d);
+
+		if(Card::width!=-1 && Card::height!=-1)
+		{
+			if(!((w1>=Card::width*0.8f && w1<=Card::width*1.2f && w2>=Card::height*0.8f && w2<=Card::height*1.2f) || (w2>=Card::width*0.8f && w2<=Card::width*1.2f && w1>=Card::height*0.8f && w1<=Card::height*1.2f)))
+			return false;
+		}
 
 		if(a1>=MIN_D1 && a1<=MAX_D1 && a2>=MIN_D2 && a2<=MAX_D2)
 		{

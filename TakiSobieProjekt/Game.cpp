@@ -10,7 +10,7 @@ bool Game::IsMana(int id,Color color)
 	{
 		return this->player2.mana.IsMana(color);
 	}
-return false;
+	return false;
 }
 void Game::AddMana(int id,Color color)
 {
@@ -24,7 +24,10 @@ void Game::AddMana(int id,Color color)
 	}
 	this->server.AddMana(id,color);
 }
-
+void Game::Clear()
+{
+	this->lastId=-1;
+}
 void Game::SubMana(int id,Color color)
 {
 	if(id==1)
@@ -39,6 +42,7 @@ void Game::SubMana(int id,Color color)
 }
 void Game::AddLife(int id,int value)
 {
+	
 	if(id==1)
 	{
 		this->player1.hp+=value;
@@ -47,7 +51,8 @@ void Game::AddLife(int id,int value)
 	{
 		this->player2.hp+=value;
 	}
-	this->server.SubLife(id,value);
+	this->server.AddLife(id,value);
+	GHAddLife(id,value);
 }
 void Game::SubLife(int id,int value)
 {
@@ -60,6 +65,7 @@ void Game::SubLife(int id,int value)
 		this->player2.hp-=value;
 	}
 	this->server.SubLife(id,value);
+	GHSubLife(id,value);
 }
 bool Game::CanPay(int id,int white, int blue,int black,int red,int green,int colorless)
 {
@@ -84,7 +90,7 @@ void Game::Pay(int id,int white, int blue,int black,int red,int green,int colorl
 		{
 			this->player1.mana.Pay(white,blue,black,red,green,colorless);
 			this->player1.mana.CopyMana(aw,au,ab,ar,ag);
-			this->server.SubMana(id,w-aw,u-au,b-ab,r-ar,g-ag);
+			this->server.SubMana(id,white,blue,black,red,green);
 		}
 	}
 	else
@@ -94,7 +100,7 @@ void Game::Pay(int id,int white, int blue,int black,int red,int green,int colorl
 		{
 			this->player2.mana.Pay(white,blue,black,red,green,colorless);
 			this->player2.mana.CopyMana(aw,au,ab,ar,ag);
-			this->server.SubMana(id,w-aw,u-au,b-ab,r-ar,g-ag);
+			this->server.SubMana(id,white,blue,black,red,green);
 		}
 	}
 }
@@ -349,10 +355,18 @@ Phase Game::GetPhase()
 }
 
 
+void Game::ChangeStackState(int id,State state)
+{
+	
+		this->server.StackColor(id,state);
+	
 
+}
 Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h,int interval,bool showLog)
 {
+	stackState=NEUTRAL;
 	SetTargetMode(false);
+	lastId=-1;
 	firsCardPoint = Point(550,250);
 	firstCardHeight = 350;
 	firstCardWidth = 250;

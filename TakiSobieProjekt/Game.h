@@ -6,6 +6,8 @@
 #include "opencv2/imgproc/imgproc.hpp"
 #include "opencv2/core/core.hpp"
 #include "cvdrawingutils.h"
+#include "settings.h"
+#include <fstream>
 using namespace std;
 using namespace cv;
 using namespace aruco;
@@ -28,7 +30,7 @@ class Game
 private:
 	int aPlayer;
 	Phase phase;
-	
+	State stackState;
 	int gameWidth;
 	int gameHeight;
 	bool zmiana;
@@ -38,6 +40,8 @@ private:
 	bool targetMode;
 public:
 	Mat diff;
+	void ChangeStackState(int id,State state);
+	int lastId;
 	static int Distance(Point a,Point b)
 	{
 		return std::sqrtf(((b.x-a.x)*(b.x-a.x)+(b.y-a.y)*(b.y-a.y)));
@@ -87,7 +91,7 @@ float targetOldAngle;
 	~Game();
 
 
-
+	void Clear();
 	void AddMana(int id,Color color);
 	void SubMana(int id,Color color);
 	void Pay(int id,int white, int blue,int black,int red,int green,int colorless);
@@ -95,4 +99,65 @@ float targetOldAngle;
 	void SubLife(int id,int value);
 	void AddLife(int id,int value);
 	bool IsMana(int id,Color color);
+
+	string lastString;
+	void GHDefense(int attacker,int defencer)
+	{
+		string log = "DEFENSE "+to_string((_Longlong)attacker) + " " + to_string((_Longlong)attacker);
+		Write(log);
+	}
+	void GHPlay(int owner,int id,string name,int targetCreature,int targetPlayer)
+	{
+		string log = "PLAY "+to_string((_Longlong)owner) + " " +to_string((_Longlong)id) +" "+ name +" " +to_string((_Longlong)targetCreature)+ " " +to_string((_Longlong)targetPlayer);
+		Write(log);
+	}
+	void GHAtack(int id)
+	{
+			string log = "ATTACK "+to_string((_Longlong)id);
+		Write(log);
+	}
+	void GHTap(int id)
+	{
+			string log = "TAP "+to_string((_Longlong)id);
+		Write(log);
+	}
+	void GHUntap(int id)
+	{
+			string log = "UNTAP "+to_string((_Longlong)id);
+		Write(log);
+	}
+	void GHSubLife(int owner,int value)
+	{
+		string log = "SUBLIFE "+to_string((_Longlong)owner)+" "+to_string((_Longlong)value);
+		Write(log);
+	
+	}
+	void GHAddLife(int owner,int value)
+	{
+		string log = "ADDLIFE "+to_string((_Longlong)owner)+" "+to_string((_Longlong)value);
+		Write(log);
+	
+	}
+	void GHNewGame(string name1,string name2)
+	{
+		string log = "NEWGAME "+ name1 + " "+ name2;
+
+			Write(log);
+
+	}
+	void GHDie(int id)
+	{
+	string log = "DIE "+to_string((_Longlong)id);
+		Write(log);
+	
+
+	}
+	void Write(string log)
+	{
+				fstream plik;
+	plik.open( "log1.txt", std::ios::in | std::ios::out | std::ios::app);
+	plik << log<<endl;
+	plik.close();
+	}
+
 };

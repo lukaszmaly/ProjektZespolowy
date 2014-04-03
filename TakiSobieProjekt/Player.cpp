@@ -45,10 +45,10 @@ void Player::Draw()
 	sprintf(cad1,"OldAngle: %d",this->oldangle);
 	putText(img,cad1, Point(10,70),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(200,200,200),2);
 
-	sprintf(cad1,"Angle: %d",this->angle);
+	sprintf(cad1,"Biala: %d",this->mana.white);
 	putText(img,cad1, Point(10,90),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(200,200,200),2);
 
-	sprintf(cad1,"Mana: %d",this->mana);
+	sprintf(cad1,"Zielona: %d",this->mana.green);
 	putText(img,cad1, Point(10,120),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(200,200,200),2);
 	sprintf(cad1,"NExt phase: %s",this->agree ? "true":"false");
 	putText(img,cad1, Point(10,150),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(200,200,200),2);
