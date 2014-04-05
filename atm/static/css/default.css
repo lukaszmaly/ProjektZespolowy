@@ -1,23 +1,316 @@
 body {
             text-align: center;
-        }
-     
+            background:transparent url("../images/bg-header.jpg");
+            background-position:top center;
+            background-repeat:no-repeat;
+            background-color:black;
+            margin:0;
+	    padding: 0;
+      }
+      
+        a{ 
+	outline:0;
+	} 
+	
+ 	img {
+        border:0;	
+	}
+        
         #page {
-            width: 960px;
-            text-align: left;
-            margin: 10px auto 20px auto; 
+            background:transparent url("../images/footer.jpg");
+            background-position:bottom center;
+            background-repeat:no-repeat;
+            width: 100%;
+            
         }
-       
-        #sidebar {
-            float: top;
-            height: 50px;
-            border: 1px solid #000;
-            margin: 10px auto 20px auto;
-        }
-       
-        #content {
-            float: center;
-            border: 1px solid #f00;
-            padding: 10px;
-        }
+        #page div#header {
+	width:950px;
+	height:275px;
+	margin:0 auto;
+	text-align:center;
+	position:relative;
+	overflow:hidden;
+}
+
+
+
+#page div#header ul.navigation {
+	background:transparent url("../images/bg-navigation.png");
+	background-position:center center;
+	background-repeat:no-repeat;
+	list-style-type:none;
+	margin:0;
+	padding:0;
+	height:120px;
+	position:relative;
+	top:13px;
+	left:0;
+}
+#page div#header ul.navigation li {
+	float:left;
+	line-height:120px;
+	text-align:center;
+}
+#page div#header ul.navigation li.first {
+	margin:0 0 0 50px;
+}
+#page div#header ul.navigation li a {
+	font-family:Volkhov;
+	font-size:20px;
+	font-weight:normal;
+	color:#311a0b;
+	text-transform:uppercase;
+	text-decoration:none;
+	padding:0 28px;
+	text-shadow:0 1px 0 #e5c288;
+	display:block;
+}
+
+#page #body {
+	width:888px;
+	margin:0 auto;
+	overflow:hidden;
+	padding:10px 0;
+}
+#page #body div.featured {
+	width:884px;
+	height:380px;
+	background:transparent url("../images/bg-featured.png");
+	background-position:center center;
+	background-repeat:no-repeat;
+	padding:2px;
+	position:relative;
+	margin:0 0 25px 0;
+}
+#page #body div.featured img {
+	opacity:100;
+}
+
+#page #body div.featured div.section {
+	width:800px;
+	height:298px;
+	padding:25px;
+	background:transparent url("../images/bg-featured-text-content.png");
+	background-position:center center;
+	background-repeat:repeat;
+	position:absolute;
+	top:20px;
+	left:20px;
+}
+#page #body div.featured div.section h2 {
+	margin:0;
+	font-family:Volkhov;
+	font-size:27px;
+	height:32px;
+	line-height:32px;
+	color:#fbc316;
+	font-weight:normal;
+}
+#page #body div.featured div.section h2 a {
+	margin:0;
+	font-family:Volkhov;
+	font-size:27px;
+	color:#fbc316;
+	font-weight:normal;
+	text-decoration:none;
+	text-transform:uppercase;
+	text-align:center;
+	display:block;
+	text-shadow:2px 2px 5px #120c0b;
+}
+#page #body div.featured div.section p {
+	font-family:Georgia;
+	font-size:14px;
+	color:#ffffff;
+	text-align:justify;
+	line-height:24px;
+	margin-bottom:17px;
+}
+#page #body div.featured div.section p a {
+	font-family:Georgia;
+	font-size:14px;
+	color:#ffffff;
+	text-align:justify;
+	line-height:24px;
+	text-decoration:none;
+	font-style:italic;
+}
+#page #body div.featured div.section p a:hover {
+	font-family:Georgia;
+	font-size:14px;
+	color:#ffffff;
+	text-align:justify;
+	line-height:24px;
+	text-decoration:none;
+}
+
+#page #body div#content {
+	width:630px;
+	float:left;
+	background-position:bottom center;
+	margin:0 36px 0 0;
+}
+#page #body div#content p {
+	font-family:Georgia;
+	font-size:14px;
+	color:#9e8934;
+	text-align:justify;
+	line-height:24px;
+	margin-bottom:25px;
+}
+#page #body div#content p a {
+	font-family:Georgia;
+	font-size:14px;
+	color:#9e8934;
+	text-align:justify;
+	line-height:24px;
+}
+#page #body div#content p a:hover {
+	font-family:Georgia;
+	font-size:14px;
+	color:#9e8934;
+	text-align:justify;
+	line-height:24px;
+	text-decoration:none;
+}
+#page #body div#sidebar {
+	width:222px;
+	float:left;
+	padding:15px 0 0 0;
+}
+#page #body div#content img {
+	margin:15px 0 0 0;
+}
+#page #body div#content ul {
+	list-style-type:none;
+	margin:30px 0 0 0;
+	padding:0;
+}
+#page #body div#content ul li h2 {
+	font-family:Georgia;
+	font-size:14px;
+	font-style:Italic;
+	color:#fddb53;
+	font-weight:bold;
+}
+#page #body div#content ul li h2 a {
+	font-family:Georgia;
+	font-size:14px;
+	font-style:Italic;
+	color:#fddb53;
+	font-weight:bold;
+	text-decoration:none;
+}
+#page #body div#content ul li h2 a:hover {
+	font-family:Georgia;
+	font-size:14px;
+	font-style:Italic;
+	color:#b8b6b6;
+	font-weight:bold;
+	text-decoration:none;
+}
+#page #body div#content ul li p {
+	font-family:Georgia;
+	font-size:14px;
+	color:#b8b6b6;
+	margin:0 0 30px 0;
+}
+#page #body div#content ul li p a {
+	font-family:Georgia;
+	font-size:14px;
+	color:#fdd848;
+}
+#page #body div#content ul li p a:hover {
+	font-family:Georgia;
+	font-size:14px;
+	color:#fdd848;
+	text-decoration:none;
+}
+
+
+#page #body div.content {
+	width:888px;
+	margin:0 auto;
+}
+#page #body div.content ul {
+	list-style-type:none;
+	margin:0;
+	padding:0;
+}
+#page #body div.content ul li {
+	display:block;
+	position:relative;
+}
+#page #body div.content ul li div h2 {
+	font-family:Georgia;
+	font-size:14px;
+	font-weight:bold;
+	font-style:italic;
+	color:#fddb53;
+	margin:20px 0 30px 0;
+}
+#page #body div.content ul li div h2 a {
+	font-family:Georgia;
+	font-size:14px;
+	font-weight:bold;
+	font-style:italic;
+	color:#fddb53;
+	text-decoration:none;
+}
+#page #body div.content ul li div h2 a:hover {
+	font-family:Georgia;
+	font-size:14px;
+	font-weight:bold;
+	font-style:italic;
+	color:#b8b6b6;
+	text-decoration:none;
+}
+#page #body div.content ul li div {
+	width:630px;
+	position:absolute;
+	top:0;
+	left:0;
+}
+#page #body div.content ul li div p {
+	font-family:Georgia;
+	font-size:14px;
+	line-height:24px;
+	color:#b8b6b6;
+	float:none;
+	text-align:justify;
+	margin:0 0 30px 0;
+	
+}
+#page #body div.content ul li div p a {
+	width:630px;
+	font-family:Georgia;
+	font-size:14px;
+	line-height:24px;
+	color:#b8b6b6;
+}
+#page #body div.content ul li div p a:hover {
+	width:630px;
+	font-family:Georgia;
+	font-size:14px;
+	line-height:24px;
+	color:#fddb53;
+	text-decoration:none;
+}
+#page #body div.content ul li img {
+	float:right;
+	position:relative;
+	top:0px;
+	z-index:1;
+	margin:30px 0 0 0;
+}
+
+#content
+{
+width:500px;
+margin:0px auto;
+}
+
+
+
+        
 

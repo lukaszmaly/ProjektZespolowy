@@ -1,6 +1,144 @@
 {% extends "stat.html" %}
 
+{%block section %}
+			<h2>Witaj na stronie ATMagic<br></h2>
+			<p></p>			
+			<p>Augmented reality etc.<br></p>
+		{% endblock %}
+
 {% block content %}
-<h1>ulubone kolory?</h1>
-cokolwiek by to znaczylo
+<html>
+
+<head>
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
+<script src="http://code.highcharts.com/highcharts.js"></script>
+
+<script>
+
+$(document).ready(function() {
+
+
+
+    var chart1 = new Highcharts.Chart({
+
+        chart: {
+
+			backgroundColor: '#FCFFC5',
+
+            renderTo: 'container',
+
+            type: 'column'
+
+        },
+
+				plotOptions: {
+
+        column: {
+
+            colorByPoint: true
+
+			}
+
+		},
+
+		colors: [
+
+				'#0000ff',
+
+				'#008000',
+
+                '#ffffff',
+
+				'#ff0000',				
+
+                '#000000'
+
+            ],
+
+
+
+        title: {
+
+            text: 'Ulubione kolory'
+
+        },
+
+	
+
+        xAxis: {
+
+		
+
+            categories: [{% for el,k in d.iteritems%}
+
+                        [
+
+                            '{{ el }}', 
+
+
+
+                        ],
+
+                        {% endfor %}]
+
+						
+
+        },
+
+        yAxis: {
+
+            title: {
+
+                text: 'Liczba u¿yæ'
+
+            },
+
+			tickInterval: 2
+
+        },
+
+		legend: {
+
+                enabled: false
+
+            },
+
+        series: [{
+
+			name:'Ile razy wyst¹pi³',
+
+            data: [{% for el,k in d.iteritems %}
+
+                        [
+
+                            {{k}}, 
+
+
+
+                        ],
+
+                        {% endfor %}]
+
+        }]
+
+    });
+
+});
+
+</script>
+
+</head>
+
+<body>
+
+<div id="container" style="width:100%; height:400px;"></div>
+
+
+
+</body>
+
+</html>
+
 {% endblock %}

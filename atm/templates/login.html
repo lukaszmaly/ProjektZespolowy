@@ -1,12 +1,12 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block section %}
 
     {% if form.errors %}
       <p class="error">Zle haslo/nazwa uzytkownika</p>
     {% endif %}
 
-    <form action="/accounts/auth/" method="post">{% csrf_token %}
+    <form action="/accounts/auth/" method="post" style="color:white">{% csrf_token %}
         <label for="username">Login:</label>
         <input type="text" name="username" value="" id="username">
         <label for="password">haslo</label>

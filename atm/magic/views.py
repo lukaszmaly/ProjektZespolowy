@@ -6,16 +6,18 @@ from django.views.generic.base import TemplateView
 from magic.models import *
 from django.core.context_processors import csrf
 from forms import *
-from collections import Counter
 import os
 
-lista=[]
+def analizeinfo(info, id2, z):
+    a=Gracz.objects.get(id=id2)
+    print 'point'
+    if z==1:
+        a.wygrane+=1
+    elif z==0:
+        a.przegrane+=1
+       
+    a.save()
 
-def czytaj(player):
-    with open('/home/erwin/atm/magic/'+player+'.txt') as f:
-        lines=f.read().splitlines()
-    print lines
-    return lines
 
 def language(request, language='pl'):
     response = HttpResponse("setting language to %s" % language)
@@ -28,42 +30,42 @@ def gracze(request):
                              {'gracze' : Gracz.objects.all()})
                          
 
-def gracz(request, gracz_id):
-    with open('/home/erwin/atm/magic/history/'+Gracz.objects.get(id=gracz_id).imie+'.txt') as f:
-        lines=f.read().splitlines()
-    winner=lines[0] 
-    if winner==Gracz.objects.get(id=gracz_id).imie:
-    
-        Gracz.objects.get(id=gracz_id).wygrane+=1
-        Gracz.objects.get(id=gracz_id).save()
-        print 'dodano'
-    
-    global lista
-    looser=lines[1]
-    timegame=lines[3]
-    hp1 = lines[5]
-    hp2 = lines[6]
-    hist=lines[8:]
-    #lines.append('koniec')
-  #  with open('/home/erwin/atm/magic/history/'+Gracz.objects.get(id=gracz_id).imie+'.txt','a') as f:
-   #     f.write(lines[-1])
-    
-    print hist
-    lista=hist
-    f.close()
-    
-    if not os.path.exists('/home/erwin/atm/magic/history/'+looser+'.txt'):
-        g=open('/home/erwin/atm/magic/history/'+looser+'.txt','w')
-        Gracz.objects.get(imie=looser).przegrane+=1
-        Gracz.objects.get(imie=looser).save()
-        for item in lines:
-            g.write('%s\n' % item)
-        g.close()
-        
-    return render_to_response('gracz.html',{'gracz' : Gracz.objects.get(id=gracz_id), 'winner': winner, 'looser': looser, 'timegame' : timegame, 'hp1' : hp1, 'hp2': hp2, 'hist': hist})
+def gracz(request, gracz_id):      
+    info=[]  
+    hist=[]    
+    lista=[]
+
+
+    try:
+        with open('/home/erwin/atm/magic/history/'+ 
+str(Gracz.objects.get(id=gracz_id).imie)+'.txt','r+') as f:
+            print 'ok'
+            lista=f.readlines()
+            stat=int(lista[0])
+            info=lista[1:3]
+            hist=lista[3:]
+      
+            if stat==1:        
+               a=Gracz.objects.get(id=gracz_id)   
+               a.wygrane+=1
+               a.save()
+            if stat==0:
+            #analizeinfo(info,gracz_id,0)
+               a=Gracz.objects.get(id=gracz_id)   
+               a.przegrane+=1
+               a.save()
+       #    print 'done'
+        f.close()
+       #hist analize
+       #info analize 
+        return render_to_response('gracz.html',{'gracz' : Gracz.objects.get(id=gracz_id), 
+'info':info, 'hist':hist})
+    except IOError:
+        return  render_to_response('gracz.html',{'gracz' : Gracz.objects.get(id=gracz_id)})
+
+     
 
 def stat(request):
-    
     return render_to_response('stat.html')
 
 def main(request, language='pl'):
@@ -96,17 +98,20 @@ def video(request):
 
 def popular(request):
     
-    d={'woj':3,'zwiad':1,'lucz':1}
+    d={'banshee':15,'overlord':12,'spiderling':10, 'dragon':5}
     return render_to_response('popular.html', {'d':d})
 
-def leng(request):
-    return render_to_response('leng.html')
+def leng(request): 
+    d= {'najkrotsza':5,'najdluzsza':22,'srednio':12} 
+    return render_to_response('leng.html', {'d':d})
 
-def color(request):
-    return render_to_response('color.html')
+def color(request): 
+    d={'bialy':2,'czarny':1,'zielony':1} 
+    return render_to_response('color.html', {'d':d})
 
-def best(request):
-    return render_to_response('best.html')
+def best(request): 
+    d={'gracz1':5,'gracz2':4,'gracz3':3} 
+    return render_to_response('best.html', {'d':d})
 
 def hello_template_simple(request):
     return render_to_response('hello.html', {'name' : name})

@@ -1,0 +1,3970 @@
+0
+Wygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kWygrywa Olek
+Przegrywa Lucas
+
+Zaczyna: Olek!
+
+#1 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 1 czerwona mana
+Olek zagrywa Striking Sliver
+
+#1 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Elvish Mystic
+
+#2 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Elvish Mystic
+Olek atakuje Striking Sliver
+HP_Lucas: 19
+
+#2 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 1 zielona mana
+Lucas Giant Growth, cel: Elvish Mystic
+Lucas atakuje Elvish Mystic
+HP_Olek: 16
+Lucas tapuje 1 zielona mana
+Lucas zagrywa Gladecover Scout
+
+#3 Olek
+Olek zagrywa czerwona mana
+Olek tapuje 2 czerwona mana
+Olek zagrywa Young Pyromancer
+Olek zagrywa Shock, cel: Elvish Mystic
+Umiera Elvish Mystic
+Olek zagrywa Token Red Elemental 1/1 
+Olek atakuje Striking Sliver
+Olek atakuje Goblin Shortcutter
+Lucas blokuje Goblin Shortcutter: Gladecover Scout
+Umiera Goblin Shortcutter 
+Umiera Gladecover Scout
+HP_Lucas: 18
+
+#3 Lucas
+Lucas zagrywa zielona mana
+
+#4 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Dyplomats
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 16
+Olek zagrywa Token Red Elemental 1/1
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+HP_Lucas: 12
+
+#4 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Giant Spider
+
+#5 Olek
+Olek atakuje Striking Sliver
+Olek atakuje Young Pyromancer
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Young Pyromancer: Giant Spider
+Olek tapuje 2 czerwona mana
+Olek zagrywa Thunder Strike, cel: Young Pyromancer
+Olek zagrywa Token Red Elemental 1/1
+Umiera Young Pyromancer
+Umiera Giant Spider
+HP_Lucas: 9
+Olek tapuje 1 czerwona mana
+Olek zagrywa Shock, cel: Lucas
+HP_Lucas: 7
+
+#5 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 4 zielona mana
+Lucas zagrywa Rumbling Baloth
+
+#6 Olek
+Olek tapuje 2 czerwona mana
+Olek zagrywa Goblin Shortcutter, cel: Rumbling Baloth
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+HP_Lucas: 4
+
+#6 Lucas
+Lucas zagrywa zielona mana
+Lucas tapuje 2 zielona mana
+Lucas tapuje Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+Lucas tapuje 1 zielona mana 
+Umiejetnosc Scavenging Ooze 
+Counter Scavenging Ooze
+
+#7 Olek
+Olek zagrywa czerwona mana
+Olek atakuje Striking Sliver
+Olek atakuje Red Elemental
+Olek atakuje Red Elemental
+Lucas blokuje Red Elemental: Scavenging Ooze
+Lucas blokuje Red Elemental: Rumbling Baloth
+Umiera Scavenging Ooze
+Umiera Rumbling Baloth
+HP_Lucas: 3
+Olek tapuje 3 czerwona mana
+Olek zagrywa Flames of the Firebrand, cel: Lucas, Lucas, Lucas
+HP_Lucas: 0
+Koniec: Wygrywa Olek!
+
+
+
+
+
+kkkkkkk

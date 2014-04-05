@@ -1,30 +1,14 @@
 {% extends "base.html" %}
 
-{% block content %}
-<html>
-<body>
-<h1>{{ gracz.imie }}</h1>
+{%block section %}
+			<h2>{{ gracz.imie }}</h2>
 <p>id: {{ gracz.id }} </p>
 <p>wygrane: {{ gracz.wygrane }} </p>
 <p>przegrane: {{gracz.przegrane }}</p>
 <p>logowania: {{gracz.logowania}} </p>
 <p>mail: {{gracz.mail}} </p>
+		{% endblock %}
 
-<h2>ostatnia rozgrywka</h2>
-<p>wygral: {{winner}}</p>
-<p>przeciwnik: {{looser}}</p>
-<p>tury: {{timegame}}</p>
-<p>hp win: {{hp1}}</p>
-<p>hp lost: {{hp2}}</p>
-
-<ul>
-{% for x in hist %}
-    <li>{{ x }}</li>
-{% endfor %}
-<li>wygrywa: {{winner}}</li>
-</ul>
-
-</body>
-</html>
+{% block content %}
 
 {% endblock %}

@@ -1,16 +1,18 @@
 {% extends "base.html" %}
 
 {% block sidebar %}
-<ul><li>
-    <a href="/main/">Strona glowna</a>
-    <a href="/stat/popular/">Popularne karty</a>
-    <a href="/stat/leng/">Dlugosc gier</a>
-    <a href="/stat/color/">Ulubione kolory</a>
-    <a href="/stat/best/">Najlepsi gracze</a>
-</li>
-</ul>
-
+   <li class="first"><a href="/main/" class="active">Główna<br></a></li>
+   <li><a href="/stat/popular/">Popularne</a></li>
+    <li><a href="/stat/leng/">Dlugosc gier</a></li>
+    <li><a href="/stat/color/">Kolory</a></li>
+   <li><a href="/stat/best/">Najlepsi</a></li>
 {% endblock %}
+
+{%block section %}
+			<h2>Statystyki gier<br></h2>
+			<p></p>			
+			<p>Sprawdź czym ostatnio grano<br></p>
+		{% endblock %}
 
 {% block content %}
 

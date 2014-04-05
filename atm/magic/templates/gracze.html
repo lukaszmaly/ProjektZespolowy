@@ -1,20 +1,22 @@
 {% extends "base.html" %}
 
+	{%block section %}
+			<h1 style="color:white">Lista Graczy<br></h1>
+			<p></p>			
+			{% for gracz in gracze %}
+		<div>
+		<h2><a href = "/gracze/{{gracz.id}}/">{{ gracz.imie }}</a></h2>
+		</div>
+	
+			{% endfor %}
+
+	{% endblock %}
+
+
+
 {% block content %}
 
-{% if gracze.count > 0 %}
-<h1>Lista graczy:</h1>
-{% for gracz in gracze %}
-<div>
-<h2><a href = "/gracze/{{gracz.id}}/">{{ gracz.imie }}</a></h2>
-</div>
-{% endfor %}
 
 
-{% else %}
-
-<p>Nic!</p>
-
-{% endif%}
 
 {% endblock %}

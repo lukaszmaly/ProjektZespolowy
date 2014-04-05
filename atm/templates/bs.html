@@ -1,0 +1,62 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<img src='{% static "assets/images/logo.png" %}' />
+
+
+<head>
+<meta charset="utf-8">
+    <title>{% block title %}ATMagic{% endblock %}</title>
+        <link rel="stylesheet" type="text/css" href='{% static "assets/css/default.css" %}'>   
+</head>
+
+<body>
+    <div id="page">
+	<div id="header">
+		<a id="logo" href="base.html" >
+		<img style="border: 0px solid ; width: 278px; height: 156px;" src="images/logo.png" alt="">
+
+         
+<ul class="navigation">	
+  <li class="first"><a href="index.html" class="active">Strona główna<br></a></li>
+  <li><a href="about.html">Statystyki</a></li>
+  <li><a href="myths.html">Download</a></li>
+ <li><a href="archives.html">Zaloguj</a></li>
+    </div>
+		<div id="body">
+		<div class="featured"> 
+                <img style="width: 882px; height: 383px;" alt="" 
+		src='{% static "assets/images/angel.jpg" %}'>
+		
+		<div class="section">
+			<h2><a href="base.html">Czym jest ATMagic<br></a></h2>
+			<p>Augmented reality etc.<br></p>
+			<p><br></p>
+			<a class="readmore" href="base.html">&nbsp;</a> </div>
+			<span>&nbsp;</span> </div>
+			<div id="content">
+       
+		<p>Witaj na stronie atmagic.</p>
+		<p>przykladowy txt</p>
+		</div>&nbsp;
+		</div>
+		<div id="footer">
+        	<ul>
+		<li><a href="about.html" class="video"></a>
+	        <p>infonr3</p>
+		</li>
+		<li><a href="myths.html" class="myths">&nbsp;</a>		
+    		<p>infonr2&nbsp;&nbsp;&nbsp;</p>
+		</li>
+		<li class="last">
+		<a href="archives.html" class="archives">&nbsp;</a>
+		<p>Info nr 1</p></li>
+		<li class="last"><br></li>
+		</ul>
+			<span>© Copyright © ATMagic<br></span> 
+	</div>
+	</div>
+
+</body>
+</html>
+
