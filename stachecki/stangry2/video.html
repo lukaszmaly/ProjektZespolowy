@@ -12,26 +12,27 @@ $(document).ready(function(){
 	var string;
 	//pierwszy wczytany nick to pierwszy gracz
 	var nickname;
-	//nazwy kart rowniez pobierane z pliku, poki co wpisane na sztywno
 	var card;
 	var gracz1='{{gracz1}}';
 	var gracz2='{{gracz2}}';
 	var ile ={{ileakcji}};
 	//licznik akcji
 	var licznik=0;
-	//licznik tur
-	//ilewykonac akcji
 	var wartosc1;
-	var kartynastole = new Array();
-	var ind =0;
+	
+	var ind1 =0, ind2=0, ind=0;
 	//ktora karte usunac
 	var cousunac;
-	//slownik, ktory zapamieta gdzie dana karta zostala wczytana
-	var slownik = new Array();
-	//ostatni zapamietany div 
-	var ostatnidiv=0;
 
-	
+	//akcje: LOAD, PLAY, DEAD
+	var kartynastole = new Array();
+	var divs =[];
+	var karty=[];
+	var ktorydivwolny=[];
+	var akcje = [];
+	var tabhp1=[];
+	var tabhp2 = [];
+
 	//limit na sztywno - ilosc "divow"
 	for (var i = 0, limit = 5; i <= limit; i++) 
 	{
@@ -46,14 +47,30 @@ $(document).ready(function(){
 	//wyswietla "plansze", czyli obie ramki do gry
 	$('.gracz1').show();
 	$('.gracz2').show();
-
-	$('.nastepny').click(function()
 	
+	$("#hp1").append('hp1: 20');
+	$("#hp2").append('hp2: 20');
+	
+	$('.nastepny').click(function()	
 	{
 		if (licznik<ile)	
 		{			
 			//zwiekszamy licznik akcji
 			licznik++;
+			//kopiujemyhp
+			if (licznik==1)
+			{
+				tabhp1[licznik-1]=20;
+				tabhp2[licznik-1]=20;
+			}
+			//w innym przypadku, wpisujemy poprzednia wartosc
+			else
+			{
+				tabhp1[licznik-1]=tabhp1[licznik-2];
+				tabhp2[licznik-1]=tabhp2[licznik-2];
+			}
+			
+			akcje[licznik-1] = "nic";
 			//szukamy, ktory gracz gra
 			{% for key,value in ktogra.iteritems %}
 				wartosc1 = {{key}};
@@ -63,6 +80,7 @@ $(document).ready(function(){
 				}
 			{% endfor %}
 			
+			cousunac="";
 			//szukamy, jesli trzeba bedzie usunac karte
 			{% for key,value in deads.iteritems %}
 				wartosc1 = {{key}};
@@ -72,6 +90,28 @@ $(document).ready(function(){
 				}
 			{% endfor %}
 			
+			//szukamy, czy update zdrowia
+			{% for key,value in hp1.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					$("#hp1").empty();
+					$("#hp1").append("hp1: "+'{{value}}');
+					tabhp1[licznik-1]='{{value}}';
+
+				}
+			{% endfor %}
+			
+			{% for key,value in hp2.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					$("#hp2").empty();
+					$("#hp2").append("hp2: "+'{{value}}');
+					tabhp2[licznik-1]='{{value}}';
+				}
+			{% endfor %}
+		
 			//zaleznie od nicku, wczytujemy karte do danego pola
 			if (nickname==gracz1)			
 			{					
@@ -80,20 +120,42 @@ $(document).ready(function(){
 						wartosc1 = {{key}};
 						if (wartosc1 == licznik)
 						{
+							
+							ind++;
 							card='{{value}}';
-							string = "gracz1div1";
+							var replaced = card.replace(/%20/g, " ");
+							karty[ind-1]=replaced;
+							if (ind1 < 5)
+							{
+								ind1++;
+								string = "gracz1div"+ind1;
+								
+							}
+							else
+							{
+								for (var i =0,ogr = ktorydivwolny.length; i<ogr;i++)
+								{
+									if (ktorydivwolny[i]!="")
+									{
+										string=ktorydivwolny[i];
+										break;
+									}
+								}
+							}
 							$('<img id="theImg" src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);	
 							$("#"+string).show();
+							akcje[licznik-1] = "load";
 						}
 					{% endfor %}
 					//zapamietujemy wczytana karte
 					{% for key,value in idlist.iteritems %}
 						wartosc1 = {{key}};
 						if (wartosc1==licznik)
-							kartynastole[ind]='{{value}}';							
+							kartynastole[ind-1]='{{value}}';							
 					{% endfor %}
-					ind++;
-					slownik[string]=kartynastole[ind-1];
+					
+					divs[ind-1]=string;
+	
 			}
 			
 			//analogicznie jak wyzej
@@ -103,36 +165,58 @@ $(document).ready(function(){
 						wartosc1 = {{key}};
 						if (wartosc1 == licznik)
 						{
+							ind++;
 							card='{{value}}';
-							string = "gracz2div2";
+							
 							var replaced = card.replace(/%20/g, " ");
-							$('<img id="theImg" src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);			
+							karty[ind-1]=replaced;
+							if (ind2 < 5)
+							{
+								ind2++;
+								string = "gracz2div"+ind2;
+								
+							}
+							else
+							{
+								for (var i =0,ogr = ktorydivwolny.length; i<ogr;i++)
+								{
+									if (ktorydivwolny[i]!="")
+									{
+										string=ktorydivwolny[i];
+										break;
+									}
+								}
+							}
+							$('<img id="theImg" src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);
 							$("#"+string).show();
+							akcje[licznik-1] = "load";
 						}
 					{% endfor %}
 					
 					{% for key,value in idlist.iteritems %}
 						wartosc1 = {{key}};
 						if (wartosc1==licznik)
-							kartynastole[ind]='{{value}}';							
+							kartynastole[ind-1]='{{value}}';							
 					{% endfor %}
-					ind++;
-					slownik[kartynastole[ind-1]]=string;
+					
+					divs[ind-1]=string;
 			}
+			
 			//jesli trzeba cos usunac
-			else if (cousunac!="")
+			if (cousunac!="")
 			{
 				for (var i =0, limit = kartynastole.length; i<limit; i++)
 				{
 					if (kartynastole[i]==cousunac)
 					{
-						kartynastole[i]="";						
-						$("#"+slownik[kartynastole[i]]).empty();
-						slownik[kartynastole[i]]="";
+						$("#"+divs[i]).empty();
+						ktorydivwolny[i]=divs[i];
+						akcje[licznik-1] = "dead";						
 					}
 				}
  			}
 			
+
 			//wczytujemy kolejna akcje
 			$("#tekst").empty();	
 			{% for key,value in akcje.iteritems %}
@@ -147,24 +231,57 @@ $(document).ready(function(){
 	
 	$('.poprzedni').click(function()
 	{
-	
-		string1 = "gracz1div1"
-		string2 = "gracz2div1"
-		$("#"+string1).empty();
-		$("#"+string1).hide();
-		$("#"+string2).empty();
-		$("#"+string2).hide();
-	
+
 		if (licznik!=0)
-			licznik = licznik-1;
+		{
 			
+			$("#hp1").empty();
+			$("#hp1").append("hp1: "+tabhp1[licznik-1]);
+		
+			$("#hp2").empty();
+			$("#hp2").append("hp2: "+tabhp2[licznik-1]);
+			licznik=licznik-1;
+		}
+		else if (licznik==0)
+		{
+			for (var i =0, limit = divs.length; i<limit; i++)
+			{			
+				$("#"+divs).empty();
+			}	
+		}
+
+			
+		 if (akcje [licznik]=="dead")
+		{
+				//latwiej bedzie po prostu ladowac wszystkie akcje ponownie
+			for (var i =0, limit = divs.length; i<limit; i++)
+				$("#"+divs[i]).empty();
+				
+			for (var i =0, limit = kartynastole.length; i<limit; i++)
+			{			
+				$('<img id="theImg" src="{% static "assets/images/'+karty[i]+'.jpg" %}" />').appendTo("#"+divs[i]);			
+				$("#"+divs).show();
+			}		
+		}
+		
+		//odejmujemy indeks i wczytujemy karte z ostatniego elementu tabeli
+		else if (akcje [licznik] == "load")
+		{
+		
+			karty[ind-1]="";
+			$("#"+divs[ind-1]).empty();
+			ind --;
+		}
+		
 			
 		$("#tekst").empty();
 		{% for key,value in akcje.iteritems %}
 			wartosc = {{key}};
-			if (licznik-1 == wartosc)
+			if (licznik == wartosc)
 				$("#tekst").append('{{value}}');							
-		{% endfor %}			
+		{% endfor %}	
+
+		
     });
 });
 </script>
@@ -174,6 +291,7 @@ $(document).ready(function(){
 <button class ="poprzedni">Previous</button>
 <button class ="nastepny">Next</button>
 <div id="tekst"><h2></div></h2>
+<div id="hp1"><h2></div></h2>
 <div class="pole">
 <div class="gracz1" style="height:300px; width:1000px; border:1px solid green; overflow:auto;">
 <div style="display: table-row">
@@ -196,7 +314,7 @@ $(document).ready(function(){
     </div>
 
 </div>
-
+<div id="hp2"><h2></div></h2>
 </div>
 </body>
 </html>

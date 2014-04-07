@@ -96,8 +96,6 @@ def video(request):
 	class Game:
 		nick1="";
 		nick2="";
-		hp1=20;
-		hp2=20;
 		winner = "";
 		count=0;
 		cardlist={};
@@ -106,6 +104,8 @@ def video(request):
 		deadlist={};
 		#ktory gracz gra
 		ktogra={};
+		hp1list={};
+		hp2list={};
 		#HP poczatkowe 20
 		#otwieramy plik itworzymy obiekt gry
 	fo=open('C:\\Users\\np550\\Desktop\\atm\\magic\\history\\LOGI_V3.txt', 'r');
@@ -149,6 +149,8 @@ def video(request):
 					for i in range (4,limit):
 						dolacz=dolacz+" "+list[i-1];				
 					dolacz=dolacz[1:];
+					if (dolacz[len(dolacz)-1]=="\n" or dolacz[len(dolacz)-1]==" "):
+						dolacz=dolacz[:-1];
 					obiekt.cardlist.update({obiekt.count : dolacz});
 					obiekt.idlist.update({obiekt.count : list[2]});
 					obiekt.ktogra.update({obiekt.count : list[1]});
@@ -156,22 +158,26 @@ def video(request):
 					for i in range (4,len(list)+1):
 						dolacz=dolacz+" "+list[i-1];
 					dolacz=dolacz[1:];
-					dolacz=dolacz[:-1];		
+					if (dolacz[len(dolacz)-1]=="\n" or dolacz[len(dolacz)-1]==" "):
+						dolacz=dolacz[:-1];
 					obiekt.cardlist.update({obiekt.count : dolacz});
 					obiekt.idlist.update({obiekt.count : list[2]});
 					obiekt.ktogra.update({obiekt.count : list[1]});
+
 		elif ("SUBLIFE" in list[0]):
 			if ("1" in list[1]):
-				obiekt.hp1=list[2];
+				list[2]=list[2][:-1];
+				obiekt.hp1list.update({obiekt.count : list[2]});
 			else: 
-				obiekt.hp2=list[2];
-		elif ("DEFENCE" in list[0] or "STATS" in list[0] or "ADDDAMAGE" in list[0]):
+				list[2]=list[2][:-1];
+				obiekt.hp2list.update({obiekt.count : list[2]});
+		elif ("DEFENCE" in list[0] or "STATS" in list[0] or "ADDDAMAGE" in list[0] or "ATTACK" in list[0] or "NEXTTURN" in list[0]):
 			continue;
 		elif ("DEAD" in list[0]):
 			obiekt.deadlist.update({obiekt.count : list[1][:-1]});
 		#zamykamy plik
 	fo.close();
-	return render_to_response ('video.html',{'karty':obiekt.cardlist, 'licznik':obiekt.count, 'gracz1': 1, 'gracz2': 2, 'ktogra':obiekt.ktogra, 'akcje':obiekt.actionlist, 'deads':obiekt.deadlist, 'idlist':obiekt.idlist, 'ileakcji':obiekt.count})
+	return render_to_response ('video.html',{'karty':obiekt.cardlist, 'licznik':obiekt.count, 'gracz1': 1, 'gracz2': 2, 'ktogra':obiekt.ktogra, 'akcje':obiekt.actionlist, 'deads':obiekt.deadlist, 'idlist':obiekt.idlist, 'ileakcji':obiekt.count, 'hp1':obiekt.hp1list, 'hp2':obiekt.hp2list})
 
 def popular(request):
     
