@@ -48,5 +48,6 @@ public:
 	void SendNewCard(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bool taped);
 	void UpdateCard(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bool taped,int att,int def);
 	void AddPlayer(int id,const char name[]);
+	void ActivePlayer(int id);
 };
 

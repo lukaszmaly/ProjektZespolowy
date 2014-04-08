@@ -15,3 +15,13 @@ enum State
 	NEUTRAL =2
 
 };
+
+enum Phase {
+	PIERWSZY = 0,
+	ATAK = 1,
+	OBRONA = 2,
+	WYMIANA = 3,
+	DRUGI = 4,
+	UPKEEP = 5
+};
+

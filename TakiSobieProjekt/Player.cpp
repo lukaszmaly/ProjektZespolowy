@@ -10,7 +10,7 @@ Player::Player(string name,int markerId)
 	cardsInLib=60;
 	cardsInTomb=0;
 	cardsOnHand=7;
-	
+	stackE=stackB=Point(-1,-1);
 }
 
 
@@ -28,7 +28,7 @@ void Player::Init(string name,int markerId)
 	cardsOnHand=7;
 
 }
-void Player::Draw()
+void Player::Draw(Mat &frame)
 {
 	img = Scalar(0,0,0);
 	char cad[100];
@@ -53,6 +53,7 @@ void Player::Draw()
 	sprintf(cad1,"NExt phase: %s",this->agree ? "true":"false");
 	putText(img,cad1, Point(10,150),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(200,200,200),2);
 	imshow(name,img);
+	if(stackB.x!=-1) rectangle(frame,this->stackB,this->stackE,Scalar(0,0,200),2);
 
 }
 

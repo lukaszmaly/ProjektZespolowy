@@ -183,6 +183,9 @@ class Mana
 class Player
 {
 public:
+
+	Point stackB;
+	Point stackE;
 	Player(void);
 	void Init(string name,int markerId);
 	Player(string name,int markerId);
@@ -203,7 +206,7 @@ public:
 	int cardsInTomb;
 	bool active;
 	void Update();
-	void Draw();
+	void Draw(Mat &frame);
 
 	int operator==(const Player &p) {return  markerId==p.markerId;}
 };

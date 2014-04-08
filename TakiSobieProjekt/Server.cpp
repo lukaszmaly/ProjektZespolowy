@@ -331,7 +331,21 @@ void Server::Dead(int id)
 	}
 
 }
+void Server::ActivePlayer(int id)
+{
+	char data[100];
+	int n = sprintf_s(data,"| ACTIVEPLAYER %d |",id);	
 
+	if(soc.send(data, n, client, port) != sf::Socket::Done)
+	{
+		cout<<"Blad podczas wysylanie danych o nowej karcie"<<endl;
+	}
+	else if(showLog)
+	{
+		cout<< data <<endl;Write(data);
+	}
+
+}
 void Server::Block(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bool taped,int id2,int att,int def)
 {
 	char data[100];

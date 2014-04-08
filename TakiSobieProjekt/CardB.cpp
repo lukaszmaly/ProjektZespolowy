@@ -12,7 +12,7 @@ CardB::~CardB(void)
 
 string CardB::GetTypeToString()
 {
-	switch(type)
+	switch(this->type)
 	{
 	case CREATURE:
 		return "Creature";
@@ -29,7 +29,12 @@ string CardB::GetTypeToString()
 	case ARTIFACT:
 		return "Artifact";
 		break;
+			case LAND:
+		return "Land";
+		break;
+		
 	}
+	return "NONE";
 }
 
 void CardB::PrintStats()

@@ -91,6 +91,7 @@ void Game::Pay(int id,int white, int blue,int black,int red,int green,int colorl
 			this->player1.mana.Pay(white,blue,black,red,green,colorless);
 			this->player1.mana.CopyMana(aw,au,ab,ar,ag);
 			this->server.SubMana(id,white,blue,black,red,green);
+			this->ChangeStackState(1,NEUTRAL);
 		}
 	}
 	else
@@ -101,6 +102,7 @@ void Game::Pay(int id,int white, int blue,int black,int red,int green,int colorl
 			this->player2.mana.Pay(white,blue,black,red,green,colorless);
 			this->player2.mana.CopyMana(aw,au,ab,ar,ag);
 			this->server.SubMana(id,white,blue,black,red,green);
+				this->ChangeStackState(2,NEUTRAL);
 		}
 	}
 }
@@ -120,7 +122,7 @@ Player & Game::GetPlayer(int id)
 }
 void Game::setFaza(int i)
 {
-	return;
+
 	switch(i)
 	{
 	case 0:
@@ -276,19 +278,20 @@ void Game::nextPhase()
 		this->oneAttack=false;
 		break;
 	case DRUGI:
-		server.NextPhase();
+		
 		phase=UPKEEP;
 		break;
 	case UPKEEP:
+		server.NextPhase();
 		phase = PIERWSZY;
 		break;
 	}
 }
 
-void Game::Draw()
+void Game::Draw(Mat &frame)
 {
-	player1.Draw();
-	player2.Draw();
+	player1.Draw(frame);
+	player2.Draw(frame);
 	//imshow("DiffCard",diff);
 
 }
@@ -375,6 +378,7 @@ Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip
 	bgrMode=true;
 	firstCardChecked=false;
 	checkCardsProp=true;
+	CanResolve = true;
 	beAbleMarker=true;
 	gameWidth = w;
 	oneAttack=false;
@@ -386,6 +390,9 @@ Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip
 	player1.Init(player1s,player1Id);
 	player2.Init(player2s,player2Id);
 	aPlayer = player1.markerId;
+	server.AddPlayer(1,player1s.c_str());
+	server.AddPlayer(2,player2s.c_str());
+	server.ActivePlayer(1);
 }
 
 int Game::distance(Point a,Point b)

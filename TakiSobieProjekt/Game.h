@@ -7,6 +7,7 @@
 #include "opencv2/core/core.hpp"
 #include "cvdrawingutils.h"
 #include "settings.h"
+#include <vector>
 #include <fstream>
 using namespace std;
 using namespace cv;
@@ -14,20 +15,37 @@ using namespace aruco;
 #define ACTION 428
 #define TARGETMARKER 985
 #define M_PI 3.14159265358979323846
-enum Phase {
-	PIERWSZY = 0,
-	ATAK = 1,
-	OBRONA = 2,
-	WYMIANA = 3,
-	DRUGI = 4,
-	UPKEEP = 5
+
+
+class Spell
+{
+public:
+	int cardId;
+	int baseId;
+	int owner;
+	int targetCreature;
+	int targetPlayer;
+	int value;
+
+	Spell()
+	{
+	}
+	Spell(int cardId,int baseId,int owner,int targetCreature,int targetPlayer,int value)
+	{
+		this->cardId=cardId;
+		this->baseId=baseId;
+		this->owner=owner;
+		this->targetCreature=targetCreature;
+		this->targetPlayer=targetPlayer;
+		this->value=value;
+
+	}
 };
-
-
 
 class Game
 {
 private:
+
 	int aPlayer;
 	Phase phase;
 	State stackState;
@@ -35,10 +53,13 @@ private:
 	int gameHeight;
 	bool zmiana;
 	Point action;
+	
 	bool checkCardsProp;
 	bool bgrMode;
 	bool targetMode;
 public:
+	bool CanResolve;
+	vector<Spell> stack;
 	Mat diff;
 	void ChangeStackState(int id,State state);
 	int lastId;
@@ -84,7 +105,7 @@ float targetOldAngle;
 	string getCurrentPhase();
 	void nextPhase();
 	void Update();
-	void Draw();
+	void Draw(Mat &frame);
 	int GetCurrentPlayer();
 	Player &getCurrentPlayer();
 	Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h,int interval,bool showLog);
@@ -160,4 +181,12 @@ float targetOldAngle;
 	plik.close();
 	}
 
+
+	void StackSettings(int w,int h,int x1,int y1,int x2,int y2)
+	{
+		player1.stackB=Point(x1,y1);
+		player2.stackB=Point(x2,y2);
+		player1.stackE=Point(x1+w,y1+h);
+		player2.stackE=Point(x2+w,y2+h);
+	}
 };

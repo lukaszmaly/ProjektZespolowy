@@ -60,10 +60,21 @@ public:
 	bool hasFirstStrikeEOT;
 	bool hasLifelinkEOT;
 	bool hasFlyingEOT;
+	bool hasTrampleEOT;
+	bool hasHexproofEOT;
+
+	bool hasFirstStrike;
+	bool hasLifelink;
+	bool hasFlying;
+	bool hasTrample;
+	bool hasHexproof;
 
 	bool hasCantAttack;
 	bool hasCantBlock;
 
+	bool hasCantUntap;
+
+	void Add(int attack,int defense);
 	void AddEOT(int attack,int defense);
 	int attEOT;
 	int defEOT;
@@ -97,7 +108,7 @@ public:
 	int blocking;
 	void Unlock();
 	void setCardBase(CardB &card);
-	void NewRound();
+	void NewRound(int player);
 	void Compare(Mat &img1,Mat &img2,float tab[3],Game &game);
 	Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp);
 	Card(void);

@@ -19,15 +19,14 @@ public:
 	int targetPlayerId;
 	MarkerDetector MDetector;
 
-
 	ScriptsManager(void)
 	{
 		canUseMarker=true;
 		target=Point(-1,-1);
 		targetId=-1;
 		targetPlayerId=-1;
-	
 	}
+
 	void AddEOT(int id,vector<Card> &cards,int attack,int defense)
 	{
 		for(unsigned int i=0;i<cards.size();i++)
@@ -39,10 +38,6 @@ public:
 			}
 		}
 	}
-
-
-	
-
 	void DestroyCreature(int id,vector<Card> &cards)
 	{
 		for(unsigned int i=0;i<cards.size();i++)
@@ -65,22 +60,22 @@ public:
 			}
 		}
 	}
-
 	void SubLife(int id,int n,Game &game)
 	{
-		
+		game.SubLife(id,n);
 	}
-
+	void AddLife(int id,int n,Game &game)
+	{
+		game.AddLife(id,n);
+	}
 	void DrawCard(int id,int n,Game &game)
 	{
-
+		game.server.DrawCard(id,n);
 	}
-
 	void ScryCard(int id,int n,Game &game)
 	{
-
+		game.server.Scry(id,n);
 	}
-
 	void PutPermanentOnDeck(int id,vector<Card> &cards,Game &game)
 	{
 		for(unsigned int i=0;i<cards.size();i++)
@@ -108,9 +103,8 @@ public:
 				distance = d;
 				index = cards[i].id;
 			}
-				
-			}
-		
+
+		}
 		return index;
 	}
 
@@ -133,8 +127,6 @@ public:
 		char cad6[100];
 		sprintf(cad6,"Aktualna cel:%d (%d,%d)",targetId,target.x,target.y);
 		putText(img,cad6, Point(10,100),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
-		sprintf(cad6,"Aktualna faza %s",game.getCurrentPhase().c_str());
-		putText(img,cad6, Point(10,130),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 
 		MDetector.setMinMaxSize(0.01f);
 		vector<Marker> markers;
@@ -154,70 +146,241 @@ public:
 			}
 		}
 
-
-
-		if(stos.size()==0) return;
-
-
-
-
-
-
 		for(unsigned int i=0;i<stos.size();i++)
 		{
-			if(stos[i].cardBase.type==INSTANT && stos[i].cardBase.id!=game.lastId 
+			if((stos[i].cardBase.type==INSTANT || stos[i].cardBase.type==ENCHANTMENT || stos[i].cardBase.type==SORCERY) && stos[i].cardBase.id!=game.lastId 
 				&& game.CanPay(stos[i].owner,stos[i].cardBase.whiteCost,stos[i].cardBase.blueCost,stos[i].cardBase.blackCost,stos[i].cardBase.redCost,stos[i].cardBase.greenCost,stos[i].cardBase.lessCost))
 			{
-				if(Resolve(stos[i],cards,game)==true)
+
+				game.Pay(stos[i].owner,stos[i].cardBase.whiteCost,stos[i].cardBase.blueCost,stos[i].cardBase.blackCost,stos[i].cardBase.redCost,stos[i].cardBase.greenCost,stos[i].cardBase.lessCost);
+				vector<pair<int,int>> t =stos[i].cardBase.enterAbilities;
+				for(int j=0;j<t.size();j++)
 				{
-					 game.Pay(stos[i].owner,stos[i].cardBase.whiteCost,stos[i].cardBase.blueCost,stos[i].cardBase.blackCost,stos[i].cardBase.redCost,stos[i].cardBase.greenCost,stos[i].cardBase.lessCost);
-					 game.lastId=stos[i].cardBase.id;
+					game.stack.push_back(Spell(stos[i].cardBase.id,t[j].first,stos[i].owner,targetId,targetId,t[j].second));
 				}
+
+				game.lastId=stos[i].cardBase.id;
 				canUseMarker=true;
 				targetId=-1;
 			}
 		}
+
+		for(unsigned int i=0;i<game.stack.size();i++)
+		{
+			Resolve(game.stack[i],cards,game);
+			game.stack.erase(game.stack.begin()+i);
+			i=-1;
+		}
 	}
 
-	bool Resolve(Card &card,vector<Card> &cards,Game &game)
+	void Resolve(Spell s,vector<Card> &cards,Game &game)
 	{
-		//sprawdz czy karta bêdzie targetowa³a i uzale¿nij od tego dalsz¹ czêœæ programu
-		vector<pair<int,int>> ab = card.cardBase.enterAbilities;
-		if((ab.size())!=0)
+		switch(s.baseId)
 		{
-			for(int i=0;i<ab.size();i++)
+		case 0:
+			AddLife(s.targetPlayer,s.value,game);
+			break;
+		case 1:
+			SubLife(s.targetPlayer,s.value,game);
+			break;
+		case 2:
+			AddDamage(s.targetCreature,cards,s.value);
+			break;
+		case 3:
+			SubLife(s.targetPlayer,s.value,game);
+			break;
+		case 4:
+			AddEOT(s.targetCreature,cards,s.value,s.value);
+			break;
+
+		case 5:
+			AddEOT(s.targetCreature,cards,(-1)*s.value,(-1)*s.value);
+			break;
+		case 6:
+			DestroyCreature(s.targetCreature,cards);
+			break;
+		case 7:
+			AddEOT(s.targetCreature,cards,s.value,0);
+			break;
+		case 8:
+			AddEOT(s.targetCreature,cards,0,s.value);
+			break;
+		case 9:
+			AddLifelink(s.targetCreature,cards,true);
+			break;
+		case 10:
+			AddLifelink(s.targetCreature,cards,false);
+			break;
+		case 11:
+			AddFirstStrike(s.targetCreature,cards,true);
+			break;
+		case 12:
+			AddFirstStrike(s.targetCreature,cards,false);
+			break;
+		case 13:
+			AddFlying(s.targetCreature,cards,true);
+			break;
+		case 14:
+			AddFlying(s.targetCreature,cards,false);
+			break;
+		case 15:
+			AddTrample(s.targetCreature,cards,true);
+			break;
+		case 16:
+			AddTrample(s.targetCreature,cards,false);
+			break;
+		case 17:
+			AddHexproof(s.targetCreature,cards,true);
+			break;
+		case 18:
+			AddHexproof(s.targetCreature,cards,false);
+			break;
+		case 19:
+			PutCounter(s.targetCreature,cards,s.value,s.value);
+			break;
+		case 20:
+			PutCounter(s.targetCreature,cards,s.value,s.value);
+			break;
+		case 21:
+			DrawCard(s.owner,s.value,game);
+			break;
+		case 22:
+			CantAttack(s.targetCreature,cards);
+			break;
+		case 23:
+			CantBlock(s.targetCreature,cards);
+			break;
+		case 24:
+			AddLife(s.owner,s.value,game);
+			break;
+		case 25:
+			SubLife(s.owner,s.value,game);
+			break;
+		case 26:
+			GiveDrawACardWhenAttack(s.targetCreature,cards);
+			break;
+		case 27:
+			GivePutCounterWhenAttack(s.targetCreature,cards);
+			break;
+		case 28:
+			TapCard(s.targetCreature,cards,true);
+			break;
+		case 29:
+			TapCard(s.targetCreature,cards,false);
+			break;
+		case 30:
+			ScryCard(s.owner,s.value,game);
+			break;
+		}
+	}
+
+	void TapCard(int id,vector<Card>&cards,bool permanent)
+	{
+		for(unsigned int i=0;i<cards.size();i++)
+		{
+			if(cards[i].id==id)
 			{
-				if(ab[i].first==2 && targetId!=-1) 
-				{
-					
-					AddDamage(targetId,cards,ab[i].second);
-					game.server.VisualEffect("BOLT",-1,targetId);
-					game.GHPlay(card.owner,card.id,card.cardBase.name,targetId,-1);
-					game.ChangeStackState(card.owner,NEUTRAL);
-					return true;
-				}
-				else if(ab[i].first==4 && targetId!=-1) 
-				{
-					AddEOT(targetId,cards,ab[i].second,ab[i].second);
-					return true;
-				}
-				else if(ab[i].first==6  && targetId!=-1)
-				{
-					DestroyCreature(targetId,cards);
-					return true;
-				}
-				else
-				{
-					return false;
-				}
+				if(permanent)	cards[i].hasCantUntap=true;
+				else cards[i].canUntap=false;
 			}
 		}
 
-
-		return false;
+	}
+	void GivePutCounterWhenAttack(int id,vector<Card>&cards)
+	{
 
 	}
 
+	void GiveDrawACardWhenAttack(int id,vector<Card>&cards)
+	{
+
+	}
+
+	void CantBlock(int id,vector<Card>&cards)
+	{
+		for(unsigned int i=0;i<cards.size();i++)
+		{
+			if(cards[i].id==id)
+			{
+				cards[i].hasCantBlock=true;
+			}
+		}
+	}
+	void CantAttack(int id,vector<Card>&cards)
+	{
+		for(unsigned int i=0;i<cards.size();i++)
+		{
+			if(cards[i].id==id)
+			{
+				cards[i].hasCantAttack=true;
+			}
+		}
+	}
+	void PutCounter(int id,vector<Card>&cards,int att,int def)
+	{
+		for(unsigned int i=0;i<cards.size();i++)
+		{
+			if(cards[i].id==id)
+			{
+				cards[i].Add(att,def);
+			}
+		}
+	}
+	void AddHexproof(int id,vector<Card>&cards,bool permanent)
+	{
+		for(unsigned int i=0;i<cards.size();i++)
+		{
+			if(cards[i].id==id)
+			{
+				if(permanent) cards[i].hasHexproof=true;
+				else	cards[i].hasHexproofEOT=true;
+			}
+		}
+	}
+	void AddTrample(int id,vector<Card>&cards,bool permanent)
+	{
+		for(unsigned int i=0;i<cards.size();i++)
+		{
+			if(cards[i].id==id)
+			{
+				if(permanent) cards[i].hasTrample=true;
+				else	cards[i].hasTrampleEOT=true;
+			}
+		}
+	}
+	void AddFlying(int id,vector<Card>&cards,bool permanent)
+	{
+		for(unsigned int i=0;i<cards.size();i++)
+		{
+			if(cards[i].id==id)
+			{
+				if(permanent) cards[i].hasFlying=true;
+				else cards[i].hasFlyingEOT=true;
+			}
+		}
+	}
+	void AddLifelink(int id,vector<Card>&cards,bool permanent)
+	{
+		for(unsigned int i=0;i<cards.size();i++)
+		{
+			if(cards[i].id==id)
+			{
+				if(permanent) cards[i].hasLifelink=true;
+				else	cards[i].hasLifelinkEOT=true;
+			}
+		}
+	}
+	void AddFirstStrike(int id,vector<Card>&cards,bool permanent)
+	{
+		for(unsigned int i=0;i<cards.size();i++)
+		{
+			if(cards[i].id==id)
+			{
+				if(permanent) cards[i].hasFirstStrike=true;
+				else	cards[i].hasFirstStrikeEOT=true;
+			}
+		}
+	}
 	~ScriptsManager(void);
 };
 

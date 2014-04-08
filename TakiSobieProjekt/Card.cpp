@@ -195,6 +195,12 @@ void Card::AddEOT(int attack,int defense)
 	defEOT+=defense;
 	if(GetDefense()<=0) die();
 }
+void Card::Add(int attack,int defense)
+{
+	additionalAttack+=attack;
+	additionalDefense+=defense;
+	if(GetDefense()<=0) die();
+}
 Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp=false)
 {
 	attEOT=defEOT=0;
@@ -396,6 +402,7 @@ void Card::GiveLifeToPlayer(int value,Game &game)
 
 void Card::Fight(Card &op,Game &game)
 {
+	op.canUntap=false;
 	game.GHAtack(op.id);
 	game.GHDefense(op.id,this->id);
 
@@ -542,10 +549,9 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 	}
 }
 
-void Card::NewRound()
+void Card::NewRound(int player)
 {
-
-	if(this->attack==false)
+	if(this->owner==player)
 	{
 		this->canUntap=true;
 	}
@@ -568,6 +574,7 @@ void Card::Clear()
 
 bool Card::CanBlock(Card card)
 {
+	if(this->canUntap==false) return false;
 	if(this->hasCantBlock==false && card.cardBase.hasFlying==true && (this->cardBase.hasFlying==true || this->cardBase.hasReach==true))
 	{
 		return true;
