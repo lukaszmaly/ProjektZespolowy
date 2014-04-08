@@ -1,6 +1,7 @@
 package MTGPackage;
 import processing.core.*;
 import hypermedia.net.UDP;
+
 import java.util.*;
 
 import MTGPackage.Effect.Type;
@@ -62,7 +63,7 @@ public class Game {
 		edge4=parent.loadImage("LD.png");
 		skull = parent.loadImage("skull.jpg");
 		upArrow=parent.loadImage("arrows_up.png");
-		bolt=parent.loadImage("lightning-single1.png");
+		//bolt=parent.loadImage("lightning-single1.png");
 		
 		calibr = parent.createFont("Arial", 50, true);
 		f = parent.createFont("Arial", 12, true);
@@ -118,9 +119,10 @@ public class Game {
 			}
 		}
 	}
-	
+//////////////////////////////////////////////////////////////////////////////////////	
 	public void processMessages() {
 		synchronized (mutex) {
+			parent.println(this.Msgs.size());
 			for (String message : this.Msgs) {
 
 				String[] Dane = message.split(" ");
@@ -141,7 +143,7 @@ public class Game {
 									.parseFloat(Dane[13])), Integer
 									.parseInt(Dane[2]), Integer
 									.parseInt(Dane[3]), Integer
-									.parseInt(Dane[4]), parent,this));
+									.parseInt(Dane[4]), parent,this,-1,-1));
 					break;
 
 					
@@ -158,6 +160,123 @@ public class Game {
 					break;
 					
 				}
+				
+				case "ADDLIFE":
+				
+					int id=Integer.parseInt(Dane[2]);
+					int q=Integer.parseInt(Dane[3]);
+					if(id==1)this.P1.life+=q; else this.P2.life+=q;
+					break;
+					
+				
+				case "ATTACK":
+					id = Integer.parseInt(Dane[2]);
+					for (int i = 0; i < this.Cards.size(); i++) {
+						Card c = this.Cards.get(i);
+						if (c.id == id) {
+							c.r = 255;
+							c.g = 0;
+							c.b = 0;
+/*
+				
+*/
+							c.loc[0].x = Integer.parseInt(Dane[6]);
+							c.loc[0].y = Integer.parseInt(Dane[7]);
+							c.loc[1].x = Integer.parseInt(Dane[8]);
+							c.loc[1].y = Integer.parseInt(Dane[9]);
+							c.loc[2].x = Integer.parseInt(Dane[10]);
+							c.loc[2].y = Integer.parseInt(Dane[11]);
+							c.loc[3].x = Integer.parseInt(Dane[12]);
+							c.loc[3].y = Integer.parseInt(Dane[13]);
+							
+							c.power=Integer.parseInt(Dane[14]);
+							c.toughness=Integer.parseInt(Dane[15]);
+							
+							if(c.loc[0].x>=c.loc[3].x && c.loc[0].y<=c.loc[3].y) c.direction=1;
+					    	else if(c.loc[0].x>=c.loc[3].x && c.loc[0].y>=c.loc[3].y) c.direction=2;
+					    	else if(c.loc[0].x<=c.loc[3].x && c.loc[0].y>=c.loc[3].y) c.direction=3;
+					    	else c.direction=4;
+							c.attack = true;
+					
+						}
+					}
+
+					break;
+				case "BLOCK":
+					
+					 id = Integer.parseInt(Dane[2]);
+					
+					PVector v1=new PVector(0,0),v2=new PVector(0,0);
+					int attackId = Integer.parseInt(Dane[14]);
+					for (int i = 0; i < this.Cards.size(); i++) {
+						Card c = this.Cards.get(i);
+						if (c.id == attackId) {
+							
+							
+							v2=new PVector((c.loc[0].x+c.loc[1].x+c.loc[2].x+c.loc[3].x)/4,(c.loc[0].y+c.loc[1].y+c.loc[2].y+c.loc[3].y)/4);
+							v2=c.center;
+						}
+					}
+					for (int i = 0; i < this.Cards.size(); i++) {
+						Card c = this.Cards.get(i);
+						if (c.id == id) {
+							c.blockedId=attackId;
+							v1=new PVector((c.loc[0].x+c.loc[1].x+c.loc[2].x+c.loc[3].x)/4,(c.loc[0].y+c.loc[1].y+c.loc[2].y+c.loc[3].y)/4);
+							v1=c.center;
+							c.loc[0].x = Integer.parseInt(Dane[6]);
+							c.loc[0].y = Integer.parseInt(Dane[7]);
+							c.loc[1].x = Integer.parseInt(Dane[8]);
+							c.loc[1].y = Integer.parseInt(Dane[9]);
+							c.loc[2].x = Integer.parseInt(Dane[10]);
+							c.loc[2].y = Integer.parseInt(Dane[11]);
+							c.loc[3].x = Integer.parseInt(Dane[12]);
+							c.loc[3].y = Integer.parseInt(Dane[13]);
+							
+							c.power=Integer.parseInt(Dane[15]);
+							c.toughness=Integer.parseInt(Dane[16]);
+							
+							if(c.loc[0].x>=c.loc[3].x && c.loc[0].y<=c.loc[3].y) c.direction=1;
+					    	else if(c.loc[0].x>=c.loc[3].x && c.loc[0].y>=c.loc[3].y) c.direction=2;
+					    	else if(c.loc[0].x<=c.loc[3].x && c.loc[0].y>=c.loc[3].y) c.direction=3;
+					    	else c.direction=4;
+							
+						
+						
+							
+						}
+					}
+					Effect ef=new Effect(parent,this,Type.ARROW,-1,v1,v2);
+					this.Effects.add(ef);
+				/*	if(c.block==false)
+					{
+						Effect e=new Effect(parent,Type.ARROW,-1,v1,v2);
+						e.blockId=id;
+						this.Effects.add(e);
+						c.block=true;
+					}*/
+	
+					
+					break;
+				
+				case "DEAD":
+					id = Integer.parseInt(Dane[2]);
+					for (int i = 0; i < this.Cards.size(); i++) {
+						Card c = this.Cards.get(i);
+						if (c.id == id) {
+							c.isDead = true;
+							c.sparkTime=15;
+							 PVector acc=null;
+							    PVector vel=null;
+							  for( i=0;i<c.se.size();i++)
+						    	{
+						    	
+						    	SparkEdge e=c.se.get(i);
+						    c.sparkTime=15;
+						    	e.changeSparkType('c',0,0,0,6,vel,acc);
+						    	}
+						}
+					}
+					
 				case "EFFECT":
 				{
 					
@@ -169,17 +288,31 @@ public class Game {
 						int playerId=Integer.parseInt(Dane[3]);
 						int cardId=Integer.parseInt(Dane[4]);
 						
-						if(cardId>=0) this.Effects.add(new Effect(parent,Type.BOLT,10,cardId,this.cardWidth,this.cardHeight,this.Cards));
+						if(cardId>=0) this.Effects.add(new Effect(parent,this,Type.BOLT,16,cardId,this.cardWidth,this.cardHeight,this.Cards));
 					}
 					
 					
 					
 					break;
 				}
+					
+				case "MARKERS":
+					if (this.tokens == true)
+						{this.tokens = false; this.window=1; this.cardWidth=Integer.parseInt(Dane[2]); this.cardHeight=Integer.parseInt(Dane[3]);}
+					else
+						{this.tokens = true; this.window=0;}
+					break;
+					
+				case "NEXTPHASE":
+					
+					this.fazy.zmien_faze();
+					break;
+				
+				
 				case "SUBMANA":
 				{
 					char c=Dane[3].charAt(0);
-					int id=Integer.parseInt(Dane[2]);
+					 id=Integer.parseInt(Dane[2]);
 				
 					if(id==1)
 						{
@@ -198,7 +331,7 @@ public class Game {
 				case "SUBMANA2":
 				{
 					
-					int id=Integer.parseInt(Dane[2]);
+					 id=Integer.parseInt(Dane[2]);
 					
 					if(id==1)
 					{
@@ -210,7 +343,7 @@ public class Game {
 				else 
 				{
 					
-					this.P1.subtractMana(Integer.parseInt(Dane[3]),Integer.parseInt(Dane[4]),Integer.parseInt(Dane[5]),Integer.parseInt(Dane[6]),Integer.parseInt(Dane[7])); 
+					this.P2.subtractMana(Integer.parseInt(Dane[3]),Integer.parseInt(Dane[4]),Integer.parseInt(Dane[5]),Integer.parseInt(Dane[6]),Integer.parseInt(Dane[7])); 
 				
 				}
 					
@@ -218,18 +351,11 @@ public class Game {
 					
 				}
 				
-				case "ADDLIFE":
-				{
-					int id=Integer.parseInt(Dane[2]);
-					int q=Integer.parseInt(Dane[3]);
-					if(id==1)this.P1.life+=q; else this.P2.life+=q;
-					break;
-					
-				}
+				
 				case "SUBLIFE":
 				{
-					int id=Integer.parseInt(Dane[2]);
-					int q=Integer.parseInt(Dane[3]);
+					 id=Integer.parseInt(Dane[2]);
+					 q=Integer.parseInt(Dane[3]);
 					if(id==1)this.P1.life-=q; else this.P2.life-=q;
 					break;
 					
@@ -238,9 +364,9 @@ public class Game {
 		
 				
 				case "STACK":
-					int id=Integer.parseInt(Dane[2]);
+					 id=Integer.parseInt(Dane[2]);
 					 char color=Dane[3].charAt(0);
-					 if(id==0) {
+					 if(id==1) {
 						 switch(color)
 						 {
 						 case 'R':
@@ -262,7 +388,7 @@ public class Game {
 						 }
 					 }
 						 else
-							 if(id==1) {
+							 if(id==2) {
 								 switch(color)
 								 {
 								 case 'R':
@@ -330,6 +456,9 @@ public class Game {
 							c.loc2[2].y = Integer.parseInt(Dane[11]);
 							c.loc2[3].x = Integer.parseInt(Dane[12]);
 							c.loc2[3].y = Integer.parseInt(Dane[13]);
+							
+							c.power=Integer.parseInt(Dane[14]);
+							c.toughness=Integer.parseInt(Dane[15]);
 
 							float dist[] = new float[4];
 							float mindist;
@@ -396,102 +525,12 @@ public class Game {
 
 					}
 					break;
-					
-				case "NEXTPHASE":
-					
-					this.fazy.zmien_faze();
-					break;
-				case "ATTACK":
-					id = Integer.parseInt(Dane[2]);
-					for (int i = 0; i < this.Cards.size(); i++) {
-						Card c = this.Cards.get(i);
-						if (c.id == id) {
-							c.r = 255;
-							c.g = 0;
-							c.b = 0;
-/*
 				
-*/
-							c.loc[0].x = Integer.parseInt(Dane[6]);
-							c.loc[0].y = Integer.parseInt(Dane[7]);
-							c.loc[1].x = Integer.parseInt(Dane[8]);
-							c.loc[1].y = Integer.parseInt(Dane[9]);
-							c.loc[2].x = Integer.parseInt(Dane[10]);
-							c.loc[2].y = Integer.parseInt(Dane[11]);
-							c.loc[3].x = Integer.parseInt(Dane[12]);
-							c.loc[3].y = Integer.parseInt(Dane[13]);
-							c.attack = true;
-					
-						}
-					}
-
-					break;
-
-				case "BLOCK":
 				
-					id = Integer.parseInt(Dane[2]);
-					
-					PVector v1=new PVector(0,0),v2=new PVector(0,0);
-					int attackId = Integer.parseInt(Dane[14]);
-					for (int i = 0; i < this.Cards.size(); i++) {
-						Card c = this.Cards.get(i);
-						if (c.id == attackId) {
-							
-							
-							v2=new PVector((c.loc[0].x+c.loc[1].x+c.loc[2].x+c.loc[3].x)/4,(c.loc[0].y+c.loc[1].y+c.loc[2].y+c.loc[3].y)/4);
-							
-							
-								
 
-						}
-					}
-					for (int i = 0; i < this.Cards.size(); i++) {
-						Card c = this.Cards.get(i);
-						if (c.id == id) {
-							
-							v1=new PVector((c.loc[0].x+c.loc[1].x+c.loc[2].x+c.loc[3].x)/4,(c.loc[0].y+c.loc[1].y+c.loc[2].y+c.loc[3].y)/4);
-							c.loc[0].x = Integer.parseInt(Dane[6]);
-							c.loc[0].y = Integer.parseInt(Dane[7]);
-							c.loc[1].x = Integer.parseInt(Dane[8]);
-							c.loc[1].y = Integer.parseInt(Dane[9]);
-							c.loc[2].x = Integer.parseInt(Dane[10]);
-							c.loc[2].y = Integer.parseInt(Dane[11]);
-							c.loc[3].x = Integer.parseInt(Dane[12]);
-							c.loc[3].y = Integer.parseInt(Dane[13]);
-							
-							
-							if(c.block==false)
-							{
-								Effect e=new Effect(parent,Type.ARROW,-1,v1,v2);
-								e.blockId=id;
-								this.Effects.add(e);
-								c.block=true;
-							}
-							else
-							{
-								
-							}
-							
-						}
-					}
-	
-					
-					break;
-				case "MARKERS":
-					if (this.tokens == true)
-						{this.tokens = false; this.window=1; this.cardWidth=Integer.parseInt(Dane[2]); this.cardHeight=Integer.parseInt(Dane[3]);}
-					else
-						{this.tokens = true; this.window=0;}
-					break;
-				case "DEAD":
-					id = Integer.parseInt(Dane[2]);
-					for (int i = 0; i < this.Cards.size(); i++) {
-						Card c = this.Cards.get(i);
-						if (c.id == id) {
-							c.isDead = true;
-
-						}
-					}
+				
+				
+				
 				}
 			}
 			this.Msgs.clear();

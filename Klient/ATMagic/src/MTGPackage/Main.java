@@ -13,9 +13,14 @@ import MTGPackage.Effect.Type;
 public class Main extends PApplet {
 
 	Game game=new Game(this);
+	int counter=1;
+	//Game game;
 	public void setup()
 		{		
 		size(displayWidth, displayHeight);
+		
+		//game.Effects.add(new Effect(this,game,20,game.board.lib1.position,20,0,255,0));
+		game.Effects.add(new Effect(this,game, Type.SPEAR, 30,new PVector(0,0),new PVector(width/2, height/2)));
 		background(0);		
 		}
 	@Override
@@ -26,6 +31,7 @@ public class Main extends PApplet {
 
 	public void draw() 
 	{
+		counter--;
 		if(game.window==0 && game.tokens == true)
 		{	
 			background(0);
@@ -35,8 +41,14 @@ public class Main extends PApplet {
 		else
 		if(game.window==1)
 		{
+			
 			game.processMessages();
-			background(0);
+			if(counter<0)
+				{
+				background(0);
+				game.board.display2(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
+				counter=1;
+				}
 			game.board.display(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
 			game.board.displayLog();
 			game.goThroughCards();
@@ -68,6 +80,15 @@ public class Main extends PApplet {
 					{
 					Card c = game.Cards.get((int) random(game.Cards.size()));
 					c.isDead = true;
+					   PVector acc=null;
+					    PVector vel=null;
+					  for(int i=0;i<c.se.size();i++)
+				    	{
+				    	
+				    	SparkEdge e=c.se.get(i);
+				    c.sparkTime=15;
+				    	e.changeSparkType('c',0,0,0,6,vel,acc);
+				    	}
 					}
 			break;
 			case 'l' :
@@ -110,7 +131,7 @@ public class Main extends PApplet {
 						if(game.T[3]==null) 
 							{
 							game.T[3]=new PVector(mouseX,mouseY); 
-							game.Cards.add(new Card((int)game.T[0].x,(int)game.T[0].y,(int)game.T[1].x,(int)game.T[1].y,(int)game.T[2].x,(int)game.T[2].y,(int)game.T[3].x,(int)game.T[3].y,id,id,0,this,game));
+							game.Cards.add(new Card((int)game.T[0].x,(int)game.T[0].y,(int)game.T[1].x,(int)game.T[1].y,(int)game.T[2].x,(int)game.T[2].y,(int)game.T[3].x,(int)game.T[3].y,id,id,0,this,game,1,1));
 							game.T[0]=null;
 							game.T[1]=null;
 							game.T[2]=null;
@@ -119,10 +140,11 @@ public class Main extends PApplet {
 				}
 		if (mouseButton == LEFT) 
 		{		
-			 game.Effects.add(new Effect(this,Type.BOLT,12,1,game.cardWidth,game.cardHeight,game.Cards));	
+			 game.Effects.add(new Effect(this,game,Type.FIRE,30,1,game.cardWidth,game.cardHeight,game.Cards));	
 		}
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
+	
 	public static void main(String args[]) {
 		PApplet.main(new String[] { "--present", "MTGPackage.Main" });
 	}

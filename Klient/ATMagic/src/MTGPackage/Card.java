@@ -9,13 +9,14 @@ public class Card
 	
 	PVector[] loc;													//Polozenie 4 rogow
 	PVector LG,PG,LD,PD,center;											//Polozenie 4 rogow
-	PVector[] loc2;													//Polozenie przed atakiem	
+	PVector[] loc2;	
+	//Polozenie przed atakiem	
 	ArrayList<SparkEdge> se;										//4 krawedzie x 10 generatorow	
-	int sparkTime=20, frameLife=100,frameRate=1,deadCounter=200,direction; 	//sparking po wejsciu karty, jasnosc  frame'a	
+	int sparkTime,blockedId=-1, frameLife=100,frameRate=1,deadCounter=200,direction; 	//sparking po wejsciu karty, jasnosc  frame'a	
 	boolean frame,frameCounter=false,isDead=false,attack=false,block=false,isBlocked=false;		//Czy ma byc ramka, czy ma sie rozjasniac czy zaciemniac
 	int r,g,b,id, db_id, owner,manaCost;
 	float a=0,c=0;
-	int wCost=0,bCost=0,uCost=0,rCost=0,gCost=0,power,toughness;
+	int wCost=0,bCost=0,uCost=0,rCost=0,gCost=0,power=-1,toughness=-1;
 	float sin=0,asin=0;
 	PImage skull;
 	Game game;
@@ -96,17 +97,21 @@ public class Card
 			default: break;
 			
 			}
-		
+		/*
 			for(int i=50;i>0;i--)
 			{
 				
 				parent.noFill();
-				parent.stroke(this.r,this.g,this.b,(int)(parent.sqrt(frameLife*i)));
-				parent.ellipse(0,0,150-2*i,200-2*i);
+				parent.strokeWeight(1);
+				parent.stroke(this.r,this.g,this.b,(int)(parent.sqrt(frameLife*1f*i)));
+				parent.rectMode(parent.CENTER);
+				parent.ellipse(0,0,1.7f*game.cardWidth-2*i,1.7f*game.cardHeight-2*i);
+				//parent.rect(0,0,1.4f*game.cardWidth-2*i,1.4f*game.cardHeight-2*i,20,20,20,20);
 				//parent.ellipse(0,0,100+2*i,150+2*i);
+				parent.rectMode(parent.CORNER);
 				
 			}
-			
+			*/
 		
 			parent.popMatrix();
 			
@@ -117,8 +122,13 @@ public class Card
 					parent.fill(240,240,70,(100f*frameLife*0.01f));
 					parent.ellipseMode(parent.CENTER);
 					//parent.stroke(240,240,70,(100-4*i)*frameLife*0.01f);
-					parent.stroke(240,240,70,(100)*frameLife*0.01f);
-					parent.ellipse(returnCenter.x, returnCenter.y, 100, 100);
+					parent.stroke(240,240,70,100);
+					parent.ellipse(returnCenter.x, returnCenter.y, 10, 10);
+					for(int i=10;i<100;i++)
+					{
+						parent.stroke(240,240,70,100-i);
+						parent.ellipse(returnCenter.x, returnCenter.y, i, i);
+					}
 			
 			}
 			
@@ -133,7 +143,21 @@ public class Card
 			parent.vertex(loc[3].x,loc[3].y);
 			parent.vertex(loc[0].x,loc[0].y);
 			parent.endShape();
-			 
+			
+			parent.stroke(r,g,b);
+			parent.strokeWeight(5);
+			parent.noFill();
+			parent.beginShape();
+			parent.vertex(loc[0].x,loc[0].y);
+			parent.vertex(loc[1].x,loc[1].y);
+			parent.vertex(loc[2].x,loc[2].y);
+			parent.vertex(loc[3].x,loc[3].y);
+			parent.vertex(loc[0].x,loc[0].y);
+			parent.endShape();
+			
+			parent.strokeWeight(1);
+			if(this.toughness!=-1 && this.power!=-1)
+			{ 
 			parent.pushMatrix();
 			parent.translate(this.loc[3].x,this.loc[3].y);
 			
@@ -158,24 +182,8 @@ public class Card
 				
 			default: break;
 			}
+			
 			parent.translate(-0.1f*game.cardWidth,0.1f*game.cardHeight);
-			parent.noStroke();
-			parent.fill(255);
-			parent.ellipse(0,0,0.25f*game.cardHeight,0.25f*game.cardWidth);
-			parent.noFill();
-			for(int i=10;i>0;i--)
-			{
-				parent.stroke(0,0,255,i*10);
-				parent.ellipse(0,0,0.25f*game.cardHeight+10-1*i,0.25f*game.cardWidth+10-1*i);
-				
-			}
-				game.f=parent.createFont("Arial", 28);
-			parent.textFont(game.f);
-			parent.fill(255,0,0);
-			parent.textAlign(parent.CENTER,parent.CENTER);
-			parent.text(this.power, 0,-3);
-			parent.translate(game.cardWidth*1.1f,0);
-			//parent.stroke(0,0,255);
 			parent.noStroke();
 			parent.fill(255);
 			parent.ellipse(0,0,0.25f*game.cardHeight,0.25f*game.cardWidth);
@@ -186,11 +194,28 @@ public class Card
 				parent.ellipse(0,0,0.25f*game.cardHeight+10-1*i,0.25f*game.cardWidth+10-1*i);
 				
 			}
+				game.f=parent.createFont("Arial", 28);
+			parent.textFont(game.f);
+			parent.fill(255,0,0);
+			parent.textAlign(parent.CENTER,parent.CENTER);
+			parent.text(this.power, 0,-3);
+			parent.translate(game.cardWidth*1.2f,0);
+			//parent.stroke(0,0,255);
+			parent.noStroke();
+			parent.fill(255);
+			parent.ellipse(0,0,0.25f*game.cardHeight,0.25f*game.cardWidth);
+			parent.noFill();
+			for(int i=10;i>0;i--)
+			{
+				parent.stroke(0,0,255,i*10);
+				parent.ellipse(0,0,0.25f*game.cardHeight+10-1*i,0.25f*game.cardWidth+10-1*i);
+				
+			}
 			
 			parent.fill(0,0,255);
 			parent.text(this.toughness, 0,-3);
 			parent.popMatrix();
-			
+			}
 			//}
 		if(this.isDead==true)
 		{
@@ -331,17 +356,19 @@ public class Card
 	    	return Points;
 	    }
   
-    Card(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,int id,int db_id,int owner,PApplet p,Game gm)
+    Card(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,int id,int db_id,int owner,PApplet p,Game gm,int power, int toughness)
     {
     	parent=p;
     	isDead=false;
-    	frame=true;							//czy ma byc ramka
+    	frame=true;			
+    	this.sparkTime=10; //czy ma byc ramka
     	loc=new PVector[4];	
     	loc2=new PVector[4];	//lokalizacja
-    	r=0;g=0;b=255;
+    	r=0;g=255;b=0;
     	skull = parent.loadImage("xbones-black.png");
     	this.game=gm;
-    	
+    	this.power=power;
+    	this.toughness=toughness;
     	
     	loc[0]=new PVector(x1,y1);
     	loc[1]=new PVector(x2,y2);
@@ -408,7 +435,7 @@ public class Card
 	    	//parent.println("SE");
 	    	SparkEdge e=se.get(i);
 	    
-	    	e.changeSparkType('c',255,0,0,6,vel,acc);
+	    	e.changeSparkType('c',40,30,210,6,vel,acc);
 	    	}
 	    
     }

@@ -4,11 +4,11 @@ import processing.core.*;
 public class Board 
 {
 	PVector graveyard1;
+	
 	PApplet parent;
-	//int stack1R=0, stack1G=0,stack1B=255;
-	//int stack2R=0, stack2G=0,stack2B=255;
-	//int stackCost=9999;
+	
 	Stack stack1,stack2;
+	Library lib1,lib2;
 	PFont f;
 	PImage img;
 	Game game;
@@ -19,21 +19,34 @@ public class Board
 		 img = parent.loadImage("mana-symbols.png");
 		 stack1=new Stack(parent,new PVector(0.92f,0.3f));
 		 stack2=new Stack(parent,new PVector(0.92f,0.7f));
+		 lib1=new Library(parent,new PVector(0.08f,0.2f));
+		 lib2=new Library(parent,new PVector(0.08f,0.8f));
 	 }
 	 
 	 public void display(int color,int t, int w, Player P1,Player P2,int width, int height)         //Wyswietlanie pol
+	 {	 
+		// this.drawFrame(color,2*w);
+		// stack1.drawStack();
+		// stack2.drawStack();
+		// lib1.drawLibrary();
+		// lib2.drawLibrary();
+		// this.drawLife(P1, P2);
+		// this.drawMana(P1, P2);
+		 this.drawField();
+		 this.game.fazy.rysuj();
+	 }
+	 public void display2(int color,int t, int w, Player P1,Player P2,int width, int height)         //Wyswietlanie pol
 	 {
-		 
+ 
 		 this.drawFrame(color,2*w);
-		 this.drawGraveyardExile(color,w,width,height);
 		 stack1.drawStack();
 		 stack2.drawStack();
-		// this.drawStack(color, w,width,height);
-		 this.drawField();
+		 lib1.drawLibrary();
+		 lib2.drawLibrary();
 		 this.drawLife(P1, P2);
 		 this.drawMana(P1, P2);
-		// this.drawMarkersDetector();
-		 this.game.fazy.rysuj();
+		// this.drawField();
+		// this.game.fazy.rysuj();
 	 }
 	 public void displayLog()
 	 {
@@ -221,6 +234,46 @@ parent.rectMode(parent.CENTER);
 			parent.popMatrix();
 
 	 }
+	 public class Library
+	 {
+		 int r,g,b;
+		 PVector position;
+		 PApplet parent;
+		 
+			Library(PApplet p,PVector pos)
+		 	{
+		 		parent=p;
+		 		position=pos;
+		 		r=0;g=0;b=255;
+		 		
+		 		
+		 	}
+			public void drawLibrary()
+			{
+			 		 {
+			 		
+			 			 parent.strokeWeight(1);
+			 			 parent.stroke(r,g, b );
+			 			 
+			 		
+			 			 
+			 	parent.rectMode(parent.CENTER);
+			 			 
+			 			 parent.fill(0);
+			 			 int i;
+			 			 for(i=20;i>0;i--)
+			 			 {
+			 				 parent.stroke(r+10*i,g, b-10*i,20+i*8);
+			 				 parent.pushMatrix();
+			 				 parent.translate(parent.width*position.x,parent.height*position.y);			 				// parent.rotate(parent.PI/2);
+			 				 parent.rect(0,0,game.cardWidth*1.6f-2*i,game.cardHeight*1.6f-2*i,10,10,10,10);
+			 				 parent.noFill();
+			 				 parent.popMatrix();
+			 			 }
+			 			
+			 		 }
+			 	}
+	 }
 	 public class Stack
 	 {
 	 	PApplet parent;
@@ -257,7 +310,7 @@ parent.rectMode(parent.CENTER);
 	 				 parent.pushMatrix();
 	 				 parent.translate(parent.width*position.x,parent.height*position.y);
 	 				// parent.rotate(parent.PI/2);
-	 				 parent.rect(0,0,game.cardWidth*1.6f-2*i,game.cardHeight*1.6f-2*i,100,100,100,100);
+	 				 parent.rect(0,0,game.cardWidth*1.6f-2*i,game.cardHeight*1.6f-2*i,50,50,50,50);
 	 				 parent.noFill();
 	 				 parent.popMatrix();
 	 			 }
