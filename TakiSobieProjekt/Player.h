@@ -56,18 +56,23 @@ class Mana
 		{
 		case WHITE:
 			this->white+=value;
+			this->all+=1;
 			break;
 		case GREEN:
 			this->green+=value;
+			this->all+=1;
 			break;
 		case RED:
 			this->red+=value;
+			this->all+=1;
 			break;
 		case BLUE:
 			this->blue+=value;
+			this->all+=1;
 			break;
 		case BLACK:
 			this->black+=value;
+			this->all+=1;
 		}
 	}
 	void SubMana(Color color,int value=1)
@@ -75,19 +80,24 @@ class Mana
 		switch(color)
 		{
 		case WHITE:
-			this->white+=value;
+			this->white-=value;
+			this->all-=1;
 			break;
 		case GREEN:
-			this->green+=value;
+			this->green-=value;
+			this->all-=1;
 			break;
 		case RED:
-			this->red+=value;
+			this->red-=value;
+			this->all-=1;
 			break;
 		case BLUE:
-			this->blue+=value;
+			this->blue-=value;
+			this->all-=1;
 			break;
 		case BLACK:
-			this->black+=value;
+			this->black-=value;
+			this->all-=1;
 		}
 	}
 	bool IsMana(Color color)
@@ -119,7 +129,7 @@ class Mana
 		this->blue+=blue;
 		this->green+=green;
 		this->red+=red;
-		this->all=this->all+white+blue+black+red+green;
+		this->all=this->white+this->blue+this->black+this->red+this->green;
 	}
 	void Print()
 	{

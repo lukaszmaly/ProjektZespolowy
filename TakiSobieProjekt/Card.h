@@ -12,11 +12,11 @@
 #include "CardB.h"
 #include "Game.h"
 
-#define MIN_D1 1.3
-#define MAX_D1 1.5
+#define MIN_D1 1.1
+#define MAX_D1 1.8
 #define M_PI 3.14159265358979323846
-#define MIN_D2 0.6
-#define MAX_D2 0.8
+#define MIN_D2 0.4
+#define MAX_D2 0.9
 //
 //#define MIN_D1 1.39
 //#define MAX_D1 1.45
@@ -149,11 +149,11 @@ public:
 		float a1=Distance(a,b)/Distance(b,c);
 		float a2=Distance(b,c)/Distance(c,d);
 
-		if(Card::width!=-1 && Card::height!=-1)
-		{
-			if(!((w1>=Card::width*0.8f && w1<=Card::width*1.2f && w2>=Card::height*0.8f && w2<=Card::height*1.2f) || (w2>=Card::width*0.8f && w2<=Card::width*1.2f && w1>=Card::height*0.8f && w1<=Card::height*1.2f)))
-			return false;
-		}
+		//if(Card::width!=-1 && Card::height!=-1)
+		//{
+		//	if(!((w1>=Card::width*0.8f && w1<=Card::width*1.2f && w2>=Card::height*0.8f && w2<=Card::height*1.2f) || (w2>=Card::width*0.8f && w2<=Card::width*1.2f && w1>=Card::height*0.8f && w1<=Card::height*1.2f)))
+		//	return false;
+		//}
 
 		if(a1>=MIN_D1 && a1<=MAX_D1 && a2>=MIN_D2 && a2<=MAX_D2)
 		{

@@ -112,6 +112,8 @@ float targetOldAngle;
 	~Game();
 
 
+	bool oneLandEachTurn;
+	bool playedLand;
 	void Clear();
 	void AddMana(int id,Color color);
 	void SubMana(int id,Color color);

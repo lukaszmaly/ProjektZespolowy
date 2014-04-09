@@ -60,6 +60,10 @@ void CardB::PrintStats()
 	if(hasFirstStrike) cout<<"FirstStrike";
 	cout<<endl;
 	cout<<"Enter battlefield abb: "<<enterAbilities.size()<<endl;
+	for(int i=0;i<enterAbilities.size();i++)
+	{
+		cout<<i<<"-ty "<< enterAbilities[i].first<<" "<<enterAbilities[i].second<<endl;
+	}
 	cout<<"Upkeep  abb: "<<upkeepAbilities.size()<<endl;
 	cout<<"Passive abb: "<<passiveAbilities.size()<<endl;
 }

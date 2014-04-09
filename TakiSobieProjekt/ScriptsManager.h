@@ -34,6 +34,7 @@ public:
 			if(cards[i].id==id)
 			{
 				cards[i].AddEOT(attack,defense);
+				cout<<"KARTA: "<<attack<<" "<<defense<<endl;
 				return;
 			}
 		}
@@ -95,13 +96,21 @@ public:
 		else targetPlayerId=2;
 		int index =-1;
 		int distance = 10000000;
+		targetPlayerId=1;
+		int d;
+		distance = game.distance(p,Point(game.player1.stackB.x,0));
+		d = game.distance(p,Point(game.player2.stackB.x,game.GetGameHeight()));
+		if(d<distance)
+			targetPlayerId=2;
+
 		for(unsigned int i=0;i<cards.size();i++)
 		{
-			int d = game.distance(cards[i].getCenter(),p);
-			if(d<distance && !cards[i].cardBase.hasHexproof)
+			d = game.distance(cards[i].getCenter(),p);
+			if(d<distance && !cards[i].cardBase.hasHexproof && cards[i].cardBase.type==CREATURE)
 			{
 				distance = d;
 				index = cards[i].id;
+				targetPlayerId=-1;
 			}
 
 		}
@@ -138,7 +147,7 @@ public:
 				if(canUseMarker==false) {break;}
 				target=markers[i].getCenter();
 				targetId=GetCardId(target,cards,game);
-				if(targetId!=-1)
+				if(targetId!=-1 || targetPlayerId!=-1)
 				{
 					canUseMarker=false;
 				}
@@ -148,7 +157,7 @@ public:
 
 		for(unsigned int i=0;i<stos.size();i++)
 		{
-			if((stos[i].cardBase.type==INSTANT || stos[i].cardBase.type==ENCHANTMENT || stos[i].cardBase.type==SORCERY) && stos[i].cardBase.id!=game.lastId 
+			if((targetId!=-1 || targetPlayerId!=-1) && (stos[i].cardBase.type==INSTANT || stos[i].cardBase.type==ENCHANTMENT || stos[i].cardBase.type==SORCERY) && stos[i].cardBase.id!=game.lastId 
 				&& game.CanPay(stos[i].owner,stos[i].cardBase.whiteCost,stos[i].cardBase.blueCost,stos[i].cardBase.blackCost,stos[i].cardBase.redCost,stos[i].cardBase.greenCost,stos[i].cardBase.lessCost))
 			{
 
@@ -156,12 +165,14 @@ public:
 				vector<pair<int,int>> t =stos[i].cardBase.enterAbilities;
 				for(int j=0;j<t.size();j++)
 				{
-					game.stack.push_back(Spell(stos[i].cardBase.id,t[j].first,stos[i].owner,targetId,targetId,t[j].second));
+					game.stack.push_back(Spell(stos[i].cardBase.id,t[j].first,stos[i].owner,targetId,targetPlayerId,t[j].second));
 				}
 
 				game.lastId=stos[i].cardBase.id;
 				canUseMarker=true;
 				targetId=-1;
+				targetPlayerId=-1;
+				stos.erase(stos.begin()+i);
 			}
 		}
 
@@ -185,9 +196,11 @@ public:
 			break;
 		case 2:
 			AddDamage(s.targetCreature,cards,s.value);
+			game.server.VisualEffect("BOLT",-1,s.targetCreature);
 			break;
 		case 3:
 			SubLife(s.targetPlayer,s.value,game);
+			game.server.VisualEffect("SPEAR",s.targetPlayer,-1);
 			break;
 		case 4:
 			AddEOT(s.targetCreature,cards,s.value,s.value);

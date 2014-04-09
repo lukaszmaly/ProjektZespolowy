@@ -11,6 +11,7 @@ Card::~Card(void)
 }
 void Card::Damage(int value)
 {
+	cout<<"Damage"<<endl;
 	this->defEOT-=value;
 	if(GetDefense()<=0) this->die();
 }
@@ -182,10 +183,12 @@ void Card::Unlock()
 
 int Card::GetAttack()
 {
+	
 	return (att+attEOT+additionalAttack);
 }
 int Card::GetDefense()
 {
+
 	return (def+defEOT+additionalDefense);
 }
 
@@ -193,10 +196,16 @@ void Card::AddEOT(int attack,int defense)
 {
 	attEOT+=attack;
 	defEOT+=defense;
-	if(GetDefense()<=0) die();
+	cout<< "Atak: "<<att << attEOT << additionalAttack<<endl;
+			cout<< "Obrona: "<<def << defEOT << additionalDefense<<endl;
+
+
+	cout<<"Dodaje +"<<attack<<"/+"<<defense<<". Aktualne staty: "<<GetAttack()<<"/"<<GetDefense()<<endl;
+	//if(GetDefense()<=0) die();
 }
 void Card::Add(int attack,int defense)
 {
+	cout <<"Twarde staty"<<endl;
 	additionalAttack+=attack;
 	additionalDefense+=defense;
 	if(GetDefense()<=0) die();
@@ -392,6 +401,7 @@ void Card::Untap(Game &game)
 
 void Card::die()
 {
+	cout<<"Umieram"<<endl;
 	dead=true;
 }
 

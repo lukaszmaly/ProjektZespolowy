@@ -27,6 +27,7 @@ void Game::AddMana(int id,Color color)
 void Game::Clear()
 {
 	this->lastId=-1;
+		playedLand=false;
 }
 void Game::SubMana(int id,Color color)
 {
@@ -367,6 +368,8 @@ void Game::ChangeStackState(int id,State state)
 }
 Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h,int interval,bool showLog)
 {
+		oneLandEachTurn = false;
+	 playedLand = false;
 	stackState=NEUTRAL;
 	SetTargetMode(false);
 	lastId=-1;
