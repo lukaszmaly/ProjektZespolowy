@@ -69,8 +69,8 @@ public class Phrases {
 	    }
 	        
 	     frame_num += 1;
-	     if(frame_num>600) frame_num=1;
-	     stopnie = (float) (0.6 * frame_num);
+	     if(frame_num>300) frame_num=1;
+	     stopnie = (float) (1.2f * frame_num);
 	    
 	    parent.translate(x+113,y+83);
 	    parent.rotate(parent.radians(stopnie));

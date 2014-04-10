@@ -17,8 +17,10 @@ public class Board
 	 {
 		 parent=p;
 		 img = parent.loadImage("mana-symbols.png");
-		 stack1=new Stack(parent,new PVector(0.92f,0.3f));
-		 stack2=new Stack(parent,new PVector(0.92f,0.7f));
+		 stack1=new Stack(parent,new PVector(0.85f,0.13f));
+		 stack2=new Stack(parent,new PVector(0.85f,0.53f));
+		// stack1=new Stack(parent,new PVector(0.92f,0.3f));
+		 //stack2=new Stack(parent,new PVector(0.92f,0.7f));
 		 lib1=new Library(parent,new PVector(0.08f,0.2f));
 		 lib2=new Library(parent,new PVector(0.08f,0.8f));
 	 }
@@ -72,13 +74,13 @@ public class Board
 		 parent.translate(parent.width/2,parent.height*0.55f);
 		 parent.strokeWeight(1);
 		 parent.fill(255);
-		 parent.ellipse(0,0,180,200);
+		 parent.ellipse(0,0,200,250);
 		 parent.noFill( );
 			for(int i=0;i<=50;i++)
 			{
 				parent.stroke(240,240,70,200-4*i);
 				parent.ellipseMode(parent.CENTER);
-				parent.ellipse(0,0,180+1f*i,200+1f*i);
+				parent.ellipse(0,0,200+1f*i,250+1f*i);
 				
 				
 			}
@@ -280,6 +282,7 @@ parent.rectMode(parent.CENTER);
 	 	int r,g,b,
 	 		costW,costB,costU,costG,costR,cost;
 	 	PVector position;
+	 	PImage blue,red,green;
 	 	
 	 	
 	 	Stack(PApplet p,PVector pos)
@@ -287,6 +290,9 @@ parent.rectMode(parent.CENTER);
 	 		parent=p;
 	 		position=pos;
 	 		r=0;g=0;b=255;
+	 		blue=parent.loadImage("blueStack.png");
+	 		red=parent.loadImage("redStack.png");
+	 		green=parent.loadImage("greenStack.png");
 	 		
 	 		
 	 	}
@@ -295,13 +301,21 @@ parent.rectMode(parent.CENTER);
 	 	//	public void drawStack(int color, int weigth,int width, int height)
 	 		 {
 	 		
-	 			 parent.strokeWeight(1);
-	 			 parent.stroke(r,g, b );
+	 			// parent.strokeWeight(1);
+	 			// parent.stroke(r,g, b );
+	 			parent.pushMatrix();
+	 			parent.translate(parent.width*position.x,parent.height*position.y);
+	 			if(r==255)
+	 			parent.image(red,0,0,game.cardWidth*1.7f,game.cardHeight*1.6f);
+	 			else if(b==255)
+	 				parent.image(blue,0,0,game.cardWidth*1.7f,game.cardHeight*1.6f);
+	 			else if(g==255)
+	 				parent.image(green,0,0,game.cardWidth*1.7f,game.cardHeight*1.6f);
+	 			 parent.popMatrix();
 	 			 
-	 		
-	 			 
-	 	parent.rectMode(parent.CENTER);
-	 			 
+	 	//parent.rectMode(parent.CENTER);
+	 			 //parent.rectMode(parent.CORNER);
+	 			 /*
 	 			 parent.fill(255);
 	 			 int i;
 	 			 for(i=20;i>0;i--)
@@ -314,7 +328,8 @@ parent.rectMode(parent.CENTER);
 	 				 parent.noFill();
 	 				 parent.popMatrix();
 	 			 }
-	 			
+	 			 
+	 			*/
 	 		 }
 	 	}
 

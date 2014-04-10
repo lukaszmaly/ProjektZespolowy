@@ -12,15 +12,17 @@ import MTGPackage.Effect.Type;
 
 public class Main extends PApplet {
 
-	Game game=new Game(this);
-	int counter=1;
+	public Game game=new Game(this);
+	int counter=5;
+	PVector v=null,u=null;
 	//Game game;
 	public void setup()
 		{		
 		size(displayWidth, displayHeight);
 		
 		//game.Effects.add(new Effect(this,game,20,game.board.lib1.position,20,0,255,0));
-		game.Effects.add(new Effect(this,game, Type.SPEAR, 30,new PVector(0,0),new PVector(width/2, height/2)));
+		//game.Effects.add(new Effect(this,game, Type.SPEAR, 30,new PVector(200,0),new PVector(width/2, height/2)));
+		//game.Effects.add(new Effect(this,game,50,1));
 		background(0);		
 		}
 	@Override
@@ -43,13 +45,15 @@ public class Main extends PApplet {
 		{
 			
 			game.processMessages();
-			if(counter<0)
-				{
-				background(0);
-				game.board.display2(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
-				counter=1;
-				}
+			//if(counter<0)
+			//	{
+			//	background(0);
+			//	game.board.display2(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
+			//	counter=5;
+			//	}
+			background(0);
 			game.board.display(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
+			game.board.display2(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
 			game.board.displayLog();
 			game.goThroughCards();
 			game.goThroughEffects();			
@@ -139,9 +143,22 @@ public class Main extends PApplet {
 							}
 				}
 		if (mouseButton == LEFT) 
-		{		
+		{	
+			game.Effects.add(new Effect(this,game,100,1));
+			/*
+			game.Effects.add(new Effect(this,game,Type.BOLT,30,1,game.cardWidth,game.cardHeight,game.Cards));	
+			if(v==null)v=new PVector(mouseX,mouseY);
+			else
+			{
+				u=new PVector(mouseX,mouseY);
+				game.Effects.add(new Effect(this,game, Type.SPEAR, 20,new PVector(v.x,v.y),new PVector(u.x, u.y)));
+				v=null;
+				u=null;
+			}
 			 game.Effects.add(new Effect(this,game,Type.FIRE,30,1,game.cardWidth,game.cardHeight,game.Cards));	
+		*/
 		}
+		
 	}
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////	
 	

@@ -8,6 +8,7 @@ import MTGPackage.Effect.Type;
 public class Game {
 
 	PApplet parent;
+	
 	Player P1,P2;
 	ArrayList<Card> Cards;
 	ArrayList<Effect> Effects;
@@ -44,7 +45,7 @@ public class Game {
 		parent=p;
 		Cards=new ArrayList<Card>();
 		Effects=new ArrayList<Effect>();
-		
+	
 		board=new Board(p);
 		board.game=this;
 		fazy=new Phrases(p);
@@ -203,10 +204,10 @@ public class Game {
 
 					break;
 				case "BLOCK":
-					
+					/*
 					 id = Integer.parseInt(Dane[2]);
 					
-					PVector v1=new PVector(0,0),v2=new PVector(0,0);
+					//PVector v1=new PVector(0,0),v2=new PVector(0,0);
 					int attackId = Integer.parseInt(Dane[14]);
 					for (int i = 0; i < this.Cards.size(); i++) {
 						Card c = this.Cards.get(i);
@@ -289,6 +290,26 @@ public class Game {
 						int cardId=Integer.parseInt(Dane[4]);
 						
 						if(cardId>=0) this.Effects.add(new Effect(parent,this,Type.BOLT,16,cardId,this.cardWidth,this.cardHeight,this.Cards));
+					}
+
+					if(type.compareTo("SPEAR")==0)
+					{
+						PVector v=null,u=null;
+						int playerId=Integer.parseInt(Dane[3]);
+						int cardId=Integer.parseInt(Dane[4]);
+						if(playerId==1)
+						{
+							u=new PVector(parent.width/2,parent.height);
+							v=new PVector(parent.width-100,0);
+							this.Effects.add(new Effect(parent,this, Type.SPEAR, 20,u,v));
+						}
+						if(playerId==2)
+						{
+							u=new PVector(parent.width/2,0);
+							v=new PVector(parent.width-100,parent.height);
+							this.Effects.add(new Effect(parent,this, Type.SPEAR, 20,u,v));
+						}
+						//if(cardId>=0) this.Effects.add(new Effect(parent,this,Type.BOLT,16,cardId,this.cardWidth,this.cardHeight,this.Cards));
 					}
 					
 					
@@ -448,14 +469,14 @@ public class Game {
 							c.loc[3].x = Integer.parseInt(Dane[12]);
 							c.loc[3].y = Integer.parseInt(Dane[13]);
 							
-							c.loc2[0].x = Integer.parseInt(Dane[6]);
-							c.loc2[0].y = Integer.parseInt(Dane[7]);
-							c.loc2[1].x = Integer.parseInt(Dane[8]);
-							c.loc2[1].y = Integer.parseInt(Dane[9]);
-							c.loc2[2].x = Integer.parseInt(Dane[10]);
-							c.loc2[2].y = Integer.parseInt(Dane[11]);
-							c.loc2[3].x = Integer.parseInt(Dane[12]);
-							c.loc2[3].y = Integer.parseInt(Dane[13]);
+							c.loc2[0].x = c.loc[0].x;
+							c.loc2[0].y = c.loc[0].y;
+							c.loc2[1].x = c.loc[1].x;
+							c.loc2[1].y = c.loc[1].y;
+							c.loc2[2].x = c.loc[2].x;
+							c.loc2[2].y = c.loc[2].y;
+							c.loc2[3].x = c.loc[3].x;
+							c.loc2[3].y = c.loc[3].y;
 							
 							c.power=Integer.parseInt(Dane[14]);
 							c.toughness=Integer.parseInt(Dane[15]);
@@ -519,7 +540,8 @@ public class Game {
 							
 							c.center=new PVector((c.loc[0].x+c.loc[1].x+c.loc[2].x+c.loc[3].x)/4,(c.loc[0].y+c.loc[1].y+c.loc[2].y+c.loc[3].y)/4);
 
-							c.drawEdges();
+							//c.drawEdges();
+							break;
 
 						}
 

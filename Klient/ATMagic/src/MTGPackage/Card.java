@@ -12,7 +12,7 @@ public class Card
 	PVector[] loc2;	
 	//Polozenie przed atakiem	
 	ArrayList<SparkEdge> se;										//4 krawedzie x 10 generatorow	
-	int sparkTime,blockedId=-1, frameLife=100,frameRate=1,deadCounter=200,direction; 	//sparking po wejsciu karty, jasnosc  frame'a	
+	int sparkTime,blockedId=-1, frameLife=100,frameRate=1,deadCounter=40,direction; 	//sparking po wejsciu karty, jasnosc  frame'a	
 	boolean frame,frameCounter=false,isDead=false,attack=false,block=false,isBlocked=false;		//Czy ma byc ramka, czy ma sie rozjasniac czy zaciemniac
 	int r,g,b,id, db_id, owner,manaCost;
 	float a=0,c=0;
@@ -97,6 +97,11 @@ public class Card
 			default: break;
 			
 			}
+			parent.stroke(r,g,b);
+			parent.strokeWeight(5);
+			parent.ellipseMode(parent.CENTER);
+			parent.rectMode(parent.CENTER);
+			parent.rect(0,0,game.cardWidth*1.2f,game.cardHeight*1.2f,20,20,20,20);
 		/*
 			for(int i=50;i>0;i--)
 			{
@@ -143,7 +148,7 @@ public class Card
 			parent.vertex(loc[3].x,loc[3].y);
 			parent.vertex(loc[0].x,loc[0].y);
 			parent.endShape();
-			
+			/*
 			parent.stroke(r,g,b);
 			parent.strokeWeight(5);
 			parent.noFill();
@@ -154,6 +159,9 @@ public class Card
 			parent.vertex(loc[3].x,loc[3].y);
 			parent.vertex(loc[0].x,loc[0].y);
 			parent.endShape();
+			*/
+			
+		
 			
 			parent.strokeWeight(1);
 			if(this.toughness!=-1 && this.power!=-1)

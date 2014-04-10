@@ -6,10 +6,10 @@ import processing.core.*;
 
 public class Effect 
 {
-	public enum Type{START, BOLT, SPARKLES, FRAME, ARROW, TEXT, FIRE, SPEAR}
+	public enum Type{START, BOLT, SPARKLES, FRAME, ARROW, TEXT, FIRE, SPEAR,BOOST}
 	
 	PApplet parent;
-	int life,textR,textG,textB;
+	int life,textR,textG,textB,initLife=20;
 	int textSize;
 	Type type;
 	Game g;
@@ -31,6 +31,18 @@ public class Effect
 		parent=p;
 		this.life=life;
 		this.type=t;
+		
+	}
+	Effect(PApplet p,Game G,int life,int cardId)
+	{
+		parent=p;
+		this.life=life;
+		this.g=G;
+		this.type=type.BOOST;
+		arrow=parent.loadImage("arrows_up.png");
+		//img=parent.loadImage("lightning1.png");
+	//	arrow=parent.loadImage("arrows_up.png");
+		//v1=center
 		
 	}
 	public static void drawArrow(PVector v1,PVector v2)
@@ -168,8 +180,8 @@ public class Effect
 	    if(life>0) life--;
 	    
 	    int h=(int)d;
-	   // int w=(int)(d/5);
-	    int w=h;
+	    int w=(int)(d/1.5);
+	  //  int w=h;
 	   // if(w>80) w=80;
 	    float sin=(parent.abs(v1.x-v2.x))/d;
 	    float asin=parent.asin(sin);
@@ -182,29 +194,35 @@ public class Effect
 	 {
 		 parent.rotate(parent.PI-asin);
 	
-	    parent.image(img,-w/2,0,w,d);
+	   // parent.image(img,-w/2,0,w,d);
 	 }
 	 else
 		 if(v1.x<=v2.x && v1.y>=v2.y)  
 		 {
 			 parent.rotate(asin);
 			 
-		    parent.image(img,-w/2,0,w,d);
+		   // parent.image(img,-w/2,0,w,d);
 		 } 
 		 else
 			 if(v1.x>=v2.x && v1.y>=v2.y)  
 			 {
 				 parent.rotate(-asin);
 				
-			    parent.image(img,-w/2,0,w,d);
+			    //parent.image(img,-w/2,0,w,d);
 			 }
 			 else
 				 if(v1.x>=v2.x && v1.y<=v2.y)  
 				 {
 					 parent.rotate(parent.PI+asin);
 					
-				    parent.image(img,-w/2,0,w,d);
+				   // parent.image(img,-w/2,0,w,d);
 				 }
+	 float l=(life/(float)initLife);
+	 parent.println(life+" "+initLife+" "+l);
+			 parent.tint(255,(255*l));
+	 parent.image(img,-w/2,l*h,w,d*2l);
+	 parent.tint(255);
+	 
 	    parent.popMatrix();
 
 	}
@@ -282,6 +300,24 @@ public class Effect
 			*/
 			//parent.text(String.valueOf(P2.life),parent.width*0.86f,parent.height-10);
 			
+		}
+		else if(this.type==Type.BOOST)
+		{
+			for (int i = 0; i < g.Cards.size(); i++) {
+				Card c = g.Cards.get(i);
+				if (c.id == cardId) 
+				{
+				v1=c.center;
+				
+			
+		//	parent.pushMatrix();
+		//	parent.translate(v1.x, v1.y);
+				parent.line(100, 100, 600, 600);
+			parent.image(arrow, 30, 30,60,60);
+			
+			//parent.popMatrix();
+				}
+			}
 		}
 		else if (this.type==Type.FIRE)
 		{
