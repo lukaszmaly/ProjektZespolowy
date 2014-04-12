@@ -8,6 +8,7 @@ public class Board
 	PApplet parent;
 	
 	Stack stack1,stack2;
+	
 	Library lib1,lib2;
 	PFont f;
 	PImage img;

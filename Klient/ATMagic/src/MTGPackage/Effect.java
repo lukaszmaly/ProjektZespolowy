@@ -11,8 +11,10 @@ public class Effect
 	PApplet parent;
 	int life,textR,textG,textB,initLife=20;
 	int textSize;
+	String text;
 	Type type;
 	Game g;
+	int blockId1=-1,blockId2=-1;
 	PImage 	img,
 			lightning,
 			arrow;
@@ -39,6 +41,7 @@ public class Effect
 		this.life=life;
 		this.g=G;
 		this.type=type.BOOST;
+		this.cardId=cardId;
 		arrow=parent.loadImage("arrows_up.png");
 		//img=parent.loadImage("lightning1.png");
 	//	arrow=parent.loadImage("arrows_up.png");
@@ -52,8 +55,10 @@ public class Effect
 		
 	}
 	
-	Effect(PApplet p,Game G,int life,PVector pos,int size, int r, int g, int b)
+	Effect(PApplet p,Game G,int life,PVector pos,int size, int r, int g, int b,String text)
 	{
+		parent=p;
+		this.text=text;
 		this.type=type.TEXT;
 		this.v1=pos;
 		this.life=life;
@@ -127,7 +132,7 @@ public class Effect
 			if(arrowType==1) img=parent.loadImage("arrows_down.png");
 			
 	    float d=parent.dist(v1.x, v1.y, v2.x, v2.y);
-	    if(life>0) life--;
+	    //if(life>0) life--;
 	    
 	    int h=(int)d;
 	    int w=(int)(d/5);
@@ -135,7 +140,7 @@ public class Effect
 	    float sin=(parent.abs(v1.x-v2.x))/d;
 	    float asin=parent.asin(sin);
 	    parent.println(asin);
-	    parent.stroke(0,0,255);
+	   // parent.stroke(0,0,255);
 	   
 	    
 	    
@@ -218,7 +223,7 @@ public class Effect
 				   // parent.image(img,-w/2,0,w,d);
 				 }
 	 float l=(life/(float)initLife);
-	 parent.println(life+" "+initLife+" "+l);
+	// parent.println(life+" "+initLife+" "+l);
 			 parent.tint(255,(255*l));
 	 parent.image(img,-w/2,l*h,w,d*2l);
 	 parent.tint(255);
@@ -283,21 +288,23 @@ public class Effect
 		}
 		else if(this.type==type.TEXT)
 		{
-			
-			//f=parent.createFont("Comic Sans", textSize);
+			//parent.println("kk"+parent);
+			f=parent.createFont("Comic Sans", this.textSize);
 			//f=parent.createFont("Comic Sans", 22,true);
-			/*
+			
 		 	parent.textFont(f);
 			parent.fill(this.textR,this.textG,this.textB);
 			parent.textAlign(parent.CENTER);
 			
 			parent.pushMatrix();
 		//	parent.translate(parent.width*g.,10);
-			parent.translate(parent.width*v1.x,parent.height*v1.y);
+			parent.translate(v1.x*parent.width,v1.y*parent.height);
+			//parent.println("####:"+v1.y);
 			//parent.rotate(parent.PI);
-			parent.text(String.valueOf("5"),0,0);
+			//parent.text(String.valueOf("5"),0,0);
+			parent.text(this.text,0,0);
 			parent.popMatrix();
-			*/
+			
 			//parent.text(String.valueOf(P2.life),parent.width*0.86f,parent.height-10);
 			
 		}
@@ -310,9 +317,9 @@ public class Effect
 				v1=c.center;
 				
 			
-		//	parent.pushMatrix();
-		//	parent.translate(v1.x, v1.y);
-				parent.line(100, 100, 600, 600);
+			parent.pushMatrix();
+			parent.translate(v1.x, v1.y);
+				
 			parent.image(arrow, 30, 30,60,60);
 			
 			//parent.popMatrix();

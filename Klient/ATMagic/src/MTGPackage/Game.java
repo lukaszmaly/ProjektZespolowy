@@ -73,6 +73,37 @@ public class Game {
 		udp.listen(true);
 	}
 	
+	public void removeById(int id)
+	{
+		for(int i=0;i<Effects.size();i++)
+		{
+			Effect e=Effects.get(i);
+			if(e.blockId1==id || e.blockId2==id)
+			{
+				this.Effects.remove(i);
+			}
+		}
+	}
+	public void editEffectByID(int id,float x,float y)
+	{
+		for(int i=0;i<this.Effects.size();i++)
+		{
+			Effect e = this.Effects.get(i);
+			if(e.blockId1==id)
+			{
+				
+				e.v1 = new PVector(x,y);
+			}
+			if(e.blockId2==id)
+			{
+				
+				e.v2 = new PVector(x,y);
+			}
+		}
+		
+		}
+
+	
 	public void goThroughEffects()
 	{
 		if(this.Effects.isEmpty()==false)
@@ -199,15 +230,18 @@ public class Game {
 					    	else c.direction=4;
 							c.attack = true;
 					
+							
+							PVector center = new PVector((c.loc[0].x+c.loc[1].x+c.loc[2].x+c.loc[3].x)/4,(c.loc[0].y+c.loc[1].y+c.loc[2].y+c.loc[3].y)/4);
+							editEffectByID(c.id,center.x,center.y);
 						}
 					}
 
 					break;
 				case "BLOCK":
-					/*
+					
 					 id = Integer.parseInt(Dane[2]);
 					
-					//PVector v1=new PVector(0,0),v2=new PVector(0,0);
+					PVector v1=new PVector(0,0),v2=new PVector(0,0);
 					int attackId = Integer.parseInt(Dane[14]);
 					for (int i = 0; i < this.Cards.size(); i++) {
 						Card c = this.Cards.get(i);
@@ -215,7 +249,7 @@ public class Game {
 							
 							
 							v2=new PVector((c.loc[0].x+c.loc[1].x+c.loc[2].x+c.loc[3].x)/4,(c.loc[0].y+c.loc[1].y+c.loc[2].y+c.loc[3].y)/4);
-							v2=c.center;
+						
 						}
 					}
 					for (int i = 0; i < this.Cards.size(); i++) {
@@ -223,7 +257,7 @@ public class Game {
 						if (c.id == id) {
 							c.blockedId=attackId;
 							v1=new PVector((c.loc[0].x+c.loc[1].x+c.loc[2].x+c.loc[3].x)/4,(c.loc[0].y+c.loc[1].y+c.loc[2].y+c.loc[3].y)/4);
-							v1=c.center;
+							
 							c.loc[0].x = Integer.parseInt(Dane[6]);
 							c.loc[0].y = Integer.parseInt(Dane[7]);
 							c.loc[1].x = Integer.parseInt(Dane[8]);
@@ -232,7 +266,7 @@ public class Game {
 							c.loc[2].y = Integer.parseInt(Dane[11]);
 							c.loc[3].x = Integer.parseInt(Dane[12]);
 							c.loc[3].y = Integer.parseInt(Dane[13]);
-							
+							v1=new PVector((c.loc[0].x+c.loc[1].x+c.loc[2].x+c.loc[3].x)/4,(c.loc[0].y+c.loc[1].y+c.loc[2].y+c.loc[3].y)/4);
 							c.power=Integer.parseInt(Dane[15]);
 							c.toughness=Integer.parseInt(Dane[16]);
 							
@@ -241,21 +275,25 @@ public class Game {
 					    	else if(c.loc[0].x<=c.loc[3].x && c.loc[0].y>=c.loc[3].y) c.direction=3;
 					    	else c.direction=4;
 							
-						
+							if(c.block==false)
+							{
+								Effect e=new Effect(parent,this,Type.ARROW,-1,v1,v2);
+								e.blockId1=id;
+								e.blockId2=c.blockedId;
+								this.Effects.add(e);
+								c.block=true;
+							}
+							else
+							{
+								PVector center = new PVector((c.loc[0].x+c.loc[1].x+c.loc[2].x+c.loc[3].x)/4,(c.loc[0].y+c.loc[1].y+c.loc[2].y+c.loc[3].y)/4);
+								editEffectByID(c.id,center.x,center.y);
+							}
 						
 							
 						}
-					}
-					Effect ef=new Effect(parent,this,Type.ARROW,-1,v1,v2);
-					this.Effects.add(ef);
-				/*	if(c.block==false)
-					{
-						Effect e=new Effect(parent,Type.ARROW,-1,v1,v2);
-						e.blockId=id;
-						this.Effects.add(e);
-						c.block=true;
-					}*/
-	
+					
+				
+	}
 					
 					break;
 				
@@ -381,6 +419,22 @@ public class Game {
 					break;
 					
 				}
+				case "SCRY":
+				{
+					id=Integer.parseInt(Dane[2]);
+					 String s=Dane[3];
+					 if(id==1)
+					 {
+						 //this.board.lib1.r=(int)parent.random(255);
+						 //this.board.lib1.g=(int)parent.random(255);
+						 //this.board.lib1.b=(int)parent.random(255);
+						 this.Effects.add(new Effect(parent,this,100,this.board.lib1.position,20, 255, 0, 0,s));
+					 }
+					 if(id==2)
+					 {
+						 this.Effects.add(new Effect(parent,this,100,this.board.lib2.position,20, 255, 0, 0,s));
+					 }
+				}
 				
 		
 				
@@ -452,7 +506,10 @@ public class Game {
 							 * c.x4=Integer.parseInt(Dane[12]);
 							 * c.y4=Integer.parseInt(Dane[13]);
 							 */
-							
+							if(c.attack==true || c.block==true)
+							{
+								removeById(c.id);
+							}
 							c.attack = false;
 							c.block=false;
 							

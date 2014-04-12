@@ -97,7 +97,7 @@ public class Card
 			default: break;
 			
 			}
-			parent.stroke(r,g,b);
+			parent.stroke(r,g,b,40);
 			parent.strokeWeight(5);
 			parent.ellipseMode(parent.CENTER);
 			parent.rectMode(parent.CENTER);
@@ -436,7 +436,7 @@ public class Card
 
 	    PVector acc=null;
 	    PVector vel=null;
-	  
+	  parent.println("***"+this.id+"***");
 	    this.manaCost=2;
 	    for(i=0;i<se.size();i++)
 	    	{

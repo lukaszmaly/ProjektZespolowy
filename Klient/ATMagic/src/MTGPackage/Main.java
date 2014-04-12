@@ -23,6 +23,7 @@ public class Main extends PApplet {
 		//game.Effects.add(new Effect(this,game,20,game.board.lib1.position,20,0,255,0));
 		//game.Effects.add(new Effect(this,game, Type.SPEAR, 30,new PVector(200,0),new PVector(width/2, height/2)));
 		//game.Effects.add(new Effect(this,game,50,1));
+		//game.Effects.add(new Effect(this,game,100,game.board.lib1.position,20, 255, 0, 0));
 		background(0);		
 		}
 	@Override
