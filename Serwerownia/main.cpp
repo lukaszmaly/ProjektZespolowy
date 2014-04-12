@@ -31,7 +31,7 @@ class GAME_FORM : public CDialog
 			pOutput = (CEdit *) GetDlgItem(C_Output);
 			pConnect = (CButton *) GetDlgItem(C_Connect);
 			pInput->SetWindowTextW(L"192.168.0.100");
-
+			//MessageBoxW(L"widac?");
             return true; 
     }
 public:
@@ -52,8 +52,16 @@ DECLARE_MESSAGE_MAP()
 	afx_msg void host()
 	{
 		polaczenie.Init("192.168.0.100");
-		polaczenie.HostGame();
+		//polaczenie.HostGame();
+		polaczenie.Start_Game();
+	//	polaczenie.Nic();
 		pOutput->SetWindowTextW(L"Po³¹czono");
+	}
+
+	afx_msg void sending()
+	{
+		polaczenie.Send("wyslalem wiadomosc!");
+		pOutput->SetWindowTextW(L"wys³ano");
 	}
 };
 
@@ -83,6 +91,7 @@ virtual BOOL InitInstance()
 BEGIN_MESSAGE_MAP(GAME_FORM, CDialog)
 	ON_COMMAND(C_Connect,conn)
 	ON_COMMAND(C_Host,host)
+	ON_COMMAND(C_Send,sending)
 END_MESSAGE_MAP()
 
 //-----------------------------------------------------------------------------------------
