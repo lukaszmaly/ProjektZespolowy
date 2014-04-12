@@ -15,40 +15,36 @@ void Card::Damage(int value)
 	this->defEOT-=value;
 	if(GetDefense()<=0) this->die();
 }
-void Card::SetTarget(int id)
-{
-	target = id;
-}
 
-int Card::GetTarget()
-{
-	return target;
-}
-void Card::Prepare(vector<Point>&square,Mat &img)
-{
-	if(square[1].y>square[3].y) swap(square[1],square[3]);
-	float ab = Distance(square[0],square[1]);
-	float bc = Distance(square[1],square[2]);
 
-	//Poprawienie bokow.
-	if(ab>bc) 
+
+void Card::Prepare2(vector<Point>&square,Mat &img)
+{
+	Point a=square[0],b=square[1],c=square[2],d=square[3];
+	Point center = Card::getCenter(a,b,c,d);
+	if(Game::GetAngle(a,b,center)<0)
 	{
-		Point ta,tb,tc,td;
-		ta=square[0];
-		tb=square[1];
-		tc=square[2];
-		td=square[3];
-		square[0]=tb;
-		square[1]=tc;
-		square[2]=td;
-		square[3]=ta;
+		Point t = b;
+		b = d;
+		d = t;
 	}
+	// w poprawnym kierunku
+	if(Game::GetAngle(a,b,center) >Game::GetAngle(b,c,center))
+	{
+		Point t = a;
+		a = b;
+		b = c;
+		c = d;
+		d = t;
+	}
+	//Poprawne krawedzie 
+
 	Mat tmp;
 	Mat t;
 	img.copyTo(t);
 	tmp.cols=200;
 	tmp.rows=400;
-	Point2f c1[4] = {square[0],square[1],square[2],square[3]};
+	Point2f c1[4] = {a,b,c,d};
 	Point2f c2[4] = {Point2f(0,0), Point2f(251,0), Point2f(251,356),Point2f(0,356)};
 	Mat mmat(3,3,CV_32FC1);
 	mmat=getAffineTransform(c1,c2);
@@ -91,48 +87,16 @@ void Card::Prepare(vector<Point>&square,Mat &img)
 	if(tab3[2]<0) r++;
 	if(r>=2)
 	{
-		swap(square[0],square[2]);
-		swap(square[1],square[3]);
+		swap(a,c);
+		swap(d,b);
 	}
-
-	//////Koniec poprawiania boków
-	//////Poprawianie kolejnoœci punktów
-	Point2f center = getCenter(square[0],square[1],square[2],square[3]);
-	Point2f first;
-	Point2f second;
-	Point2f tab[4]={square[0],square[1],square[2],square[3]};
-	int tabb[4]={0,1,2,3};
-	for(int i=0;i<4;i++)
-	{
-		for(int j=i+1;j<4;j++)
-		{
-			if(tab[j].y<tab[i].y)//if(tab[j].y<tab[i].y+5)  5 to wskaznik tolerancji(bledy pokazuja siê gdy 2 górne rogi s¹ idealnie równoleg³e.
-				//Nie do konca jeszcze zrobione
-			{
-				int te= tabb[i];
-				tabb[i]=tabb[j];
-				tabb[j]=te;
-				Point2f t= tab[j];
-				tab[j]=tab[i];
-				tab[i]=t;
-			}
-		}
-	}
-	first = square[tabb[0]];
-	second = square[(tabb[0]+1)%4];
-	//second = square[tabb[1]];
-	// stara wersja square[tabb[1]]; <-- w tej wersji sortowanie jest wymagane
-	//sortowanie jest aktualnie niepotrzebne, ale nie wiem czy wystêpuje nadal b³¹d, dlatego dla pewnoœci zostawiam
-
-	float a = atan2f(( first.y - center.y ),( first.x - center.x ) ) * 180 / M_PI + 180;
-	float aa = atan2f(( second.y - center.y ),( second.x - center.x ) ) * 180 / M_PI + 180;
-
-	if(a > aa) 
-	{ 
-		swap(square[0],square[1]);
-		swap(square[2],square[3]);
-	}
+	square[0] = a;
+	square[1] = b;
+	square[2] = c;
+	square[3] = d;
 }
+
+
 
 float Card::getAngle()
 {
@@ -210,15 +174,54 @@ void Card::Add(int attack,int defense)
 	additionalDefense+=defense;
 	if(GetDefense()<=0) die();
 }
-Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp=false)
+
+Card::Card(Point a, Point b, Point c,Point d,vector<CardB>& bkarty,Game &game,int owner,int baseId)
 {
+	newRound=true;
 	attEOT=defEOT=0;
 	additionalAttack=additionalDefense=0;
-	area=0;
+	
+	deadSended=false;
 	canUntap=true;
-	target=-1;
-	error=false;
-	nowa=true;
+
+
+	sendTime=0;
+	id=-1;
+	blocking=-1;
+	this->owner=owner;
+	taped=false;
+	attack=block=false;
+	this->a=a;
+	old=Point(-1,-1);
+	this->b=b;
+	this->c=c;
+	this->d=d;
+	ttl=TTL;
+	hasCantAttack=hasCantBlock=false;
+	att=-1;
+	def=-1;
+	dead=false;
+	for(int i=0;i<bkarty.size();i++)
+	{
+		if(bkarty[i].id==baseId)
+		{
+			setCardBase(bkarty[i]);
+			break;
+		}
+	}
+	cardBase.type==LAND ? gaveMana=false : gaveMana=true;
+	old=getCenter();
+}
+
+Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp=false)
+{
+	newRound=true;
+	attEOT=defEOT=0;
+	additionalAttack=additionalDefense=0;
+
+	deadSended=false;
+	canUntap=true;
+	hasLifelink=hasLifelinkEOT=hasFlying=hasFlyingEOT=hasFirstStrike=hasFirstStrikeEOT=false;
 	sendTime=0;
 	id=-1;
 	blocking=-1;
@@ -230,6 +233,10 @@ Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game
 	this->b=b;
 	this->c=c;
 	this->d=d;
+	this->la=a;
+	this->lb=b;
+	this->lc=c;
+	this->ld=d;
 	ttl=TTL;
 	hasCantAttack=hasCantBlock=false;
 	att=-1;
@@ -320,7 +327,7 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 
 	float tm[3];
 	float min=256*256;
-	cardId=-1;
+	int cardId=-1;
 	for(unsigned int i=0;i<bkarty.size();i++)
 	{
 		Compare(tmp,bkarty[i].img,tm,game);
@@ -329,45 +336,73 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 	}
 	if(cardId!=-1)
 		setCardBase(bkarty[cardId]);
+
+
 	//imshow("Karta",tmp);
-	if(waitKey(10)==122)
-	{
-		string name;
-
-		cout<<"Wpisz nazwe karty:"<<endl;
-		cout<<"Nazwa | Id | koszt | Typ(0-Creature, 1-land) | Atak | Obrna |"<<endl;
-		//cin>>name >>id>>koszt>>typ>>att>>def;
-		cin>>name;
-		//if(typ==0) typek=CREATURE; else typek=LAND;
-		cout<<"Dodano nowa karte"<<endl;;
-		imshow("Kartadodana"+name,tmp);
-		imwrite( "C:/umk/"+name+".jpg", tmp );
-		//bkarty.push_back(CardB(tmp,id,name,Red,typek,att,def,koszt));
-	}
-	else if(nowa==true && temp==false)
-	{
-		nowa=false;
-		att=cardBase.att;
-		def=cardBase.def;
-
-		/*if(game.getCurrentPlayer().mana<cardBase.koszt)
-		{
-		nowa=true;
-		error=true;
-		}
-		else
-		{
-		game.getCurrentPlayer().mana-=cardBase.koszt;
-		nowa=false;
-		error=false;
-		}*/
-
-	}
+	//if(waitKey(10)==122)
+	//{
+	//	string name;
+	//	cout<<"||Wpisz nazwe karty:"<<endl;
+	//	cin>>name;
+	//	cout<<"Dodano nowa karte"<<endl;
+	//	imshow("Kartadodana"+name,tmp);
+	//	imwrite( "C:/umk/"+name+".jpg", tmp );
+	//}
 }
 
+void Card::Update(Point a,Point b,Point c,Point d,int att,int def,Game &game)
+{
+		this->a=a;
+		this->b=b;
+		this->c=c;
+		this->d=d;
+		this->additionalAttack=this->attEOT=0;
+		this->att=att;
+		this->additionalDefense=this->defEOT=0;
+		this->def=def;
+		if(dead==false)ttl=TTL;
+		
+		if(TapUntap()==true)
+		{
+			if(taped==true)
+			{
+				Untap(game);
+			}
+			else
+			{
+				Tap(game);
+			}
+		}
+
+		if(game.GetPhase()==PIERWSZY || game.GetPhase()==DRUGI) {old=getCenter(); enemy=Point(-1,-1);}
+}
+void Card::Update(Point a,Point b,Point c,Point d,Game &game)
+{
+		this->a=a;
+		this->b=b;
+		this->c=c;
+		this->d=d;
+		if(dead==false)ttl=TTL;
+		
+		if(TapUntap()==true)
+		{
+			if(taped==true)
+			{
+				Untap(game);
+			}
+			else
+			{
+				Tap(game);
+			}
+		}
+
+		if(game.GetPhase()==PIERWSZY || game.GetPhase()==DRUGI) {old=getCenter(); enemy=Point(-1,-1);}
+}
 void Card::setCardBase(CardB &card)
 {
 	this->cardBase=card;
+	att=card.att;
+	def=card.def;
 }
 
 void Card::Tap(Game &game)
@@ -378,6 +413,7 @@ void Card::Tap(Game &game)
 	{
 		game.AddMana(this->owner,this->cardBase.landColor);
 	}
+	newRound=false;
 	game.GHTap(this->id);
 }
 
@@ -385,9 +421,9 @@ void Card::Untap(Game &game)
 {
 	cout<<"Odtapowano"<<endl;
 	taped=false;
-	if(this->cardBase.type=LAND)
+	if(this->cardBase.type==LAND)
 	{
-		if(game.IsMana(this->owner,this->cardBase.landColor) && canUntap==true)
+		if(game.IsMana(this->owner,this->cardBase.landColor))
 		{
 			game.SubMana(this->owner,this->cardBase.landColor);
 		}
@@ -395,13 +431,16 @@ void Card::Untap(Game &game)
 		{
 			canUntap=false;
 		}
-	}
+		if(newRound==true)
+			canUntap=true;
 		game.GHTap(this->id);
+	}
+
+		
 }
 
 void Card::die()
 {
-	cout<<"Umieram"<<endl;
 	dead=true;
 }
 
@@ -412,23 +451,30 @@ void Card::GiveLifeToPlayer(int value,Game &game)
 
 void Card::Fight(Card &op,Game &game)
 {
-	op.canUntap=false;
-	game.GHAtack(op.id);
-	game.GHDefense(op.id,this->id);
+	//this - karta atakuj¹ca
+	this->canUntap=false;
+	game.GHAtack(this->id);
+	game.GHDefense(this->id,this->id);
 
-	if((this->cardBase.hasFirstStrike && op.cardBase.hasFirstStrike) || (!this->cardBase.hasFirstStrike && !op.cardBase.hasFirstStrike))
+	int tempDef=op.GetDefense();
+		if((this->HasFirstStrike() && op.HasFirstStrike()) || (!this->HasFirstStrike() && !op.HasFirstStrike()))
 	{
+
 		Damage(op.GetAttack());
 		op.Damage(GetAttack());
-		if(this->cardBase.hasLifelink)	this->GiveLifeToPlayer(this->att,game);
-		if(op.cardBase.hasLifelink)	op.GiveLifeToPlayer(op.att,game);
-		if(GetDefense()<=0 || op.cardBase.hasDeatchtuch) die();
-		if(op.GetDefense()<=0 || this->cardBase.hasDeatchtuch) op.die();
+		if(this->HasLifelink())	this->GiveLifeToPlayer(this->GetAttack(),game);
+		if(op.HasLifelink())	op.GiveLifeToPlayer(op.GetAttack(),game);
+
+		if(GetDefense()<=0 || op.HasDeadtuch()) die();
+		if(op.GetDefense()<=0 || this->HasDeadtuch()) 
+		{
+			op.die();
+		}
 	}
 	else if(this->cardBase.hasFirstStrike)
 	{
 		op.Damage(GetAttack());
-		if(this->cardBase.hasLifelink)	this->GiveLifeToPlayer(this->att,game);
+		if(this->cardBase.hasLifelink)	this->GiveLifeToPlayer(this->GetAttack(),game);
 		if(op.GetDefense()<=0 || this->cardBase.hasDeatchtuch) 
 		{
 			op.die(); 
@@ -436,14 +482,14 @@ void Card::Fight(Card &op,Game &game)
 		else
 		{
 			Damage(op.GetAttack());
-			if(op.cardBase.hasLifelink)	op.GiveLifeToPlayer(op.att,game);
+			if(op.cardBase.hasLifelink)	op.GiveLifeToPlayer(op.GetAttack(),game);
 			if(GetDefense()<=0 || op.cardBase.hasDeatchtuch) die();
 		}
 	}
 	else if(op.cardBase.hasFirstStrike)
 	{
 		Damage(op.GetAttack());
-		if(op.cardBase.hasLifelink)	op.GiveLifeToPlayer(op.att,game);
+		if(op.cardBase.hasLifelink)	op.GiveLifeToPlayer(op.GetAttack(),game);
 		if(GetDefense()<=0 || op.cardBase.hasDeatchtuch) 
 		{
 			die(); 
@@ -451,7 +497,7 @@ void Card::Fight(Card &op,Game &game)
 		else
 		{
 			op.Damage(GetAttack());
-			if(this->cardBase.hasLifelink)	this->GiveLifeToPlayer(this->att,game);
+		if(this->cardBase.hasLifelink)	this->GiveLifeToPlayer(this->GetAttack(),game);
 			if(op.GetDefense()<=0 || this->cardBase.hasDeatchtuch) die();
 		}
 	}
@@ -460,7 +506,7 @@ void Card::Fight(Card &op,Game &game)
 	op.Clear();
 }
 
-void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
+void Card::Draw(Mat &img1,Game &game)
 {
 	if(--ttl>=0)
 	{
@@ -476,21 +522,14 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 		putText(img1,"c", Point(c.x,c.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 		putText(img1,"d", Point(d.x,d.y),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 
-
-
 		sprintf(cad2,"ID:%d",id);
 		putText(img1,cad2, Point(d.x,d.y)+Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 
 
 
-		if(cardId!=-1)
-		{
-			sprintf(cad,"%s",bkarty[cardId].name.c_str());
-		}
-		else
-		{
-			sprintf(cad,"none");
-		}
+		
+			sprintf(cad,"%s",cardBase.name.c_str());
+	
 
 		if(taped==true)
 			sprintf(cad1,"Taped(%s)",game.GetPlayer(this->owner).name.c_str());
@@ -511,7 +550,7 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 		if(def!=-1)
 		{
 			char cad4[100];
-			sprintf(cad4,"Def: %d",GetDefense());
+			sprintf(cad4,"CanUntap: %d ",this->canUntap);
 			putText(img1,cad4, c-Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
 		}
 
@@ -543,14 +582,6 @@ void Card::Draw(Mat &img1,vector<CardB>&bkarty,Game &game)
 				}
 			}
 		}
-		//if(cardBase.koszt>owner.mana && cardBase.type!=LAND)
-		//{
-		//	line(img1,a,c,Scalar(255,0,0),3);
-		//	char cad4[100];
-		////	sprintf(cad4,"Brakuje: %d",cardBase.koszt-owner.mana);
-		//	putText(img1,cad4, d+Point(0,20),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);	
-
-		//}
 		if(dead==true)
 		{
 			line(img1,a,c,Scalar(255,0,0),3);
@@ -564,13 +595,16 @@ void Card::NewRound(int player)
 	if(this->owner==player)
 	{
 		this->canUntap=true;
+		this->newRound=true;
 	}
 	this->attack=false;
 	this->block=false;
-	def=cardBase.def+this->additionalAttack;
-	att=cardBase.att+this->additionalDefense;
+	def=cardBase.def;
+	att=cardBase.att;
 	defEOT=0;
 	attEOT=0;
+	hasFlyingEOT=hasLifelinkEOT=hasFirstStrikeEOT=hasHexproofEOT=false;
+	la=lb=lc=ld=Point(-1,-1);
 }
 
 void Card::Clear()
@@ -580,20 +614,22 @@ void Card::Clear()
 	old=getCenter();
 	enemy=Point(-1,-1);
 	blocking=-1;
+	la=lb=lc=ld=Point(-1,-1);
 }
 
-bool Card::CanBlock(Card card)
+bool Card::CanBlock(Card &card)
 {
-	if(this->canUntap==false) return false;
-	if(this->hasCantBlock==false && card.cardBase.hasFlying==true && (this->cardBase.hasFlying==true || this->cardBase.hasReach==true))
+	if(this->canUntap==false || this->cardBase.type!=CREATURE || this->hasCantBlock==true) return false;
+	cout<<"TUTAJ"<<endl;
+	if(card.HasFlying()==true && (this->cardBase.hasFlying==false && this->cardBase.hasReach==false))
 	{
-		return true;
+		return false;
 	}
-	return false;
+	return true;
 }
 bool Card::CanAttack()
 {
-	if(this->cardBase.hasDefender==true || this->hasCantAttack==true) return false;
-
+	if(this->cardBase.type!=CREATURE) cout<<"KREATURA"<<endl;
+	if(this->cardBase.hasDefender==true || this->hasCantAttack==true || this->cardBase.type!=CREATURE) return false;
 	return true;
 }

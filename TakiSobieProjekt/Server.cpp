@@ -2,17 +2,11 @@
 
 ///Czasami usuwa karte z karty, popraw
 //popraw czas wysy³ania wiadomoœci
-void Server::Update()
-{
-	time++;
-	if(time > interval)
-	{
-		time = 0;
-	}
-}
+
 
 	void Server::VisualEffect(string id,int player,int creature)
 	{
+		if(id.compare("NONE")==0) return;
 		char data[100];
 		int n = sprintf_s(data,"| EFFECT %s %d %d |",id.c_str(),player,creature);	
 
@@ -27,10 +21,7 @@ void Server::Update()
 	}
 void Server::Write(const char tab[100])
 {
-	fstream plik;
-	plik.open( "log.txt", std::ios::in | std::ios::out | std::ios::app);
-	plik << tab<<endl;
-	plik.close();
+	file << tab << endl;
 }
 void Server::SetInterval(int value)
 {
@@ -86,7 +77,7 @@ void Server::Init(string ip,int port,int interval,bool showLog)
 
 Server::Server()
 {
-	time = 0;
+	file.open( "log.txt", std::ios::in | std::ios::out | std::ios::app);
 }
 
 
@@ -415,5 +406,7 @@ void Server::AddPlayer(int id,const char name[])
 Server::~Server()
 {
 	soc.unbind();
+
 	Write("Zamknieto serwer");
+	file.close();
 }

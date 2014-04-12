@@ -122,13 +122,12 @@ public:
 
 		for(unsigned int i=0;i<cards.size();i++)
 		{
-			for(unsigned int j =0; j<cards[i].cardBase.upkeepAbilities.size();j++)
+			vector<pair<int,int>> tt=cards[i].cardBase.upkeepAbilities;
+			for(unsigned int z =0; z<tt.size();z++)
 			{
-				//triggery
+				game.stack.push_back(Spell(cards[i].cardBase.id,tt[z].first,cards[i].owner,cards[i].id,cards[i].owner,tt[z].second,cards[i].cardBase.effect));
 			}
 		}
-
-
 	}
 
 	void Update(Mat &img,Game &game,vector<Card> &cards,vector<Card> &stos)
@@ -165,7 +164,7 @@ public:
 				vector<pair<int,int>> t =stos[i].cardBase.enterAbilities;
 				for(int j=0;j<t.size();j++)
 				{
-					game.stack.push_back(Spell(stos[i].cardBase.id,t[j].first,stos[i].owner,targetId,targetPlayerId,t[j].second));
+					game.stack.push_back(Spell(stos[i].cardBase.id,t[j].first,stos[i].owner,targetId,targetPlayerId,t[j].second,stos[i].cardBase.effect));
 				}
 
 				game.lastId=stos[i].cardBase.id;
@@ -184,69 +183,80 @@ public:
 		}
 	}
 
+
+	void VisualEffect(Game &game,string d,string s,int targetPlayer,int targetCreature)
+	{
+		if(d.compare("NONE")==0)
+		{
+			game.server.VisualEffect(s,targetPlayerId,targetId);
+		}
+		else
+		{
+				game.server.VisualEffect(d,targetPlayerId,targetId);
+		}
+	}
 	void Resolve(Spell s,vector<Card> &cards,Game &game)
 	{
 		switch(s.baseId)
 		{
 		case 0:
 			AddLife(s.targetPlayer,s.value,game);
+			VisualEffect(game,s.effect,"ADDLIFE",targetPlayerId,targetId);
 			break;
 		case 1:
 			SubLife(s.targetPlayer,s.value,game);
+			VisualEffect(game,s.effect,"SUBLIFE",targetPlayerId,targetId);
 			break;
 		case 2:
 			AddDamage(s.targetCreature,cards,s.value);
-			game.server.VisualEffect("BOLT",-1,s.targetCreature);
+			VisualEffect(game,s.effect,"BOLT",targetPlayerId,targetId);
 			break;
 		case 3:
 			SubLife(s.targetPlayer,s.value,game);
-			game.server.VisualEffect("SPEAR",s.targetPlayer,-1);
+			VisualEffect(game,s.effect,"SPEAR",targetPlayerId,targetId);
 			break;
 		case 4:
 			AddEOT(s.targetCreature,cards,s.value,s.value);
+			VisualEffect(game,s.effect,"ADDSTATS",targetPlayerId,targetId);
 			break;
 
 		case 5:
 			AddEOT(s.targetCreature,cards,(-1)*s.value,(-1)*s.value);
+			VisualEffect(game,s.effect,"SUBSTATS",targetPlayerId,targetId);
 			break;
 		case 6:
 			DestroyCreature(s.targetCreature,cards);
+			VisualEffect(game,s.effect,"DESTROY",targetPlayerId,targetId);
 			break;
 		case 7:
 			AddEOT(s.targetCreature,cards,s.value,0);
+			VisualEffect(game,s.effect,"ADDSTATS",targetPlayerId,targetId);
 			break;
 		case 8:
 			AddEOT(s.targetCreature,cards,0,s.value);
+			VisualEffect(game,s.effect,"ADDDEF",targetPlayerId,targetId);
 			break;
 		case 9:
 			AddLifelink(s.targetCreature,cards,true);
+			VisualEffect(game,s.effect,"LIFELINKP",targetPlayerId,targetId);
 			break;
 		case 10:
 			AddLifelink(s.targetCreature,cards,false);
+			VisualEffect(game,s.effect,"LIFELINK",targetPlayerId,targetId);
 			break;
 		case 11:
 			AddFirstStrike(s.targetCreature,cards,true);
+			VisualEffect(game,s.effect,"FIRSTSTRIKEP",targetPlayerId,targetId);
 			break;
 		case 12:
 			AddFirstStrike(s.targetCreature,cards,false);
+			VisualEffect(game,s.effect,"FIRSTSTRIKE",targetPlayerId,targetId);
 			break;
 		case 13:
 			AddFlying(s.targetCreature,cards,true);
 			break;
 		case 14:
 			AddFlying(s.targetCreature,cards,false);
-			break;
-		case 15:
-			AddTrample(s.targetCreature,cards,true);
-			break;
-		case 16:
-			AddTrample(s.targetCreature,cards,false);
-			break;
-		case 17:
-			AddHexproof(s.targetCreature,cards,true);
-			break;
-		case 18:
-			AddHexproof(s.targetCreature,cards,false);
 			break;
 		case 19:
 			PutCounter(s.targetCreature,cards,s.value,s.value);
@@ -256,6 +266,7 @@ public:
 			break;
 		case 21:
 			DrawCard(s.owner,s.value,game);
+			VisualEffect(game,s.effect,"DRAW",targetPlayerId,targetId);
 			break;
 		case 22:
 			CantAttack(s.targetCreature,cards);
@@ -269,20 +280,14 @@ public:
 		case 25:
 			SubLife(s.owner,s.value,game);
 			break;
-		case 26:
-			GiveDrawACardWhenAttack(s.targetCreature,cards);
-			break;
-		case 27:
-			GivePutCounterWhenAttack(s.targetCreature,cards);
-			break;
-		case 28:
-			TapCard(s.targetCreature,cards,true);
-			break;
-		case 29:
-			TapCard(s.targetCreature,cards,false);
-			break;
 		case 30:
 			ScryCard(s.owner,s.value,game);
+			break;
+		case 31:
+			if(targetPlayerId!=-1)
+				SubLife(targetPlayerId,s.value,game);
+			else if(targetId!=-1)
+				AddDamage(targetId,cards,s.value);
 			break;
 		}
 	}
@@ -299,16 +304,8 @@ public:
 		}
 
 	}
-	void GivePutCounterWhenAttack(int id,vector<Card>&cards)
-	{
 
-	}
-
-	void GiveDrawACardWhenAttack(int id,vector<Card>&cards)
-	{
-
-	}
-
+	
 	void CantBlock(int id,vector<Card>&cards)
 	{
 		for(unsigned int i=0;i<cards.size();i++)
@@ -347,17 +344,6 @@ public:
 			{
 				if(permanent) cards[i].hasHexproof=true;
 				else	cards[i].hasHexproofEOT=true;
-			}
-		}
-	}
-	void AddTrample(int id,vector<Card>&cards,bool permanent)
-	{
-		for(unsigned int i=0;i<cards.size();i++)
-		{
-			if(cards[i].id==id)
-			{
-				if(permanent) cards[i].hasTrample=true;
-				else	cards[i].hasTrampleEOT=true;
 			}
 		}
 	}

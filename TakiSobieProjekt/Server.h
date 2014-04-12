@@ -16,13 +16,12 @@ private:
 	int port;
 	bool showLog;
 	int interval;
-	int time;
 	UdpSocket soc;
 	IpAddress client;
+	fstream file;
 public:
 	Server();
 	void NextPhase();
-
 	void VisualEffect(string id,int player,int creature);
 	void PutPermanentOnLibrary(int id);
 		void Scry(int id,int value);
@@ -41,7 +40,6 @@ public:
 	void DrawCard(int id,int value);
 	void Block(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bool taped,int id2,int att,int def);
 	~Server();
-	void Update();
 	void Attack(int id,int idb,int gracz,Point a, Point b,Point c,Point d,bool taped,int att,int def);
 	void Cost(int id,int white,int blue,int black,int red,int green);
 	void Init(string ip,int port,int interval,bool showLog);

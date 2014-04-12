@@ -7,9 +7,6 @@ Player::Player(string name,int markerId)
 	this->name=name;
 	angleDiff=0;
 	hp=20;
-	cardsInLib=60;
-	cardsInTomb=0;
-	cardsOnHand=7;
 	stackE=stackB=Point(-1,-1);
 }
 
@@ -23,9 +20,6 @@ void Player::Init(string name,int markerId)
 	this->markerId=markerId;
 	this->name=name;
 	hp=20;
-	cardsInLib=60;
-	cardsInTomb=0;
-	cardsOnHand=7;
 
 }
 void Player::Draw(Mat &frame)

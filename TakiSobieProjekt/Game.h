@@ -26,13 +26,14 @@ public:
 	int targetCreature;
 	int targetPlayer;
 	int value;
-
+	string effect;
 	Spell()
 	{
 	}
-	Spell(int cardId,int baseId,int owner,int targetCreature,int targetPlayer,int value)
+	Spell(int cardId,int baseId,int owner,int targetCreature,int targetPlayer,int value,string effect)
 	{
 		this->cardId=cardId;
+		this->effect=effect;
 		this->baseId=baseId;
 		this->owner=owner;
 		this->targetCreature=targetCreature;
@@ -53,17 +54,20 @@ private:
 	int gameHeight;
 	bool zmiana;
 	Point action;
-	
+	State stack1;
+	State stack2;
 	bool checkCardsProp;
 	bool bgrMode;
 	bool targetMode;
 public:
+	bool multiplayerMode;
+	int playerIdInMultiplayerMode;
+
 	bool CanResolve;
 	vector<Spell> stack;
-	Mat diff;
 	void ChangeStackState(int id,State state);
 	int lastId;
-	static int Distance(Point a,Point b)
+	static float Distance(Point a,Point b)
 	{
 		return std::sqrtf(((b.x-a.x)*(b.x-a.x)+(b.y-a.y)*(b.y-a.y)));
 	}
@@ -74,7 +78,7 @@ public:
 	int firstCardWidth;
 	int firstCardHeight;
 	bool firstCardChecked;
-		bool showCardArea;
+
 	bool IsBgrMode();
 	bool CheckCardsProp();
 Point target;
@@ -82,7 +86,7 @@ bool beAbleMarker;
 float targetAngle;
 float targetOldAngle;
 	void StopMarker();
-	void MakeDiffImage(Mat &img1,Point a,Point b,Point c,Point d);
+
 		static float getangle( cv::Point pt1, cv::Point pt2, cv::Point pt0 ) {
 	return atan2f( (pt1.y - pt2.y ),( pt1.x - pt2.x ) ) * 180 / M_PI + 180;
 	}
@@ -177,12 +181,24 @@ float targetOldAngle;
 	}
 	void Write(string log)
 	{
-				fstream plik;
-	plik.open( "log1.txt", std::ios::in | std::ios::out | std::ios::app);
-	plik << log<<endl;
-	plik.close();
+		fstream plik;
+		plik.open( "log1.txt", std::ios::in | std::ios::out | std::ios::app);
+		plik << log<<endl;
+		plik.close();
 	}
 
+	static float GetAngle(Point p1,Point p2,Point p0)
+	{
+		float p01 = Distance(p0,p1);
+		float p02 = Distance(p0,p2);
+		float p12 = Distance(p1,p2);
+		float an= acos((p01*p01+p02*p02-p12*p12)/(float)(2*p01*p02)) * 180/M_PI;
+		Point w1 = Point(p1.x-p0.x,p1.y-p0.y);
+		Point w2 = Point(p2.x-p0.x,p2.y-p0.y);
+		if(w1.x*w2.y - w1.y*w2.x < 0)
+		an = -an;
+		return an;
+	}
 
 	void StackSettings(int w,int h,int x1,int y1,int x2,int y2)
 	{

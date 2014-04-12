@@ -66,10 +66,12 @@ void CardB::PrintStats()
 	}
 	cout<<"Upkeep  abb: "<<upkeepAbilities.size()<<endl;
 	cout<<"Passive abb: "<<passiveAbilities.size()<<endl;
+	if(effect.compare("NONE")!=0)
+	cout<<"Effect: "<<effect<<endl;
 }
 
 
-void CardB::Init(int id,string name,int type,int att,int def,int redCost,int whiteCost,int greenCost,int blackCost,int blueCost,int lessCost,bool hasDefender,bool hasLifelink,bool hasDeatchtuch,bool hasHaste,bool hasFlying,bool hasReach,bool hasFirstStrike,bool hasHexproof,vector<pair<int,int>> enterList,vector<pair<int,int>> upkeepList,vector<pair<int,int>> passiveList)
+void CardB::Init(int id,string name,int type,int att,int def,int redCost,int whiteCost,int greenCost,int blackCost,int blueCost,int lessCost,bool hasDefender,bool hasLifelink,bool hasDeatchtuch,bool hasHaste,bool hasFlying,bool hasReach,bool hasFirstStrike,bool hasHexproof,vector<pair<int,int>> enterList,vector<pair<int,int>> upkeepList,vector<pair<int,int>> passiveList,string effect)
 {
 
 	this->id=id;
@@ -124,6 +126,7 @@ void CardB::Init(int id,string name,int type,int att,int def,int redCost,int whi
 	this->enterAbilities=enterList;
 	this->upkeepAbilities=upkeepList;
 	this->passiveAbilities=passiveList;
+	this->effect=effect;
 }
 
 CardB::CardB(Mat &img)

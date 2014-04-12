@@ -56,23 +56,23 @@ class Mana
 		{
 		case WHITE:
 			this->white+=value;
-			this->all+=1;
+			this->all+=value;
 			break;
 		case GREEN:
 			this->green+=value;
-			this->all+=1;
+			this->all+=value;
 			break;
 		case RED:
 			this->red+=value;
-			this->all+=1;
+			this->all+=value;
 			break;
 		case BLUE:
 			this->blue+=value;
-			this->all+=1;
+			this->all+=value;
 			break;
 		case BLACK:
 			this->black+=value;
-			this->all+=1;
+			this->all+=value;
 		}
 	}
 	void SubMana(Color color,int value=1)
@@ -81,23 +81,23 @@ class Mana
 		{
 		case WHITE:
 			this->white-=value;
-			this->all-=1;
+			this->all-=value;
 			break;
 		case GREEN:
 			this->green-=value;
-			this->all-=1;
+			this->all-=value;
 			break;
 		case RED:
 			this->red-=value;
-			this->all-=1;
+			this->all-=value;
 			break;
 		case BLUE:
 			this->blue-=value;
-			this->all-=1;
+			this->all-=value;
 			break;
 		case BLACK:
 			this->black-=value;
-			this->all-=1;
+			this->all-=value;
 		}
 	}
 	bool IsMana(Color color)
@@ -209,11 +209,7 @@ public:
 	int oldangle;
 	Mana mana;
 	string name;
-
 	int markerId;
-	int cardsOnHand;
-	int cardsInLib;
-	int cardsInTomb;
 	bool active;
 	void Update();
 	void Draw(Mat &frame);

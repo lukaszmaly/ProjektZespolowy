@@ -31,15 +31,15 @@ class Card
 public:
 	static int width;
 	static int height;
-		bool CanBlock(Card card);
+		bool CanBlock(Card &card);
 		bool CanAttack();
 	bool gaveMana;
-
+	bool newRound;
 	void Fight(Card &op,Game &game);
 	void GiveLifeToPlayer(int value,Game &game);
 	CardB cardBase;
 
-	static void Draw(Mat &img)
+	static void DrawValidCard(Mat &img)
 	{
 		int x,y;
 		x=y=100;
@@ -56,47 +56,63 @@ public:
 	int GetTarget();
 	int additionalAttack;
 	int additionalDefense;
-
 	bool hasFirstStrikeEOT;
 	bool hasLifelinkEOT;
 	bool hasFlyingEOT;
-	bool hasTrampleEOT;
 	bool hasHexproofEOT;
-
 	bool hasFirstStrike;
 	bool hasLifelink;
 	bool hasFlying;
-	bool hasTrample;
 	bool hasHexproof;
 
 	bool hasCantAttack;
 	bool hasCantBlock;
+static void Prepare2(vector<Point>&square,Mat &img);
 
 	bool hasCantUntap;
 
+	bool HasLifelink()
+	{
+		return (cardBase.hasLifelink || hasLifelink || hasLifelinkEOT);
+	}
+
+	bool HasFirstStrike()
+	{
+		return (cardBase.hasFirstStrike ||hasFirstStrike|| hasFirstStrikeEOT);
+	}
+
+	bool HasFlying()
+	{
+		return (cardBase.hasFlying ||hasFlying || hasFlyingEOT);
+	}
+
+	bool HasHexproof()
+	{
+		return (cardBase.hasHexproof ||hasHexproof || hasHexproofEOT);
+	}
+	bool HasDeadtuch()
+	{
+		return cardBase.hasDeatchtuch;
+	}
 	void Add(int attack,int defense);
 	void AddEOT(int attack,int defense);
 	int attEOT;
 	int defEOT;
 	int GetAttack();
 	int GetDefense();
-	int target;
 	static int ID;
 	int id;
-	float area;
 	int sendTime;
 	bool canUntap;
 	bool dead;
 	Point old;
 	int att;
-	bool error;
-	bool nowa;
 	int def;
 	int owner;
-	int cardId;
 	bool taped;
 	void prepareToBlock();
 	Point a,b,c,d;
+	Point la,lb,lc,ld;
 	Mat img;
 	static const int TTL=30;
 	int ttl;
@@ -104,6 +120,7 @@ public:
 	void Clear();
 	bool attack;
 	Point2f enemy;
+	bool deadSended;
 	bool block;
 	int blocking;
 	void Unlock();
@@ -111,11 +128,14 @@ public:
 	void NewRound(int player);
 	void Compare(Mat &img1,Mat &img2,float tab[3],Game &game);
 	Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp);
+	Card(Point a, Point b, Point c,Point d,vector<CardB>& bkarty,Game &game,int owner,int baseId);
 	Card(void);
 	bool TapUntap();
 	float getAngle();
-	void Draw(Mat &img1,vector<CardB>&bkarty,Game &game);
+	void Draw(Mat &img1,Game &game);
 	void Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp);
+	void Update(Point a,Point b,Point c,Point d,int att,int def,Game &game);
+	void Update(Point a,Point b,Point c,Point d,Game &game);
 	Point2f getCenter();
 	bool TrySend(Game &game);
 	void Damage(int value);
@@ -134,14 +154,13 @@ public:
 		float dy1 = pt1.y - pt0.y;
 		float dx2 = pt2.x - pt0.x;
 		float dy2 = pt2.y - pt0.y;
-		return (dx1*dx2 + dy1*dy2)/sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2));
+		return (dx1*dx2 + dy1*dy2)/(float)sqrt((dx1*dx1 + dy1*dy1)*(dx2*dx2 + dy2*dy2));
 	}
 
 	static Point2f getCenter(Point a,Point b,Point c,Point d);
 
 	void Tap(Game &game);
 	void Untap(Game &game);
-	static void Prepare(vector<Point> &square,Mat &img);
 	static bool Valid(Point a,Point b,Point c,Point d)
 	{
 		float w1 = Distance(a,b);

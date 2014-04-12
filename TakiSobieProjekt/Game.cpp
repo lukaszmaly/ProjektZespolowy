@@ -167,63 +167,6 @@ void Game::SetTargetMode(bool value)
 }
 
 
-void Game::MakeDiffImage(Mat &img1,Point a,Point b,Point c,Point d)
-{
-	if(!img1.data || !diff.data) return;
-	Mat img;
-	Mat after;
-
-	Mat t;
-	img1.copyTo(t);
-	img.cols=251;
-	img.rows=356;
-	Point2f c1[4] = {a,b,c,d};
-	Point2f c2[4] = {Point2f(0,0), Point2f(251,0), Point2f(251,356),Point2f(0,356)};
-	Mat mmat(3,3,CV_32FC1);
-	mmat=getAffineTransform(c1,c2);
-	warpAffine(t,img,mmat,Size(251,356));
-	/*cvtColor(img,img,CV_BGR2HSV);
-	cvtColor(diff,diff,CV_BGR2HSV);*/
-
-	imshow("SprawdzanaKarta",img);
-
-	img.copyTo(after);
-	int width=diff.cols;
-	int height=diff.rows;
-	int n=width*height;
-	int channels=diff.channels();
-	long int red=0,green=0,blue=0;
-	long int red2=0,green2=0,blue2=0;
-	unsigned int wsk=0;
-	float bb=0,g=0,r=0;
-	for(int y=0;y<height;y++)
-	{
-		for(int x=0;x<width;x++)
-		{
-			wsk=channels*(width*y + x);
-			blue+=diff.data[wsk]-img.data[wsk];
-			green+=diff.data[wsk+1]-img.data[wsk+1];
-			red+=diff.data[wsk+2]-img.data[wsk+2];
-		}
-	}
-	r=red/(float)n;
-	g=green/(float)n;
-	bb=blue/(float)n;
-
-	for(int y=0;y<height;y++)
-	{
-		for(int x=0;x<width;x++)
-		{
-			wsk=channels*(width*y + x);
-			after.data[wsk]+=(int)bb;
-			after.data[wsk+1]+=(int)g;
-			after.data[wsk+2]+=(int)r;
-		}
-	}
-
-
-	imshow("AfterImprove",after);
-}
 
 string Game::getCurrentPhase()
 {
@@ -331,7 +274,7 @@ void Game::Update()
 			targetOldAngle = targetAngle;
 		}
 	}
-	server.Update();
+
 
 }
 
@@ -361,11 +304,13 @@ Phase Game::GetPhase()
 
 void Game::ChangeStackState(int id,State state)
 {
-	
-		this->server.StackColor(id,state);
-	
-
+	if(id==1 && state==this->stack1) return;
+	else if(id==2 && state==this->stack2) return;
+	if(id==1) this->stack1 = state;
+	if(id==2) this->stack2 = state;
+	this->server.StackColor(id,state);
 }
+
 Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h,int interval,bool showLog)
 {
 		oneLandEachTurn = false;
@@ -373,11 +318,11 @@ Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip
 	stackState=NEUTRAL;
 	SetTargetMode(false);
 	lastId=-1;
+	stack1=NEUTRAL;
+	stack2=NEUTRAL;
 	firsCardPoint = Point(550,250);
 	firstCardHeight = 350;
 	firstCardWidth = 250;
-	diff =Mat(251,356,CV_8UC3);
-	showCardArea=false;
 	bgrMode=true;
 	firstCardChecked=false;
 	checkCardsProp=true;

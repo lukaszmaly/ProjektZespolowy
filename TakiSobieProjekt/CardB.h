@@ -43,11 +43,11 @@ public:
 	bool hasReach;
 	bool hasHaste;
 	bool hasFirstStrike;
-
+	string effect;
 	vector<pair<int,int>> enterAbilities;
 	vector<pair<int,int>> upkeepAbilities;
 	vector<pair<int,int>> passiveAbilities;
-	void Init(int id,string name,int type,int att,int def,int redCost,int whiteCost,int greenCost,int blackCost,int blueCost,int lessCost,bool hasDefender,bool hasLifelink,bool hasDeatchtuch,bool hasHaste,bool hasFlying,bool hasReach,bool hasFirstStrike,bool hasHexproof,vector<pair<int,int>> enterList,vector<pair<int,int>> upkeepList,vector<pair<int,int>> passiveList);
+	void Init(int id,string name,int type,int att,int def,int redCost,int whiteCost,int greenCost,int blackCost,int blueCost,int lessCost,bool hasDefender,bool hasLifelink,bool hasDeatchtuch,bool hasHaste,bool hasFlying,bool hasReach,bool hasFirstStrike,bool hasHexproof,vector<pair<int,int>> enterList,vector<pair<int,int>> upkeepList,vector<pair<int,int>> passiveList,string effect);
 	int redCost;
 	int blueCost;
 	int greenCost;
