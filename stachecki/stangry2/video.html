@@ -14,7 +14,7 @@
 
 {% block content %}
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"> </script>
-
+<script type="text/javascript" src="http://jqueryrotate.googlecode.com/svn/trunk/jQueryRotate.js"></script>
 <script>
 
 $(document).ready(function(){
@@ -157,12 +157,13 @@ $(document).ready(function(){
 							card='{{value}}';
 							var replaced = card.replace(/%20/g, " ");
 							karty[ind-1]=replaced;
-							if (ind1 < 5)
+							if (ind1 < 4)
 							{
-								ind1++;
+								
 								string = "gracz1div"+ind1;
 								$('<img id="theImg" style="height:200px;weight:200px; margin-left:10px; position:relative;"src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);
 								$("#"+string).show();
+								ind1++;
 								//w razie czego dziala $("#theImg").animate({left: '-210px'},500);
 								//$("#"+string).animate({left: '-210px'},500);
 							}
@@ -212,12 +213,13 @@ $(document).ready(function(){
 							
 							var replaced = card.replace(/%20/g, " ");
 							karty[ind-1]=replaced;
-							if (ind2 < 5)
+							if (ind2 < 4)
 							{
-								ind2++;
+								
 								string = "gracz2div"+ind2;
 								$('<img id="theImg" style="height:200px;weight:200px; margin-left:10px;"src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);							
 								$("#"+string).show();
+								ind2++;
 							}
 							else
 							{
@@ -265,9 +267,28 @@ $(document).ready(function(){
 				}
  			}
 			
+			//do zrobienia
 			if (coatakuje!="")
 			{
-				
+				for (var i=0, ogr =ind; i<ind;i++)
+				{
+					if (kartynastole[i]==coatakuje)
+					{	
+						if(nickname==gracz1)
+						{
+							$("#"+divs[i]).rotate(90);
+							$("#"+divs[i]).animate({top:'100px'}, 1000);
+
+						}
+						else if (nickname==gracz2)
+						{
+							var res = divs[i].substr(9,1);
+							$("#"+divs[i]).rotate(90);
+							$("#"+divs[i]).animate({top:'-100px'}, 1000);
+						}
+						
+					}
+				}
 			}
 			
 			if (cobroni!="")
@@ -369,22 +390,22 @@ $(document).ready(function(){
 <div class="pole">
 <div class="gracz1" style="height:300px; width:1000px; border:1px solid green; overflow:auto; position:relative;left:0px;top:0px;margin-bottom:0px;">
 <div style="display: table-row">
-        <div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:0px;top:0px;margin-bottom:0px;" id ="gracz1div1"> </div>
+        <div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:0px;top:0px;margin-bottom:0px;" id ="gracz1div0"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:200px;top:0px;margin-bottom:0px;" id ="gracz1div1"> </div>
 		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:200px;top:0px;margin-bottom:0px;" id ="gracz1div2"> </div>
-		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:200px;top:0px;margin-bottom:0px;" id ="gracz1div3"> </div>
+		<div style="display: table-cell;overflow:hidden;" id ="gracz1div3"> </div>
 		<div style="display: table-cell;overflow:hidden;" id ="gracz1div4"> </div>
-		<div style="display: table-cell;overflow:hidden;" id ="gracz1div5"> </div>
     </div>
 
 </div>
 
 <div class="gracz2" style="height:300px; width:1000px; border:1px solid blue;overflow:auto; ">	
 <div style="display: table-row">
-        <div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:0px;top:100px;margin-bottom:0px;" id ="gracz2div1"> </div>
+        <div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:0px;top:100px;margin-bottom:0px;" id ="gracz2div0"> </div>
+		<div style="display: table-cell;" id ="gracz2div1"> </div>
 		<div style="display: table-cell;" id ="gracz2div2"> </div>
 		<div style="display: table-cell;" id ="gracz2div3"> </div>
 		<div style="display: table-cell;" id ="gracz2div4"> </div>
-		<div style="display: table-cell;" id ="gracz2div5"> </div>
     </div>
 
 </div>
