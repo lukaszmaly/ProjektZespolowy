@@ -1,7 +1,18 @@
+
+{% extends 'base.html' %}
+
+{% block section %}
+<h2>ATM</h2>
+<p>Tutaj możesz zobaczyć wizualizację gry</p>
+{% endblock %}
+
+
 {% load static %}
 <!DOCTYPE html>
 <html>
 <head>
+
+{% block content %}
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"> </script>
 
 <script>
@@ -22,7 +33,7 @@ $(document).ready(function(){
 	
 	var ind1 =0, ind2=0, ind=0;
 	//ktora karte usunac
-	var cousunac;
+	var cousunac,coatakuje, cobroni;
 
 	//akcje: LOAD, PLAY, DEAD
 	var kartynastole = new Array();
@@ -57,6 +68,9 @@ $(document).ready(function(){
 		{			
 			//zwiekszamy licznik akcji
 			licznik++;
+			coatakuje="";
+			cobroni="";
+			cousunac="";
 			//kopiujemyhp
 			if (licznik==1)
 			{
@@ -80,7 +94,25 @@ $(document).ready(function(){
 				}
 			{% endfor %}
 			
-			cousunac="";
+			//szukamy, ktory gracz gra
+			{% for key,value in ataki.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					coatakuje={{value}};
+				}
+			{% endfor %}
+			
+			//szukamy, ktory gracz gra
+			{% for key,value in obrony.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					cobroni={{value}};
+				}
+			{% endfor %}
+			
+		
 			//szukamy, jesli trzeba bedzie usunac karte
 			{% for key,value in deads.iteritems %}
 				wartosc1 = {{key}};
@@ -129,7 +161,10 @@ $(document).ready(function(){
 							{
 								ind1++;
 								string = "gracz1div"+ind1;
-								
+								$('<img id="theImg" style="height:200px;weight:200px; margin-left:10px; position:relative;"src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);
+								$("#"+string).show();
+								//w razie czego dziala $("#theImg").animate({left: '-210px'},500);
+								//$("#"+string).animate({left: '-210px'},500);
 							}
 							else
 							{
@@ -137,13 +172,20 @@ $(document).ready(function(){
 								{
 									if (ktorydivwolny[i]!="")
 									{
-										string=ktorydivwolny[i];
-										break;
+										var substr= ktorydivwolny[i].search("gracz1");
+										if (substr != -1)
+										{
+											string=ktorydivwolny[i];
+											ktorydivwolny[i]="";
+											$('<img id="theImg" style="height:200px;weight:200px; margin-left:10px;"src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);
+											$("#"+string).show();
+											break;
+										}
+										else continue;
 									}
 								}
 							}
-							$('<img id="theImg" src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);	
-							$("#"+string).show();
+
 							akcje[licznik-1] = "load";
 						}
 					{% endfor %}
@@ -174,7 +216,8 @@ $(document).ready(function(){
 							{
 								ind2++;
 								string = "gracz2div"+ind2;
-								
+								$('<img id="theImg" style="height:200px;weight:200px; margin-left:10px;"src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);							
+								$("#"+string).show();
 							}
 							else
 							{
@@ -182,13 +225,19 @@ $(document).ready(function(){
 								{
 									if (ktorydivwolny[i]!="")
 									{
-										string=ktorydivwolny[i];
-										break;
+										var substr= ktorydivwolny[i].search("gracz2");
+										if (substr != -1)
+										{
+											string=ktorydivwolny[i];
+											ktorydivwolny[i]="";
+											$('<img id="theImg" style="height:200px;weight:200px; margin-left:10px;"src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);
+											$("#"+string).show();
+											break;
+										}
+										else continue;
 									}
 								}
 							}
-							$('<img id="theImg" src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);
-							$("#"+string).show();
 							akcje[licznik-1] = "load";
 						}
 					{% endfor %}
@@ -215,6 +264,27 @@ $(document).ready(function(){
 					}
 				}
  			}
+			
+			if (coatakuje!="")
+			{
+				
+			}
+			
+			if (cobroni!="")
+			{
+				
+				for (var i=0, ogr =ind; i<ind;i++)
+				{
+					if (kartynastole[i]==cobroni)
+					{	
+						if(nickname==gracz1)
+						$("#"+divs[i]).animate({top:'100px'}, 1000);
+						else if (nickname==gracz2)
+						$("#"+divs[i]).animate({top:'-100px'}, 1000);
+					}
+				}
+                
+			}
 			
 
 			//wczytujemy kolejna akcje
@@ -259,8 +329,12 @@ $(document).ready(function(){
 				
 			for (var i =0, limit = kartynastole.length; i<limit; i++)
 			{			
-				$('<img id="theImg" src="{% static "assets/images/'+karty[i]+'.jpg" %}" />').appendTo("#"+divs[i]);			
-				$("#"+divs).show();
+				if (kartynastole[i]!="")
+				{
+					$('<img id="theImg" style="height:200px;weight:200px; margin-left:10px;"src="{% static "assets/images/'+karty[i]+'.jpg" %}" />').appendTo("#"+divs[i]);			
+					$("#"+divs).show();
+				}
+			
 			}		
 		}
 		
@@ -293,20 +367,20 @@ $(document).ready(function(){
 <div id="tekst"><h2></div></h2>
 <div id="hp1"><h2></div></h2>
 <div class="pole">
-<div class="gracz1" style="height:300px; width:1000px; border:1px solid green; overflow:auto;">
+<div class="gracz1" style="height:300px; width:1000px; border:1px solid green; overflow:auto; position:relative;left:0px;top:0px;margin-bottom:0px;">
 <div style="display: table-row">
-        <div style="display: table-cell;" id ="gracz1div1"> </div>
-		<div style="display: table-cell;" id ="gracz1div2"> </div>
-		<div style="display: table-cell;" id ="gracz1div3"> </div>
-		<div style="display: table-cell;" id ="gracz1div4"> </div>
-		<div style="display: table-cell;" id ="gracz1div5"> </div>
+        <div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:0px;top:0px;margin-bottom:0px;" id ="gracz1div1"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:200px;top:0px;margin-bottom:0px;" id ="gracz1div2"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:200px;top:0px;margin-bottom:0px;" id ="gracz1div3"> </div>
+		<div style="display: table-cell;overflow:hidden;" id ="gracz1div4"> </div>
+		<div style="display: table-cell;overflow:hidden;" id ="gracz1div5"> </div>
     </div>
 
 </div>
 
 <div class="gracz2" style="height:300px; width:1000px; border:1px solid blue;overflow:auto; ">	
 <div style="display: table-row">
-        <div style="display: table-cell;" id ="gracz2div1"> </div>
+        <div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:0px;top:100px;margin-bottom:0px;" id ="gracz2div1"> </div>
 		<div style="display: table-cell;" id ="gracz2div2"> </div>
 		<div style="display: table-cell;" id ="gracz2div3"> </div>
 		<div style="display: table-cell;" id ="gracz2div4"> </div>
@@ -316,5 +390,7 @@ $(document).ready(function(){
 </div>
 <div id="hp2"><h2></div></h2>
 </div>
+
+{% endblock %}
 </body>
 </html>

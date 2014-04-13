@@ -29,7 +29,7 @@ def gracze(request):
                          
 
 def gracz(request, gracz_id):
-    with open('C:\\Users\\np550\\Desktop\\atm\\magic\\history\\'+Gracz.objects.get(id=gracz_id).imie+'.txt') as f:
+    with open('/home/erwin/atm/magic/history/'+Gracz.objects.get(id=gracz_id).imie+'.txt') as f:
         lines=f.read().splitlines()
     winner=lines[0] 
     if winner==Gracz.objects.get(id=gracz_id).imie:
@@ -52,8 +52,8 @@ def gracz(request, gracz_id):
     lista=hist
     f.close()
     
-    if not os.path.exists('C:\\Users\\np550\\Desktop\\atm\\magic\\history\\'+looser+'.txt'):
-        g=open('C:\\Users\\np550\\Desktop\\atm\\magic\\history'+looser+'.txt','w')
+    if not os.path.exists('C:\\Users\\np550\\Desktop\\atm\\history\\'+looser+'.txt'):
+        g=open('C:\\Users\\np550\\Desktop\\atm\\history\\'+looser+'.txt','w')
         Gracz.objects.get(imie=looser).przegrane+=1
         Gracz.objects.get(imie=looser).save()
         for item in lines:
@@ -106,6 +106,8 @@ def video(request):
 		ktogra={};
 		hp1list={};
 		hp2list={};
+		ataklist={};
+		defenslist={};
 		#HP poczatkowe 20
 		#otwieramy plik itworzymy obiekt gry
 	fo=open('C:\\Users\\np550\\Desktop\\atm\\magic\\history\\LOGI_V3.txt', 'r');
@@ -145,19 +147,14 @@ def video(request):
 			if (list[2] != "-1" ):
 				dolacz="";
 				if (len(list) > 5):
-					limit=len(list)-1;
-					for i in range (4,limit):
-						dolacz=dolacz+" "+list[i-1];				
-					dolacz=dolacz[1:];
+					dolacz=list[3];			
 					if (dolacz[len(dolacz)-1]=="\n" or dolacz[len(dolacz)-1]==" "):
 						dolacz=dolacz[:-1];
 					obiekt.cardlist.update({obiekt.count : dolacz});
 					obiekt.idlist.update({obiekt.count : list[2]});
 					obiekt.ktogra.update({obiekt.count : list[1]});
 				else:
-					for i in range (4,len(list)+1):
-						dolacz=dolacz+" "+list[i-1];
-					dolacz=dolacz[1:];
+					dolacz=list[3];	
 					if (dolacz[len(dolacz)-1]=="\n" or dolacz[len(dolacz)-1]==" "):
 						dolacz=dolacz[:-1];
 					obiekt.cardlist.update({obiekt.count : dolacz});
@@ -171,13 +168,19 @@ def video(request):
 			else: 
 				list[2]=list[2][:-1];
 				obiekt.hp2list.update({obiekt.count : list[2]});
-		elif ("DEFENCE" in list[0] or "STATS" in list[0] or "ADDDAMAGE" in list[0] or "ATTACK" in list[0] or "NEXTTURN" in list[0]):
+		elif ("STATS" in list[0] or "ADDDAMAGE" in list[0] or "NEXTTURN" in list[0]):
 			continue;
+		elif ("DEFENCE" in list[0]):
+			#bedzie mnie interesowalo, co sie blokuje... chyba
+			obiekt.defenslist.update({obiekt.count : list[2][:-1]});
+		elif ("ATTACK" in list[0]):
+			obiekt.ataklist.update({obiekt.count : list[1][:-1]});
 		elif ("DEAD" in list[0]):
 			obiekt.deadlist.update({obiekt.count : list[1][:-1]});
 		#zamykamy plik
 	fo.close();
-	return render_to_response ('video.html',{'karty':obiekt.cardlist, 'licznik':obiekt.count, 'gracz1': 1, 'gracz2': 2, 'ktogra':obiekt.ktogra, 'akcje':obiekt.actionlist, 'deads':obiekt.deadlist, 'idlist':obiekt.idlist, 'ileakcji':obiekt.count, 'hp1':obiekt.hp1list, 'hp2':obiekt.hp2list})
+	return render_to_response ('video.html',{'karty':obiekt.cardlist, 'licznik':obiekt.count, 'gracz1': 1, 'gracz2': 2, 'ktogra':obiekt.ktogra, 'akcje':obiekt.actionlist, 'deads':obiekt.deadlist, 'idlist':obiekt.idlist, 'ileakcji':obiekt.count, 'hp1':obiekt.hp1list, 'hp2':obiekt.hp2list, 'ataki':obiekt.ataklist,
+	'obrony':obiekt.defenslist})
 
 def popular(request):
     
