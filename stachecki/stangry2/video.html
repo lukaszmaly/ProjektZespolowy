@@ -291,7 +291,7 @@ $(document).ready(function(){
 					if (kartynastole[i]==cousunac)
 					{
 						$("#"+divs[i]).empty();
-						ktorydivwolny[i]=divs[i];
+						ktorydivwolny[indsm]=divs[i];
 						smierci[indsm]=karty[i];
 						indsm++;
 						akcje[licznik-1] = "dead";						
@@ -311,22 +311,19 @@ $(document).ready(function(){
 						{
 							$("#"+divs[i]).rotate(90);
 							$("#"+divs[i]).animate({top:'100px'}, 1000);
-							atakujace[inda]=divs[i];
-							inda++;
-							akcje[licznik-1] = "atak";
-							break;
+
 
 						}
 						else if (kto=="gracz2")
 						{
 							$("#"+divs[i]).rotate(90);
 							$("#"+divs[i]).animate({top:'-30px'}, 1000);
-							atakujace[inda]=divs[i];
-							inda++;
-							akcje[licznik-1] = "atak";
-							break;
 						}
-						
+													
+						atakujace[inda]=divs[i];
+						inda++;
+						akcje[licznik-1] = "atak";
+						break;
 					}
 				}
 			}
@@ -349,23 +346,21 @@ $(document).ready(function(){
 								if(kto=="gracz1")
 								{
 									$("#"+divs[i]).animate({top:'100px'}, 1000);
-									broniacy=divs[i];
-									akcje[licznik-1] = "obrona";
-									break;
+						
 								}
 							
 								else if (kto=="gracz2")
 								{
 
 									$("#"+divs[i]).animate({top:'-30px'}, 1000);									
-									broniacy=divs[i];
-									akcje[licznik-1] = "obrona";
-									break;
 								}
 												
 							}
 						
 						}
+						broniacy=divs[i];
+						akcje[licznik-1] = "obrona";
+						break;
 					}
                 }
 			}
@@ -406,11 +401,12 @@ $(document).ready(function(){
 			
 		 if (akcje [licznik]=="dead")
 		{
-			var dif = ktorydivwolny[ktorydivwolny.length-1];
+			var dif = ktorydivwolny[indsm-1];
 			var replaced = smierci[indsm-1].replace(/%20/g, " ");
 			$('<img id="theImg" style="position:relative;height:200px;weight:200px;"src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+dif);							
 			$("#"+dif).show();
-			divs[ktorydivwolny.length-1]=dif;
+			divs[divs.length-1]=dif;
+			if (indsm!=0)
 			indsm--;
 			
 		}
@@ -429,9 +425,9 @@ $(document).ready(function(){
 			$("#"+atakujace[inda-1]).rotate(360);
 			var kto =  ($("#"+atakujace[inda-1]).parent().attr('class'));
 			if (kto=="gracz1")
-			$("#"+atakujace[inda-1]).animate({top:'-5px'}, 1000);	
+				$("#"+atakujace[inda-1]).animate({top:'-5px'}, 1000);	
 			else
-			$("#"+atakujace[inda-1]).animate({top:'90px'}, 1000);	
+				$("#"+atakujace[inda-1]).animate({top:'90px'}, 1000);	
 			inda--;
 			
 			
@@ -440,13 +436,11 @@ $(document).ready(function(){
 		else if (akcje[licznik]=="obrona")
 		{
 			var kto =  ($("#"+broniacy).parent().attr('class'));
-			var a
 			if (kto=="gracz1")
-			$("#"+broniacy).animate({top:'-5px'}, 1000);	
+				$("#"+broniacy).animate({top:'-5px'}, 1000);	
 			else
-			$("#"+broniacy).animate({top:'90px'}, 1000);	
-			
-			
+				$("#"+broniacy).animate({top:'90px'}, 1000);	
+
 		}
 		
 			

@@ -53,14 +53,4 @@ PLAY 2 13 DramaticRescue
 STATS 13 3 3
 
 
-newgame: wczytujemy graczy i przypisujemy im id
-attack: ktora karta napierdala
-play: jak nowa karta, to przypisuje jej id; jak -1, nic nie robi
-dead: ktora karta umiera
-adddamage: jakies gowno niepotrzebne
-nextturn: niepotrzebne;
-sublife: jakies staty podbija glupie
-defence: obrona, niepotzebne
-stats: cholera wie 
-
 
