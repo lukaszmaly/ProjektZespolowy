@@ -35,7 +35,7 @@ $(document).ready(function(){
 	var broniacy;
 	var inda=0;
 	
-	var ind1 =0, ind2=0, ind=0, indsm=0;
+	var ind1 =0, ind2=0, ind=0, indsm=0, inddmg=0;
 	//ktora karte usunac,coatakuje, co broni i cel obrony
 	var cousunac,coatakuje, cobroni,cel;
 
@@ -48,6 +48,7 @@ $(document).ready(function(){
 	var tabhp1=[];
 	var tabhp2 = [];
 	var smierci = [];
+	var damages = [];
 	
 	//limit na sztywno - ilosc "divow"
 	for (var i = 0, limit = 5; i <= limit; i++) 
@@ -337,31 +338,40 @@ $(document).ready(function(){
 					if (kartynastole[i]==cobroni)
 					{	
 
-						for (var j=0, ogr =ind; j<ind;j++)
-						{
-							
-							if (kartynastole[j]==cel)
-							{	
-								var kto =  ($("#"+divs[i]).parent().attr('class'));
-								if(kto=="gracz1")
-								{
-									$("#"+divs[i]).animate({top:'100px'}, 1000);
+							var kto =  ($("#"+divs[i]).parent().attr('class'));
+							if(kto=="gracz1")
+							{
+								$("#"+divs[i]).animate({top:'100px'}, 1000);
 						
-								}
+							}
 							
-								else if (kto=="gracz2")
-								{
+							else if (kto=="gracz2")
+							{
 
 									$("#"+divs[i]).animate({top:'-30px'}, 1000);									
-								}
-												
 							}
-						
-						}
-						broniacy=divs[i];
-						akcje[licznik-1] = "obrona";
+							broniacy=divs[i];
+							akcje[licznik-1] = "obrona";
+							break;				
+					}
+
+                }
+			}
+			
+			if (cel!="")
+			{
+				for (var i=0, ogr =ind; i<ind;i++)
+				{
+					if (kartynastole[i]==cel)
+					{	
+						$('<img id="wyk" style="position:relative;height:50px;weight:50px;  " src="{% static "assets/images/wykrzyknik.jpg" %}" />').appendTo("#"+divs[i]);	
+						$("#"+divs[i]).show();
+						akcje[licznik-1]="add";
+						damages[inddmg]=divs[i];
+						inddmg++;
 						break;
 					}
+
                 }
 			}
 			
@@ -441,6 +451,13 @@ $(document).ready(function(){
 			else
 				$("#"+broniacy).animate({top:'90px'}, 1000);	
 
+		}
+		
+		else if (akcje[licznik]=="add")
+		{	
+			damages[inddmg-1]="";
+			inddmg--;
+			$( "#wyk" ).remove();
 		}
 		
 			

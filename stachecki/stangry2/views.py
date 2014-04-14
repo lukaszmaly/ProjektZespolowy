@@ -169,7 +169,7 @@ def video(request):
 			else: 
 				list[2]=list[2][:-1];
 				obiekt.hp2list.update({obiekt.count : list[2]});
-		elif ("STATS" in list[0] or "ADDDAMAGE" in list[0] or "NEXTTURN" in list[0]):
+		elif ("STATS" in list[0] or "NEXTTURN" in list[0]):
 			continue;
 		elif ("DEFENCE" in list[0]):
 			#bedzie mnie interesowalo, co sie blokuje... chyba
@@ -179,10 +179,11 @@ def video(request):
 			obiekt.ataklist.update({obiekt.count : list[1][:-1]});
 		elif ("DEAD" in list[0]):
 			obiekt.deadlist.update({obiekt.count : list[1][:-1]});
+		elif ("ADDDAMAGE" in list[0]):
+			obiekt.celelist.update({obiekt.count : list [1]});
 		#zamykamy plik
 	fo.close();
-	return render_to_response ('video.html',{'karty':obiekt.cardlist, 'licznik':obiekt.count, 'gracz1': 1, 'gracz2': 2, 'ktogra':obiekt.ktogra, 'akcje':obiekt.actionlist, 'deads':obiekt.deadlist, 'idlist':obiekt.idlist, 'ileakcji':obiekt.count, 'hp1':obiekt.hp1list, 'hp2':obiekt.hp2list, 'ataki':obiekt.ataklist,
-	'obrony':obiekt.defenslist, 'cele':obiekt.celelist})
+	return render_to_response ('video.html',{'karty':obiekt.cardlist, 'licznik':obiekt.count, 'gracz1': 1, 'gracz2': 2, 'ktogra':obiekt.ktogra, 'akcje':obiekt.actionlist, 'deads':obiekt.deadlist, 'idlist':obiekt.idlist, 'ileakcji':obiekt.count, 'hp1':obiekt.hp1list, 'hp2':obiekt.hp2list, 'ataki':obiekt.ataklist,'obrony':obiekt.defenslist, 'cele':obiekt.celelist})
 
 def popular(request):
     

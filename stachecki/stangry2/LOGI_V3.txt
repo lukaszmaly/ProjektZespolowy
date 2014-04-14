@@ -1,4 +1,4 @@
-NEWGAME OLEK LUCAS //olek ma nr 1, lucas 2
+NEWGAME OLEK LUCAS
 PLAY 1 3 Shock -1 -1 
 NEXTTURN
 PLAY 2 4 AxebaneStag -1 -1
