@@ -108,6 +108,7 @@ def video(request):
 		hp2list={};
 		ataklist={};
 		defenslist={};
+		celelist={};
 		#HP poczatkowe 20
 		#otwieramy plik itworzymy obiekt gry
 	fo=open('C:\\Users\\np550\\Desktop\\atm\\magic\\history\\LOGI_V3.txt', 'r');
@@ -173,6 +174,7 @@ def video(request):
 		elif ("DEFENCE" in list[0]):
 			#bedzie mnie interesowalo, co sie blokuje... chyba
 			obiekt.defenslist.update({obiekt.count : list[2][:-1]});
+			obiekt.celelist.update({obiekt.count : list[1]});
 		elif ("ATTACK" in list[0]):
 			obiekt.ataklist.update({obiekt.count : list[1][:-1]});
 		elif ("DEAD" in list[0]):
@@ -180,7 +182,7 @@ def video(request):
 		#zamykamy plik
 	fo.close();
 	return render_to_response ('video.html',{'karty':obiekt.cardlist, 'licznik':obiekt.count, 'gracz1': 1, 'gracz2': 2, 'ktogra':obiekt.ktogra, 'akcje':obiekt.actionlist, 'deads':obiekt.deadlist, 'idlist':obiekt.idlist, 'ileakcji':obiekt.count, 'hp1':obiekt.hp1list, 'hp2':obiekt.hp2list, 'ataki':obiekt.ataklist,
-	'obrony':obiekt.defenslist})
+	'obrony':obiekt.defenslist, 'cele':obiekt.celelist})
 
 def popular(request):
     
