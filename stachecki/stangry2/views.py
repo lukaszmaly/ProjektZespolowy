@@ -172,9 +172,7 @@ def video(request):
 		elif ("STATS" in list[0] or "NEXTTURN" in list[0]):
 			continue;
 		elif ("DEFENCE" in list[0]):
-			#bedzie mnie interesowalo, co sie blokuje... chyba
 			obiekt.defenslist.update({obiekt.count : list[2][:-1]});
-			obiekt.celelist.update({obiekt.count : list[1]});
 		elif ("ATTACK" in list[0]):
 			obiekt.ataklist.update({obiekt.count : list[1][:-1]});
 		elif ("DEAD" in list[0]):
