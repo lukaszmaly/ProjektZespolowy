@@ -4,7 +4,7 @@ import processing.core.*;
 public class Board 
 {
 	PVector graveyard1;
-	
+
 	PApplet parent;
 	
 	Stack stack1,stack2,stack3;
@@ -329,7 +329,8 @@ parent.rectMode(parent.CENTER);
 	 		costW,costB,costU,costG,costR,cost;
 	 	PVector position;
 	 	PImage blue,red,green;
-	 	
+	 	boolean cardOnStack=false;
+		int cardOnStackId;
 	 	
 	 	Stack(PApplet p,PVector pos)
 	 	{
@@ -361,7 +362,11 @@ parent.rectMode(parent.CENTER);
 	 			else if(g==255)
 	 				parent.image(green,0,0,game.cardWidth*1.6f,game.cardHeight*1.4f);
 	 			 parent.popMatrix();
-	 			 
+	 			 if(cardOnStack==true)
+	 			 {
+	 				 parent.image(game.skull,parent.width*position.x+game.cardWidth*0.8f,parent.height*position.y+game.cardHeight*0.7f);
+	 			 }
+	 			parent.imageMode(parent.CORNER);
 	 	//parent.rectMode(parent.CENTER);
 	 			 //parent.rectMode(parent.CORNER);
 	 			 /*

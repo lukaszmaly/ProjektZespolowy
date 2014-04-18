@@ -308,7 +308,20 @@ public class Game {
 	}
 					
 					break;
-				
+				case "CARDONSTACK":
+					int playerId=Integer.parseInt(Dane[2]);
+					int cardId=Integer.parseInt(Dane[3]);
+					if(playerId==1)
+					{
+						this.board.stack1.cardOnStack=true;
+						this.board.stack1.cardOnStackId=cardId;
+					}
+					else
+					{
+						this.board.stack2.cardOnStack=true;
+						this.board.stack2.cardOnStackId=cardId;
+					}
+					break;
 				case "DAMAGE":
 					id=Integer.parseInt(Dane[2]);
 					 q=Integer.parseInt(Dane[3]);
@@ -338,6 +351,26 @@ public class Game {
 						}
 					}
 					
+				case "DRAW":
+				{
+					id=Integer.parseInt(Dane[2]);
+					 String s=Dane[3];
+					 s="Draw\n"+s;
+					 if(id==1)
+					 {
+						 //this.board.lib1.r=(int)parent.random(255);
+						 //this.board.lib1.g=(int)parent.random(255);
+						 //this.board.lib1.b=(int)parent.random(255);
+						 this.Effects.add(new Effect(parent,this,120,this.board.lib1.position,new PVector(0,0),40, 0, 255, 0,s));
+					 }
+					 if(id==2)
+					 {
+						 this.Effects.add(new Effect(parent,this,120,this.board.lib2.position,new PVector(0,0),40, 0, 255, 0,s));
+					 }
+				}
+				
+		break;
+					
 				case "EFFECT":
 				{
 					
@@ -346,8 +379,8 @@ public class Game {
 					if(type.compareTo("BOLT")==0)
 					{
 						
-						int playerId=Integer.parseInt(Dane[3]);
-						int cardId=Integer.parseInt(Dane[4]);
+						 playerId=Integer.parseInt(Dane[3]);
+						 cardId=Integer.parseInt(Dane[4]);
 						
 						if(cardId>=0) this.Effects.add(new Effect(parent,this,Type.BOLT,24,cardId,this.cardWidth,this.cardHeight,this.Cards));
 					}
@@ -355,8 +388,8 @@ public class Game {
 					if(type.compareTo("SPEAR")==0)
 					{
 						PVector v=null,u=null;
-						int playerId=Integer.parseInt(Dane[3]);
-						int cardId=Integer.parseInt(Dane[4]);
+						 playerId=Integer.parseInt(Dane[3]);
+						 cardId=Integer.parseInt(Dane[4]);
 						if(playerId==1)
 						{
 							u=new PVector(parent.width/2,parent.height);
@@ -375,7 +408,7 @@ public class Game {
 					if(type.compareTo("BOOST")==0)
 					{
 						
-						int cardId=Integer.parseInt(Dane[4]);
+						 cardId=Integer.parseInt(Dane[4]);
 						this.Effects.add(new Effect(parent,this,Type.BOOST,50,cardId));
 						
 						
@@ -384,7 +417,7 @@ public class Game {
 						if(type.compareTo("REDUCTION")==0)
 					{
 							
-							int cardId=Integer.parseInt(Dane[4]);
+							 cardId=Integer.parseInt(Dane[4]);
 							this.Effects.add(new Effect(parent,this,Type.REDUCTION,50,cardId));
 					}
 					
@@ -493,25 +526,7 @@ public class Game {
 						 this.Effects.add(new Effect(parent,this,120,this.board.lib2.position,new PVector(0,0),35, 255, 0, 0,s));					 }
 				}
 				break;
-				case "DRAW":
-				{
-					id=Integer.parseInt(Dane[2]);
-					 String s=Dane[3];
-					 s="Draw\n"+s;
-					 if(id==1)
-					 {
-						 //this.board.lib1.r=(int)parent.random(255);
-						 //this.board.lib1.g=(int)parent.random(255);
-						 //this.board.lib1.b=(int)parent.random(255);
-						 this.Effects.add(new Effect(parent,this,120,this.board.lib1.position,new PVector(0,0),40, 0, 255, 0,s));
-					 }
-					 if(id==2)
-					 {
-						 this.Effects.add(new Effect(parent,this,120,this.board.lib2.position,new PVector(0,0),40, 0, 255, 0,s));
-					 }
-				}
-				
-		break;
+		
 				
 				case "STACK":
 					 id=Integer.parseInt(Dane[2]);
@@ -534,6 +549,7 @@ public class Game {
 							 this.board.stack1.r=0;
 							 this.board.stack1.g=0;
 							 this.board.stack1.b=255;
+							 this.board.stack1.cardOnStack=false;
 							 break;
 						 }
 					 }
@@ -556,6 +572,7 @@ public class Game {
 									 this.board.stack2.r=0;
 									 this.board.stack2.g=0;
 									 this.board.stack2.b=255;
+									 this.board.stack2.cardOnStack=false;
 									 break;
 								 
 								 
