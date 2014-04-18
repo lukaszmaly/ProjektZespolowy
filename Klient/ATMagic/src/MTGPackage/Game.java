@@ -308,6 +308,14 @@ public class Game {
 					
 					break;
 				
+				case "DAMAGE":
+					id=Integer.parseInt(Dane[2]);
+					 q=Integer.parseInt(Dane[3]);
+					 Effects.add(new Effect(parent, this, Type.DAMAGE, 50, id));
+					Effect ef= Effects.get(Effects.size()-1);
+					ef.q=q;
+					break;
+					
 				case "DEAD":
 					id = Integer.parseInt(Dane[2]);
 					for (int i = 0; i < this.Cards.size(); i++) {

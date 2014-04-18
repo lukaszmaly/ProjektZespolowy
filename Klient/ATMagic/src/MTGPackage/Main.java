@@ -36,7 +36,7 @@ public class Main extends PApplet {
 	{
 		//game.cardWidth=110;
 		//game.cardHeight=158;
-		rectMode(CENTER);
+		
 		
 		counter--;
 		if(game.window==0 && game.tokens == true)
@@ -73,6 +73,8 @@ public class Main extends PApplet {
 			
 			game.goThroughCards();
 			game.goThroughEffects();
+			
+		
 		}
 	}
 
@@ -119,8 +121,8 @@ public class Main extends PApplet {
 					
 				break;
 			case 'g':
-				if(game.GameType=='S') game.GameType='M';
-				else game.GameType='S';
+				if(game.GameType=='S') {game.GameType='M';game.window=2;}
+				else {game.GameType='S';game.window=1;}
 				break;
 					
 			
@@ -174,20 +176,23 @@ public class Main extends PApplet {
 				}
 		if (mouseButton == LEFT) 
 		{	
-			game.Effects.add(new Effect(this,game,Type.BOOST,50,1));
-			game.Effects.add(new Effect(this,game,Type.REDUCTION,50,2));
+		//	game.Effects.add(new Effect(this,game,Type.BOOST,50,1));
+		//	game.Effects.add(new Effect(this,game,Type.REDUCTION,50,2));
+			// game.Effects.add(new Effect(this, game, Type.DAMAGE, 50, 1));
+			// Effect e= game.Effects.get(game.Effects.size()-1);
+			//	e.q=1;
 			//game.Effects.add(new Effect(this, game, 100,new PVector(0.5f,0.5f), new PVector(0,0), 30, 0, 255, 0, "TEXT"));
-			/*
-			game.Effects.add(new Effect(this,game,Type.BOLT,30,1,game.cardWidth,game.cardHeight,game.Cards));	
+			
+			//game.Effects.add(new Effect(this,game,Type.BOLT,30,1,game.cardWidth,game.cardHeight,game.Cards));	
 			if(v==null)v=new PVector(mouseX,mouseY);
 			else
 			{
 				u=new PVector(mouseX,mouseY);
-				game.Effects.add(new Effect(this,game, Type.SPEAR, 20,new PVector(v.x,v.y),new PVector(u.x, u.y)));
+				game.Effects.add(new Effect(this,game, Type.SPEAR, 60,new PVector(v.x,v.y),new PVector(u.x, u.y)));
 				v=null;
 				u=null;
 			}
-			*/
+			
 			 //game.Effects.add(new Effect(this,game,Type.FIRE,30,1,game.cardWidth,game.cardHeight,game.Cards));	
 		
 		}

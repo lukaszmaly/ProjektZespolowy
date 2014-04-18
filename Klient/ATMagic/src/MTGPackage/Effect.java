@@ -6,18 +6,19 @@ import processing.core.*;
 
 public class Effect 
 {
-	public enum Type{START, BOLT, SPARKLES, FRAME, ARROW, TEXT, FIRE, SPEAR,BOOST,REDUCTION}
+	public enum Type{START, BOLT, SPARKLES, DAMAGE, ARROW, TEXT, FIRE, SPEAR,BOOST,REDUCTION}
 	
 	PApplet parent;
 	int life,textR,textG,textB,initLife=20;
-	int textSize;
+	int textSize,q;
 	String text;
 	Type type;
 	Game g;
 	int blockId1=-1,blockId2=-1;
 	PImage 	img,
 			lightning,
-			arrow;
+			arrow,
+			damage;
 	PImage 	l1,l2,l3,l4,
 			f1,f2,f3,f4,f5,f6;
 	PVector v1, v2;
@@ -26,7 +27,7 @@ public class Effect
 	int cardId;
 	int cardWidth, cardHeight;
 	PFont f=new PFont();
-	ArrayList<Card> Cards;
+	//ArrayList<Card> Cards;
 	
 	Effect(PApplet p,Type t,int life)
 	{
@@ -44,8 +45,10 @@ public class Effect
 		this.cardId=cardId;
 		if(t==Type.BOOST)
 		arrow=parent.loadImage("arrows_up.png");
-		if(t==Type.REDUCTION)
+		else if(t==Type.REDUCTION)
 			arrow=parent.loadImage("arrows_down.png");
+		else if(t==Type.DAMAGE)
+			damage=parent.loadImage("Blood.png");
 		this.initLife=life;
 	
 		
@@ -73,6 +76,7 @@ public class Effect
 		this.v1=v1;
 		this.v2=v2;
 		this.life=life;
+		this.initLife=life;
 		this.type=t;
 		this.g=G;
 		this.cardHeight=cardHeight;
@@ -100,7 +104,7 @@ public class Effect
 		this.cardId=cardID;
 		this.cardHeight=cardHeight;
 		this.cardWidth=cardWidth;
-		this.Cards=c;
+		//this.Cards=c;
 	
 		if(t==Type.BOLT)
 		{
@@ -174,139 +178,7 @@ public class Effect
 	    parent.popMatrix();
 
 	}
-		if(this.type==Type.SPEAR)
-		{
-			
-			
-	    float d=parent.dist(v1.x, v1.y, v2.x, v2.y);
-	    if(life>0) life--;
-	    
-	    int h=(int)d;
-	    int w=(int)(d/1.5);
-	  //  int w=h;
-	   // if(w>80) w=80;
-	    float sin=(parent.abs(v1.x-v2.x))/d;
-	    float asin=parent.asin(sin);
-	 //   parent.println(asin);
-	    parent.stroke(0,0,255);
-    parent.pushMatrix();
-	    parent.translate(v2.x, v2.y);
-	 
-	 if(v1.x<=v2.x && v1.y<=v2.y)  
-	 {
-		 parent.rotate(parent.PI-asin);
-	
-	   // parent.image(img,-w/2,0,w,d);
-	 }
-	 else
-		 if(v1.x<=v2.x && v1.y>=v2.y)  
-		 {
-			 parent.rotate(asin);
-			 
-		   // parent.image(img,-w/2,0,w,d);
-		 } 
-		 else
-			 if(v1.x>=v2.x && v1.y>=v2.y)  
-			 {
-				 parent.rotate(-asin);
-				
-			    //parent.image(img,-w/2,0,w,d);
-			 }
-			 else
-				 if(v1.x>=v2.x && v1.y<=v2.y)  
-				 {
-					 parent.rotate(parent.PI+asin);
-					
-				   // parent.image(img,-w/2,0,w,d);
-				 }
-	 float l=(life/(float)initLife);
-	// parent.println(life+" "+initLife+" "+l);
-			 parent.tint(255,(255*l));
-	 parent.image(img,-w/2,l*h,w,d*2l);
-	 parent.tint(255);
-	 
-	    parent.popMatrix();
-
-	}
-		else
-		if(this.type==Type.BOLT)
-		{
-
-			Card c;
-			for (int i = 0; i < Cards.size(); i++) {
-				c = Cards.get(i);
-				
-				if (c.id == cardId) {
-
-		    if(life>0) life--;
-		   
-			parent.pushMatrix();
-			
-			parent.translate(c.loc[0].x,c.loc[0].y);
-			switch(c.direction)
-			{
-			case 1:
-				parent.rotate(c.asin);
-				break;
-				
-			case 2:
-				parent.rotate(-c.asin+parent.PI);
-				break;
-				
-			case 3:
-				parent.rotate(c.asin+parent.PI);
-				break;
-				
-			case 4:
-				parent.rotate(-c.asin);
-				break;
-				
-			default: break;
-			
-			}
-			
-			
-	
-			if((int)(life)%4==0)
-			parent.image(l1, -cardWidth/2, -cardHeight/2,cardWidth*2f,cardHeight*2f);
-			else
-				if((int)(life)%4==1)
-					parent.image(l2, -cardWidth/2, -cardHeight/2,cardWidth*2f,cardHeight*2f);
-				else
-					if((int)(life)%4==2)
-						parent.image(l3, -cardWidth/2, -cardHeight/2,cardWidth*2f,cardHeight*2f);
-					else
-						if((int)(life)%4==3)
-							parent.image(l4, -cardWidth/2, -cardHeight/2,cardWidth*2f,cardHeight*2f);
-			parent.popMatrix();
-			}
-			}
-
-		}
-		else if(this.type==type.TEXT)
-		{
-			//parent.println("kk"+parent);
-			f=parent.createFont("Comic Sans", this.textSize);
-			//f=parent.createFont("Comic Sans", 22,true);
-			
-		 	parent.textFont(f);
-			parent.fill(this.textR,this.textG,this.textB);
-			parent.textAlign(parent.CENTER);
-			
-			parent.pushMatrix();
-		//	parent.translate(parent.width*g.,10);
-			//v1
-			parent.translate(v1.x*parent.width,v1.y*parent.height);
-			//parent.println("####:"+v1.y);
-			//parent.rotate(parent.PI);
-			//parent.text(String.valueOf("5"),0,0);
-			parent.println(this.text+" "+ v1.x*parent.width+" "+v1.y*parent.height);
-			parent.text(this.text,0,0);
-			parent.popMatrix();
-			life--;
-			//parent.text(String.valueOf(P2.life),parent.width*0.86f,parent.height-10);
-			
-		}
+		
 		else if(this.type==Type.BOOST)
 		{
 			for (int i = 0; i < g.Cards.size(); i++) {
@@ -409,6 +281,312 @@ public class Effect
 			}
 			
 		}
+		
+		else
+			if(this.type==Type.BOLT)
+			{
+
+				Card c;
+				for (int i = 0; i < g.Cards.size(); i++) {
+					c = g.Cards.get(i);
+					
+					if (c.id == cardId) {
+
+			    if(life>0) life--;
+			   
+				parent.pushMatrix();
+				
+				parent.translate(c.loc[0].x,c.loc[0].y);
+				switch(c.direction)
+				{
+				case 1:
+					parent.rotate(c.asin);
+					break;
+					
+				case 2:
+					parent.rotate(-c.asin+parent.PI);
+					break;
+					
+				case 3:
+					parent.rotate(c.asin+parent.PI);
+					break;
+					
+				case 4:
+					parent.rotate(-c.asin);
+					break;
+					
+				default: break;
+				
+				}
+				
+				
+		
+				if((int)(life)%4==0)
+				parent.image(l1, -cardWidth/2, -cardHeight/2,cardWidth*2f,cardHeight*2f);
+				else
+					if((int)(life)%4==1)
+						parent.image(l2, -cardWidth/2, -cardHeight/2,cardWidth*2f,cardHeight*2f);
+					else
+						if((int)(life)%4==2)
+							parent.image(l3, -cardWidth/2, -cardHeight/2,cardWidth*2f,cardHeight*2f);
+						else
+							if((int)(life)%4==3)
+								parent.image(l4, -cardWidth/2, -cardHeight/2,cardWidth*2f,cardHeight*2f);
+				parent.popMatrix();
+				}
+				}
+
+			}
+			else if (this.type==Type.DAMAGE)
+			{
+				Card c;
+				for (int i = 0; i < g.Cards.size(); i++) {
+					c = g.Cards.get(i);
+					
+					if (c.id == cardId) {
+
+			    if(life>0) life--;
+			   
+				parent.pushMatrix();
+				
+				parent.translate(c.loc[0].x,c.loc[0].y);
+				switch(c.direction)
+				{
+				case 1:
+					parent.rotate(c.asin);
+					break;
+					
+				case 2:
+					parent.rotate(-c.asin+parent.PI);
+					break;
+					
+				case 3:
+					parent.rotate(c.asin+parent.PI);
+					break;
+					
+				case 4:
+					parent.rotate(-c.asin);
+					break;
+					
+				default: break;
+				
+				}
+				
+				int halfinit=initLife/2;
+				
+				if(life>(initLife/2))
+				{
+					int life2=initLife-life;
+					float l=life2/(float)halfinit;
+					int tint=(int)(l*255);
+					parent.tint(255,tint);
+					
+				}
+				else
+				{
+					float l=life/(float)halfinit;
+					int tint=(int)(l*255);
+					parent.tint(255,tint);
+				}
+				float size;
+				if(this.q<3)
+				{
+					 size=q/3f;
+				}
+				else
+				{
+					 size=1.0f;
+				}
+				parent.image(damage, g.cardWidth/2-(size/2)*g.cardWidth,g.cardHeight/2-(size/2)*g.cardHeight, g.cardWidth*size,g.cardHeight*size);
+				//parent.image(damage, 0.5f*size*g.cardWidth, 0.5f*size*g.cardHeight,g.cardWidth*size,g.cardHeight*size);
+				parent.println(size);
+				parent.popMatrix();
+				parent.tint(255);
+				}
+				}	
+			}
+		
+			else if (this.type==Type.FIRE)
+			{
+
+				Card c;
+				for (int i = 0; i < g.Cards.size(); i++) {
+					c = g.Cards.get(i);
+					
+					if (c.id == cardId) {
+
+			    if(life>0) life--;
+			   
+				parent.pushMatrix();
+				
+				parent.translate(c.loc[0].x,c.loc[0].y);
+				switch(c.direction)
+				{
+				case 1:
+					parent.rotate(c.asin);
+					break;
+					
+				case 2:
+					parent.rotate(-c.asin+parent.PI);
+					break;
+					
+				case 3:
+					parent.rotate(c.asin+parent.PI);
+					break;
+					
+				case 4:
+					parent.rotate(-c.asin);
+					break;
+					
+				default: break;
+				
+				}
+				parent.translate(-0.01f*cardWidth,-0.05f*cardHeight);
+				/*
+				if((int)(life)%4==0)
+				parent.image(f1, 0, 0,cardWidth,cardHeight);
+				else
+					if((int)(life)%4==1)
+					{
+						parent.tint(255, 127);
+						parent.image(f1, 0, 0,cardWidth,cardHeight);
+						parent.tint(255);
+						parent.image(f2, 0, 0,cardWidth,cardHeight);
+					}
+					else
+						if((int)(life)%4==2)
+						{
+							parent.tint(255, 127);
+							parent.image(f2, 0, 0,cardWidth,cardHeight);
+							parent.tint(255);
+							parent.image(f3,0, 0,cardWidth,cardHeight);
+						}
+						else
+							if((int)(life)%4==3)
+							{
+								parent.tint(255, 127);
+								parent.image(f3, 0, 0,cardWidth,cardHeight);
+								parent.tint(255);
+								parent.image(f4, 0, 0,cardWidth,cardHeight);
+							}
+							*/
+				
+					
+					/*
+					if(life>25 && life<=30)
+						{
+							parent.tint(255, 127);
+							parent.image(f1, 0, 0,cardWidth,cardHeight);
+							parent.tint(255);
+							parent.image(f2, 0, 0,cardWidth,cardHeight);
+						}
+						else
+							if(life>20 && life<=25)
+							{	parent.tint(255,50);
+								parent.image(f1, 0, 0,cardWidth,cardHeight);
+								parent.tint(255, 127);
+								parent.image(f2, 0, 0,cardWidth,cardHeight);
+								parent.tint(255);
+								parent.image(f3,0, 0,cardWidth,cardHeight);
+							}
+							else
+								if(life>15 && life<=20)
+								{
+									parent.tint(255,50);
+									parent.image(f2, 0, 0,cardWidth,cardHeight);
+									parent.tint(255, 127);
+									parent.image(f3, 0, 0,cardWidth,cardHeight);
+									parent.tint(255);
+									parent.image(f4, 0, 0,cardWidth,cardHeight);
+								}
+								else
+									if(life>10 && life<=15)
+									{
+										parent.tint(255,50);
+										parent.image(f3, 0, 0,cardWidth,cardHeight);
+										parent.tint(255, 127);
+										parent.image(f4, 0, 0,cardWidth,cardHeight);
+										parent.tint(255);
+										parent.image(f5, 0, 0,cardWidth,cardHeight);
+									}
+									else
+										if(life>5 && life<=10)
+										{
+											parent.tint(255,50);
+											parent.image(f4, 0, 0,cardWidth,cardHeight);
+											parent.tint(255, 127);
+											parent.image(f5, 0, 0,cardWidth,cardHeight);
+											parent.tint(255);
+											parent.image(f6, 0, 0,cardWidth,cardHeight);
+										}
+										else
+											if(life>0 && life<=5)
+											{
+												parent.tint(255, 127);
+												parent.image(f5, 0, 0,cardWidth,cardHeight);
+												parent.tint(255);
+												parent.image(f6, 0, 0,cardWidth,cardHeight);
+											}
+											*/
+				if(life>25 && life<=30)
+				{
+					parent.tint(255, (30-life)*50);
+					parent.image(f2, -10, 0,cardWidth,cardHeight);
+				}
+				else
+					if(life>20 && life<=25)
+					{
+						parent.tint(255, life*5);
+						parent.image(f2, -10, 0,cardWidth,cardHeight);
+						
+						parent.tint(255, (25-life)*50);
+						parent.image(f3, 0, 0,cardWidth,cardHeight);
+					}
+					else
+						if(life>15 && life<=20)
+						{
+							parent.tint(255, life*10);
+							parent.image(f3, 0, 0,cardWidth,cardHeight);
+							
+							parent.tint(255, (20-life)*50);
+							parent.image(f4, 0, 0,cardWidth,cardHeight);
+						}
+						else
+							if(life>10 && life<=15)
+							{
+								parent.tint(255, life*15);
+								parent.image(f4, 0, 0,cardWidth,cardHeight);
+								
+								parent.tint(255, (15-life)*50);
+								parent.image(f3, 0, 0,cardWidth,cardHeight);
+							}
+							else
+								if(life>5 && life<=10)
+								{
+									parent.tint(255, life*20);
+									parent.image(f3, 0, 0,cardWidth,cardHeight);
+									
+									parent.tint(255, (10-life)*50);
+									parent.image(f2, -10, 0,cardWidth,cardHeight);
+								}
+								else
+									if(life>0 && life<=5)
+									{
+										parent.tint(255, life*25);
+										parent.image(f2, -10, 0,cardWidth,cardHeight);
+									}
+				//parent.tint(255, (30-life)*10);
+				//parent.image(f6, 0, 0,cardWidth,cardHeight);
+				parent.tint(255);
+				parent.popMatrix();
+				}
+				}
+
+			}
+		
+		
+		
+		
 		else if(this.type==Type.REDUCTION)
 		{
 			for (int i = 0; i < g.Cards.size(); i++) {
@@ -511,183 +689,105 @@ public class Effect
 			}
 			
 		}
-		else if (this.type==Type.FIRE)
+		
+		else if(this.type==Type.SPEAR)
 		{
-
-			Card c;
-			for (int i = 0; i < Cards.size(); i++) {
-				c = Cards.get(i);
-				
-				if (c.id == cardId) {
-
-		    if(life>0) life--;
-		   
-			parent.pushMatrix();
 			
-			parent.translate(c.loc[0].x,c.loc[0].y);
-			switch(c.direction)
-			{
-			case 1:
-				parent.rotate(c.asin);
-				break;
-				
-			case 2:
-				parent.rotate(-c.asin+parent.PI);
-				break;
-				
-			case 3:
-				parent.rotate(c.asin+parent.PI);
-				break;
-				
-			case 4:
-				parent.rotate(-c.asin);
-				break;
-				
-			default: break;
 			
-			}
-			parent.translate(-0.01f*cardWidth,-0.05f*cardHeight);
-			/*
-			if((int)(life)%4==0)
-			parent.image(f1, 0, 0,cardWidth,cardHeight);
-			else
-				if((int)(life)%4==1)
-				{
-					parent.tint(255, 127);
-					parent.image(f1, 0, 0,cardWidth,cardHeight);
-					parent.tint(255);
-					parent.image(f2, 0, 0,cardWidth,cardHeight);
-				}
-				else
-					if((int)(life)%4==2)
-					{
-						parent.tint(255, 127);
-						parent.image(f2, 0, 0,cardWidth,cardHeight);
-						parent.tint(255);
-						parent.image(f3,0, 0,cardWidth,cardHeight);
-					}
-					else
-						if((int)(life)%4==3)
-						{
-							parent.tint(255, 127);
-							parent.image(f3, 0, 0,cardWidth,cardHeight);
-							parent.tint(255);
-							parent.image(f4, 0, 0,cardWidth,cardHeight);
-						}
-						*/
-			
+	    float d=parent.dist(v1.x, v1.y, v2.x, v2.y);
+	    if(life>0) life--;
+	    
+	    int h=(int)d;
+	    int w=(int)(d/1.5);
+	  //  int w=h;
+	   // if(w>80) w=80;
+	    float sin=(parent.abs(v1.x-v2.x))/d;
+	    float asin=parent.asin(sin);
+	 //   parent.println(asin);
+	    parent.stroke(0,0,255);
+    parent.pushMatrix();
+	    parent.translate(v2.x, v2.y);
+	 
+	 if(v1.x<=v2.x && v1.y<=v2.y)  
+	 {
+		 parent.rotate(parent.PI-asin);
+	
+	   // parent.image(img,-w/2,0,w,d);
+	 }
+	 else
+		 if(v1.x<=v2.x && v1.y>=v2.y)  
+		 {
+			 parent.rotate(asin);
+			 
+		   // parent.image(img,-w/2,0,w,d);
+		 } 
+		 else
+			 if(v1.x>=v2.x && v1.y>=v2.y)  
+			 {
+				 parent.rotate(-asin);
 				
-				/*
-				if(life>25 && life<=30)
-					{
-						parent.tint(255, 127);
-						parent.image(f1, 0, 0,cardWidth,cardHeight);
-						parent.tint(255);
-						parent.image(f2, 0, 0,cardWidth,cardHeight);
-					}
-					else
-						if(life>20 && life<=25)
-						{	parent.tint(255,50);
-							parent.image(f1, 0, 0,cardWidth,cardHeight);
-							parent.tint(255, 127);
-							parent.image(f2, 0, 0,cardWidth,cardHeight);
-							parent.tint(255);
-							parent.image(f3,0, 0,cardWidth,cardHeight);
-						}
-						else
-							if(life>15 && life<=20)
-							{
-								parent.tint(255,50);
-								parent.image(f2, 0, 0,cardWidth,cardHeight);
-								parent.tint(255, 127);
-								parent.image(f3, 0, 0,cardWidth,cardHeight);
-								parent.tint(255);
-								parent.image(f4, 0, 0,cardWidth,cardHeight);
-							}
-							else
-								if(life>10 && life<=15)
-								{
-									parent.tint(255,50);
-									parent.image(f3, 0, 0,cardWidth,cardHeight);
-									parent.tint(255, 127);
-									parent.image(f4, 0, 0,cardWidth,cardHeight);
-									parent.tint(255);
-									parent.image(f5, 0, 0,cardWidth,cardHeight);
-								}
-								else
-									if(life>5 && life<=10)
-									{
-										parent.tint(255,50);
-										parent.image(f4, 0, 0,cardWidth,cardHeight);
-										parent.tint(255, 127);
-										parent.image(f5, 0, 0,cardWidth,cardHeight);
-										parent.tint(255);
-										parent.image(f6, 0, 0,cardWidth,cardHeight);
-									}
-									else
-										if(life>0 && life<=5)
-										{
-											parent.tint(255, 127);
-											parent.image(f5, 0, 0,cardWidth,cardHeight);
-											parent.tint(255);
-											parent.image(f6, 0, 0,cardWidth,cardHeight);
-										}
-										*/
-			if(life>25 && life<=30)
-			{
-				parent.tint(255, (30-life)*50);
-				parent.image(f2, -10, 0,cardWidth,cardHeight);
-			}
-			else
-				if(life>20 && life<=25)
-				{
-					parent.tint(255, life*5);
-					parent.image(f2, -10, 0,cardWidth,cardHeight);
+			    //parent.image(img,-w/2,0,w,d);
+			 }
+			 else
+				 if(v1.x>=v2.x && v1.y<=v2.y)  
+				 {
+					 parent.rotate(parent.PI+asin);
 					
-					parent.tint(255, (25-life)*50);
-					parent.image(f3, 0, 0,cardWidth,cardHeight);
-				}
-				else
-					if(life>15 && life<=20)
-					{
-						parent.tint(255, life*10);
-						parent.image(f3, 0, 0,cardWidth,cardHeight);
-						
-						parent.tint(255, (20-life)*50);
-						parent.image(f4, 0, 0,cardWidth,cardHeight);
-					}
-					else
-						if(life>10 && life<=15)
-						{
-							parent.tint(255, life*15);
-							parent.image(f4, 0, 0,cardWidth,cardHeight);
-							
-							parent.tint(255, (15-life)*50);
-							parent.image(f3, 0, 0,cardWidth,cardHeight);
-						}
-						else
-							if(life>5 && life<=10)
-							{
-								parent.tint(255, life*20);
-								parent.image(f3, 0, 0,cardWidth,cardHeight);
-								
-								parent.tint(255, (10-life)*50);
-								parent.image(f2, -10, 0,cardWidth,cardHeight);
-							}
-							else
-								if(life>0 && life<=5)
-								{
-									parent.tint(255, life*25);
-									parent.image(f2, -10, 0,cardWidth,cardHeight);
-								}
-			//parent.tint(255, (30-life)*10);
-			//parent.image(f6, 0, 0,cardWidth,cardHeight);
-			parent.tint(255);
-			parent.popMatrix();
-			}
-			}
-
+				   // parent.image(img,-w/2,0,w,d);
+				 }
+	// float l=(life/(float)initLife);
+	// parent.println(life+" "+initLife+" "+l);
+			// parent.tint(255,(255*l));
+	 int halfinit=initLife/2;
+	 float l;
+		if(life>(initLife/2))
+		{
+			int life2=initLife-life;
+			 l=life2/(float)halfinit;
+			int tint=(int)(l*400);
+			parent.tint(255,tint);
+			
 		}
+		else
+		{
+			 l=life/(float)halfinit;
+			int tint=(int)(l*400);
+			parent.tint(255,tint);
+		}
+	 parent.image(img,-w/2,((life/initLife)*h)+life*4,w,d+life*4);
+	 parent.tint(255);
+	 
+	    parent.popMatrix();
+
+	}
+		
+		else if(this.type==type.TEXT)
+		{
+			//parent.println("kk"+parent);
+			f=parent.createFont("Comic Sans", this.textSize);
+			//f=parent.createFont("Comic Sans", 22,true);
+			
+		 	parent.textFont(f);
+			parent.fill(this.textR,this.textG,this.textB);
+			parent.textAlign(parent.CENTER);
+			
+			parent.pushMatrix();
+		//	parent.translate(parent.width*g.,10);
+			//v1
+			parent.translate(v1.x*parent.width,v1.y*parent.height);
+			//parent.println("####:"+v1.y);
+			//parent.rotate(parent.PI);
+			//parent.text(String.valueOf("5"),0,0);
+			parent.println(this.text+" "+ v1.x*parent.width+" "+v1.y*parent.height);
+			parent.text(this.text,0,0);
+			parent.popMatrix();
+			life--;
+			//parent.text(String.valueOf(P2.life),parent.width*0.86f,parent.height-10);
+			
+		}
+		
+		
+	
 			
 	}
 	
