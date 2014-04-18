@@ -6,7 +6,17 @@ import processing.core.*;
 
 public class Effect 
 {
-	public enum Type{START, BOLT, SPARKLES, DAMAGE, ARROW, TEXT, FIRE, SPEAR,BOOST,REDUCTION}
+	public enum Type{	START, 
+						BOLT, 
+						SPARKLES, 
+						DAMAGE, 
+						ARROW, 
+						TEXT, 
+						FIRE, 
+						FIRE2,
+						SPEAR,
+						BOOST,
+						REDUCTION}
 	
 	PApplet parent;
 	int life,textR,textG,textB,initLife=20,startingcounter;
@@ -21,7 +31,8 @@ public class Effect
 			damage;
 	PImage 	l1,l2,l3,l4,
 			f1,f2,f3,f4,f5,f6;
-	ArrayList<PImage> fires=new ArrayList<PImage>();
+	
+	
 	PVector v1, v2;
 	int blockId;
 	int arrowType=0;
@@ -52,13 +63,11 @@ public class Effect
 			damage=parent.loadImage("Blood.png");
 		else if(t==Type.FIRE)
 		{
-			String s="AnimatedFire/animatedfire";
-			for(int i=1;i<=24;i++)
-			{
-				img=parent.loadImage(s+i+".png");
-				//println(s+i+".png");
-				fires.add(img);
-			}
+			
+		}
+		else if(t==Type.FIRE2)
+		{
+			
 		}
 		this.initLife=life;
 	
@@ -490,7 +499,7 @@ public class Effect
 				// imgNum=g.drawCounter-startingcounter;
 				
 				parent.imageMode(parent.CENTER);
-				parent.image(fires.get(imgNum), 0,0);
+				parent.image(g.fires.get(imgNum), 0,0);
 				parent.imageMode(parent.CORNER);
 				parent.popMatrix();
 				parent.tint(255);
@@ -676,9 +685,71 @@ public class Effect
 	*/
 			}
 		
+			else if(this.type==Type.FIRE2)
+			{
+				
+					Card c;
+					for (int i = 0; i < g.Cards.size(); i++) {
+						c = g.Cards.get(i);
+						
+						if (c.id == cardId) {
+
+				    
+				   
+					parent.pushMatrix();
+					
+					parent.translate(c.center.x,c.center.y);
+					switch(c.direction)
+					{
+					case 1:
+						parent.rotate(c.asin);
+						break;
+						
+					case 2:
+						parent.rotate(-c.asin+parent.PI);
+						break;
+						
+					case 3:
+						parent.rotate(c.asin+parent.PI);
+						break;
+						
+					case 4:
+						parent.rotate(-c.asin);
+						break;
+						
+					default: break;
+					
+						}
+						
+						
+						
+						
+						
+						int imgNum=74;
+						if(initLife-life>=0 && initLife-life<74)
+						 imgNum=(initLife-life);
+						
+						if(imgNum>50)
+							parent.tint(255,(74-imgNum)*10);
+						
+						if(imgNum<25)
+							parent.tint(255,(imgNum)*10);
+						
+						parent.println(imgNum+"^");
+						//if(g.drawCounter-startingcounter<23)
+						// imgNum=g.drawCounter-startingcounter;
+						
+						parent.imageMode(parent.CENTER);
+						parent.image(g.fires2.get(imgNum), 0,0);
+						parent.imageMode(parent.CORNER);
+						parent.popMatrix();
+						parent.tint(255);
+						if(life>0) life--;
+						
+					}
+			}
 		
-		
-		
+			}
 		else if(this.type==Type.REDUCTION)
 		{
 			for (int i = 0; i < g.Cards.size(); i++) {

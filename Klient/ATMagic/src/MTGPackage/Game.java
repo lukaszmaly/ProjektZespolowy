@@ -14,6 +14,8 @@ public class Game {
 	ArrayList<Card> Cards;
 	ArrayList<Effect> Effects;
 	ArrayList<String> Msgs = new ArrayList<String>();
+	ArrayList<PImage> fires2=new ArrayList<PImage>();
+	ArrayList<PImage> fires=new ArrayList<PImage>();
 	char GameType;
 	PVector[] T=new PVector[4];
 	
@@ -71,6 +73,28 @@ public class Game {
 		
 		calibr = parent.createFont("Arial", 50, true);
 		f = parent.createFont("Arial", 12, true);
+		
+		String s="AnimatedFire2/fire1_0";
+		for(int i=51;i<=99;i++)
+		{
+			PImage img=parent.loadImage(s+"0"+i+".png");
+			parent.println(s+"0"+i+".png");
+			fires2.add(img);
+		}
+		for(int i=100;i<=125;i++)
+		{
+			PImage img=parent.loadImage(s+i+".png");
+			parent.println(s+i+".png");
+			fires2.add(img);
+		}
+		
+		 s="AnimatedFire/animatedfire";
+		for(int i=1;i<=24;i++)
+		{
+			PImage img=parent.loadImage(s+i+".png");
+			//println(s+i+".png");
+			fires.add(img);
+		}
 		
 		udp = new UDP(parent, 600);
 		udp.listen(true);
@@ -420,6 +444,16 @@ public class Game {
 							 cardId=Integer.parseInt(Dane[4]);
 							this.Effects.add(new Effect(parent,this,Type.REDUCTION,50,cardId));
 					}
+						else if(type.compareTo("FIRE")==0)
+						{
+							cardId=Integer.parseInt(Dane[4]);
+							this.Effects.add(new Effect(parent,this,Type.FIRE,48,cardId));
+						}
+						else if(type.compareTo("FIRE2")==0)
+						{
+							cardId=Integer.parseInt(Dane[4]);
+							this.Effects.add(new Effect(parent,this,Type.FIRE2,74,cardId));
+						}
 					
 					
 					
