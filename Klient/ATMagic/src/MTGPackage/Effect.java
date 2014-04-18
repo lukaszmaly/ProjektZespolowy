@@ -81,12 +81,14 @@ public class Effect
 		this.text=text;
 		this.type=type.TEXT;
 		this.v1=pos;
+		this.v2=move;
 		this.life=life;
 		this.textR=r;
 		this.textG=g;
 		this.textB=b;
 		this.g=G;
 		this.textSize=size;
+		this.initLife=life;
 		
 	}
 	
@@ -937,11 +939,38 @@ public class Effect
 			parent.pushMatrix();
 		//	parent.translate(parent.width*g.,10);
 			//v1
+			int halfinit=initLife/2;
+			//img=parent.loadImage("arrows_down.png");
+			if(life>(initLife/2))
+			{
+				int life2=initLife-life;
+				float l=life2/(float)halfinit;
+				int tint=((int)(l*255));
+			//	parent.println(life2+"   "+l+"   "+tint);
+				//parent.tint(255,tint);
+				parent.fill(this.textR,this.textG,this.textB,2*tint);
+				//parent.image(arrow, 0, 0,50,50);
+				parent.println("   "+tint);
+				
+			}
+			else
+			{
+				float l=life/(float)halfinit;
+				int tint=((int)(l*255));
+				//parent.println(life+"   "+l+"   "+tint);
+				//parent.tint(255,tint);
+				//parent.image(arrow, 0, 0,50,50);
+				parent.fill(this.textR,this.textG,this.textB,2*tint);
+				parent.println("   "+tint);
+			}
+			v1.x=v1.x+v2.x;
+			v1.y=v1.y+v2.y;
 			parent.translate(v1.x*parent.width,v1.y*parent.height);
 			//parent.println("####:"+v1.y);
 			//parent.rotate(parent.PI);
 			//parent.text(String.valueOf("5"),0,0);
-			parent.println(this.text+" "+ v1.x*parent.width+" "+v1.y*parent.height);
+		//	parent.println(this.text+" "+ v1.x*parent.width+" "+v1.y*parent.height);
+			
 			parent.text(this.text,0,0);
 			parent.popMatrix();
 			life--;
