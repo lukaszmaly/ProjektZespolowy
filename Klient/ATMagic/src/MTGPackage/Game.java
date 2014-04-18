@@ -10,10 +10,11 @@ public class Game {
 	PApplet parent;
 	
 	Player P1,P2;
+	Player ActivePlayer;
 	ArrayList<Card> Cards;
 	ArrayList<Effect> Effects;
 	ArrayList<String> Msgs = new ArrayList<String>();
-	
+	char GameType;
 	PVector[] T=new PVector[4];
 	
 	Board board;
@@ -45,16 +46,17 @@ public class Game {
 		parent=p;
 		Cards=new ArrayList<Card>();
 		Effects=new ArrayList<Effect>();
-	
+		
 		board=new Board(p);
 		board.game=this;
 		fazy=new Phrases(p);
 		
 		P1=new Player(p,0,"PlayerOne");
 		P2=new Player(p,1,"PlayerTwo");
+		ActivePlayer=P2;
 		
-		cardWidth=113;
-		cardHeight=162;
+		cardWidth=100;
+		cardHeight=145;
 		
 		this.lines = parent.loadStrings("log.txt");
 		
@@ -154,7 +156,7 @@ public class Game {
 //////////////////////////////////////////////////////////////////////////////////////	
 	public void processMessages() {
 		synchronized (mutex) {
-			parent.println(this.Msgs.size());
+			//parent.println(this.Msgs.size());
 			for (String message : this.Msgs) {
 
 				String[] Dane = message.split(" ");
@@ -162,6 +164,15 @@ public class Game {
 				
 
 				switch (Dane[1]) {
+				case "ACTIVEPLAYER":
+					 int id=Integer.parseInt(Dane[2]);
+					 if(id==1)
+						 this.ActivePlayer=this.P1;
+					 else 
+						 this.ActivePlayer=this.P2;
+				break;
+					
+				
 				case "ADD":
 
 				
@@ -182,7 +193,7 @@ public class Game {
 				case "ADDMANA":
 				{
 					
-					int id=Integer.parseInt(Dane[2]);
+					 id=Integer.parseInt(Dane[2]);
 				
 					char c=Dane[3].charAt(0);
 					
@@ -195,7 +206,7 @@ public class Game {
 				
 				case "ADDLIFE":
 				
-					int id=Integer.parseInt(Dane[2]);
+					 id=Integer.parseInt(Dane[2]);
 					int q=Integer.parseInt(Dane[3]);
 					if(id==1)this.P1.life+=q; else this.P2.life+=q;
 					break;
@@ -303,14 +314,16 @@ public class Game {
 						Card c = this.Cards.get(i);
 						if (c.id == id) {
 							c.isDead = true;
-							c.sparkTime=15;
+							
+							//c.sparkTime=15;
+							removeById(id);
 							 PVector acc=null;
 							    PVector vel=null;
 							  for( i=0;i<c.se.size();i++)
 						    	{
 						    	
 						    	SparkEdge e=c.se.get(i);
-						    c.sparkTime=15;
+						    //c.sparkTime=15;
 						    	e.changeSparkType('c',0,0,0,6,vel,acc);
 						    	}
 						}
@@ -327,9 +340,9 @@ public class Game {
 						int playerId=Integer.parseInt(Dane[3]);
 						int cardId=Integer.parseInt(Dane[4]);
 						
-						if(cardId>=0) this.Effects.add(new Effect(parent,this,Type.BOLT,16,cardId,this.cardWidth,this.cardHeight,this.Cards));
+						if(cardId>=0) this.Effects.add(new Effect(parent,this,Type.BOLT,24,cardId,this.cardWidth,this.cardHeight,this.Cards));
 					}
-
+					else
 					if(type.compareTo("SPEAR")==0)
 					{
 						PVector v=null,u=null;
@@ -349,6 +362,22 @@ public class Game {
 						}
 						//if(cardId>=0) this.Effects.add(new Effect(parent,this,Type.BOLT,16,cardId,this.cardWidth,this.cardHeight,this.Cards));
 					}
+					else
+					if(type.compareTo("BOOST")==0)
+					{
+						
+						int cardId=Integer.parseInt(Dane[4]);
+						this.Effects.add(new Effect(parent,this,Type.BOOST,50,cardId));
+						
+						
+					}
+					else
+						if(type.compareTo("REDUCTION")==0)
+					{
+							
+							int cardId=Integer.parseInt(Dane[4]);
+							this.Effects.add(new Effect(parent,this,Type.REDUCTION,50,cardId));
+					}
 					
 					
 					
@@ -356,8 +385,24 @@ public class Game {
 				}
 					
 				case "MARKERS":
+					char ch=Dane[4].charAt(0);
+					 id=Integer.parseInt(Dane[5]);
+					 if(P1.id==id)
+					 {
+						 P1.isLocal=true;
+						 P2.isLocal=false;
+					 }
+					 
 					if (this.tokens == true)
-						{this.tokens = false; this.window=1; this.cardWidth=Integer.parseInt(Dane[2]); this.cardHeight=Integer.parseInt(Dane[3]);}
+						{
+						this.tokens = false; 
+						this.GameType=ch;
+						if (this.GameType=='S')
+							this.window=1;
+						else window=2;
+						this.cardWidth=Integer.parseInt(Dane[2]); 
+						this.cardHeight=Integer.parseInt(Dane[3]);
+						}
 					else
 						{this.tokens = true; this.window=0;}
 					break;
@@ -370,7 +415,7 @@ public class Game {
 				
 				case "SUBMANA":
 				{
-					char c=Dane[3].charAt(0);
+					 char c=Dane[3].charAt(0);
 					 id=Integer.parseInt(Dane[2]);
 				
 					if(id==1)
@@ -423,20 +468,41 @@ public class Game {
 				{
 					id=Integer.parseInt(Dane[2]);
 					 String s=Dane[3];
+					 s="Scry\n"+s;
 					 if(id==1)
 					 {
 						 //this.board.lib1.r=(int)parent.random(255);
 						 //this.board.lib1.g=(int)parent.random(255);
 						 //this.board.lib1.b=(int)parent.random(255);
-						 this.Effects.add(new Effect(parent,this,100,this.board.lib1.position,20, 255, 0, 0,s));
+						// parent.pushMatrix();
+						// parent.rotate(parent.PI);
+						 this.Effects.add(new Effect(parent,this,120,this.board.lib1.position,new PVector(0,0),35, 255, 0, 0,s));
+						// parent.popMatrix();
 					 }
 					 if(id==2)
 					 {
-						 this.Effects.add(new Effect(parent,this,100,this.board.lib2.position,20, 255, 0, 0,s));
+						 this.Effects.add(new Effect(parent,this,120,this.board.lib2.position,new PVector(0,0),35, 255, 0, 0,s));					 }
+				}
+				break;
+				case "DRAW":
+				{
+					id=Integer.parseInt(Dane[2]);
+					 String s=Dane[3];
+					 s="Draw\n"+s;
+					 if(id==1)
+					 {
+						 //this.board.lib1.r=(int)parent.random(255);
+						 //this.board.lib1.g=(int)parent.random(255);
+						 //this.board.lib1.b=(int)parent.random(255);
+						 this.Effects.add(new Effect(parent,this,120,this.board.lib1.position,new PVector(0,0),40, 0, 255, 0,s));
+					 }
+					 if(id==2)
+					 {
+						 this.Effects.add(new Effect(parent,this,120,this.board.lib2.position,new PVector(0,0),40, 0, 255, 0,s));
 					 }
 				}
 				
-		
+		break;
 				
 				case "STACK":
 					 id=Integer.parseInt(Dane[2]);

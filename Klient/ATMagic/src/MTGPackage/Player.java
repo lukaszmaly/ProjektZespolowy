@@ -6,6 +6,7 @@ public class Player {
 	int id,life,manaPool;
 	int w=0,b=0,u=0,r=0,g=0;
 	String name;
+	boolean isLocal;
 	//int cardHeight,cardWidth;
 	
 	Player(PApplet p, int id,String name)

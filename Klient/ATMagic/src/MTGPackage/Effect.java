@@ -6,7 +6,7 @@ import processing.core.*;
 
 public class Effect 
 {
-	public enum Type{START, BOLT, SPARKLES, FRAME, ARROW, TEXT, FIRE, SPEAR,BOOST}
+	public enum Type{START, BOLT, SPARKLES, FRAME, ARROW, TEXT, FIRE, SPEAR,BOOST,REDUCTION}
 	
 	PApplet parent;
 	int life,textR,textG,textB,initLife=20;
@@ -35,27 +35,24 @@ public class Effect
 		this.type=t;
 		
 	}
-	Effect(PApplet p,Game G,int life,int cardId)
+	Effect(PApplet p,Game G,Type t,int life,int cardId)
 	{
 		parent=p;
 		this.life=life;
 		this.g=G;
-		this.type=type.BOOST;
+		this.type=t;
 		this.cardId=cardId;
+		if(t==Type.BOOST)
 		arrow=parent.loadImage("arrows_up.png");
-		//img=parent.loadImage("lightning1.png");
-	//	arrow=parent.loadImage("arrows_up.png");
-		//v1=center
-		
-	}
-	public static void drawArrow(PVector v1,PVector v2)
-	{
-		//img=parent.loadImage("arrows_up.png");
-		
-		
-	}
+		if(t==Type.REDUCTION)
+			arrow=parent.loadImage("arrows_down.png");
+		this.initLife=life;
 	
-	Effect(PApplet p,Game G,int life,PVector pos,int size, int r, int g, int b,String text)
+		
+	}
+
+	
+	Effect(PApplet p,Game G,int life,PVector pos,PVector move,int size, int r, int g, int b,String text)
 	{
 		parent=p;
 		this.text=text;
@@ -298,13 +295,15 @@ public class Effect
 			
 			parent.pushMatrix();
 		//	parent.translate(parent.width*g.,10);
+			//v1
 			parent.translate(v1.x*parent.width,v1.y*parent.height);
 			//parent.println("####:"+v1.y);
 			//parent.rotate(parent.PI);
 			//parent.text(String.valueOf("5"),0,0);
+			parent.println(this.text+" "+ v1.x*parent.width+" "+v1.y*parent.height);
 			parent.text(this.text,0,0);
 			parent.popMatrix();
-			
+			life--;
 			//parent.text(String.valueOf(P2.life),parent.width*0.86f,parent.height-10);
 			
 		}
@@ -315,16 +314,202 @@ public class Effect
 				if (c.id == cardId) 
 				{
 				v1=c.center;
-				
+				if(this.life>0) this.life--;
 			
 			parent.pushMatrix();
 			parent.translate(v1.x, v1.y);
+			switch(c.direction)
+			{
+			case 1:
+				parent.rotate(c.asin);
+				break;
 				
-			parent.image(arrow, 30, 30,60,60);
+			case 2:
+				parent.rotate(-c.asin+parent.PI);
+				break;
+				
+			case 3:
+				parent.rotate(c.asin+parent.PI);
+				break;
+				
+			case 4:
+				parent.rotate(-c.asin);
+				break;
+				
+			default: break;
 			
-			//parent.popMatrix();
-				}
 			}
+			
+			int halfinit=initLife/2;
+			
+			if(life>(initLife/2))
+			{
+				int life2=initLife-life;
+				float l=life2/(float)halfinit;
+				int tint=(int)(l*255);
+			//	parent.println(life2+"   "+l+"   "+tint);
+				parent.tint(255,tint);
+				//parent.image(arrow, 0, 0,50,50);
+				
+			}
+			else
+			{
+				float l=life/(float)halfinit;
+				int tint=(int)(l*255);
+				//parent.println(life+"   "+l+"   "+tint);
+				parent.tint(255,tint);
+				//parent.image(arrow, 0, 0,50,50);
+			}
+			parent.translate(0,(initLife/4)-(initLife-life)/2);
+			parent.image(arrow, -15, -15,30,30);
+			parent.image(arrow, -55, -15,30,30);//oryg
+			parent.image(arrow, 25, -15,30,30);
+			
+			parent.image(arrow, -15, -10,30,30);
+				parent.image(arrow, -55, -10,30,30);
+				parent.image(arrow, 25, -10,30,30);
+				
+				parent.image(arrow, -15, -5,30,30);
+				parent.image(arrow, -55, -5,30,30);
+				parent.image(arrow, 25, -5,30,30);
+			
+		//	parent.image(arrow, -15, 5,30,30);
+		//	parent.image(arrow, -55, 5,30,30);
+		//	parent.image(arrow, 25, 5,30,30);
+			
+		//	parent.image(arrow, -15, -5,30,30);
+		//	parent.image(arrow, -55, -5,30,30);
+		//	parent.image(arrow, 25, -5,30,30);
+			
+			parent.image(arrow, -35, 20,30,30);//oryg
+			parent.image(arrow, 5, 20,30,30);
+			
+			parent.image(arrow, -35, 25,30,30);
+			parent.image(arrow, 5, 25,30,30);
+			
+			parent.image(arrow, -35, 30,30,30);
+			parent.image(arrow, 5, 30,30,30);
+			
+			parent.image(arrow, -35, -55,30,30);//oryg
+			parent.image(arrow, 5, -55,30,30);
+			
+			parent.image(arrow, -35, -50,30,30);
+			parent.image(arrow, 5, -50,30,30);
+			
+			parent.image(arrow, -35, -45,30,30);
+			parent.image(arrow, 5, -45,30,30);
+			
+			
+			parent.tint(255);
+			parent.popMatrix();
+			break;
+			
+				}
+				
+			}
+			
+		}
+		else if(this.type==Type.REDUCTION)
+		{
+			for (int i = 0; i < g.Cards.size(); i++) {
+				Card c = g.Cards.get(i);
+				if (c.id == cardId) 
+				{
+				v1=c.center;
+				if(this.life>0) this.life--;
+			
+			parent.pushMatrix();
+			parent.translate(v1.x, v1.y);
+			switch(c.direction)
+			{
+			case 1:
+				parent.rotate(c.asin);
+				break;
+				
+			case 2:
+				parent.rotate(-c.asin+parent.PI);
+				break;
+				
+			case 3:
+				parent.rotate(c.asin+parent.PI);
+				break;
+				
+			case 4:
+				parent.rotate(-c.asin);
+				break;
+				
+			default: break;
+			
+			}
+			
+			int halfinit=initLife/2;
+			//img=parent.loadImage("arrows_down.png");
+			if(life>(initLife/2))
+			{
+				int life2=initLife-life;
+				float l=life2/(float)halfinit;
+				int tint=((int)(l*255))/4;
+			//	parent.println(life2+"   "+l+"   "+tint);
+				parent.tint(255,tint);
+				//parent.image(arrow, 0, 0,50,50);
+				
+			}
+			else
+			{
+				float l=life/(float)halfinit;
+				int tint=((int)(l*255))/4;
+				//parent.println(life+"   "+l+"   "+tint);
+				parent.tint(255,tint);
+				//parent.image(arrow, 0, 0,50,50);
+			}
+			parent.translate(0,-(initLife/4)+(initLife-life)/2);
+			parent.image(arrow, -15, -15,30,30);
+			parent.image(arrow, -55, -15,30,30);//oryg
+			parent.image(arrow, 25, -15,30,30);
+			
+			parent.image(arrow, -15, -10,30,30);
+				parent.image(arrow, -55, -10,30,30);
+				parent.image(arrow, 25, -10,30,30);
+				
+				parent.image(arrow, -15, -5,30,30);
+				parent.image(arrow, -55, -5,30,30);
+				parent.image(arrow, 25, -5,30,30);
+			
+		//	parent.image(arrow, -15, 5,30,30);
+		//	parent.image(arrow, -55, 5,30,30);
+		//	parent.image(arrow, 25, 5,30,30);
+			
+		//	parent.image(arrow, -15, -5,30,30);
+		//	parent.image(arrow, -55, -5,30,30);
+		//	parent.image(arrow, 25, -5,30,30);
+			
+			parent.image(arrow, -35, 20,30,30);//oryg
+			parent.image(arrow, 5, 20,30,30);
+			
+			parent.image(arrow, -35, 25,30,30);
+			parent.image(arrow, 5, 25,30,30);
+			
+			parent.image(arrow, -35, 30,30,30);
+			parent.image(arrow, 5, 30,30,30);
+			
+			parent.image(arrow, -35, -55,30,30);//oryg
+			parent.image(arrow, 5, -55,30,30);
+			
+			parent.image(arrow, -35, -50,30,30);
+			parent.image(arrow, 5, -50,30,30);
+			
+			parent.image(arrow, -35, -45,30,30);
+			parent.image(arrow, 5, -45,30,30);
+			
+			
+			parent.tint(255);
+			parent.popMatrix();
+			break;
+			
+				}
+				
+			}
+			
 		}
 		else if (this.type==Type.FIRE)
 		{

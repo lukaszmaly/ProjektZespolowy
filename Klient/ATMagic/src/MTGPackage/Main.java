@@ -34,6 +34,10 @@ public class Main extends PApplet {
 
 	public void draw() 
 	{
+		//game.cardWidth=110;
+		//game.cardHeight=158;
+		rectMode(CENTER);
+		
 		counter--;
 		if(game.window==0 && game.tokens == true)
 		{	
@@ -46,18 +50,29 @@ public class Main extends PApplet {
 		{
 			
 			game.processMessages();
-			//if(counter<0)
-			//	{
-			//	background(0);
-			//	game.board.display2(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
-			//	counter=5;
-			//	}
+		
 			background(0);
 			game.board.display(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
 			game.board.display2(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
 			game.board.displayLog();
+			
 			game.goThroughCards();
-			game.goThroughEffects();			
+			game.goThroughEffects();
+			
+		
+			
+		} 
+		else if(game.window==2)
+		{
+			game.processMessages();
+			
+			background(0);
+			game.board.display(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
+			game.board.display2(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
+			game.board.displayLog();
+			
+			game.goThroughCards();
+			game.goThroughEffects();
 		}
 	}
 
@@ -76,7 +91,7 @@ public class Main extends PApplet {
 				else
 					{
 					game.tokens = false;
-					game.window=1;
+					game.window=2;
 					}
 			break;
 		
@@ -96,6 +111,20 @@ public class Main extends PApplet {
 				    	}
 					}
 			break;
+			case 'p':
+				if(game.ActivePlayer==game.P1)
+					game.ActivePlayer=game.P2;
+				else 					game.ActivePlayer=game.P1;
+
+					
+				break;
+			case 'g':
+				if(game.GameType=='S') game.GameType='M';
+				else game.GameType='S';
+				break;
+					
+			
+	
 			case 'l' :
 				if(game.lines.length>game.log && game.lines[game.log]!="Utworzono serwer" && game.lines[game.log]!="Zamknieto serwer") 
 					game.udp.send( game.lines[game.log], "localhost",600  );
@@ -145,7 +174,9 @@ public class Main extends PApplet {
 				}
 		if (mouseButton == LEFT) 
 		{	
-			game.Effects.add(new Effect(this,game,100,1));
+			game.Effects.add(new Effect(this,game,Type.BOOST,50,1));
+			game.Effects.add(new Effect(this,game,Type.REDUCTION,50,2));
+			//game.Effects.add(new Effect(this, game, 100,new PVector(0.5f,0.5f), new PVector(0,0), 30, 0, 255, 0, "TEXT"));
 			/*
 			game.Effects.add(new Effect(this,game,Type.BOLT,30,1,game.cardWidth,game.cardHeight,game.Cards));	
 			if(v==null)v=new PVector(mouseX,mouseY);
@@ -156,8 +187,9 @@ public class Main extends PApplet {
 				v=null;
 				u=null;
 			}
-			 game.Effects.add(new Effect(this,game,Type.FIRE,30,1,game.cardWidth,game.cardHeight,game.Cards));	
-		*/
+			*/
+			 //game.Effects.add(new Effect(this,game,Type.FIRE,30,1,game.cardWidth,game.cardHeight,game.Cards));	
+		
 		}
 		
 	}
@@ -174,6 +206,7 @@ public class Main extends PApplet {
 	synchronized (game.mutex) 
 		{
 		game.Msgs.add(message);
+		println(message);
 		}
 	}
 }
