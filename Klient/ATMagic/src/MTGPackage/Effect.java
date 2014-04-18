@@ -9,7 +9,7 @@ public class Effect
 	public enum Type{START, BOLT, SPARKLES, DAMAGE, ARROW, TEXT, FIRE, SPEAR,BOOST,REDUCTION}
 	
 	PApplet parent;
-	int life,textR,textG,textB,initLife=20;
+	int life,textR,textG,textB,initLife=20,startingcounter;
 	int textSize,q;
 	String text;
 	Type type;
@@ -21,6 +21,7 @@ public class Effect
 			damage;
 	PImage 	l1,l2,l3,l4,
 			f1,f2,f3,f4,f5,f6;
+	ArrayList<PImage> fires=new ArrayList<PImage>();
 	PVector v1, v2;
 	int blockId;
 	int arrowType=0;
@@ -49,9 +50,19 @@ public class Effect
 			arrow=parent.loadImage("arrows_down.png");
 		else if(t==Type.DAMAGE)
 			damage=parent.loadImage("Blood.png");
+		else if(t==Type.FIRE)
+		{
+			String s="AnimatedFire/animatedfire";
+			for(int i=1;i<=24;i++)
+			{
+				img=parent.loadImage(s+i+".png");
+				//println(s+i+".png");
+				fires.add(img);
+			}
+		}
 		this.initLife=life;
 	
-		
+		startingcounter=g.drawCounter;
 	}
 
 	
@@ -397,10 +408,11 @@ public class Effect
 				{
 					 size=1.0f;
 				}
-				parent.image(damage, g.cardWidth/2-(size/2)*g.cardWidth,g.cardHeight/2-(size/2)*g.cardHeight, g.cardWidth*size,g.cardHeight*size);
-				//parent.image(damage, 0.5f*size*g.cardWidth, 0.5f*size*g.cardHeight,g.cardWidth*size,g.cardHeight*size);
+				
+				parent.image(damage, 0.5f*size*g.cardWidth, 0.5f*size*g.cardHeight,g.cardWidth*size,g.cardHeight*size);
 				parent.println(size);
 				parent.popMatrix();
+				//parent.imageMode(parent.CORNER);
 				parent.tint(255);
 				}
 				}	
@@ -408,7 +420,86 @@ public class Effect
 		
 			else if (this.type==Type.FIRE)
 			{
+				Card c;
+				for (int i = 0; i < g.Cards.size(); i++) {
+					c = g.Cards.get(i);
+					
+					if (c.id == cardId) {
 
+			    
+			   
+				parent.pushMatrix();
+				
+				parent.translate(c.center.x,c.center.y);
+				switch(c.direction)
+				{
+				case 1:
+					parent.rotate(c.asin);
+					break;
+					
+				case 2:
+					parent.rotate(-c.asin+parent.PI);
+					break;
+					
+				case 3:
+					parent.rotate(c.asin+parent.PI);
+					break;
+					
+				case 4:
+					parent.rotate(-c.asin);
+					break;
+					
+				default: break;
+				
+				}
+				/*
+				int halfinit=initLife/2;
+				
+				if(life>(initLife/2))
+				{
+					int life2=initLife-life;
+					float l=life2/(float)halfinit;
+					int tint=(int)(l*255);
+					parent.tint(255,tint);
+					
+				}
+				else
+				{
+					float l=life/(float)halfinit;
+					int tint=(int)(l*255);
+					parent.tint(255,tint);
+				}
+				float size;
+				if(this.q<3)
+				{
+					 size=q/3f;
+				}
+				else
+				{
+					 size=1.0f;
+				}
+				*/
+				//parent.image(damage, g.cardWidth/2-(size/2)*g.cardWidth,g.cardHeight/2-(size/2)*g.cardHeight, g.cardWidth*size,g.cardHeight*size);
+				//parent.image(damage, 0.5f*size*g.cardWidth, 0.5f*size*g.cardHeight,g.cardWidth*size,g.cardHeight*size);
+				//parent.println(size);
+				int imgNum=23;
+				if(initLife-life>=0 && initLife-life<48)
+				 imgNum=(initLife-life)/2;
+				parent.println(imgNum+"^");
+				//if(g.drawCounter-startingcounter<23)
+				// imgNum=g.drawCounter-startingcounter;
+				
+				parent.imageMode(parent.CENTER);
+				parent.image(fires.get(imgNum), 0,0);
+				parent.imageMode(parent.CORNER);
+				parent.popMatrix();
+				parent.tint(255);
+				if(life>0) life--;
+				}
+				}
+				
+				
+/*
 				Card c;
 				for (int i = 0; i < g.Cards.size(); i++) {
 					c = g.Cards.get(i);
@@ -528,6 +619,7 @@ public class Effect
 												parent.image(f6, 0, 0,cardWidth,cardHeight);
 											}
 											*/
+				/*
 				if(life>25 && life<=30)
 				{
 					parent.tint(255, (30-life)*50);
@@ -581,7 +673,7 @@ public class Effect
 				parent.popMatrix();
 				}
 				}
-
+	*/
 			}
 		
 		

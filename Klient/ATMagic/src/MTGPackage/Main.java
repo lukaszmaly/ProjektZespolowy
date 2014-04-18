@@ -15,11 +15,66 @@ public class Main extends PApplet {
 	public Game game=new Game(this);
 	int counter=5;
 	PVector v=null,u=null;
+	PImage img;
+	ArrayList<PImage> imgs=new ArrayList<PImage>();
 	//Game game;
 	public void setup()
 		{		
 		size(displayWidth, displayHeight);
+		String s="AnimatedFire/animatedfire";
+		for(int i=1;i<=24;i++)
+		{
+			img=loadImage(s+i+".png");
+			println(s+i+".png");
+			imgs.add(img);
+		}
+		/*
+		img=loadImage("AnimatedFire/animatedfire1.png");
+		imgs.add(img);
 		
+		img=loadImage("AnimatedFire/animatedfire2.png");
+		imgs.add(img);
+		img=loadImage("AnimatedFire/animatedfire3.png");
+		imgs.add(img);
+		img=loadImage("AnimatedFire/animatedfire4.png");
+		imgs.add(img);
+		img=loadImage("AnimatedFire/animatedfire5.png");
+		imgs.add(img);
+		img=loadImage("AnimatedFire/animatedfire6.png");
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire7.png");
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire8.png");
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire9.png");
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire10.png");
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire11.png");
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire12.png");
+		imgs.add(img);
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire13.png");
+		imgs.add(img);
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire14.png");
+		imgs.add(img);
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire15.png");
+		imgs.add(img);
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire16.png");
+		imgs.add(img);
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire17.png");
+		imgs.add(img);
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire18.png");
+		imgs.add(img);
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire19.png");
+		imgs.add(img);
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire20.png");
+		imgs.add(img);
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire21.png");
+		imgs.add(img);
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire22.png");
+		imgs.add(img);
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire23.png");
+		imgs.add(img);
+		imgs.add(img);img=loadImage("AnimatedFire/animatedfire24.png");
+		imgs.add(img);
+		*/
+		
+		//img=loadImage("animatedfire.png");
 		//game.Effects.add(new Effect(this,game,20,game.board.lib1.position,20,0,255,0));
 		//game.Effects.add(new Effect(this,game, Type.SPEAR, 30,new PVector(200,0),new PVector(width/2, height/2)));
 		//game.Effects.add(new Effect(this,game,50,1));
@@ -37,7 +92,8 @@ public class Main extends PApplet {
 		//game.cardWidth=110;
 		//game.cardHeight=158;
 		
-		
+		game.drawCounter++;
+		//println(game.drawCounter);
 		counter--;
 		if(game.window==0 && game.tokens == true)
 		{	
@@ -76,6 +132,9 @@ public class Main extends PApplet {
 			
 		
 		}
+	int counter=game.drawCounter/2;
+	if(counter<imgs.size())
+		image(imgs.get(counter),300,100);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
@@ -176,6 +235,7 @@ public class Main extends PApplet {
 				}
 		if (mouseButton == LEFT) 
 		{	
+			game.Effects.add(new Effect(this,game,Type.FIRE,48,1));
 		//	game.Effects.add(new Effect(this,game,Type.BOOST,50,1));
 		//	game.Effects.add(new Effect(this,game,Type.REDUCTION,50,2));
 			// game.Effects.add(new Effect(this, game, Type.DAMAGE, 50, 1));
@@ -184,7 +244,7 @@ public class Main extends PApplet {
 			//game.Effects.add(new Effect(this, game, 100,new PVector(0.5f,0.5f), new PVector(0,0), 30, 0, 255, 0, "TEXT"));
 			
 			//game.Effects.add(new Effect(this,game,Type.BOLT,30,1,game.cardWidth,game.cardHeight,game.Cards));	
-			if(v==null)v=new PVector(mouseX,mouseY);
+			/*if(v==null)v=new PVector(mouseX,mouseY);
 			else
 			{
 				u=new PVector(mouseX,mouseY);
@@ -192,7 +252,7 @@ public class Main extends PApplet {
 				v=null;
 				u=null;
 			}
-			
+			*/
 			 //game.Effects.add(new Effect(this,game,Type.FIRE,30,1,game.cardWidth,game.cardHeight,game.Cards));	
 		
 		}

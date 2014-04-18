@@ -23,7 +23,8 @@ public class Game {
 	int cardHeight,
 		cardWidth,
 		window=0,
-		log=0;
+		log=0,
+		drawCounter;
 	Object mutex = new Object();
 	
 	String[] lines;
@@ -59,7 +60,7 @@ public class Game {
 		cardHeight=145;
 		
 		this.lines = parent.loadStrings("log.txt");
-		
+		drawCounter=0;
 		edge1=parent.loadImage("LG.png"); 
 		edge2=parent.loadImage("PG.png"); 
 		edge3=parent.loadImage("PD.png"); 
