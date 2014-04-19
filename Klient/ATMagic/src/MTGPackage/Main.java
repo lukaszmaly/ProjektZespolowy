@@ -151,7 +151,7 @@ public class Main extends PApplet {
 		{
 		if (mouseButton == RIGHT) 
 			{
-			int id = 1;
+			int id = 0;
 			for (int i = 0; i < game.Cards.size(); i++)
 				if (game.Cards.get(i).id >= id)
 					id = game.Cards.get(i).id + 1;
@@ -172,7 +172,7 @@ public class Main extends PApplet {
 						if(game.T[3]==null) 
 							{
 							game.T[3]=new PVector(mouseX,mouseY); 
-							game.Cards.add(new Card((int)game.T[0].x,(int)game.T[0].y,(int)game.T[1].x,(int)game.T[1].y,(int)game.T[2].x,(int)game.T[2].y,(int)game.T[3].x,(int)game.T[3].y,id,id,0,this,game,1,1));
+							game.Cards.add(new Card((int)game.T[0].x,(int)game.T[0].y,(int)game.T[1].x,(int)game.T[1].y,(int)game.T[2].x,(int)game.T[2].y,(int)game.T[3].x,(int)game.T[3].y,id,id,1,this,game,1,1));
 							game.T[0]=null;
 							game.T[1]=null;
 							game.T[2]=null;
@@ -181,17 +181,17 @@ public class Main extends PApplet {
 				}
 		if (mouseButton == LEFT) 
 		{	
-			game.Effects.add(new Effect(this,game,Type.FIRESHIELD,100,1));
+			//game.Effects.add(new Effect(this,game,Type.FIRESHIELD,100,1));
 			//game.Effects.add(new Effect(this,game,Type.FIRE2,74,1));
 			//game.Effects.add(new Effect(this,game,Type.FIRE,48,1));
 		//	game.Effects.add(new Effect(this,game,Type.BOOST,50,1));
 		//	game.Effects.add(new Effect(this,game,Type.REDUCTION,50,2));
-			// game.Effects.add(new Effect(this, game, Type.DAMAGE, 50, 1));
+			 //game.Effects.add(new Effect(this, game, Type.DAMAGE, 40, 0));
 			// Effect e= game.Effects.get(game.Effects.size()-1);
-			//	e.q=1;
+			//	e.q=3;
 			//game.Effects.add(new Effect(this, game, 200,new PVector(0.5f,0.5f), new PVector(0.001f,0.001f), 30, 0, 255, 0, "TEXT"));
 			
-			//game.Effects.add(new Effect(this,game,Type.BOLT,30,1,game.cardWidth,game.cardHeight,game.Cards));	
+			//game.Effects.add(new Effect(this,game,Type.BOLT,40,0,game.cardWidth,game.cardHeight,game.Cards));	
 			/*if(v==null)v=new PVector(mouseX,mouseY);
 			else
 			{

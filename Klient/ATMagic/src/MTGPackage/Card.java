@@ -101,8 +101,13 @@ public class Card
 			parent.strokeWeight(5);
 			parent.ellipseMode(parent.CENTER);
 			parent.rectMode(parent.CENTER);
+			parent.imageMode(parent.CENTER);
+			if((this.owner==1 && game.P1.isLocal==true) ||(this.owner==2 && game.P2.isLocal==true))
 			parent.rect(0,0,game.cardWidth*1.2f,game.cardHeight*1.2f,20,20,20,20);
-		/*
+			else parent.image(game.dbCards.get(this.db_id), 0, 0,game.cardWidth,game.cardHeight);
+		
+			parent.imageMode(parent.CORNER);
+			/*
 			for(int i=50;i>0;i--)
 			{
 				
@@ -153,8 +158,9 @@ public class Card
 					}
 			*/
 			}
-			
-			
+			if((this.owner==1 && game.P1.isLocal==true) ||(this.owner==2 && game.P2.isLocal==true))
+
+			{
 			parent.strokeWeight(1);
 			parent.stroke(255);
 			parent.fill(255);
@@ -165,6 +171,7 @@ public class Card
 			parent.vertex(loc[3].x,loc[3].y);
 			parent.vertex(loc[0].x,loc[0].y);
 			parent.endShape();
+			}
 			/*
 			parent.stroke(r,g,b);
 			parent.strokeWeight(5);

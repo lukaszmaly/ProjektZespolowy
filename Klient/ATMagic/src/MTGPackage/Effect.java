@@ -120,6 +120,7 @@ public class Effect
 		this.v1=v1;
 		this.v2=v2;
 		this.life=life;
+		this.initLife=life;
 		this.type=t;
 		this.g=G;
 		this.cardId=cardID;
@@ -339,9 +340,43 @@ public class Effect
 				default: break;
 				
 				}
+int halfinit=initLife/2;
 				
+				if(life>(initLife*0.75f))
+				{
+					int life2=initLife-life;
+					float l=life2/(float)halfinit;
+					int tint=(int)(l*255);
+					parent.tint(255,tint);
+					
+				}
+				else
+					if(life<(initLife*0.25f))
+				{
+					float l=life/(float)halfinit;
+					int tint=(int)(l*255);
+					parent.tint(255,tint);
+				}
+					else
+						parent.tint(255);
+
+						
+						
+				if(life>(initLife*0.75f))
+				parent.image(l1, -cardWidth/2, -cardHeight/2,cardWidth*2f,cardHeight*2f);
+				else
+					if(life>(initLife*0.5f) && life<initLife*0.75f)
+						parent.image(l2, -cardWidth/2, -cardHeight/2,cardWidth*2f,cardHeight*2f);
+					else
+						if(life>(initLife*0.25f) && life< initLife*0.5f)
+							parent.image(l3, -cardWidth/2, -cardHeight/2,cardWidth*2f,cardHeight*2f);
+						else
+							parent.image(l4, -cardWidth/2, -cardHeight/2,cardWidth*2f,cardHeight*2f);
+
+					
+				parent.tint(255);
 				
-		
+		/*
 				if((int)(life)%4==0)
 				parent.image(l1, -cardWidth/2, -cardHeight/2,cardWidth*2f,cardHeight*2f);
 				else
@@ -353,6 +388,7 @@ public class Effect
 						else
 							if((int)(life)%4==3)
 								parent.image(l4, -cardWidth/2, -cardHeight/2,cardWidth*2f,cardHeight*2f);
+				*/
 				parent.popMatrix();
 				}
 				}
@@ -370,7 +406,8 @@ public class Effect
 			   
 				parent.pushMatrix();
 				
-				parent.translate(c.loc[0].x,c.loc[0].y);
+				//parent.translate(c.loc[0].x,c.loc[0].y);
+				parent.translate(c.center.x,c.center.y);
 				switch(c.direction)
 				{
 				case 1:
@@ -418,11 +455,14 @@ public class Effect
 				{
 					 size=1.0f;
 				}
-				
-				parent.image(damage, 0.5f*size*g.cardWidth, 0.5f*size*g.cardHeight,g.cardWidth*size,g.cardHeight*size);
+				parent.imageMode(parent.CENTER);
+				//parent.image(damage, 0.5f*size*g.cardWidth, 0.5f*size*g.cardHeight,g.cardWidth*size,g.cardHeight*size);
+				parent.image(damage,0, 0,g.cardWidth*size,g.cardHeight*size);
+
 				parent.println(size);
 				parent.popMatrix();
-				//parent.imageMode(parent.CORNER);
+				
+				parent.imageMode(parent.CORNER);
 				parent.tint(255);
 				}
 				}	

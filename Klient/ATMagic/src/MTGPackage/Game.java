@@ -470,24 +470,35 @@ public class Game {
 				case "MARKERS":
 					char ch=Dane[4].charAt(0);
 					 id=Integer.parseInt(Dane[5]);
+					 this.GameType=ch;
 					 if(P1.id==id)
 					 {
 						 P1.isLocal=true;
 						 P2.isLocal=false;
 					 }
+					 else
+					 {
+						 P2.isLocal=true;
+						 P1.isLocal=false; 
+					 }
 					 
 					if (this.tokens == true)
 						{
 						this.tokens = false; 
-						this.GameType=ch;
 						if (this.GameType=='S')
 							this.window=1;
 						else window=2;
-						this.cardWidth=Integer.parseInt(Dane[2]); 
-						this.cardHeight=Integer.parseInt(Dane[3]);
 						}
 					else
-						{this.tokens = true; this.window=0;}
+						{
+						this.tokens=true;
+						this.window=0;
+						}
+
+						this.cardWidth=Integer.parseInt(Dane[2]); 
+						this.cardHeight=Integer.parseInt(Dane[3]);
+						
+					
 					break;
 					
 				case "NEXTPHASE":
