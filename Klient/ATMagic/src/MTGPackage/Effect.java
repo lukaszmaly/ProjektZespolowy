@@ -17,7 +17,8 @@ public class Effect
 						SPEAR,
 						BOOST,
 						REDUCTION,
-						FIRESHIELD}
+						FIRESHIELD,
+						DEATH}
 	
 	PApplet parent;
 	int life,textR,textG,textB,initLife=20,startingcounter;
@@ -30,7 +31,8 @@ public class Effect
 			lightning,
 			arrow,
 			damage,
-			fireshield;
+			fireshield,
+			death;
 	PImage 	l1,l2,l3,l4,
 			f1,f2,f3,f4,f5,f6;
 	
@@ -66,6 +68,10 @@ public class Effect
 		else if(t==Type.FIRESHIELD)
 		{
 			fireshield=parent.loadImage("Fire_Shield.png");
+		}
+		else if(t==Type.DEATH)
+		{
+			death=parent.loadImage("skull2.png");
 		}
 	
 		this.initLife=life;
@@ -467,6 +473,67 @@ int halfinit=initLife/2;
 				}
 				}	
 			}
+			else if(this.type==Type.DEATH)
+			{
+				Card c;
+				for (int i = 0; i < g.Cards.size(); i++) {
+					c = g.Cards.get(i);
+					
+					if (c.id == cardId) {
+
+			    
+			   
+				parent.pushMatrix();
+				
+				parent.translate(c.center.x,c.center.y);
+				switch(c.direction)
+				{
+				case 1:
+					parent.rotate(c.asin);
+					break;
+					
+				case 2:
+					parent.rotate(-c.asin+parent.PI);
+					break;
+					
+				case 3:
+					parent.rotate(c.asin+parent.PI);
+					break;
+					
+				case 4:
+					parent.rotate(-c.asin);
+					break;
+					
+				default: break;
+				
+					}
+				int halfinit=initLife/2;
+				
+				if(life>(initLife/2))
+				{
+					int life2=initLife-life;
+					float l=life2/(float)halfinit;
+					int tint=(int)(l*255);
+					parent.tint(255,tint);
+					
+				}
+				else
+				{
+					float l=life/(float)halfinit;
+					int tint=(int)(l*255);
+					parent.tint(255,tint);
+				}
+				parent.imageMode(parent.CENTER);
+				parent.image(death, 0,0,g.cardWidth,g.cardHeight);
+				parent.imageMode(parent.CORNER);
+				parent.tint(255);
+				parent.popMatrix();
+				if(this.life>0)this.life--;
+				break;
+					}
+				}
+			}
+			
 		
 			else if (this.type==Type.FIRE)
 			{

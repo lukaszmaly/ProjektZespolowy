@@ -183,6 +183,12 @@ public class Main extends PApplet {
 		{	
 			//game.Effects.add(new Effect(this,game,Type.FIRESHIELD,100,1));
 			//game.Effects.add(new Effect(this,game,Type.FIRE2,74,1));
+			game.Effects.add(new Effect(this,game,Type.DEATH,300,0));
+			Card c = game.Cards.get(0);
+			c.isDead = true;
+			c.deadCounter=300;
+			//c.sparkTime=15;
+			game.removeById(0);
 			//game.Effects.add(new Effect(this,game,Type.FIRE,48,1));
 		//	game.Effects.add(new Effect(this,game,Type.BOOST,50,1));
 		//	game.Effects.add(new Effect(this,game,Type.REDUCTION,50,2));

@@ -367,7 +367,8 @@ public class Game {
 						Card c = this.Cards.get(i);
 						if (c.id == id) {
 							c.isDead = true;
-							
+							this.Effects.add(new Effect(parent,this,Type.DEATH,100,0));
+							c.deadCounter=100;
 							//c.sparkTime=15;
 							removeById(id);
 							 PVector acc=null;

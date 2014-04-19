@@ -18,7 +18,7 @@ public class Card
 	float a=0,c=0;
 	int wCost=0,bCost=0,uCost=0,rCost=0,gCost=0,power=-1,toughness=-1;
 	float sin=0,asin=0;
-	PImage skull,ret;
+	PImage skull,ret,skull2;
 	Game game;
 	
 	int height()
@@ -127,11 +127,13 @@ public class Card
 			
 			if(this.attack==true)
 			{
-				PVector returnCenter=new PVector((loc2[0].x+loc2[1].x+loc2[2].x+loc2[3].x)/4,(loc2[0].y+loc2[1].y+loc2[2].y+loc2[3].y)/4);
+				//PVector returnCenter=new PVector((loc2[0].x+loc2[1].x+loc2[2].x+loc2[3].x)/4,(loc2[0].y+loc2[1].y+loc2[2].y+loc2[3].y)/4);
+				PVector returnCenter=new PVector((loc2[0].x+loc2[1].x+loc2[2].x+loc2[3].x)/4+200,(loc2[0].y+loc2[1].y+loc2[2].y+loc2[3].y)/4);
+				parent.tint(255,(frameLife)+75);
 				parent.pushMatrix();
 				parent.translate(returnCenter.x-game.cardWidth/2, returnCenter.y-game.cardWidth/2);
 				parent.image(ret,0,0,game.cardWidth,game.cardWidth);
-				
+				parent.tint(255);
 				parent.popMatrix();
 			/*	
 				parent.strokeWeight(8);
@@ -253,6 +255,7 @@ public class Card
 		{
 			
 			this.deadCounter--;
+			/*
 			parent.strokeWeight(1);
 			parent.stroke(0);
 			parent.fill(0);
@@ -285,10 +288,10 @@ public class Card
 						}
 						
 						
-						parent.image(skull,0,0,parent.dist(this.loc[0].x,this.loc[0].y,this.loc[1].x,this.loc[1].y),parent.dist(this.loc[2].x,this.loc[2].y,this.loc[1].x,this.loc[1].y));
+						parent.image(skull2,0,0,parent.dist(this.loc[0].x,this.loc[0].y,this.loc[1].x,this.loc[1].y),parent.dist(this.loc[2].x,this.loc[2].y,this.loc[1].x,this.loc[1].y));
 						parent.popMatrix();
 						parent.tint(255);
-			
+			*/
 		}
 
   }
@@ -392,6 +395,7 @@ public class Card
     Card(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,int id,int db_id,int owner,PApplet p,Game gm,int power, int toughness)
     {
     	parent=p;
+    	this.attack=true;
     	isDead=false;
     	frame=true;			
     	this.sparkTime=10; //czy ma byc ramka
@@ -400,6 +404,7 @@ public class Card
     	r=0;g=255;b=0;
     	ret=parent.loadImage("return.png");
     	skull = parent.loadImage("xbones-black.png");
+    	skull2 = parent.loadImage("skull2.png");
     	this.game=gm;
     	this.power=power;
     	this.toughness=toughness;
