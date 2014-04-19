@@ -16,7 +16,8 @@ public class Effect
 						FIRE2,
 						SPEAR,
 						BOOST,
-						REDUCTION}
+						REDUCTION,
+						FIRESHIELD}
 	
 	PApplet parent;
 	int life,textR,textG,textB,initLife=20,startingcounter;
@@ -28,7 +29,8 @@ public class Effect
 	PImage 	img,
 			lightning,
 			arrow,
-			damage;
+			damage,
+			fireshield;
 	PImage 	l1,l2,l3,l4,
 			f1,f2,f3,f4,f5,f6;
 	
@@ -61,14 +63,11 @@ public class Effect
 			arrow=parent.loadImage("arrows_down.png");
 		else if(t==Type.DAMAGE)
 			damage=parent.loadImage("Blood.png");
-		else if(t==Type.FIRE)
+		else if(t==Type.FIRESHIELD)
 		{
-			
+			fireshield=parent.loadImage("Fire_Shield.png");
 		}
-		else if(t==Type.FIRE2)
-		{
-			
-		}
+	
 		this.initLife=life;
 	
 		startingcounter=g.drawCounter;
@@ -751,6 +750,53 @@ public class Effect
 					}
 			}
 		
+			}
+		
+			else if (this.type==Type.FIRESHIELD)
+			{
+				Card c;
+				for (int i = 0; i < g.Cards.size(); i++) {
+					c = g.Cards.get(i);
+					
+					if (c.id == cardId) {
+						parent.pushMatrix();
+						parent.imageMode(parent.CENTER);
+						int halfinit=initLife/2;
+						
+						if(life>(initLife/2))
+						{
+							int life2=initLife-life;
+							float l=life2/(float)halfinit;
+							int tint=(int)(l*255);
+							parent.tint(255,tint);
+							
+						}
+						else
+						{
+							float l=life/(float)halfinit;
+							int tint=(int)(l*255);
+							parent.tint(255,tint);
+						}
+						parent.translate(c.center.x, c.center.y);
+						float angle=life/(float)initLife;
+						//float angle2=(life+20)/(float)(initLife+40);
+						//float angle3=(life+40)/(float)(initLife+40);
+						parent.println("angl:   "+angle);
+						parent.rotate(parent.PI*angle*10);
+						parent.image(fireshield, 0, 0,g.cardWidth*2*(1-angle),g.cardWidth*2f*(1-angle));
+				
+						//parent.image(fireshield, 0, 0,g.cardWidth*2*(1-angle2),g.cardWidth*2*(1-angle2));
+
+						//parent.image(fireshield, 0, 0,g.cardWidth*2*(1-angle3),g.cardWidth*2*(1-angle3));
+
+						parent.imageMode(parent.CORNER);
+						parent.popMatrix();
+						if(life>0)life--;
+						parent.tint(255);
+						break;
+					}
+				}
+				
 			}
 		else if(this.type==Type.REDUCTION)
 		{

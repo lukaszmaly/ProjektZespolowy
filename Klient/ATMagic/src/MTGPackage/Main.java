@@ -181,6 +181,7 @@ public class Main extends PApplet {
 				}
 		if (mouseButton == LEFT) 
 		{	
+			game.Effects.add(new Effect(this,game,Type.FIRESHIELD,100,1));
 			//game.Effects.add(new Effect(this,game,Type.FIRE2,74,1));
 			//game.Effects.add(new Effect(this,game,Type.FIRE,48,1));
 		//	game.Effects.add(new Effect(this,game,Type.BOOST,50,1));

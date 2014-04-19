@@ -16,6 +16,7 @@ public class Game {
 	ArrayList<String> Msgs = new ArrayList<String>();
 	ArrayList<PImage> fires2=new ArrayList<PImage>();
 	ArrayList<PImage> fires=new ArrayList<PImage>();
+	ArrayList<PImage> dbCards=new ArrayList<PImage>();
 	char GameType;
 	PVector[] T=new PVector[4];
 	
@@ -26,7 +27,8 @@ public class Game {
 		cardWidth,
 		window=0,
 		log=0,
-		drawCounter;
+		drawCounter,
+		cardsInDB=24;
 	Object mutex = new Object();
 	
 	String[] lines;
@@ -95,7 +97,12 @@ public class Game {
 			//println(s+i+".png");
 			fires.add(img);
 		}
-		
+		s="Cards/";
+		for(int i=0;i<cardsInDB;i++)
+		{
+			PImage img=parent.loadImage(s+i+".jpg");
+			dbCards.add(img);
+		}
 		udp = new UDP(parent, 600);
 		udp.listen(true);
 	}
