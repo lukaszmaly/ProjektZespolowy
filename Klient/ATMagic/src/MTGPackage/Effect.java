@@ -72,6 +72,7 @@ public class Effect
 		else if(t==Type.DEATH)
 		{
 			death=parent.loadImage("skull2.png");
+			//death=parent.loadImage("FlamedSkull.png");
 		}
 	
 		this.initLife=life;

@@ -314,7 +314,7 @@ parent.rectMode(parent.CENTER);
 			 				 parent.pushMatrix();
 			 				 parent.translate(parent.width*position.x,parent.height*position.y);			 				// parent.rotate(parent.PI/2);
 			 				 //parent.rect(0,0,game.cardWidth*1.6f-2*i,game.cardHeight*1.6f-2*i,10,10,10,10);
-			 				parent.image(library, 0, 0);
+			 				parent.image(library, 0, 0,game.cardWidth*1.6f,game.cardHeight*1.4f);
 			 				 // parent.noFill();
 			 				 parent.popMatrix();
 			 			 //}

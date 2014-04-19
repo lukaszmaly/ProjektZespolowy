@@ -18,7 +18,7 @@ public class Card
 	float a=0,c=0;
 	int wCost=0,bCost=0,uCost=0,rCost=0,gCost=0,power=-1,toughness=-1;
 	float sin=0,asin=0;
-	PImage skull,ret,skull2;
+	PImage skull,ret,skull2,sword;
 	Game game;
 	
 	int height()
@@ -127,13 +127,45 @@ public class Card
 			
 			if(this.attack==true)
 			{
-				//PVector returnCenter=new PVector((loc2[0].x+loc2[1].x+loc2[2].x+loc2[3].x)/4,(loc2[0].y+loc2[1].y+loc2[2].y+loc2[3].y)/4);
-				PVector returnCenter=new PVector((loc2[0].x+loc2[1].x+loc2[2].x+loc2[3].x)/4+200,(loc2[0].y+loc2[1].y+loc2[2].y+loc2[3].y)/4);
+				PVector returnCenter=new PVector((loc2[0].x+loc2[1].x+loc2[2].x+loc2[3].x)/4,(loc2[0].y+loc2[1].y+loc2[2].y+loc2[3].y)/4);
+				//PVector returnCenter=new PVector((loc2[0].x+loc2[1].x+loc2[2].x+loc2[3].x)/4+200,(loc2[0].y+loc2[1].y+loc2[2].y+loc2[3].y)/4);
 				parent.tint(255,(frameLife)+75);
 				parent.pushMatrix();
 				parent.translate(returnCenter.x-game.cardWidth/2, returnCenter.y-game.cardWidth/2);
 				parent.image(ret,0,0,game.cardWidth,game.cardWidth);
 				parent.tint(255);
+				parent.popMatrix();
+				
+				parent.pushMatrix();
+				parent.translate(this.center.x, this.center.y);
+				switch(direction)
+				{
+				case 1:
+					parent.rotate(asin);
+					break;
+					
+				case 2:
+					parent.rotate(-asin+parent.PI);
+					break;
+					
+				case 3:
+					parent.rotate(asin+parent.PI);
+					break;
+					
+				case 4:
+					parent.rotate(-asin);
+					break;
+					
+				default: break;
+				}
+				parent.rotate(-parent.PI/4);
+				parent.translate( -game.cardWidth*0.43f,-game.cardWidth*0.5f);
+				
+				parent.imageMode(parent.CENTER);
+			//	parent.tint(255,this.frameLife+75);
+				parent.image(sword,0,0,sword.width*0.08f,sword.height*0.08f);
+				parent.imageMode(parent.CORNER);
+			//	parent.tint(255);
 				parent.popMatrix();
 			/*	
 				parent.strokeWeight(8);
@@ -395,7 +427,7 @@ public class Card
     Card(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,int id,int db_id,int owner,PApplet p,Game gm,int power, int toughness)
     {
     	parent=p;
-    	this.attack=true;
+    	//this.attack=true;
     	isDead=false;
     	frame=true;			
     	this.sparkTime=10; //czy ma byc ramka
@@ -405,6 +437,7 @@ public class Card
     	ret=parent.loadImage("return.png");
     	skull = parent.loadImage("xbones-black.png");
     	skull2 = parent.loadImage("skull2.png");
+    	sword = parent.loadImage("Steel_sword_detail.png");
     	this.game=gm;
     	this.power=power;
     	this.toughness=toughness;

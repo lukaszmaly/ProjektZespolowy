@@ -53,7 +53,7 @@ public class Main extends PApplet {
 			game.board.display(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
 			game.board.display2(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
 			game.board.displayLog();
-			
+			rect(300,200,game.cardWidth,game.cardHeight);
 			game.goThroughCards();
 			game.goThroughEffects();
 			
@@ -68,7 +68,7 @@ public class Main extends PApplet {
 			game.board.display(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
 			game.board.display2(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
 			game.board.displayLog();
-			
+			rect(300,200,game.cardWidth,game.cardHeight);
 			game.goThroughCards();
 			game.goThroughEffects();
 			
