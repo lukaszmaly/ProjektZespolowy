@@ -19,7 +19,8 @@ public class Effect
 						REDUCTION,
 						FIRESHIELD,
 						DEATH,
-						SCRY}
+						SCRY,
+						DRAW}
 	
 	PApplet parent;
 	int life,textR,textG,textB,initLife=20,startingcounter;
@@ -35,7 +36,8 @@ public class Effect
 			damage,
 			fireshield,
 			death,
-			scry;
+			scry,
+			draw;
 	PImage 	l1,l2,l3,l4,
 			f1,f2,f3,f4,f5,f6;
 	
@@ -126,6 +128,14 @@ public class Effect
 		if(t==Type.SCRY)
 		{	this.rotate=r;
 			scry=parent.loadImage("scry.png");
+		//scry=parent.loadImage("hand2.png");
+
+		}
+		if(t==Type.DRAW)
+		{	this.rotate=r;
+		parent.println("$"+this.rotate);
+		draw=parent.loadImage("hand2.png");
+
 		}
 		
 	}
@@ -545,7 +555,47 @@ int halfinit=initLife/2;
 					}
 				}
 			}
+			else if(this.type==Type.DRAW)
+			{
+				
+				if(this.life>0) this.life--;
+				
+				parent.pushMatrix();
+				parent.translate(v1.x*parent.width, v1.y*parent.height);
+		
+				int halfinit=initLife/2;
+				
+				if(life>(initLife/2))
+				{
+					int life2=initLife-life;
+					float l=life2/(float)halfinit;
+					int tint=(int)(l*255);
+				//	parent.println(life2+"   "+l+"   "+tint);
+					parent.tint(255,tint);
+					//parent.image(arrow, 0, 0,50,50);
+					
+				}
+				else
+				{
+					float l=life/(float)halfinit;
+					int tint=(int)(l*255);
+					//parent.println(life+"   "+l+"   "+tint);
+					parent.tint(255,tint);
+					//parent.image(arrow, 0, 0,50,50);
+				}
+				float h=(draw.height/(float)draw.width);
+				parent.println("h:"+h);
+				parent.imageMode(parent.CENTER);
+				//parent.image(scry, 0, 0,g.cardWidth,g.cardWidth*(scry.height/scry.width));
+				if(this.rotate==true)
+					parent.rotate(parent.PI);
+				parent.image(draw, 0, 0,g.cardWidth,h*g.cardWidth);
+				parent.imageMode(parent.CORNER);
+				parent.tint(255);
+				parent.popMatrix();
+				
 			
+			}
 		
 			else if (this.type==Type.FIRE)
 			{
@@ -1051,7 +1101,7 @@ int halfinit=initLife/2;
 			parent.println("h:"+h);
 			parent.imageMode(parent.CENTER);
 			//parent.image(scry, 0, 0,g.cardWidth,g.cardWidth*(scry.height/scry.width));
-			if(this.rotate=true)
+			if(this.rotate==true)
 				parent.rotate(parent.PI);
 			parent.image(scry, 0, 0,g.cardWidth,h*g.cardWidth);
 			parent.imageMode(parent.CORNER);

@@ -228,9 +228,21 @@ public class Main extends PApplet {
 				u=null;
 			}
 			*/
-			game.Effects.add(new Effect(this,game,Type.SCRY,200,game.board.lib1.position,new PVector(0,0),true));
-			game.Effects.add(new Effect(this, game, 200, new PVector(game.board.lib1.position.x,game.board.lib1.position.y-0.05f), new PVector(0, 0),35, 0, 0, 255, "1",true));
-			 //game.Effects.add(new Effect(this,game,Type.FIRE,30,1,game.cardWidth,game.cardHeight,game.Cards));	
+			/*
+			game.Effects.add(new Effect(this,game,Type.DRAW,200,new PVector(game.board.lib1.position.x,game.board.lib1.position.y-0.025f),new PVector(0,0),true));
+			game.Effects.add(new Effect(this, game, 200, new PVector(game.board.lib1.position.x,game.board.lib1.position.y+0.08f), new PVector(0, 0),35, 0, 255, 0, "1",true));
+			
+			game.Effects.add(new Effect(this,game,Type.DRAW,200,new PVector(game.board.lib2.position.x,game.board.lib2.position.y+0.025f),new PVector(0,0),false));
+			game.Effects.add(new Effect(this, game, 200, new PVector(game.board.lib2.position.x,game.board.lib2.position.y-0.05f), new PVector(0, 0),35, 0, 255, 0, "1",false));
+			 */
+			
+			game.Effects.add(new Effect(this,game,Type.SCRY,150,new PVector(game.board.lib1.position.x,game.board.lib1.position.y-0.02f),new PVector(0,0),true));
+			game.Effects.add(new Effect(this, game, 150, new PVector(game.board.lib1.position.x,game.board.lib1.position.y+0.06f), new PVector(0, 0),35, 0, 255, 0, "1",true));
+			
+			game.Effects.add(new Effect(this,game,Type.SCRY,150,new PVector(game.board.lib2.position.x,game.board.lib2.position.y+0.02f),new PVector(0,0),false));
+			game.Effects.add(new Effect(this, game, 150, new PVector(game.board.lib2.position.x,game.board.lib2.position.y-0.04f), new PVector(0, 0),35, 0, 255, 0, "1",false));
+			
+			//game.Effects.add(new Effect(this,game,Type.FIRE,30,1,game.cardWidth,game.cardHeight,game.Cards));	
 		
 		}
 		
