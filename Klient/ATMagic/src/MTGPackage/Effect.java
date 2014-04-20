@@ -18,11 +18,13 @@ public class Effect
 						BOOST,
 						REDUCTION,
 						FIRESHIELD,
-						DEATH}
+						DEATH,
+						SCRY}
 	
 	PApplet parent;
 	int life,textR,textG,textB,initLife=20,startingcounter;
 	int textSize,q;
+	boolean rotate=false;
 	String text;
 	Type type;
 	Game g;
@@ -32,7 +34,8 @@ public class Effect
 			arrow,
 			damage,
 			fireshield,
-			death;
+			death,
+			scry;
 	PImage 	l1,l2,l3,l4,
 			f1,f2,f3,f4,f5,f6;
 	
@@ -81,7 +84,7 @@ public class Effect
 	}
 
 	
-	Effect(PApplet p,Game G,int life,PVector pos,PVector move,int size, int r, int g, int b,String text)
+	Effect(PApplet p,Game G,int life,PVector pos,PVector move,int size, int r, int g, int b,String text,boolean rotated)
 	{
 		parent=p;
 		this.text=text;
@@ -95,10 +98,11 @@ public class Effect
 		this.g=G;
 		this.textSize=size;
 		this.initLife=life;
+		this.rotate=rotated;
 		
 	}
 	
-	Effect(PApplet p,Game G,Type t,int life,PVector v1,PVector v2)
+	Effect(PApplet p,Game G,Type t,int life,PVector v1,PVector v2,boolean r)
 	{
 		parent=p;
 		this.v1=v1;
@@ -112,11 +116,16 @@ public class Effect
 		lightning=parent.loadImage("arrows_up.png");
 		if(t==Type.ARROW)
 		{
-			img=parent.loadImage("arrows_up.png");
+			//img=parent.loadImage("arrows_up.png");
+			img=parent.loadImage("sword.png");
 		}
 		if(t==Type.SPEAR)
 		{
 			img=parent.loadImage("fire8.png");
+		}
+		if(t==Type.SCRY)
+		{	this.rotate=r;
+			scry=parent.loadImage("scry.png");
 		}
 		
 	}
@@ -180,30 +189,32 @@ public class Effect
 	 if(v1.x<=v2.x && v1.y<=v2.y)  
 	 {
 		 parent.rotate(parent.PI-asin);
-	
-	    parent.image(img,-w/2,0,w,d);
+		// parent.rotate(parent.PI/4);
+	    //parent.image(img,-w/2,0,w,d);
 	 }
 	 else
 		 if(v1.x<=v2.x && v1.y>=v2.y)  
 		 {
 			 parent.rotate(asin);
-			 
-		    parent.image(img,-w/2,0,w,d);
+			// parent.rotate(parent.PI/4);
+		   // parent.image(img,-w/2,0,w,d);
 		 } 
 		 else
 			 if(v1.x>=v2.x && v1.y>=v2.y)  
 			 {
 				 parent.rotate(-asin);
-				
-			    parent.image(img,-w/2,0,w,d);
+				 //parent.rotate(parent.PI/4);
+			  //  parent.image(img,-w/2,0,w,d);
 			 }
 			 else
 				 if(v1.x>=v2.x && v1.y<=v2.y)  
 				 {
 					 parent.rotate(parent.PI+asin);
-					
-				    parent.image(img,-w/2,0,w,d);
+					//parent.rotate(parent.PI/4);
+				   // parent.image(img,-w/2,0,w,d);
 				 }
+	// parent.rotate(-parent.PI/8);
+	 parent.image(img,-w/2,0,w,d);
 	    parent.popMatrix();
 
 	}
@@ -1008,7 +1019,47 @@ int halfinit=initLife/2;
 			}
 			
 		}
+		else if(this.type==Type.SCRY)
+		{
+			
+			if(this.life>0) this.life--;
+			
+			parent.pushMatrix();
+			parent.translate(v1.x*parent.width, v1.y*parent.height);
+	
+			int halfinit=initLife/2;
+			
+			if(life>(initLife/2))
+			{
+				int life2=initLife-life;
+				float l=life2/(float)halfinit;
+				int tint=(int)(l*255);
+			//	parent.println(life2+"   "+l+"   "+tint);
+				parent.tint(255,tint);
+				//parent.image(arrow, 0, 0,50,50);
+				
+			}
+			else
+			{
+				float l=life/(float)halfinit;
+				int tint=(int)(l*255);
+				//parent.println(life+"   "+l+"   "+tint);
+				parent.tint(255,tint);
+				//parent.image(arrow, 0, 0,50,50);
+			}
+			float h=(scry.height/(float)scry.width);
+			parent.println("h:"+h);
+			parent.imageMode(parent.CENTER);
+			//parent.image(scry, 0, 0,g.cardWidth,g.cardWidth*(scry.height/scry.width));
+			if(this.rotate=true)
+				parent.rotate(parent.PI);
+			parent.image(scry, 0, 0,g.cardWidth,h*g.cardWidth);
+			parent.imageMode(parent.CORNER);
+			parent.tint(255);
+			parent.popMatrix();
+			
 		
+		}
 		else if(this.type==Type.SPEAR)
 		{
 			
@@ -1124,7 +1175,11 @@ int halfinit=initLife/2;
 			//parent.rotate(parent.PI);
 			//parent.text(String.valueOf("5"),0,0);
 		//	parent.println(this.text+" "+ v1.x*parent.width+" "+v1.y*parent.height);
-			
+			if(this.rotate==true)
+				{
+				parent.rotate(parent.PI);
+				parent.translate(0, 20);
+				}
 			parent.text(this.text,0,0);
 			parent.popMatrix();
 			life--;

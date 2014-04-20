@@ -51,13 +51,13 @@ public class Game {
 		parent=p;
 		Cards=new ArrayList<Card>();
 		Effects=new ArrayList<Effect>();
-		
+		P1=new Player(p,0,"PlayerOne");
+		P2=new Player(p,1,"PlayerTwo");
 		board=new Board(p);
 		board.game=this;
 		fazy=new Phrases(p);
 		
-		P1=new Player(p,0,"PlayerOne");
-		P2=new Player(p,1,"PlayerTwo");
+		
 		ActivePlayer=P2;
 		
 		cardWidth=100;
@@ -320,7 +320,7 @@ public class Game {
 							
 							if(c.block==false)
 							{
-								Effect e=new Effect(parent,this,Type.ARROW,-1,v1,v2);
+								Effect e=new Effect(parent,this,Type.ARROW,-1,v1,v2,false);
 								e.blockId1=id;
 								e.blockId2=c.blockedId;
 								this.Effects.add(e);
@@ -393,11 +393,11 @@ public class Game {
 						 //this.board.lib1.r=(int)parent.random(255);
 						 //this.board.lib1.g=(int)parent.random(255);
 						 //this.board.lib1.b=(int)parent.random(255);
-						 this.Effects.add(new Effect(parent,this,120,this.board.lib1.position,new PVector(0,0),40, 0, 255, 0,s));
+						 this.Effects.add(new Effect(parent,this,120,this.board.lib1.position,new PVector(0,0),40, 0, 255, 0,s,true));
 					 }
 					 if(id==2)
 					 {
-						 this.Effects.add(new Effect(parent,this,120,this.board.lib2.position,new PVector(0,0),40, 0, 255, 0,s));
+						 this.Effects.add(new Effect(parent,this,120,this.board.lib2.position,new PVector(0,0),40, 0, 255, 0,s,false));
 					 }
 				}
 				
@@ -426,13 +426,13 @@ public class Game {
 						{
 							u=new PVector(parent.width/2,parent.height);
 							v=new PVector(parent.width-100,0);
-							this.Effects.add(new Effect(parent,this, Type.SPEAR, 20,u,v));
+							this.Effects.add(new Effect(parent,this, Type.SPEAR, 20,u,v,false));
 						}
 						if(playerId==2)
 						{
 							u=new PVector(parent.width/2,0);
 							v=new PVector(parent.width-100,parent.height);
-							this.Effects.add(new Effect(parent,this, Type.SPEAR, 20,u,v));
+							this.Effects.add(new Effect(parent,this, Type.SPEAR, 20,u,v,false));
 						}
 						//if(cardId>=0) this.Effects.add(new Effect(parent,this,Type.BOLT,16,cardId,this.cardWidth,this.cardHeight,this.Cards));
 					}
@@ -571,12 +571,12 @@ public class Game {
 						 //this.board.lib1.b=(int)parent.random(255);
 						// parent.pushMatrix();
 						// parent.rotate(parent.PI);
-						 this.Effects.add(new Effect(parent,this,120,this.board.lib1.position,new PVector(0,0),35, 255, 0, 0,s));
+						 this.Effects.add(new Effect(parent,this,120,this.board.lib1.position,new PVector(0,0),35, 255, 0, 0,s,true));
 						// parent.popMatrix();
 					 }
 					 if(id==2)
 					 {
-						 this.Effects.add(new Effect(parent,this,120,this.board.lib2.position,new PVector(0,0),35, 255, 0, 0,s));					 }
+						 this.Effects.add(new Effect(parent,this,120,this.board.lib2.position,new PVector(0,0),35, 255, 0, 0,s,false));					 }
 				}
 				break;
 		

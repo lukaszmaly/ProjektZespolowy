@@ -11,7 +11,7 @@ public class Board
 	
 	Library lib1,lib2;
 	PFont f;
-	PImage img,angel,detector,library;
+	PImage img,angel,detector,library,back;
 	Game game;
 	
 	Board(PApplet p)
@@ -26,8 +26,8 @@ public class Board
 		// stack3=new Stack(parent,new PVector(0.55f,0.5f));
 		// stack1=new Stack(parent,new PVector(0.92f,0.3f));
 		 //stack2=new Stack(parent,new PVector(0.92f,0.7f));
-		 lib1=new Library(parent,new PVector(0.08f,0.2f));
-		 lib2=new Library(parent,new PVector(0.08f,0.8f));
+		 lib1=new Library(parent,new PVector(0.08f,0.2f),1);
+		 lib2=new Library(parent,new PVector(0.08f,0.8f),2);
 	 }
 	 
 	 public void display(int color,int t, int w, Player P1,Player P2,int width, int height)         //Wyswietlanie pol
@@ -100,7 +100,14 @@ public class Board
 		 parent.fill(255);
 		 parent.stroke(255);
 		 parent.rectMode(parent.CORNERS);
+		 if(game.GameType=='S')
 		 parent.rect(225, 10, parent.width-225, parent.height-10, 10, 10, 10, 10);
+		 else
+		 {
+			 parent.rect(225, 10, parent.width-225, parent.height/2-3, 10, 10, 10, 10);
+			 parent.rect(225, parent.height/2+3, parent.width-225, parent.height-10, 10, 10, 10, 10);
+
+		 }
 		 parent.rectMode(parent.CORNER);
 		 
 	 }
@@ -281,14 +288,18 @@ parent.rectMode(parent.CENTER);
 	 public class Library
 	 {
 		 int r,g,b;
+		int owner;
 		 PVector position;
 		 PApplet parent;
 		 
-			Library(PApplet p,PVector pos)
+			Library(PApplet p,PVector pos,int owner)
 		 	{
 				
 		 		parent=p;
+		 		this.owner=owner;
+		 		
 		 		library=parent.loadImage("Library.png");
+		 		back=parent.loadImage("MTGBack.jpg");
 		 		position=pos;
 		 		r=0;g=0;b=255;
 		 		
@@ -316,7 +327,10 @@ parent.rectMode(parent.CENTER);
 			 				 //parent.rect(0,0,game.cardWidth*1.6f-2*i,game.cardHeight*1.6f-2*i,10,10,10,10);
 			 				parent.image(library, 0, 0,game.cardWidth*1.6f,game.cardHeight*1.4f);
 			 				 // parent.noFill();
-			 				 parent.popMatrix();
+			 				if((owner==1 && game.P1.isLocal==false) || (owner==2 && game.P2.isLocal==false))
+				 				parent.image(back, 0, 0,game.cardWidth,game.cardHeight);
+
+			 					parent.popMatrix();
 			 			 //}
 			 			 parent.imageMode(parent.CORNER);
 			 		 }

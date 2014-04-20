@@ -74,7 +74,7 @@ public class Main extends PApplet {
 			
 		
 		}
-	
+	//image(loadImage("scry.png"),100,200,100,50);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
@@ -128,6 +128,14 @@ public class Main extends PApplet {
 			case 'g':
 				if(game.GameType=='S') {game.GameType='M';game.window=2;}
 				else {game.GameType='S';game.window=1;}
+				
+				if(game.P1.isLocal==false)
+					game.P1.isLocal=true;
+				else game.P1.isLocal=false;
+				
+				if(game.P2.isLocal==false)
+					game.P2.isLocal=true;
+				else game.P2.isLocal=false;
 				break;
 					
 			
@@ -183,12 +191,16 @@ public class Main extends PApplet {
 		{	
 			//game.Effects.add(new Effect(this,game,Type.FIRESHIELD,100,1));
 			//game.Effects.add(new Effect(this,game,Type.FIRE2,74,1));
+			/*
 			game.Effects.add(new Effect(this,game,Type.DEATH,300,0));
 			Card c = game.Cards.get(0);
 			c.isDead = true;
 			c.deadCounter=300;
 			//c.sparkTime=15;
 			game.removeById(0);
+			
+			*/
+			
 			//game.Effects.add(new Effect(this,game,Type.FIRE,48,1));
 		//	game.Effects.add(new Effect(this,game,Type.BOOST,50,1));
 		//	game.Effects.add(new Effect(this,game,Type.REDUCTION,50,2));
@@ -206,7 +218,18 @@ public class Main extends PApplet {
 				v=null;
 				u=null;
 			}
+			
+			if(v==null)v=new PVector(mouseX,mouseY);
+			else
+			{
+				u=new PVector(mouseX,mouseY);
+				game.Effects.add(new Effect(this,game, Type.ARROW, 60,new PVector(v.x,v.y),new PVector(u.x, u.y)));
+				v=null;
+				u=null;
+			}
 			*/
+			game.Effects.add(new Effect(this,game,Type.SCRY,200,game.board.lib1.position,new PVector(0,0),true));
+			game.Effects.add(new Effect(this, game, 200, new PVector(game.board.lib1.position.x,game.board.lib1.position.y-0.05f), new PVector(0, 0),35, 0, 0, 255, "1",true));
 			 //game.Effects.add(new Effect(this,game,Type.FIRE,30,1,game.cardWidth,game.cardHeight,game.Cards));	
 		
 		}
