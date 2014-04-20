@@ -218,16 +218,16 @@ public class Main extends PApplet {
 				v=null;
 				u=null;
 			}
-			
+			*/
 			if(v==null)v=new PVector(mouseX,mouseY);
 			else
 			{
 				u=new PVector(mouseX,mouseY);
-				game.Effects.add(new Effect(this,game, Type.ARROW, 60,new PVector(v.x,v.y),new PVector(u.x, u.y)));
+				game.Effects.add(new Effect(this,game, Type.SPEAR2, 60,new PVector(v.x,v.y),new PVector(u.x, u.y),false));
 				v=null;
 				u=null;
 			}
-			*/
+			
 			/*
 			game.Effects.add(new Effect(this,game,Type.DRAW,200,new PVector(game.board.lib1.position.x,game.board.lib1.position.y-0.025f),new PVector(0,0),true));
 			game.Effects.add(new Effect(this, game, 200, new PVector(game.board.lib1.position.x,game.board.lib1.position.y+0.08f), new PVector(0, 0),35, 0, 255, 0, "1",true));

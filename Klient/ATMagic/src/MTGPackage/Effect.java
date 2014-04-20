@@ -20,7 +20,8 @@ public class Effect
 						FIRESHIELD,
 						DEATH,
 						SCRY,
-						DRAW}
+						DRAW,
+						SPEAR2}
 	
 	PApplet parent;
 	int life,textR,textG,textB,initLife=20,startingcounter;
@@ -125,6 +126,7 @@ public class Effect
 		{
 			img=parent.loadImage("fire8.png");
 		}
+		
 		if(t==Type.SCRY)
 		{	this.rotate=r;
 			scry=parent.loadImage("scry.png");
@@ -1180,6 +1182,74 @@ int halfinit=initLife/2;
 	    parent.popMatrix();
 
 	}
+		else if(this.type==Type.SPEAR2)
+		{
+			float d=parent.dist(v1.x, v1.y, v2.x, v2.y);
+		    if(life>0) life--;
+		    
+
+		    float sin=(parent.abs(v1.x-v2.x))/d;
+		    float asin=parent.asin(sin);
+				parent.pushMatrix();
+				
+				parent.translate(v1.x,v1.y);
+				if(v1.x<=v2.x && v1.y<=v2.y)  
+				 {
+					 parent.rotate(parent.PI-asin);
+				
+				   // parent.image(img,-w/2,0,w,d);
+				 }
+				 else
+					 if(v1.x<=v2.x && v1.y>=v2.y)  
+					 {
+						 parent.rotate(asin);
+						 
+					   // parent.image(img,-w/2,0,w,d);
+					 } 
+					 else
+						 if(v1.x>=v2.x && v1.y>=v2.y)  
+						 {
+							 parent.rotate(-asin);
+							
+						    //parent.image(img,-w/2,0,w,d);
+						 }
+						 else
+							 if(v1.x>=v2.x && v1.y<=v2.y)  
+							 {
+								 parent.rotate(parent.PI+asin);
+								
+							   // parent.image(img,-w/2,0,w,d);
+							 }
+					
+					parent.rotate(parent.PI);
+					parent.translate(0,(1-(life/(float)initLife))*d);
+					
+					
+					int imgNum=74;
+					if(initLife-life>=0 && initLife-life<74)
+					 imgNum=(initLife-life);
+					
+					if(imgNum>50)
+						parent.tint(255,(74-imgNum)*10);
+					
+					if(imgNum<25)
+						parent.tint(255,(imgNum)*10);
+					
+					parent.println(imgNum+"^");
+					//if(g.drawCounter-startingcounter<23)
+					// imgNum=g.drawCounter-startingcounter;
+					
+					parent.imageMode(parent.CENTER);
+					parent.image(g.fires2.get(imgNum), 0,0);
+					parent.imageMode(parent.CORNER);
+					parent.popMatrix();
+					parent.tint(255);
+					if(life>0) life--;
+					
+				}
+		
+	
+		
 		
 		else if(this.type==type.TEXT)
 		{
