@@ -99,21 +99,38 @@ def video(request):
 		winner = "";
 		count=0;
 		cardlist={};
+		#kto gra karte
 		idlist={};
+		#lista akcji
 		actionlist={};
+		#kto umiera
 		deadlist={};
 		#ktory gracz gra
 		ktogra={};
+		#hp gracza 1
 		hp1list={};
+		#hp gracza 2
 		hp2list={};
+		# co atakuje
 		ataklist={};
+		#co broni
 		defenslist={};
-		celelist={};
+		#komu dodajemy damage
+		dmglist={};
+		#gdzie sie mamy przesuwac
+		celeobrony={};
+		#nastepna tura
+		nextturn={};
+		#ogolne staty
+		stats = {};
+		#staty pierwsze
+		stats1={};
+		#staty drugie
+		stats2={};
 		#HP poczatkowe 20
 		#otwieramy plik itworzymy obiekt gry
 	fo=open('C:\\Users\\np550\\Desktop\\atm\\magic\\history\\LOGI_V3.txt', 'r');
 	obiekt = Game();
-
 
 	#pierwsza petla - czytamy nicki
 	for x in range (0, 1):
@@ -127,7 +144,7 @@ def video(request):
 
 	#indeks naszej listy
 	i=0;
-
+	ostktogra=0;
 	licznik=0;
 	#ogr to numer ostatniej linijki pliku
 	ogr = 1000;
@@ -154,6 +171,7 @@ def video(request):
 					obiekt.cardlist.update({obiekt.count : dolacz});
 					obiekt.idlist.update({obiekt.count : list[2]});
 					obiekt.ktogra.update({obiekt.count : list[1]});
+					ostktogra = obiekt.count;
 				else:
 					dolacz=list[3];	
 					if (dolacz[len(dolacz)-1]=="\n" or dolacz[len(dolacz)-1]==" "):
@@ -161,7 +179,7 @@ def video(request):
 					obiekt.cardlist.update({obiekt.count : dolacz});
 					obiekt.idlist.update({obiekt.count : list[2]});
 					obiekt.ktogra.update({obiekt.count : list[1]});
-
+					ostktogra = obiekt.count;
 		elif ("SUBLIFE" in list[0]):
 			if ("1" in list[1]):
 				list[2]=list[2][:-1];
@@ -169,19 +187,25 @@ def video(request):
 			else: 
 				list[2]=list[2][:-1];
 				obiekt.hp2list.update({obiekt.count : list[2]});
-		elif ("STATS" in list[0] or "NEXTTURN" in list[0]):
-			continue;
+		elif ("NEXTTURN" in list[0]):
+			element = obiekt.ktogra.get(ostktogra,obiekt.ktogra);
+			obiekt.nextturn.update({obiekt.count : element});
+		elif ("STATS" in list[0]):
+			obiekt.stats.update({obiekt.count : list[1]});
+			obiekt.stats1.update({obiekt.count : list[2]});
+			obiekt.stats2.update({obiekt.count : list[3][-1]});
 		elif ("DEFENCE" in list[0]):
 			obiekt.defenslist.update({obiekt.count : list[2][:-1]});
+			obiekt.celeobrony.update({obiekt.count : list[1]});
 		elif ("ATTACK" in list[0]):
 			obiekt.ataklist.update({obiekt.count : list[1][:-1]});
 		elif ("DEAD" in list[0]):
 			obiekt.deadlist.update({obiekt.count : list[1][:-1]});
 		elif ("ADDDAMAGE" in list[0]):
-			obiekt.celelist.update({obiekt.count : list [1]});
+			obiekt.dmglist.update({obiekt.count : list [1]});
 		#zamykamy plik
 	fo.close();
-	return render_to_response ('video.html',{'karty':obiekt.cardlist, 'licznik':obiekt.count, 'gracz1': 1, 'gracz2': 2, 'ktogra':obiekt.ktogra, 'akcje':obiekt.actionlist, 'deads':obiekt.deadlist, 'idlist':obiekt.idlist, 'ileakcji':obiekt.count, 'hp1':obiekt.hp1list, 'hp2':obiekt.hp2list, 'ataki':obiekt.ataklist,'obrony':obiekt.defenslist, 'cele':obiekt.celelist})
+	return render_to_response ('video.html',{'karty':obiekt.cardlist, 'licznik':obiekt.count, 'gracz1': 1, 'gracz2': 2, 'ktogra':obiekt.ktogra, 'akcje':obiekt.actionlist, 'deads':obiekt.deadlist, 'idlist':obiekt.idlist, 'ileakcji':obiekt.count, 'hp1':obiekt.hp1list, 'hp2':obiekt.hp2list, 'ataki':obiekt.ataklist,'obrony':obiekt.defenslist, 'dmg':obiekt.dmglist,'tury':obiekt.nextturn, 'cele':obiekt.celeobrony, 'stats':obiekt.stats, 'stats1':obiekt.stats1, 'stats2':obiekt.stats2})
 
 def popular(request):
     
