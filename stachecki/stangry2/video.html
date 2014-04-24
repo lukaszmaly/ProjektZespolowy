@@ -63,6 +63,8 @@ $(document).ready(function(){
 	var indstatsow=0;
 	//zmienne do statystyk
 	var celstatu, stat1,stat2;
+	//p - pozycja do przesuniecia, przesuniecie - gdzie ma isc karta
+	var przesuniecie, p;
 	
 	for (var i = 0, limit = 9; i <= limit; i++) 
 	{
@@ -98,6 +100,8 @@ $(document).ready(function(){
 			cousunac="";
 			nextturn="";
 			celataku="";
+			celstatu="";
+			dmgval="";
 			//kopiujemyhp
 			if (licznik==1)
 			{
@@ -120,20 +124,20 @@ $(document).ready(function(){
 				if (kto=="gracz1")
 				{
 					$("#"+atakujace[inda-1]).animate({top:'-5px'}, 1000);	
-					$("#"+broniacy).animate({top:'100px'}, 1000);	
+					$("#"+broniacy).animate({top:'100px', left:''+przesuniecie+'px'}, 1000);	
+					$("#tekst").append(przesuniecie);		
 				}
 				else if (kto=="gracz2")
 				{
 					$("#"+atakujace[inda-1]).animate({top:'-100px'}, 1000);	
-					$("#"+broniacy).animate({top:'-100px'}, 1000);	
+					$("#"+broniacy).animate({top:'-100px',left:'-'+przesuniecie+100+'px'}, 1000);	
+					$("#tekst").append(przesuniecie);		
 				}
 				
 				atakujace[inda-1]="";
 			}
 			
-			if (akcje [licznik-2]=="add")
-				$("#wyk").remove();
-			
+
 			akcje[licznik-1] = "nic";
 			
 			//szukamy, co atakuje obrona
@@ -146,6 +150,14 @@ $(document).ready(function(){
 			{% endfor %}
 			
 			//szukamy, ktorej karcie podnosimy statystyki
+			{% for key,value in dmgvalue.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					dmgval={{value}};
+				}
+			{% endfor %}
+			
 			{% for key,value in stats.iteritems %}
 				wartosc1 = {{key}};
 				if (wartosc1 == licznik)
@@ -406,7 +418,7 @@ $(document).ready(function(){
 								if (kartynastole[j]==cel)
 								{
 									var p = $("#"+divs[j]).position();
-									var przesuniecie = p.left-100;
+									przesuniecie = p.left-100;
 									$("#"+divs[i]).animate({top:'50px', left:''+przesuniecie+'px'}, 1000);
 									break;
 								}
@@ -421,8 +433,8 @@ $(document).ready(function(){
 							{
 								if (kartynastole[j]==cel)
 								{
-									var p = $("#"+divs[j]).position();
-									var przesuniecie = p.left-100;
+									p = $("#"+divs[j]).position();
+									przesuniecie = p.left-100;
 									$("#"+divs[i]).animate({top:'-10px', left:''+przesuniecie+'px'}, 1000);
 									break;
 								}
@@ -444,7 +456,7 @@ $(document).ready(function(){
 				{
 					if (kartynastole[i]==cel)
 					{	
-						$('<img id="wyk" style="position:relative;height:50px;weight:50px; " src="{% static "assets/images/wykrzyknik.jpg" %}" />').appendTo("#"+divs[i]);	
+						$("#"+divs[i]).append(dmgval);	
 						$("#"+divs[i]).show();
 						akcje[licznik-1]="add";
 						damages[inddmg]=divs[i];
@@ -504,13 +516,14 @@ $(document).ready(function(){
 			akcje[licznik-1]="stats";
 		}
 		
+		
 		$("#tekst").empty();
 		{% for key,value in akcje.iteritems %}
 			wartosc = {{key}};
 			if (licznik == wartosc)
 				$("#tekst").append('{{value}}');							
 		{% endfor %}
-
+		
 		}
 		
 		
