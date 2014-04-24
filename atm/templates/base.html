@@ -1,46 +1,43 @@
 {% load static %}
 <!DOCTYPE html>
-<html>
-<img src='{% static "assets/images/logo.png" %}' />
+<html lang ='pl'>
+
+<img src='{% static "assets/images/logo.jpg" %}' />
+
+
 <head>
-    <title>ATMagic</title>
+    <title>{% block title %}ATMagic{% endblock %}</title>
+
         <link rel="stylesheet" type="text/css" href='{% static "assets/css/default.css" %}'>   
+
 </head>
+
 <body>
-
     <div id="page">
-	<div id="header">
-		<a id="logo" href="main.html" >
-		<img style="border: 0px solid ; width: 278px; height: 156px;" src="images/logo.png" alt="">
 
-     
-<ul class="navigation">	
- {% block sidebar %}   
-  <li class="first"><a href="/main/" class="active">Strona główna<br></a></li>
-  <li><a href="/gracze/">Gracze</a></li>
-  <li><a href="/info/">Info</a></li>
-  <li><a href="/stat/">Statystyki</a></li>
- <li><a href="/accounts/login/">Zaloguj</a></li>
-{% endblock %}
+    <div id="sidebar">
+        {% block sidebar %}
+        <ul>
+<li><a href="/main/">Strona glowna</a>    
+<a href='/gracze/'>Gracze</a>    
+<a href="/about/">Czym jest ATMagic?</a>    
+<a href="/download/">Download</a>    
+<a href="/info/">Dokumentacja</a>    
+<a href="/graf/">Wykresy</a>     
+<a href="/stat/">Statystyki</a>    
+<a href="/video/">Wizualizacja</a>    
+<a href="/accounts/login/">Zaloguj</a>
+</li>
+        </ul>
+        {% endblock %}
     </div>
-		<div id="body">
-		<div class="featured"> 
-                <img style="width: 882px; height: 383px;" alt="" 
-		src='{% static "assets/images/angel.jpg" %}'>
-		
-		<div class="section">
-		{%block section %}
-			<h2>Witaj na stronie ATMagic<br></h2>
-			<p></p>			
-			<p>Przykładowe informacje<br></p>
-		{% endblock %}
-			</div>
-			<div id="content">
-		
-        {% block content %}
-	{% endblock %}		
-		
-	
+
+    <div id ="content">
+        {% block content %}{% endblock %}
+ 
+    </div>
+
+    </div>
 
 </body>
 </html>

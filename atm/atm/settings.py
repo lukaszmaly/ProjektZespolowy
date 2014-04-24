@@ -38,7 +38,6 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 #    'django.contrib.sites',
     'magic',
-#    'userprofile',
 )
 
 MIDDLEWARE_CLASSES = (
@@ -88,8 +87,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
 #STATIC_ROOT=''
-
-#AUTH_PROFILE_MODULE='userprofile.UserProfile'
 
 MEDIA_ROOT = '/home/erwin/atm/static/'
 
