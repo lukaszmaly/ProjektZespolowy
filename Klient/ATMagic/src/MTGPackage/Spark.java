@@ -16,16 +16,14 @@ public class Spark
 	Spark(PVector l,PApplet p, PVector a,PVector v,int life)
 	{
 		parent=p;
-		//this.v=new PVector(parent.random(0.2f)-0.1f,parent.random(-0.2f)+0.1f);
 		if(v!=null) this.v=v.get(); else this.v=new PVector(parent.random(-1,1), parent.random(-10,0));
 		if(a!=null) this.a=a.get(); else this.a=new PVector(parent.random(-0.05f,0.05f),parent.random(-0.5f,0));
-		//this.a=new PVector(parent.random(0,5f),parent.random(0,5));		
 		loc = l.get();	
 		this.life = life;
 		r=0;
 		g=0;
 		b=0;
-		//PImage star=parent.loadImage("star.png");
+		
 	}
 
 	public void run() 

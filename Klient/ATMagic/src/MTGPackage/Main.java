@@ -13,10 +13,10 @@ import MTGPackage.Effect.Type;
 public class Main extends PApplet {
 
 	public Game game=new Game(this);
-	int counter=5;
-	PVector v=null,u=null;
-	PImage img;
-	ArrayList<PImage> imgs=new ArrayList<PImage>();
+	//int counter=5;
+//	PVector v=null,u=null;
+//	PImage img;
+	//ArrayList<PImage> imgs=new ArrayList<PImage>();
 	//Game game;
 	public void setup()
 		{		
@@ -32,11 +32,7 @@ public class Main extends PApplet {
 
 	public void draw() 
 	{
-		
-		
-		game.drawCounter++;
-		
-		counter--;
+
 		if(game.window==0 && game.tokens == true)
 		{	
 			background(0);
@@ -53,11 +49,8 @@ public class Main extends PApplet {
 			game.board.display(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
 			game.board.display2(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
 			game.board.displayLog();
-			rect(300,200,game.cardWidth,game.cardHeight);
 			game.goThroughCards();
 			game.goThroughEffects();
-			
-		
 			
 		} 
 		else if(game.window==2)
@@ -68,13 +61,10 @@ public class Main extends PApplet {
 			game.board.display(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
 			game.board.display2(255, 40, 4,game.P1,game.P2,game.cardWidth,game.cardHeight);
 			game.board.displayLog();
-			rect(300,200,game.cardWidth,game.cardHeight);
 			game.goThroughCards();
 			game.goThroughEffects();
-			
-		
+
 		}
-	//image(loadImage("scry.png"),100,200,100,50);
 	}
 
 	//////////////////////////////////////////////////////////////////////////////////////////////
@@ -190,9 +180,10 @@ public class Main extends PApplet {
 		if (mouseButton == LEFT) 
 		{	
 			//game.Effects.add(new Effect(this,game,Type.FIRESHIELD,100,1));
-			//game.Effects.add(new Effect(this,game,Type.FIRE2,74,1));
-			/*
+			//game.Effects.add(new Effect(this,game,Type.FIRE2,74,0));
+			
 			game.Effects.add(new Effect(this,game,Type.DEATH,300,0));
+			/*
 			Card c = game.Cards.get(0);
 			c.isDead = true;
 			c.deadCounter=300;
@@ -201,10 +192,10 @@ public class Main extends PApplet {
 			
 			*/
 			
-			//game.Effects.add(new Effect(this,game,Type.FIRE,48,1));
+		//	game.Effects.add(new Effect(this,game,Type.FIRE,48,0));
 		//	game.Effects.add(new Effect(this,game,Type.BOOST,50,1));
 		//	game.Effects.add(new Effect(this,game,Type.REDUCTION,50,2));
-			 //game.Effects.add(new Effect(this, game, Type.DAMAGE, 40, 0));
+			// game.Effects.add(new Effect(this, game, Type.DAMAGE, 40, 0));
 			// Effect e= game.Effects.get(game.Effects.size()-1);
 			//	e.q=3;
 			//game.Effects.add(new Effect(this, game, 200,new PVector(0.5f,0.5f), new PVector(0.001f,0.001f), 30, 0, 255, 0, "TEXT"));
@@ -218,7 +209,7 @@ public class Main extends PApplet {
 				v=null;
 				u=null;
 			}
-			*/
+			
 			if(v==null)v=new PVector(mouseX,mouseY);
 			else
 			{
@@ -227,20 +218,20 @@ public class Main extends PApplet {
 				v=null;
 				u=null;
 			}
+			*/
 			
+			//game.Effects.add(new Effect(this,game,Type.DRAW,200,new PVector(game.board.lib1.position.x,game.board.lib1.position.y-0.025f),new PVector(0,0),true));
+		//	game.Effects.add(new Effect(this, game, 200, new PVector(game.board.lib1.position.x,game.board.lib1.position.y+0.08f), new PVector(0, 0),35, 0, 255, 0, "1",true));
 			/*
-			game.Effects.add(new Effect(this,game,Type.DRAW,200,new PVector(game.board.lib1.position.x,game.board.lib1.position.y-0.025f),new PVector(0,0),true));
-			game.Effects.add(new Effect(this, game, 200, new PVector(game.board.lib1.position.x,game.board.lib1.position.y+0.08f), new PVector(0, 0),35, 0, 255, 0, "1",true));
-			
 			game.Effects.add(new Effect(this,game,Type.DRAW,200,new PVector(game.board.lib2.position.x,game.board.lib2.position.y+0.025f),new PVector(0,0),false));
 			game.Effects.add(new Effect(this, game, 200, new PVector(game.board.lib2.position.x,game.board.lib2.position.y-0.05f), new PVector(0, 0),35, 0, 255, 0, "1",false));
 			 */
 			
-			game.Effects.add(new Effect(this,game,Type.SCRY,150,new PVector(game.board.lib1.position.x,game.board.lib1.position.y-0.02f),new PVector(0,0),true));
-			game.Effects.add(new Effect(this, game, 150, new PVector(game.board.lib1.position.x,game.board.lib1.position.y+0.06f), new PVector(0, 0),35, 0, 255, 0, "1",true));
+		//	game.Effects.add(new Effect(this,game,Type.SCRY,150,new PVector(game.board.lib1.position.x,game.board.lib1.position.y-0.02f),new PVector(0,0),true));
+			//game.Effects.add(new Effect(this, game, 150, new PVector(game.board.lib1.position.x,game.board.lib1.position.y+0.06f), new PVector(0, 0),35, 0, 255, 0, "1",true));
 			
-			game.Effects.add(new Effect(this,game,Type.SCRY,150,new PVector(game.board.lib2.position.x,game.board.lib2.position.y+0.02f),new PVector(0,0),false));
-			game.Effects.add(new Effect(this, game, 150, new PVector(game.board.lib2.position.x,game.board.lib2.position.y-0.04f), new PVector(0, 0),35, 0, 255, 0, "1",false));
+		//	game.Effects.add(new Effect(this,game,Type.SCRY,150,new PVector(game.board.lib2.position.x,game.board.lib2.position.y+0.02f),new PVector(0,0),false));
+			//game.Effects.add(new Effect(this, game, 150, new PVector(game.board.lib2.position.x,game.board.lib2.position.y-0.04f), new PVector(0, 0),35, 0, 255, 0, "1",false));
 			
 			//game.Effects.add(new Effect(this,game,Type.FIRE,30,1,game.cardWidth,game.cardHeight,game.Cards));	
 		

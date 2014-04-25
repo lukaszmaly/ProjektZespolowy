@@ -3,49 +3,38 @@ import processing.core.*;
 
 public class Board 
 {
-	PVector graveyard1;
-
 	PApplet parent;
-	
-	Stack stack1,stack2,stack3;
-	
+	//PVector graveyard1;
+	Stack stack1,stack2;
 	Library lib1,lib2;
-	PFont f;
+	PFont mana,life;
 	PImage img,angel,detector,library,back;
 	Game game;
 	
 	Board(PApplet p)
 	 {
-		 parent=p;
-		 img = parent.loadImage("mana-symbols.png");
-		 angel = parent.loadImage("angel.png");
-		 detector=parent.loadImage("detector.png");
-		 
-		 stack1=new Stack(parent,new PVector(0.855f,0.22f));
-		 stack2=new Stack(parent,new PVector(0.855f,0.5f));
-		// stack3=new Stack(parent,new PVector(0.55f,0.5f));
-		// stack1=new Stack(parent,new PVector(0.92f,0.3f));
-		 //stack2=new Stack(parent,new PVector(0.92f,0.7f));
-		 lib1=new Library(parent,new PVector(0.08f,0.2f),1);
-		 lib2=new Library(parent,new PVector(0.08f,0.8f),2);
+		parent=p;
+		img = parent.loadImage("mana-symbols.png");
+		angel = parent.loadImage("angel.png");
+		detector=parent.loadImage("detector.png");
+		library=parent.loadImage("Library.png");
+	 	back=parent.loadImage("MTGBack.jpg");
+	 	life=parent.createFont("Comic Sans", 50);
+	 	mana=parent.createFont("Comic Sans", 25,true);
+		stack1=new Stack(parent,new PVector(0.855f,0.22f));
+		stack2=new Stack(parent,new PVector(0.855f,0.5f));
+	
+		lib1=new Library(parent,new PVector(0.08f,0.2f),1);
+		lib2=new Library(parent,new PVector(0.08f,0.8f),2);
 	 }
 	 
 	 public void display(int color,int t, int w, Player P1,Player P2,int width, int height)         //Wyswietlanie pol
 	 {	 
-		// this.drawFrame(color,2*w);
-		// stack1.drawStack();
-		// stack2.drawStack();
-		// lib1.drawLibrary();
-		// lib2.drawLibrary();
-		// this.drawLife(P1, P2);
-		// this.drawMana(P1, P2);
 		 this.drawField();
 		 this.game.fazy.rysuj();
-		// parent.line(0, parent.height/2, parent.width,parent.height/2 );
 	 }
 	 public void display2(int color,int t, int w, Player P1,Player P2,int width, int height)         //Wyswietlanie pol
 	 {
- 
 		 this.drawFrame(color,2*w);
 		 stack1.drawStack();
 		 stack2.drawStack();
@@ -53,9 +42,7 @@ public class Board
 		 lib2.drawLibrary();
 		 this.drawLife(P1, P2);
 		 this.drawMana(P1, P2);
-		 this.drawMarkersDetector();
-		// this.drawField();
-		// this.game.fazy.rysuj();
+		 this.drawMarkersDetector();		
 	 }
 	 public void displayLog()
 	 {
@@ -87,14 +74,11 @@ public class Board
 			{
 				parent.stroke(240,240,70,200-4*i);
 				parent.ellipseMode(parent.CENTER);
-				parent.ellipse(0,0,200+1f*i,250+1f*i);
-				
-				
+				parent.ellipse(0,0,200+1f*i,250+1f*i);		
 			}
 			parent.popMatrix();
 	 }
-	 
-	 
+ 
 	 public void drawField()
 	 {
 		 parent.fill(255);
@@ -108,26 +92,18 @@ public class Board
 			 parent.rect(225, parent.height/2+3, parent.width-225, parent.height-10, 10, 10, 10, 10);
 
 		 }
-		 parent.rectMode(parent.CORNER);
-		 
+		 parent.rectMode(parent.CORNER);		 
 	 }
 	   
 	 public void drawMarkersDetector()
 	 {
-		 parent.rectMode(parent.CENTER);
-		 parent.stroke(255);
 		 parent.strokeWeight(1);
-		 parent.fill(255);
 		 parent.imageMode(parent.CENTER);
-		 parent.rectMode(parent.CENTER);
 		if(game.ActivePlayer==game.P2)
 		{
 			 parent.image(angel,0.916f*parent.width, 0.85f*parent.height,215,95);
-			 //parent.rect(0.916f*parent.width, 0.15f*parent.height,0.9f*angel.height,0.9f*angel.height,10,10,10,10);
 			 parent.image(detector, 0.9194f*parent.width, 0.15f*parent.height,215,95);
-		
-		}
-		
+		}	
 		else
 		{
 			parent.pushMatrix();
@@ -136,47 +112,9 @@ public class Board
 			parent.image(angel,0,0,215,95);
 			parent.popMatrix();
 			parent.image(detector, 0.916f*parent.width, 0.85f*parent.height,215,95);
-			//parent.rect(0.916f*parent.width, 0.85f*parent.height,0.9f*angel.height,0.9f*angel.height,10,10,10,10);
 		}
 		parent.imageMode(parent.CORNER);
-		parent.rectMode(parent.CORNER);
-		 //parent.rect(0.92f*parent.width,0.1f*parent.height,100,100,20,20,20,20);
-		 //parent.rect(0.92f*parent.width,0.85f*parent.height,100,100,20,20,20,20);
-		/*
-		 
-		 parent.noFill();
-		 for(int i=0;i<25;i++)
-		 {
-			 parent.stroke(255-i*10);
-			 
-			 parent.rect(0.75f*parent.width-i,0.05f*parent.height-i,90+2*i,90+2*i,20,20,20,20);
-			 parent.rect(0.75f*parent.width-i,0.83f*parent.height-i,90+2*i,90+2*i,20,20,20,20);
-			
-		 }
-		 */
 	 }
-	 /*
-	 public void drawStack(int color, int weigth,int width, int height)
-	 {
-	
-		 parent.strokeWeight(1);
-		 parent.stroke(stack1R,stack1G, stack1B );
-		 
-	
-		 
-parent.rectMode(parent.CENTER);
-		 
-		 parent.fill(255);
-		 int i;
-		 for(i=20;i>0;i--)
-		 {
-			 parent.stroke(stack1R,stack1G, stack1B,20+i*8);
-			 parent.rect(parent.width*0.92f,parent.height/2,width*1.7f-2*i,height*1.7f-2*i,100,100,100,100);
-			 parent.noFill();
-		 }
-		
-	 }
-	 */
 	 public void drawFrame(int color, int weigth)
 	 {
 		 parent.strokeWeight(weigth);
@@ -187,10 +125,10 @@ parent.rectMode(parent.CENTER);
 		 parent.line(parent.width,0,parent.width,parent.height);
 		 parent.line(0,parent.height,parent.width,parent.height);
 	 }
-	 
+	 /*
 	 public void drawGraveyardExile(int color, int weight,int width, int height)
 	 {
-		 this.graveyard1=new PVector(0.07f*parent.width,0.05f*parent.height);
+		// this.graveyard1=new PVector(0.07f*parent.width,0.05f*parent.height);
 		 parent.stroke(color);
 		 parent.strokeWeight(weight);
 		 parent.fill(255);
@@ -208,7 +146,8 @@ parent.rectMode(parent.CENTER);
 		 }
 			
 	 }
-	 
+	 */
+	 /*
 	 public void drawManaFields(int t)
 	 {
 		 float x1=0.2f; float x2=0.8f;
@@ -225,10 +164,10 @@ parent.rectMode(parent.CENTER);
 		 parent.rect(x1*parent.width,y1*parent.height,0.6f*parent.width,parent.height*0.15f,6,6,0,0);
 		 parent.rect(x1*parent.width,y3*parent.height,0.6f*parent.width,parent.height*0.15f,0,0,6,6); 
 	 }
- 
+ */
 	 public void drawLife(Player P1,Player P2)
-	 {		f=parent.createFont("Comic Sans", 50);
-		 	parent.textFont(f);
+	 {		//f=parent.createFont("Comic Sans", 50);
+		 	parent.textFont(life);
 			parent.fill(255,0,0);
 			parent.textAlign(parent.CENTER);
 			
@@ -251,9 +190,7 @@ parent.rectMode(parent.CENTER);
 	 
 	 public void drawMana(Player P1,Player P2)
 	 {
-		 
-			f=parent.createFont("Comic Sans", 25,true);
-		 	parent.textFont(f);
+		 	parent.textFont(mana);
 		 	parent.fill(255);
 			parent.textAlign(parent.CENTER);
 			
@@ -287,51 +224,30 @@ parent.rectMode(parent.CENTER);
 	 }
 	 public class Library
 	 {
-		 int r,g,b;
+		int r,g,b;
 		int owner;
-		 PVector position;
-		 PApplet parent;
+		PVector position;
+		PApplet parent;
 		 
 			Library(PApplet p,PVector pos,int owner)
 		 	{
-				
-		 		parent=p;
+				parent=p;
 		 		this.owner=owner;
-		 		
-		 		library=parent.loadImage("Library.png");
-		 		back=parent.loadImage("MTGBack.jpg");
 		 		position=pos;
 		 		r=0;g=0;b=255;
-		 		
-		 		
+ 		
 		 	}
 			public void drawLibrary()
 			{
 			 		 {
-			 		
-			 			// parent.strokeWeight(1);
-			 			// parent.stroke(r,g, b );
-			 			 
-			 		
-			 			 
-			 	//parent.rectMode(parent.CENTER);
 			 			 parent.imageMode(parent.CENTER);
-			 			 
-			 			 //parent.fill(0);
-			 			// int i;
-			 			// for(i=20;i>0;i--)
-			 			// {
-			 				// parent.stroke(r+10*i,g, b-10*i,20+i*8);
-			 				 parent.pushMatrix();
-			 				 parent.translate(parent.width*position.x,parent.height*position.y);			 				// parent.rotate(parent.PI/2);
-			 				 //parent.rect(0,0,game.cardWidth*1.6f-2*i,game.cardHeight*1.6f-2*i,10,10,10,10);
-			 				parent.image(library, 0, 0,game.cardWidth*1.6f,game.cardHeight*1.4f);
-			 				 // parent.noFill();
+			 			 parent.pushMatrix();
+			 			 parent.translate(parent.width*position.x,parent.height*position.y);			 				// parent.rotate(parent.PI/2);
+			 			 parent.image(library, 0, 0,game.cardWidth*1.6f,game.cardHeight*1.4f);
 			 				if((owner==1 && game.P1.isLocal==false) || (owner==2 && game.P2.isLocal==false))
 				 				parent.image(back, 0, 0,game.cardWidth,game.cardHeight);
-
 			 					parent.popMatrix();
-			 			 //}
+			 			
 			 			 parent.imageMode(parent.CORNER);
 			 		 }
 			 	}
@@ -339,8 +255,7 @@ parent.rectMode(parent.CENTER);
 	 public class Stack
 	 {
 	 	PApplet parent;
-	 	int r,g,b,
-	 		costW,costB,costU,costG,costR,cost;
+	 	int r,g,b;
 	 	PVector position;
 	 	PImage blue,red,green;
 	 	boolean cardOnStack=false;
@@ -354,19 +269,11 @@ parent.rectMode(parent.CENTER);
 	 		blue=parent.loadImage("blueStack2.png");
 	 		red=parent.loadImage("redStack2.png");
 	 		green=parent.loadImage("greenStack2.png");
-	 		
-	 		
+ 		
 	 	}
 	 	public void drawStack()
 	 	{
-	 	//	public void drawStack(int color, int weigth,int width, int height)
-	 		 {
-	 		//	parent.image(red,300,200,100,100);
-	 		//	parent.image(blue,4500,200,100,100);
-	 		//	parent.image(green,600,200,100,100);
-	 			// parent.strokeWeight(1);
-	 			// parent.stroke(r,g, b );
-	 			 parent.imageMode(parent.CENTER);
+	 			parent.imageMode(parent.CENTER);
 	 			parent.pushMatrix();
 	 			parent.translate(parent.width*position.x+game.cardWidth*0.8f,parent.height*position.y+game.cardHeight*0.7f);
 	 			if(r==255)
@@ -376,31 +283,16 @@ parent.rectMode(parent.CENTER);
 	 			else if(g==255)
 	 				parent.image(green,0,0,game.cardWidth*1.6f,game.cardHeight*1.4f);
 	 			 parent.popMatrix();
+	 			 //karta do wyswietlenia na stosie
 	 			 if(cardOnStack==true)
 	 			 {
 	 				 parent.image(game.skull,parent.width*position.x+game.cardWidth*0.8f,parent.height*position.y+game.cardHeight*0.7f);
 	 			 }
 	 			parent.imageMode(parent.CORNER);
-	 	//parent.rectMode(parent.CENTER);
-	 			 //parent.rectMode(parent.CORNER);
-	 			 /*
-	 			 parent.fill(255);
-	 			 int i;
-	 			 for(i=20;i>0;i--)
-	 			 {
-	 				 parent.stroke(r,g, b,20+i*8);
-	 				 parent.pushMatrix();
-	 				 parent.translate(parent.width*position.x,parent.height*position.y);
-	 				// parent.rotate(parent.PI/2);
-	 				 parent.rect(0,0,game.cardWidth*1.6f-2*i,game.cardHeight*1.6f-2*i,50,50,50,50);
-	 				 parent.noFill();
-	 				 parent.popMatrix();
-	 			 }
-	 			 
-	 			*/
+	 	
 	 		 }
 	 	}
 
-	 }
+	 
 }
 

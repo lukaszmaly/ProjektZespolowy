@@ -27,7 +27,6 @@ public class Game {
 		cardWidth,
 		window=0,
 		log=0,
-		drawCounter,
 		cardsInDB=24;
 	Object mutex = new Object();
 	
@@ -39,10 +38,28 @@ public class Game {
 			edge4,
 			skull,
 			upArrow,
-			bolt;
+			bolt,
+			ret,
+			skull2,
+			sword,
+			sword2;
+	
+	PImage 	img,
+			lightning,
+			boostImg,
+			reductionImg,
+			damage,
+			fireshield,
+			death,
+			scry,
+			draw,
+			spear;
+PImage 	l1,l2,l3,l4,
+	f1,f2,f3,f4,f5,f6;
 	
 	PFont 	calibr,
-			f;
+			f,
+			stats;
 	UDP udp;
 	boolean tokens=true;
 	
@@ -51,8 +68,8 @@ public class Game {
 		parent=p;
 		Cards=new ArrayList<Card>();
 		Effects=new ArrayList<Effect>();
-		P1=new Player(p,0,"PlayerOne");
-		P2=new Player(p,1,"PlayerTwo");
+		P1=new Player(p,1,"PlayerOne");
+		P2=new Player(p,2,"PlayerTwo");
 		board=new Board(p);
 		board.game=this;
 		fazy=new Phrases(p);
@@ -63,30 +80,40 @@ public class Game {
 		cardWidth=100;
 		cardHeight=145;
 		
-		this.lines = parent.loadStrings("log.txt");
-		drawCounter=0;
+		this.lines = parent.loadStrings("log5.txt");
 		edge1=parent.loadImage("LG.png"); 
 		edge2=parent.loadImage("PG.png"); 
 		edge3=parent.loadImage("PD.png"); 
 		edge4=parent.loadImage("LD.png");
 		skull = parent.loadImage("skull.jpg");
 		upArrow=parent.loadImage("arrows_up.png");
-		//bolt=parent.loadImage("lightning-single1.png");
-		
+		skull2 = parent.loadImage("skull2.png");
+    	sword = parent.loadImage("Steel_sword_detail.png");
+    	boostImg=parent.loadImage("arrows_up.png");
+    	reductionImg=parent.loadImage("arrows_down.png");
+    	damage=parent.loadImage("Blood.png");
+    	death=parent.loadImage("skull2.png");
+    	scry=parent.loadImage("scry.png");
+		draw=parent.loadImage("hand2.png");
+		l1=parent.loadImage("lightning1.png");
+		l2=parent.loadImage("lightning2.png");
+		l3=parent.loadImage("lightning3.png");
+		l4=parent.loadImage("lightning4.png");
+		sword2=parent.loadImage("sword.png");
+		spear=parent.loadImage("fire8.png");
 		calibr = parent.createFont("Arial", 50, true);
 		f = parent.createFont("Arial", 12, true);
-		
+		ret=parent.loadImage("return.png");
+		stats=parent.createFont("Arial", 28);
 		String s="AnimatedFire2/fire1_0";
 		for(int i=51;i<=99;i++)
 		{
 			PImage img=parent.loadImage(s+"0"+i+".png");
-			parent.println(s+"0"+i+".png");
 			fires2.add(img);
 		}
 		for(int i=100;i<=125;i++)
 		{
 			PImage img=parent.loadImage(s+i+".png");
-			parent.println(s+i+".png");
 			fires2.add(img);
 		}
 		
@@ -94,7 +121,6 @@ public class Game {
 		for(int i=1;i<=24;i++)
 		{
 			PImage img=parent.loadImage(s+i+".png");
-			//println(s+i+".png");
 			fires.add(img);
 		}
 		s="Cards/";
@@ -188,12 +214,9 @@ public class Game {
 //////////////////////////////////////////////////////////////////////////////////////	
 	public void processMessages() {
 		synchronized (mutex) {
-			//parent.println(this.Msgs.size());
 			for (String message : this.Msgs) {
 
 				String[] Dane = message.split(" ");
-			
-				
 
 				switch (Dane[1]) {
 				case "ACTIVEPLAYER":
@@ -228,9 +251,6 @@ public class Game {
 					 id=Integer.parseInt(Dane[2]);
 				
 					char c=Dane[3].charAt(0);
-					
-				
-					
 					if(id==1) this.P1.addMana(c); else this.P2.addMana(c);
 					break;
 					
@@ -252,9 +272,6 @@ public class Game {
 							c.r = 255;
 							c.g = 0;
 							c.b = 0;
-/*
-				
-*/
 							c.loc[0].x = Integer.parseInt(Dane[6]);
 							c.loc[0].y = Integer.parseInt(Dane[7]);
 							c.loc[1].x = Integer.parseInt(Dane[8]);
@@ -275,6 +292,7 @@ public class Game {
 					
 							
 							PVector center = new PVector((c.loc[0].x+c.loc[1].x+c.loc[2].x+c.loc[3].x)/4,(c.loc[0].y+c.loc[1].y+c.loc[2].y+c.loc[3].y)/4);
+							c.center=center;
 							editEffectByID(c.id,center.x,center.y);
 						}
 					}
@@ -320,6 +338,7 @@ public class Game {
 							
 							if(c.block==false)
 							{
+								c.center= new PVector((c.loc[0].x+c.loc[1].x+c.loc[2].x+c.loc[3].x)/4,(c.loc[0].y+c.loc[1].y+c.loc[2].y+c.loc[3].y)/4);
 								Effect e=new Effect(parent,this,Type.ARROW,-1,v1,v2,false);
 								e.blockId1=id;
 								e.blockId2=c.blockedId;
@@ -329,13 +348,12 @@ public class Game {
 							else
 							{
 								PVector center = new PVector((c.loc[0].x+c.loc[1].x+c.loc[2].x+c.loc[3].x)/4,(c.loc[0].y+c.loc[1].y+c.loc[2].y+c.loc[3].y)/4);
+								c.center=center;
 								editEffectByID(c.id,center.x,center.y);
 							}
 						
 							
-						}
-					
-				
+						}			
 	}
 					
 					break;
@@ -367,38 +385,50 @@ public class Game {
 						Card c = this.Cards.get(i);
 						if (c.id == id) {
 							c.isDead = true;
-							this.Effects.add(new Effect(parent,this,Type.DEATH,100,0));
+							this.Effects.add(new Effect(parent,this,Type.DEATH,100,id));
 							c.deadCounter=100;
 							//c.sparkTime=15;
 							removeById(id);
-							 PVector acc=null;
-							    PVector vel=null;
-							  for( i=0;i<c.se.size();i++)
-						    	{
-						    	
-						    	SparkEdge e=c.se.get(i);
-						    //c.sparkTime=15;
-						    	e.changeSparkType('c',0,0,0,6,vel,acc);
-						    	}
+							
 						}
 					}
 					
 				case "DRAW":
+				
 				{
 					id=Integer.parseInt(Dane[2]);
 					 String s=Dane[3];
-					 s="Draw\n"+s;
+					 
 					 if(id==1)
 					 {
-						 //this.board.lib1.r=(int)parent.random(255);
-						 //this.board.lib1.g=(int)parent.random(255);
-						 //this.board.lib1.b=(int)parent.random(255);
-						 this.Effects.add(new Effect(parent,this,120,this.board.lib1.position,new PVector(0,0),40, 0, 255, 0,s,true));
+						 if(P1.isLocal==false)
+						 {
+						 this.Effects.add(new Effect(parent,this,Type.DRAW,200,new PVector(this.board.lib1.position.x,this.board.lib1.position.y-0.025f),new PVector(0,0),false));
+								this.Effects.add(new Effect(parent, this, 200, new PVector(this.board.lib1.position.x,this.board.lib1.position.y+0.08f), new PVector(0, 0),35, 0, 255, 0, s,false));
+
+						 }
+						 if(P1.isLocal==true)
+						 {
+							 this.Effects.add(new Effect(parent,this,Type.DRAW,200,new PVector(this.board.lib1.position.x,this.board.lib1.position.y-0.025f),new PVector(0,0),true));
+								this.Effects.add(new Effect(parent, this, 200, new PVector(this.board.lib1.position.x,this.board.lib1.position.y+0.08f), new PVector(0, 0),35, 0, 255, 0, s,true));						 
+						 }
 					 }
+				
 					 if(id==2)
 					 {
-						 this.Effects.add(new Effect(parent,this,120,this.board.lib2.position,new PVector(0,0),40, 0, 255, 0,s,false));
+						 if(P2.isLocal==false)
+						 {
+						 this.Effects.add(new Effect(parent,this,Type.DRAW,200,new PVector(this.board.lib2.position.x,this.board.lib2.position.y-0.025f),new PVector(0,0),false));
+								this.Effects.add(new Effect(parent, this, 200, new PVector(this.board.lib2.position.x,this.board.lib2.position.y+0.08f), new PVector(0, 0),35, 0, 255, 0, s,false));
+
+						 }
+						 if(P2.isLocal==true)
+						 {
+							 this.Effects.add(new Effect(parent,this,Type.DRAW,200,new PVector(this.board.lib2.position.x,this.board.lib2.position.y-0.025f),new PVector(0,0),true));
+								this.Effects.add(new Effect(parent, this, 200, new PVector(this.board.lib2.position.x,this.board.lib2.position.y+0.08f), new PVector(0, 0),35, 0, 255, 0, s,true));						 
+						 }
 					 }
+				
 				}
 				
 		break;
@@ -414,34 +444,56 @@ public class Game {
 						 playerId=Integer.parseInt(Dane[3]);
 						 cardId=Integer.parseInt(Dane[4]);
 						
-						if(cardId>=0) this.Effects.add(new Effect(parent,this,Type.BOLT,24,cardId,this.cardWidth,this.cardHeight,this.Cards));
+						if(cardId>=0) this.Effects.add(new Effect(parent,this,Type.BOLT,40,cardId));
 					}
 					else
-					if(type.compareTo("SPEAR")==0)
+					if(type.compareTo("SPEAR2")==0)
 					{
 						PVector v=null,u=null;
 						 playerId=Integer.parseInt(Dane[3]);
 						 cardId=Integer.parseInt(Dane[4]);
 						if(playerId==1)
 						{
-							u=new PVector(parent.width/2,parent.height);
+							//u=new PVector(parent.width/2,parent.height);
+							u=new PVector(this.board.stack2.position.x*parent.width,this.board.stack2.position.y*parent.height);
 							v=new PVector(parent.width-100,0);
-							this.Effects.add(new Effect(parent,this, Type.SPEAR, 20,u,v,false));
+							this.Effects.add(new Effect(parent,this, Type.SPEAR2, 40,u,v,false));
 						}
-						if(playerId==2)
+						else if(playerId==2)
 						{
-							u=new PVector(parent.width/2,0);
+							//u=new PVector(parent.width/2,0);
+							u=new PVector(this.board.stack1.position.x*parent.width,this.board.stack1.position.y*parent.height);
+
 							v=new PVector(parent.width-100,parent.height);
-							this.Effects.add(new Effect(parent,this, Type.SPEAR, 20,u,v,false));
+							this.Effects.add(new Effect(parent,this, Type.SPEAR2, 40,u,v,false));
 						}
-						//if(cardId>=0) this.Effects.add(new Effect(parent,this,Type.BOLT,16,cardId,this.cardWidth,this.cardHeight,this.Cards));
+						else 
+						{
+							for (int i = 0; i < this.Cards.size(); i++) {
+						
+							Card c = this.Cards.get(i);
+							if (c.id == cardId) {		
+								if(c.owner==2)
+							//u=new PVector(parent.width/2,0);
+									u=new PVector(this.board.stack2.position.x*parent.width,this.board.stack2.position.y*parent.height);
+
+								else
+									u=new PVector(this.board.stack1.position.x*parent.width,this.board.stack1.position.y*parent.height);
+
+									//u=new PVector(parent.width/2,parent.height);	
+								
+							v=new PVector(c.center.x,c.center.y);
+							this.Effects.add(new Effect(parent,this, Type.SPEAR2, 40,u,v,false));
+							}
+						}
+					}
 					}
 					else
 					if(type.compareTo("BOOST")==0)
 					{
 						
 						 cardId=Integer.parseInt(Dane[4]);
-						this.Effects.add(new Effect(parent,this,Type.BOOST,50,cardId));
+						this.Effects.add(new Effect(parent,this,Type.BOOST,60,cardId));
 						
 						
 					}
@@ -450,7 +502,7 @@ public class Game {
 					{
 							
 							 cardId=Integer.parseInt(Dane[4]);
-							this.Effects.add(new Effect(parent,this,Type.REDUCTION,50,cardId));
+							this.Effects.add(new Effect(parent,this,Type.REDUCTION,60,cardId));
 					}
 						else if(type.compareTo("FIRE")==0)
 						{
@@ -475,12 +527,12 @@ public class Game {
 					 if(P1.id==id)
 					 {
 						 P1.isLocal=true;
-						 P2.isLocal=false;
+						 if (this.GameType=='M') P2.isLocal=false;
 					 }
 					 else
 					 {
 						 P2.isLocal=true;
-						 P1.isLocal=false; 
+						 if (this.GameType=='M') P1.isLocal=false; 
 					 }
 					 
 					if (this.tokens == true)
@@ -563,23 +615,38 @@ public class Game {
 				{
 					id=Integer.parseInt(Dane[2]);
 					 String s=Dane[3];
-					 s="Scry\n"+s;
+					 
 					 if(id==1)
 					 {
-						 //this.board.lib1.r=(int)parent.random(255);
-						 //this.board.lib1.g=(int)parent.random(255);
-						 //this.board.lib1.b=(int)parent.random(255);
-						// parent.pushMatrix();
-						// parent.rotate(parent.PI);
-						 this.Effects.add(new Effect(parent,this,120,this.board.lib1.position,new PVector(0,0),35, 255, 0, 0,s,true));
-						// parent.popMatrix();
+						 if(P1.isLocal==false)
+						 {
+						 this.Effects.add(new Effect(parent,this,Type.SCRY,200,new PVector(this.board.lib1.position.x,this.board.lib1.position.y-0.025f),new PVector(0,0),false));
+								this.Effects.add(new Effect(parent, this, 200, new PVector(this.board.lib1.position.x,this.board.lib1.position.y+0.08f), new PVector(0, 0),35, 0, 255, 0, s,false));
+
+						 }
+						 if(P1.isLocal==true)
+						 {
+							 this.Effects.add(new Effect(parent,this,Type.SCRY,200,new PVector(this.board.lib1.position.x,this.board.lib1.position.y-0.025f),new PVector(0,0),true));
+								this.Effects.add(new Effect(parent, this, 200, new PVector(this.board.lib1.position.x,this.board.lib1.position.y+0.08f), new PVector(0, 0),35, 0, 255, 0, s,true));						 
+						 }
 					 }
+				
 					 if(id==2)
 					 {
-						 this.Effects.add(new Effect(parent,this,120,this.board.lib2.position,new PVector(0,0),35, 255, 0, 0,s,false));					 }
-				}
+						 if(P2.isLocal==false)
+						 {
+						 this.Effects.add(new Effect(parent,this,Type.SCRY,200,new PVector(this.board.lib2.position.x,this.board.lib2.position.y-0.025f),new PVector(0,0),false));
+								this.Effects.add(new Effect(parent, this, 200, new PVector(this.board.lib2.position.x,this.board.lib2.position.y+0.08f), new PVector(0, 0),35, 0, 255, 0, s,false));
+
+						 }
+						 if(P2.isLocal==true)
+						 {
+							 this.Effects.add(new Effect(parent,this,Type.SCRY,200,new PVector(this.board.lib2.position.x,this.board.lib2.position.y-0.025f),new PVector(0,0),true));
+								this.Effects.add(new Effect(parent, this, 200, new PVector(this.board.lib2.position.x,this.board.lib2.position.y+0.08f), new PVector(0, 0),35, 0, 255, 0, s,true));						 
+						 }
+					 }
 				break;
-		
+				}
 				
 				case "STACK":
 					 id=Integer.parseInt(Dane[2]);
@@ -641,16 +708,7 @@ public class Game {
 						
 
 						if (c.id == id) {
-							/*
-							 * c.x1=Integer.parseInt(Dane[6]);
-							 * c.y1=Integer.parseInt(Dane[7]);
-							 * c.x2=Integer.parseInt(Dane[8]);
-							 * c.y2=Integer.parseInt(Dane[9]);
-							 * c.x3=Integer.parseInt(Dane[10]);
-							 * c.y3=Integer.parseInt(Dane[11]);
-							 * c.x4=Integer.parseInt(Dane[12]);
-							 * c.y4=Integer.parseInt(Dane[13]);
-							 */
+					
 							if(c.attack==true || c.block==true)
 							{
 								removeById(c.id);
@@ -682,7 +740,7 @@ public class Game {
 							
 							c.power=Integer.parseInt(Dane[14]);
 							c.toughness=Integer.parseInt(Dane[15]);
-
+/*
 							float dist[] = new float[4];
 							float mindist;
 
@@ -735,6 +793,7 @@ public class Game {
 								if (parent.dist(c.loc[i].x, c.loc[i].y, 0, parent.height) == mindist)
 									c.LD = c.loc[i];
 							}
+							*/
 							if(c.loc[0].x>=c.loc[3].x && c.loc[0].y<=c.loc[3].y) c.direction=1;
 					    	else if(c.loc[0].x>=c.loc[3].x && c.loc[0].y>=c.loc[3].y) c.direction=2;
 					    	else if(c.loc[0].x<=c.loc[3].x && c.loc[0].y>=c.loc[3].y) c.direction=3;
@@ -742,19 +801,13 @@ public class Game {
 							
 							c.center=new PVector((c.loc[0].x+c.loc[1].x+c.loc[2].x+c.loc[3].x)/4,(c.loc[0].y+c.loc[1].y+c.loc[2].y+c.loc[3].y)/4);
 
-							//c.drawEdges();
 							break;
 
 						}
 
 					}
 					break;
-				
-				
 
-				
-				
-				
 				}
 			}
 			this.Msgs.clear();

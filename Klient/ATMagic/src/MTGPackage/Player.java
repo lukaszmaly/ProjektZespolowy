@@ -6,19 +6,16 @@ public class Player {
 	int id,life,manaPool;
 	int w=0,b=0,u=0,r=0,g=0;
 	String name;
-	boolean isLocal=false;
-	//int cardHeight,cardWidth;
-	
+	boolean isLocal=true;	
 	Player(PApplet p, int id,String name)
 	{
 		parent=p;
 		this.name=name;
 		this.life=20;
-		this.manaPool=0;
+		
 		this.id=id;
-		w=b=u=r=g=0;
-		//this.cardHeight=cardHeight;
-		//this.cardWidth=cardWidth;
+		
+
 	}
 	
 	void addMana(char c)
