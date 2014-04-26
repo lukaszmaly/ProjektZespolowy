@@ -65,7 +65,7 @@ public class Card
 			parent.rectMode(parent.CENTER);
 			parent.imageMode(parent.CENTER);
 			if((this.owner==1 && game.P1.isLocal==true) ||(this.owner==2 && game.P2.isLocal==true))
-			parent.rect(0,0,game.cardWidth*1.2f,game.cardHeight*1.2f,20,20,20,20);
+			parent.rect(0,0,game.cardWidth*1.2f,game.cardHeight*1.1f,20,20,20,20);
 			else parent.image(game.dbCards.get(this.db_id), 0, 0,game.cardWidth,game.cardHeight);
 		
 			parent.imageMode(parent.CORNER);

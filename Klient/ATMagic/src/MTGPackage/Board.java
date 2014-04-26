@@ -4,7 +4,6 @@ import processing.core.*;
 public class Board 
 {
 	PApplet parent;
-	//PVector graveyard1;
 	Stack stack1,stack2;
 	Library lib1,lib2;
 	PFont mana,life;

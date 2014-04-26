@@ -14,9 +14,12 @@ public class Game {
 	ArrayList<Card> Cards;
 	ArrayList<Effect> Effects;
 	ArrayList<String> Msgs = new ArrayList<String>();
+	ArrayList<PImage> fires3=new ArrayList<PImage>();
 	ArrayList<PImage> fires2=new ArrayList<PImage>();
 	ArrayList<PImage> fires=new ArrayList<PImage>();
 	ArrayList<PImage> dbCards=new ArrayList<PImage>();
+	ArrayList<PImage> explode=new ArrayList<PImage>();
+	ArrayList<PImage> explode2=new ArrayList<PImage>();
 	char GameType;
 	PVector[] T=new PVector[4];
 	
@@ -103,7 +106,7 @@ PImage 	l1,l2,l3,l4,
 		spear=parent.loadImage("fire8.png");
 		calibr = parent.createFont("Arial", 50, true);
 		f = parent.createFont("Arial", 12, true);
-		ret=parent.loadImage("return.png");
+		ret=parent.loadImage("return2.png");
 		stats=parent.createFont("Arial", 28);
 		String s="AnimatedFire2/fire1_0";
 		for(int i=51;i<=99;i++)
@@ -123,11 +126,37 @@ PImage 	l1,l2,l3,l4,
 			PImage img=parent.loadImage(s+i+".png");
 			fires.add(img);
 		}
+		 s="AnimatedFire3/fire1_ ";
+		 
+			for(int i=1;i<=9;i++)
+			{
+				PImage img=parent.loadImage(s+"0"+i+".png");
+				fires3.add(img);
+			}
+			for(int i=10;i<=25;i++)
+			{
+				PImage img=parent.loadImage(s+i+".png");
+				fires3.add(img);
+			}
+		
 		s="Cards/";
 		for(int i=0;i<cardsInDB;i++)
 		{
 			PImage img=parent.loadImage(s+i+".jpg");
 			dbCards.add(img);
+		}
+		s="Explode/CLIFF/";
+		
+		for(int i=1;i<17;i++)
+		{
+			PImage img=parent.loadImage(s+i+".png");
+			explode.add(img);
+		}
+		s="Explode/EXPLODE2/";
+		for(int i=1;i<17;i++)
+		{
+			PImage img=parent.loadImage(s+i+".png");
+			explode2.add(img);
 		}
 		udp = new UDP(parent, 600);
 		udp.listen(true);
@@ -488,6 +517,48 @@ PImage 	l1,l2,l3,l4,
 						}
 					}
 					}
+					else
+						if(type.compareTo("BRIMSTONE")==0)
+						{
+							PVector v=null,u=null;
+							 playerId=Integer.parseInt(Dane[3]);
+							 cardId=Integer.parseInt(Dane[4]);
+							if(playerId==1)
+							{
+								//u=new PVector(parent.width/2,parent.height);
+								u=new PVector(this.board.stack2.position.x*parent.width,this.board.stack2.position.y*parent.height);
+								v=new PVector(parent.width-100,0);
+								this.Effects.add(new Effect(parent,this, Type.SPEAR2, 40,u,v,false));
+							}
+							else if(playerId==2)
+							{
+								//u=new PVector(parent.width/2,0);
+								u=new PVector(this.board.stack1.position.x*parent.width,this.board.stack1.position.y*parent.height);
+
+								v=new PVector(parent.width-100,parent.height);
+								this.Effects.add(new Effect(parent,this, Type.SPEAR2, 40,u,v,false));
+							}
+							else 
+							{
+								for (int i = 0; i < this.Cards.size(); i++) {
+							
+								Card c = this.Cards.get(i);
+								if (c.id == cardId) {		
+									if(c.owner==2)
+								//u=new PVector(parent.width/2,0);
+										u=new PVector(this.board.stack2.position.x*parent.width,this.board.stack2.position.y*parent.height);
+
+									else
+										u=new PVector(this.board.stack1.position.x*parent.width,this.board.stack1.position.y*parent.height);
+
+										//u=new PVector(parent.width/2,parent.height);	
+									
+								v=new PVector(c.center.x,c.center.y);
+								this.Effects.add(new Effect(parent,this, Type.SPEAR2, 40,u,v,false));
+								}
+							}
+						}
+						}
 					else
 					if(type.compareTo("BOOST")==0)
 					{

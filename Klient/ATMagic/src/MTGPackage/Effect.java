@@ -21,7 +21,11 @@ public class Effect
 						DEATH,
 						SCRY,
 						DRAW,
-						SPEAR2}
+						SPEAR2,
+						EXPLODE,
+						BRIMSTONE,
+						FIREBOLT,
+						FIREBOLTS}
 	
 	PApplet parent;
 	int life,textR,textG,textB,initLife=40;
@@ -82,7 +86,7 @@ public class Effect
 		this.type=t;
 		this.g=G;
 		this.rotate=r;
-	
+	this.cardId=-1;
 	}
 
 	
@@ -98,7 +102,7 @@ public class Effect
 	    if(w>80) w=80;
 	    float sin=(parent.abs(v1.x-v2.x))/d;
 	    float asin=parent.asin(sin);
-	    parent.println(asin);
+	   // parent.println(asin);
 
 	    parent.pushMatrix();
 	    parent.translate(v2.x, v2.y);
@@ -302,8 +306,71 @@ int halfinit=initLife/2;
 				break;
 				}
 				}
-
 			}
+				else if(this.type==Type.BRIMSTONE)
+				{
+					float d=parent.dist(v1.x, v1.y, v2.x, v2.y);
+				    if(life>0) life--;
+				    
+
+				    float sin=(parent.abs(v1.x-v2.x))/d;
+				    float asin=parent.asin(sin);
+						parent.pushMatrix();
+						
+						parent.translate(v1.x,v1.y);
+						if(v1.x<=v2.x && v1.y<=v2.y)  
+						 {
+							 parent.rotate(parent.PI-asin);
+						 }
+						 else
+							 if(v1.x<=v2.x && v1.y>=v2.y)  
+							 {
+								 parent.rotate(asin);
+								 
+							 } 
+							 else
+								 if(v1.x>=v2.x && v1.y>=v2.y)  
+								 {
+									 parent.rotate(-asin);
+								 }
+								 else
+									 if(v1.x>=v2.x && v1.y<=v2.y)  
+									 {
+										 parent.rotate(parent.PI+asin);
+										
+									 }
+							
+							parent.rotate(parent.PI);
+							parent.translate(0,(1-(life/(float)initLife))*d);
+							
+							
+							int imgNum=74;
+							if(initLife-life>=0 && initLife-life<74)
+							 imgNum=(initLife-life);
+							
+							if(imgNum>50)
+								parent.tint(255,(74-imgNum)*10);
+							
+							if(imgNum<25)
+								parent.tint(255,(imgNum)*10);
+							
+						
+							parent.imageMode(parent.CENTER);
+							parent.image(g.fires2.get(imgNum), 0,0,g.fires2.get(imgNum).width*0.3f,g.fires2.get(imgNum).height*0.3f);
+							parent.image(g.fires2.get(imgNum), -31,-37,g.fires2.get(imgNum).width*0.3f,g.fires2.get(imgNum).height*0.3f);
+							parent.image(g.fires2.get(imgNum), 38,36,g.fires2.get(imgNum).width*0.3f,g.fires2.get(imgNum).height*0.3f);
+							parent.image(g.fires2.get(imgNum), -35,32,g.fires2.get(imgNum).width*0.3f,g.fires2.get(imgNum).height*0.3f);
+							parent.image(g.fires2.get(imgNum), 33,-34,g.fires2.get(imgNum).width*0.3f,g.fires2.get(imgNum).height*0.3f);
+
+							parent.imageMode(parent.CORNER);
+							parent.popMatrix();
+							parent.tint(255);
+							if(life<2) g.Effects.add(new Effect(parent, g, Type.EXPLODE, 60, v2, null, false));
+							if(life>0) life--;
+							
+						}
+			
+			
 			else if (this.type==Type.DAMAGE)
 			{
 				Card c;
@@ -368,7 +435,7 @@ int halfinit=initLife/2;
 				parent.imageMode(parent.CENTER);
 				parent.image(g.damage,0, 0,g.cardWidth*size,g.cardHeight*size);
 
-				parent.println(size);
+				//parent.println(size);
 				parent.popMatrix();
 				
 				parent.imageMode(parent.CORNER);
@@ -459,7 +526,7 @@ int halfinit=initLife/2;
 					parent.tint(255,tint);
 				}
 				float h=(g.draw.height/(float)g.draw.width);
-				parent.println("h:"+h);
+				//parent.println("h:"+h);
 				parent.imageMode(parent.CENTER);
 				if(this.rotate==true)
 					parent.rotate(parent.PI);
@@ -470,7 +537,106 @@ int halfinit=initLife/2;
 				
 			
 			}
-		
+			else if (this.type==Type.EXPLODE)
+			{
+				if(this.cardId!=-1)
+				{
+				Card c;
+				for (int i = 0; i < g.Cards.size(); i++) {
+					c = g.Cards.get(i);
+					
+					if (c.id == cardId) {
+						if(life>0) life--;
+				parent.pushMatrix();
+				
+				parent.translate(c.center.x,c.center.y);
+				switch(c.direction)
+				{
+				case 1:
+					parent.rotate(c.asin);
+					break;
+					
+				case 2:
+					parent.rotate(-c.asin+parent.PI);
+					break;
+					
+				case 3:
+					parent.rotate(c.asin+parent.PI);
+					break;
+					
+				case 4:
+					parent.rotate(-c.asin);
+					break;
+					
+				default: break;
+				
+				}
+					
+				//int imgNum=15;
+				int imgNum=life/4;
+				if(initLife-life>=0 && initLife-life<(life/2)+2)
+				 imgNum=(initLife-life)/2;
+				else imgNum=life/2;
+				
+				parent.imageMode(parent.CENTER);
+				if(imgNum>2)
+				{
+				parent.image(g.explode.get(imgNum-3), 30,30,g.explode.get(imgNum-3).width*2,g.explode.get(imgNum-3).height*2);
+				parent.image(g.explode.get(imgNum-3), -30,-30,g.explode.get(imgNum-3).width*2,g.explode.get(imgNum-3).height*2);
+				parent.image(g.explode.get(imgNum-3), 30,-30,g.explode.get(imgNum-3).width*2,g.explode.get(imgNum-3).height*2);
+				parent.image(g.explode.get(imgNum-3), -30,30,g.explode.get(imgNum-3).width*2,g.explode.get(imgNum-3).height*2);
+				parent.image(g.explode.get(imgNum-3), 0,15,g.explode.get(imgNum-3).width*2,g.explode.get(imgNum-3).height*2);
+				parent.image(g.explode.get(imgNum-3), 0,-15,g.explode.get(imgNum-3).width*2,g.explode.get(imgNum-3).height*2);
+
+				}
+				parent.image(g.explode.get(imgNum), 0,0,g.explode.get(imgNum).width*2,g.explode.get(imgNum).height*2);
+				parent.imageMode(parent.CORNER);
+				parent.popMatrix();
+				parent.tint(255);
+				
+				break;
+				}
+				}
+				}
+				else
+				{
+					parent.pushMatrix();
+					
+					parent.translate(v1.x,v1.y);
+					int imgNum=15;
+					if(initLife-life>=0 && initLife-life<61)
+					 imgNum=(initLife-life)/4;
+					//else imgNum=life/2;
+					
+					parent.imageMode(parent.CENTER);
+					//if(imgNum>2)
+					{
+						/*
+					parent.image(g.explode.get(imgNum-3), 30,30,g.explode.get(imgNum-3).width*2,g.explode.get(imgNum-3).height*2);
+					parent.image(g.explode.get(imgNum-3), -30,-30,g.explode.get(imgNum-3).width*2,g.explode.get(imgNum-3).height*2);
+					parent.image(g.explode.get(imgNum-3), 30,-30,g.explode.get(imgNum-3).width*2,g.explode.get(imgNum-3).height*2);
+					parent.image(g.explode.get(imgNum-3), -30,30,g.explode.get(imgNum-3).width*2,g.explode.get(imgNum-3).height*2);
+					parent.image(g.explode.get(imgNum-3), 0,15,g.explode.get(imgNum-3).width*2,g.explode.get(imgNum-3).height*2);
+					parent.image(g.explode.get(imgNum-3), 0,-15,g.explode.get(imgNum-3).width*2,g.explode.get(imgNum-3).height*2);
+*/
+						parent.image(g.explode2.get(imgNum), 40,40,g.explode2.get(imgNum).width*1.5f,g.explode2.get(imgNum).height*1.5f);
+						parent.image(g.explode2.get(imgNum), -40,-40,g.explode2.get(imgNum).width*1.5f,g.explode2.get(imgNum).height*1.5f);
+						parent.image(g.explode2.get(imgNum), 40,-40,g.explode2.get(imgNum).width*1.5f,g.explode2.get(imgNum).height*1.5f);
+						parent.image(g.explode2.get(imgNum), -40,40,g.explode2.get(imgNum).width*1.5f,g.explode2.get(imgNum).height*1.5f);
+						parent.image(g.explode2.get(imgNum), 0,20,g.explode2.get(imgNum).width*1.5f,g.explode2.get(imgNum).height*1.5f);
+						parent.image(g.explode2.get(imgNum), 0,-20,g.explode2.get(imgNum).width*1.5f,g.explode2.get(imgNum).height*1.5f);
+					
+					}
+					//parent.image(g.explode.get(imgNum), 0,0,g.explode.get(imgNum).width*2,g.explode.get(imgNum).height*2);
+					parent.image(g.explode2.get(imgNum), 0,0,g.explode.get(imgNum).width*2,g.explode.get(imgNum).height*2);
+
+					parent.imageMode(parent.CORNER);
+					parent.popMatrix();
+					parent.tint(255);
+					
+					if(life>0)life--;
+				}
+			}
 			else if (this.type==Type.FIRE)
 			{
 				Card c;
@@ -563,7 +729,7 @@ int halfinit=initLife/2;
 						if(imgNum<25)
 							parent.tint(255,(imgNum)*10);
 						
-						parent.println(imgNum+"^");
+					//	parent.println(imgNum+"^");
 						
 						parent.imageMode(parent.CENTER);
 						parent.image(g.fires2.get(imgNum), 0,0);
@@ -576,6 +742,156 @@ int halfinit=initLife/2;
 			}
 		
 			}
+		
+			else if(this.type==Type.FIREBOLT)
+			{
+				float d=parent.dist(v1.x, v1.y, v2.x, v2.y);
+			    if(life>0) life--;
+			    
+
+			    float sin=(parent.abs(v1.x-v2.x))/d;
+			    float asin=parent.asin(sin);
+					parent.pushMatrix();
+					
+					parent.translate(v1.x,v1.y);
+					if(v1.x<=v2.x && v1.y<=v2.y)  
+					 {
+						 parent.rotate(parent.PI-asin);
+					 }
+					 else
+						 if(v1.x<=v2.x && v1.y>=v2.y)  
+						 {
+							 parent.rotate(asin);
+							 
+						 } 
+						 else
+							 if(v1.x>=v2.x && v1.y>=v2.y)  
+							 {
+								 parent.rotate(-asin);
+							 }
+							 else
+								 if(v1.x>=v2.x && v1.y<=v2.y)  
+								 {
+									 parent.rotate(parent.PI+asin);
+									
+								 }
+						
+						parent.rotate(parent.PI);
+						parent.translate(0,(1-(life/(float)initLife))*d);
+						parent.imageMode(parent.CENTER);
+
+						int frames=24;
+						float lifePerFrame=initLife/(float)frames;
+						int imgNum=(int)((initLife-life)/lifePerFrame);
+						if(life>0.75f*initLife)
+						{
+							parent.tint(255,70+255*(1-(life/(float)initLife)));
+							parent.println(255*(1-(life/(float)initLife)));
+						}
+						
+						parent.image(g.fires3.get(imgNum), 0,0);
+						
+						parent.println(255*(life/(float)initLife));
+						parent.tint(255);
+						parent.popMatrix();
+						parent.imageMode(parent.CORNER);
+
+						 //imgNum=(initLife-life);
+						/*
+						if(imgNum>50)
+							parent.tint(255,(74-imgNum)*10);
+						
+						if(imgNum<25)
+							parent.tint(255,(imgNum)*10);
+						
+					
+						parent.imageMode(parent.CENTER);
+						parent.image(g.fires2.get(imgNum), 0,0);
+						parent.imageMode(parent.CORNER);
+						parent.popMatrix();
+						parent.tint(255);
+						if(life<2) g.Effects.add(new Effect(parent, g, Type.EXPLODE, 60, v2, null, false));
+						if(life>0) life--;
+						*/
+					}
+		
+			else if(this.type==Type.FIREBOLTS)
+			{
+				if(life%2==0)
+				for(int i=0;i<2;i++)
+				{
+				g.Effects.add(new Effect(parent,g, Type.FIREBOLT, 60+(int)parent.random(30)-15,new PVector(v1.x+parent.random(100)-50,v1.y+parent.random(100)-50),new PVector(v2.x+parent.random(30)-15,v2.y+parent.random(30)-15),false));
+
+				}
+				  if(life>0) life--;
+				  
+				/*
+				float d=parent.dist(v1.x, v1.y, v2.x, v2.y);
+			    if(life>0) life--;
+			    
+
+			    float sin=(parent.abs(v1.x-v2.x))/d;
+			    float asin=parent.asin(sin);
+			    
+					parent.pushMatrix();
+					
+					parent.translate(v1.x,v1.y);
+					if(v1.x<=v2.x && v1.y<=v2.y)  
+					 {
+						 parent.rotate(parent.PI-asin);
+					 }
+					 else
+						 if(v1.x<=v2.x && v1.y>=v2.y)  
+						 {
+							 parent.rotate(asin);
+							 
+						 } 
+						 else
+							 if(v1.x>=v2.x && v1.y>=v2.y)  
+							 {
+								 parent.rotate(-asin);
+							 }
+							 else
+								 if(v1.x>=v2.x && v1.y<=v2.y)  
+								 {
+									 parent.rotate(parent.PI+asin);
+									
+								 }
+						
+						parent.rotate(parent.PI);
+						parent.translate(0,(1-(life/(float)initLife))*d);
+						parent.imageMode(parent.CENTER);
+
+						int frames=24;
+						float lifePerFrame=initLife/(float)frames;
+						int imgNum=(int)((initLife-life)/lifePerFrame);
+						if(life>0.75f*initLife)
+							parent.tint(255,255*(life/(float)initLife));
+						parent.image(g.fires3.get(imgNum), 0,0);
+						
+						//parent.println(255*(life/(float)initLife));
+						parent.tint(255);
+						parent.popMatrix();
+						parent.imageMode(parent.CORNER);
+
+						 //imgNum=(initLife-life);
+						/*
+						if(imgNum>50)
+							parent.tint(255,(74-imgNum)*10);
+						
+						if(imgNum<25)
+							parent.tint(255,(imgNum)*10);
+						
+					
+						parent.imageMode(parent.CENTER);
+						parent.image(g.fires2.get(imgNum), 0,0);
+						parent.imageMode(parent.CORNER);
+						parent.popMatrix();
+						parent.tint(255);
+						if(life<2) g.Effects.add(new Effect(parent, g, Type.EXPLODE, 60, v2, null, false));
+						if(life>0) life--;
+						*/
+					}
 
 		else if(this.type==Type.REDUCTION)
 		{
@@ -691,7 +1007,7 @@ int halfinit=initLife/2;
 				parent.tint(255,tint);
 			}
 			float h=(g.scry.height/(float)g.scry.width);
-			parent.println("h:"+h);
+			//parent.println("h:"+h);
 			parent.imageMode(parent.CENTER);
 			if(this.rotate==true)
 				parent.rotate(parent.PI);
@@ -816,6 +1132,7 @@ int halfinit=initLife/2;
 					parent.imageMode(parent.CORNER);
 					parent.popMatrix();
 					parent.tint(255);
+					if(life<2) g.Effects.add(new Effect(parent, g, Type.EXPLODE, 60, v2, null, false));
 					if(life>0) life--;
 					
 				}
@@ -837,7 +1154,7 @@ int halfinit=initLife/2;
 				float l=life2/(float)halfinit;
 				int tint=((int)(l*255));
 				parent.fill(this.textR,this.textG,this.textB,2*tint);
-				parent.println("   "+tint);
+				//parent.println("   "+tint);
 				
 			}
 			else
@@ -845,7 +1162,7 @@ int halfinit=initLife/2;
 				float l=life/(float)halfinit;
 				int tint=((int)(l*255));
 				parent.fill(this.textR,this.textG,this.textB,2*tint);
-				parent.println("   "+tint);
+			//	parent.println("   "+tint);
 			}
 			v1.x=v1.x+v2.x;
 			v1.y=v1.y+v2.y;
