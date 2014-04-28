@@ -15,7 +15,18 @@ enum State
 	NEUTRAL =2
 
 };
-
+enum Actions
+{
+	PLAYED,
+	ATTACK,
+	DEFEND,
+	SUBLIFE,
+	ADDLIFE,
+	DEAD,
+	NEWGAME,
+	STATS,
+	ADDDAMAGE
+};
 enum Phase {
 	PIERWSZY = 0,
 	ATAK = 1,

@@ -1,13 +1,31 @@
-0 Plain1 2 0 0 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-1 Plain2 2 0 0 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-2 Swamp1 2 0 0 0 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-3 Swamp2 2 0 0 0 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 
-4 Ajani 0 2 2 0 2 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 
-5 DeadlyRecluse 0 1 2 0 0 0 0 1 1 1 0 0 0 1 0 0 0 0 0 0 
-6 Forest1 2 0 0 0 0 0 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 
-7 Forest2 2 0 0 0 0 0 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 
-8 Viper 0 1 2 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 0 
-9 Vampire 0 2 1 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 
-10 Rat 0 1 1 -1 0 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 
-11 Shock 3 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 2 2 0 0 
-12 GiantGrowth 3 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 4 3 0 0
+0 Plain1 2 -1 -1 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 NONE
+1 Plain2 2 -1 -1 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 NONE
+2 Swamp1 2 -1 -1 0 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 NONE
+3 Swamp2 2 -1 -1 0 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 NONE
+4 Ajanii 0 2 2 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 NONE
+5 DeadlyRecluse 0 1 2 0 0 0 0 1 0 1 0 0 0 1 0 0 0 0 0 0 NONE
+6 Forest1 2 -1 -1 0 0 0 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 NONE
+7 Forest2 2 -1 -1 0 0 0 0 -1 0 0 0 0 0 0 0 0 0 0 0 0 NONE
+8 SunspireGriffin 0 2 3 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 NONE
+9 TrainedCaracal 0 1 1 0 1 0 0 0 0 0 0 0 0 0 0 1 0 0 0 0 NONE
+10 ForcedAdaptation 1 -1 -1 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 1 19 1 0 NONE
+11 Shock 3 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 31 2 0 0 BOLT
+12 GiantGrowth 3 0 0 0 0 0 0 1 0 0 0 0 0 0 0 0 0 1 4 3 0 0 NONE
+13 DeadWeight 1 -1 -1 0 0 1 0 0 0 0 0 0 0 0 0 0 0 1 20 2 0 0 NONE
+14 SedgeScorpion 0 1 1 0 0 0 0 1 0 1 0 0 0 0 0 0 0 0 0 0 NONE
+15 AngelicWall 0 0 4 0 1 0 0 0 0 0 0 0 1 0 1 0 0 0 0 0 NONE
+16 ConcordiaPegasus 0 1 3 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 NONE
+17 CentaurHealer 0 3 3 0 1 0 0 1 0 0 0 0 0 0 0 0 0 1 24 3 0 0 NONE
+18 BattlewiseValor 3 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 2 4 2 30 1 0 0 NONE
+19 LightingStrike 3 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 31 3 0 0 BOLT
+20 Mountain1 2 -1 -1 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 NONE
+21 Mountain2 2 -1 -1 -1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 NONE
+22 ArmoredWarhorse 0 2 3 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 NONE
+23 Pacifism 1 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 2 22 -1 23 -1 0 0 NONE
+24 HeroesReunion 3 0 0 0 1 0 0 1 0 0 0 0 0 0 0 0 0 1 0 7 0 0 NONE
+25 ChapelGeist 0 2 3 0 1 0 0 0 0 0 0 0 1 0 0 0 0 0 0 0 NONE
+26 SkyhunterPatrol 0 2 3 0 1 0 0 0 0 0 0 1 1 0 0 0 0 0 0 0 NONE
+27 PharikaCure 3 0 0 0 0 1 0 0 0 0 0 0 0 0 0 0 0 2 2 2 24 2 0 0 NONE
+28 Pillar 3 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 31 2 0 0 FIRE2
+29 SearingSpear 3 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 31 3 0 0 SPEAR2
+30 BrimstoneVolley 3 0 0 1 0 0 0 0 0 0 0 0 0 0 0 0 0 1 31 3 0 0 BRIMSTONE

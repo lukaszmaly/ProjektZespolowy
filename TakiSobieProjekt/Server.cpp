@@ -3,7 +3,20 @@
 ///Czasami usuwa karte z karty, popraw
 //popraw czas wysy³ania wiadomoœci
 
+	void Server::Damage(int id1,int value1)
+	{
+		char data[100];
+		int n = sprintf_s(data,"| DAMAGE %d %d |",id1,value1);	
 
+	if(soc.send(data, n, client, port) != sf::Socket::Done)
+	{
+		cout<<"Blad podczas wysylanie danych o nowej karcie"<<endl;
+	}
+	else if(showLog)
+	{
+		cout<< data <<endl;Write(data);
+	}
+	}
 	void Server::VisualEffect(string id,int player,int creature)
 	{
 		if(id.compare("NONE")==0) return;
@@ -28,10 +41,12 @@ void Server::SetInterval(int value)
 	this->interval=value;
 }
 
-void Server::Markers(int w,int h)
+void Server::Markers(int w,int h,bool isMultiplayer, int idInMultiplayer)
 {	
 	char data[100];
-	int n = sprintf_s(data,"| MARKERS %d %d |",w,h);	
+	char s = isMultiplayer ? 'M' : 'S';
+	
+	int n = sprintf_s(data,"| MARKERS %d %d %c %d |",w,h,s,idInMultiplayer);	
 
 	if(soc.send(data, n, client, port) != sf::Socket::Done)
 	{
@@ -79,7 +94,45 @@ Server::Server()
 {
 	file.open( "log.txt", std::ios::in | std::ios::out | std::ios::app);
 }
-
+void Server::Start()
+{
+		char data[100];
+	int n = sprintf(data,"| START |");	
+	if (soc.send(data, n, client, port) != sf::Socket::Done)
+	{
+		cout<<"Blad podczas wysylanie aktualnych danych o karcie"<<endl;
+	}
+	else if(showLog)
+	{
+		cout<< data <<endl;Write(data);
+	}
+}
+void Server::Send(string s)
+{
+		char data[100];
+	int n = sprintf(data,"%s",s.c_str());	
+	if (soc.send(data, n, client, port) != sf::Socket::Done)
+	{
+		cout<<"Blad podczas wysylanie aktualnych danych o karcie"<<endl;
+	}
+	else if(showLog)
+	{
+		cout<< data <<endl;Write(data);
+	}
+}
+void Server::CardOnStack(int owner,int id,int state)
+{
+	char data[100];
+	int n = sprintf(data,"| CARDONSTACK %d %d %d |",id,owner,state);	
+	if (soc.send(data, n, client, port) != sf::Socket::Done)
+	{
+		cout<<"Blad podczas wysylanie aktualnych danych o karcie"<<endl;
+	}
+	else if(showLog)
+	{
+		cout<< data <<endl;Write(data);
+	}
+}
 
 void Server::DrawCard(int id,int value)
 {

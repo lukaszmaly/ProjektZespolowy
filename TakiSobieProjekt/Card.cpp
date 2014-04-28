@@ -103,23 +103,20 @@ float Card::getAngle()
 	return atan2f(( a.y - getCenter().y ),( a.x - getCenter().x ) ) * 180 / M_PI + 180;
 }
 
-void Card::Compare(Mat &img1,Mat &img2,float tab[3],Game &game)
+float Card::Compare(Mat &img1,Mat &img2,Game &game)
 {
 	if(img1.data && img2.data)
 	{
-		if(game.IsBgrMode()==false)
-		{
-			cvtColor(img1,img1,COLOR_BGR2HSV);
-			cvtColor(img2,img2,COLOR_BGR2HSV);
-		}
+	
 		int width=img1.cols;
 		int height=img1.rows;
 		int n=width*height;
 		int channels=img1.channels();
 		long int red=0,green=0,blue=0;
-		long int red2=0,green2=0,blue2=0;
+		int red2=0,green2=0,blue2=0;
 		unsigned int wsk=0;
 
+	
 		for(int y=0;y<height;y++)
 		{
 			for(int x=0;x<width;x++)
@@ -127,33 +124,38 @@ void Card::Compare(Mat &img1,Mat &img2,float tab[3],Game &game)
 				wsk=channels*(width*y + x);
 				blue=img1.data[wsk]-img2.data[wsk];
 				blue2+=blue*blue;
+				//blue2+=sqrtf(blue*blue);
 				green=img1.data[wsk+1]-img2.data[wsk+1];
+				//green2+=sqrtf(green*green);
 				green2+=green*green;
 				red=img1.data[wsk+2]-img2.data[wsk +2];
+				//red2+=sqrtf(red*red);
 				red2+=red*red;
 			}
 		}
-		tab[2]=red2/(float)n;
-		tab[1]=green2/(float)n;
-		tab[0]=blue2/(float)n;
+		//return (0.2*red2+0.4*green2+0.4*blue2)/(float)n;
+		return (0.2*sqrtf(red2)+0.4*sqrtf(green2)+0.4*sqrtf(blue2))/(float)n;
 	}
+	return 0;
 }
 
 
 void Card::Unlock()
 {
-	id=ID++;
+	ID++;
+	if(owner==1) id=ID;
+	else if(owner==2) id=1000+ID;
 }
 
 int Card::GetAttack()
 {
-	
-	return (att+attEOT+additionalAttack);
+	if(this->cardBase.type==LAND) return -1;
+	return max(0,(att+attEOT+additionalAttack));
 }
 int Card::GetDefense()
 {
-
-	return (def+defEOT+additionalDefense);
+	if(this->cardBase.type==LAND) return -1;
+	return max(0,(def+defEOT+additionalDefense));
 }
 
 void Card::AddEOT(int attack,int defense)
@@ -161,7 +163,7 @@ void Card::AddEOT(int attack,int defense)
 	attEOT+=attack;
 	defEOT+=defense;
 	cout<< "Atak: "<<att << attEOT << additionalAttack<<endl;
-			cout<< "Obrona: "<<def << defEOT << additionalDefense<<endl;
+	cout<< "Obrona: "<<def << defEOT << additionalDefense<<endl;
 
 
 	cout<<"Dodaje +"<<attack<<"/+"<<defense<<". Aktualne staty: "<<GetAttack()<<"/"<<GetDefense()<<endl;
@@ -177,18 +179,19 @@ void Card::Add(int attack,int defense)
 
 Card::Card(Point a, Point b, Point c,Point d,vector<CardB>& bkarty,Game &game,int owner,int baseId)
 {
+	fresh = true;
 	newRound=true;
 	attEOT=defEOT=0;
 	additionalAttack=additionalDefense=0;
-	
+
 	deadSended=false;
 	canUntap=true;
-
+		hasLifelink=hasLifelinkEOT=hasFlying=hasFlyingEOT=hasFirstStrike=hasFirstStrikeEOT=false;
 
 	sendTime=0;
 	id=-1;
 	blocking=-1;
-	this->owner=owner;
+	this->owner=owner;	
 	taped=false;
 	attack=block=false;
 	this->a=a;
@@ -215,6 +218,8 @@ Card::Card(Point a, Point b, Point c,Point d,vector<CardB>& bkarty,Game &game,in
 
 Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp=false)
 {
+	fresh = true;
+	checked=false;
 	newRound=true;
 	attEOT=defEOT=0;
 	additionalAttack=additionalDefense=0;
@@ -242,7 +247,7 @@ Card::Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game
 	att=-1;
 	def=-1;
 	dead=false;
-	Update(a,b,c,d,img,bkarty,game,temp);
+	//Update(a,b,c,d,img,bkarty,game,temp);
 	cardBase.type==LAND ? gaveMana=false : gaveMana=true;
 	old=getCenter();
 }
@@ -313,7 +318,9 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 
 		if(game.GetPhase()==PIERWSZY || game.GetPhase()==DRUGI) {old=getCenter(); enemy=Point(-1,-1);}
 	}
-
+	if(checked==true) return;
+if(temp==true || ChangedPosition(a,la,b,lb,c,lc,d,ld))
+{
 	Mat tmp;
 	Mat t;
 	img.copyTo(t);
@@ -324,79 +331,68 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 	Mat mmat(3,3,CV_32FC1);
 	mmat=getAffineTransform(c1,c2);
 	warpAffine(t,tmp,mmat,Size(251,356));
-
-	float tm[3];
 	float min=256*256;
-	int cardId=-1;
+	int cardId=0;
+		if(game.IsBgrMode()==false)
+			cvtColor(tmp,tmp,COLOR_BGR2HSV);
 	for(unsigned int i=0;i<bkarty.size();i++)
 	{
-		Compare(tmp,bkarty[i].img,tm,game);
-		float t1=tm[0]+tm[1]+tm[2];
+		
+		float t1=Compare(tmp,bkarty[i].img,game);
 		if(t1<min) { cardId=i;min=t1;}
 	}
 	if(cardId!=-1)
 		setCardBase(bkarty[cardId]);
-
-
-	//imshow("Karta",tmp);
-	//if(waitKey(10)==122)
-	//{
-	//	string name;
-	//	cout<<"||Wpisz nazwe karty:"<<endl;
-	//	cin>>name;
-	//	cout<<"Dodano nowa karte"<<endl;
-	//	imshow("Kartadodana"+name,tmp);
-	//	imwrite( "C:/umk/"+name+".jpg", tmp );
-	//}
+}
 }
 
 void Card::Update(Point a,Point b,Point c,Point d,int att,int def,Game &game)
 {
-		this->a=a;
-		this->b=b;
-		this->c=c;
-		this->d=d;
-		this->additionalAttack=this->attEOT=0;
-		this->att=att;
-		this->additionalDefense=this->defEOT=0;
-		this->def=def;
-		if(dead==false)ttl=TTL;
-		
-		if(TapUntap()==true)
-		{
-			if(taped==true)
-			{
-				Untap(game);
-			}
-			else
-			{
-				Tap(game);
-			}
-		}
+	this->a=a;
+	this->b=b;
+	this->c=c;
+	this->d=d;
+	this->additionalAttack=this->attEOT=0;
+	this->att=att;
+	this->additionalDefense=this->defEOT=0;
+	this->def=def;
+	if(dead==false)ttl=TTL;
 
-		if(game.GetPhase()==PIERWSZY || game.GetPhase()==DRUGI) {old=getCenter(); enemy=Point(-1,-1);}
+	if(TapUntap()==true)
+	{
+		if(taped==true)
+		{
+			Untap(game);
+		}
+		else
+		{
+			Tap(game);
+		}
+	}
+
+	if(game.GetPhase()==PIERWSZY || game.GetPhase()==DRUGI) {old=getCenter(); enemy=Point(-1,-1);}
 }
 void Card::Update(Point a,Point b,Point c,Point d,Game &game)
 {
-		this->a=a;
-		this->b=b;
-		this->c=c;
-		this->d=d;
-		if(dead==false)ttl=TTL;
-		
-		if(TapUntap()==true)
-		{
-			if(taped==true)
-			{
-				Untap(game);
-			}
-			else
-			{
-				Tap(game);
-			}
-		}
+	this->a=a;
+	this->b=b;
+	this->c=c;
+	this->d=d;
+	if(dead==false)ttl=TTL;
 
-		if(game.GetPhase()==PIERWSZY || game.GetPhase()==DRUGI) {old=getCenter(); enemy=Point(-1,-1);}
+	if(TapUntap()==true)
+	{
+		if(taped==true)
+		{
+			Untap(game);
+		}
+		else
+		{
+			Tap(game);
+		}
+	}
+
+	if(game.GetPhase()==PIERWSZY || game.GetPhase()==DRUGI) {old=getCenter(); enemy=Point(-1,-1);}
 }
 void Card::setCardBase(CardB &card)
 {
@@ -436,12 +432,13 @@ void Card::Untap(Game &game)
 		game.GHTap(this->id);
 	}
 
-		
+
 }
 
 void Card::die()
 {
 	dead=true;
+	ttl=2*TTL;
 }
 
 void Card::GiveLifeToPlayer(int value,Game &game)
@@ -449,21 +446,24 @@ void Card::GiveLifeToPlayer(int value,Game &game)
 	game.AddLife(owner,value);
 }
 
-void Card::Fight(Card &op,Game &game)
+void Card::Fight(Card &op,Game &game,int &lp1,int &lp2)
 {
+	lp1=lp2=0;
 	//this - karta atakuj¹ca
 	this->canUntap=false;
 	game.GHAtack(this->id);
 	game.GHDefense(this->id,this->id);
 
 	int tempDef=op.GetDefense();
-		if((this->HasFirstStrike() && op.HasFirstStrike()) || (!this->HasFirstStrike() && !op.HasFirstStrike()))
+	if((this->HasFirstStrike() && op.HasFirstStrike()) || (!this->HasFirstStrike() && !op.HasFirstStrike()))
 	{
 
 		Damage(op.GetAttack());
 		op.Damage(GetAttack());
-		if(this->HasLifelink())	this->GiveLifeToPlayer(this->GetAttack(),game);
-		if(op.HasLifelink())	op.GiveLifeToPlayer(op.GetAttack(),game);
+		game.server.Damage(op.id,GetAttack());
+		game.server.Damage(id,op.GetAttack());
+		if(this->HasLifelink())	{this->GiveLifeToPlayer(this->GetAttack(),game); lp1+=this->GetAttack();}
+		if(op.HasLifelink())	{op.GiveLifeToPlayer(op.GetAttack(),game); lp2+=op.GetAttack();}
 
 		if(GetDefense()<=0 || op.HasDeadtuch()) die();
 		if(op.GetDefense()<=0 || this->HasDeadtuch()) 
@@ -474,30 +474,37 @@ void Card::Fight(Card &op,Game &game)
 	else if(this->cardBase.hasFirstStrike)
 	{
 		op.Damage(GetAttack());
-		if(this->cardBase.hasLifelink)	this->GiveLifeToPlayer(this->GetAttack(),game);
+
+		if(this->cardBase.hasLifelink)	{this->GiveLifeToPlayer(this->GetAttack(),game);lp1+=this->GetAttack();}
 		if(op.GetDefense()<=0 || this->cardBase.hasDeatchtuch) 
 		{
+			game.server.Damage(op.id,GetAttack());
 			op.die(); 
 		}
 		else
 		{
 			Damage(op.GetAttack());
-			if(op.cardBase.hasLifelink)	op.GiveLifeToPlayer(op.GetAttack(),game);
+			game.server.Damage(op.id,GetAttack());
+		game.server.Damage(id,op.GetAttack());
+		if(op.cardBase.hasLifelink)	{op.GiveLifeToPlayer(op.GetAttack(),game); lp2+=op.GetAttack();}
 			if(GetDefense()<=0 || op.cardBase.hasDeatchtuch) die();
 		}
 	}
 	else if(op.cardBase.hasFirstStrike)
 	{
 		Damage(op.GetAttack());
-		if(op.cardBase.hasLifelink)	op.GiveLifeToPlayer(op.GetAttack(),game);
+		if(op.cardBase.hasLifelink)	{op.GiveLifeToPlayer(op.GetAttack(),game); lp2+=op.GetAttack();}
 		if(GetDefense()<=0 || op.cardBase.hasDeatchtuch) 
 		{
+			game.server.Damage(id,op.GetAttack());
 			die(); 
 		}
 		else
 		{
 			op.Damage(GetAttack());
-		if(this->cardBase.hasLifelink)	this->GiveLifeToPlayer(this->GetAttack(),game);
+			game.server.Damage(op.id,GetAttack());
+			game.server.Damage(id,op.GetAttack());
+			if(this->cardBase.hasLifelink)	{this->GiveLifeToPlayer(this->GetAttack(),game); lp1+=this->GetAttack();}
 			if(op.GetDefense()<=0 || this->cardBase.hasDeatchtuch) die();
 		}
 	}
@@ -527,9 +534,9 @@ void Card::Draw(Mat &img1,Game &game)
 
 
 
-		
-			sprintf(cad,"%s",cardBase.name.c_str());
-	
+
+		sprintf(cad,"%s",cardBase.name.c_str());
+
 
 		if(taped==true)
 			sprintf(cad1,"Taped(%s)",game.GetPlayer(this->owner).name.c_str());
@@ -597,6 +604,7 @@ void Card::NewRound(int player)
 		this->canUntap=true;
 		this->newRound=true;
 	}
+	fresh = true;
 	this->attack=false;
 	this->block=false;
 	def=cardBase.def;
@@ -620,16 +628,16 @@ void Card::Clear()
 bool Card::CanBlock(Card &card)
 {
 	if(this->canUntap==false || this->cardBase.type!=CREATURE || this->hasCantBlock==true) return false;
-	cout<<"TUTAJ"<<endl;
+	
 	if(card.HasFlying()==true && (this->cardBase.hasFlying==false && this->cardBase.hasReach==false))
 	{
 		return false;
 	}
+	cout<<"TUTAJ"<<endl;
 	return true;
 }
 bool Card::CanAttack()
 {
-	if(this->cardBase.type!=CREATURE) cout<<"KREATURA"<<endl;
 	if(this->cardBase.hasDefender==true || this->hasCantAttack==true || this->cardBase.type!=CREATURE) return false;
 	return true;
 }

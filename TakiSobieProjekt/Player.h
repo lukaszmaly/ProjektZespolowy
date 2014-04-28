@@ -200,7 +200,6 @@ public:
 	void Init(string name,int markerId);
 	Player(string name,int markerId);
 	~Player(void);
-	Player &getCurrentPlayer();
 	int hp;
 	int angle;
 	bool agree;
@@ -211,7 +210,6 @@ public:
 	string name;
 	int markerId;
 	bool active;
-	void Update();
 	void Draw(Mat &frame);
 
 	int operator==(const Player &p) {return  markerId==p.markerId;}

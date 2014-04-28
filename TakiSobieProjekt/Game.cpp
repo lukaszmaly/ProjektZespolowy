@@ -27,7 +27,7 @@ void Game::AddMana(int id,Color color)
 void Game::Clear()
 {
 	this->lastId=-1;
-		playedLand=false;
+	playedLand=false;
 }
 void Game::SubMana(int id,Color color)
 {
@@ -43,7 +43,7 @@ void Game::SubMana(int id,Color color)
 }
 void Game::AddLife(int id,int value)
 {
-	
+
 	if(id==1)
 	{
 		this->player1.hp+=value;
@@ -103,7 +103,7 @@ void Game::Pay(int id,int white, int blue,int black,int red,int green,int colorl
 			this->player2.mana.Pay(white,blue,black,red,green,colorless);
 			this->player2.mana.CopyMana(aw,au,ab,ar,ag);
 			this->server.SubMana(id,white,blue,black,red,green);
-				this->ChangeStackState(2,NEUTRAL);
+			this->ChangeStackState(2,NEUTRAL);
 		}
 	}
 }
@@ -222,7 +222,7 @@ void Game::nextPhase()
 		this->oneAttack=false;
 		break;
 	case DRUGI:
-		
+
 		phase=UPKEEP;
 		break;
 	case UPKEEP:
@@ -300,8 +300,21 @@ Phase Game::GetPhase()
 {
 	return phase;
 }
-
-
+void Game::SetPlayerPrepared()
+{
+	if(this->playerIdInMultiplayerMode==1)
+	{
+		this->player1Done=true;
+	}
+	else
+	{
+		this->player2Done=true;
+	}
+}
+bool Game::ArePlayersReady() const
+{
+	return (player1Done && player2Done);
+}
 void Game::ChangeStackState(int id,State state)
 {
 	if(id==1 && state==this->stack1) return;
@@ -310,11 +323,22 @@ void Game::ChangeStackState(int id,State state)
 	if(id==2) this->stack2 = state;
 	this->server.StackColor(id,state);
 }
+bool Game::IsMultiplayer() const
+{
+	return this->multiplayerMode;
+}
 
 Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h,int interval,bool showLog)
 {
-		oneLandEachTurn = false;
-	 playedLand = false;
+	bgrMode=false;
+	gameStarted=false;
+	player1Done = false;
+	player2Done= false;
+	player1StackClean=true;
+	player2StackClean=true;
+
+	oneLandEachTurn = false;
+	playedLand = false;
 	stackState=NEUTRAL;
 	SetTargetMode(false);
 	lastId=-1;
@@ -323,7 +347,7 @@ Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip
 	firsCardPoint = Point(550,250);
 	firstCardHeight = 350;
 	firstCardWidth = 250;
-	bgrMode=true;
+
 	firstCardChecked=false;
 	checkCardsProp=true;
 	CanResolve = true;
@@ -346,105 +370,4 @@ Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip
 int Game::distance(Point a,Point b)
 {
 	return std::sqrtf(((b.x-a.x)*(b.x-a.x)+(b.y-a.y)*(b.y-a.y)));
-}
-
-void Game::CheckMarkers(Mat &frame)
-{
-	MarkerDetector MDetector;
-	MDetector.setMinMaxSize(0.01f);
-	markers.clear();
-	MDetector.detect(frame,markers);
-
-	for(int i = 0; i < markers.size(); i++) 
-	{
-
-		if(markers[i].id==player1.markerId)
-		{
-
-
-			player1.angle =markers[i].getAngle();
-			if(player1.oldangle<0) { player1.oldangle=player1.angle;}
-
-			player1.angleDiff=player1.angle-player1.oldangle;
-			if(player1.angleDiff>100)
-			{
-				player1.angleDiff=360-player1.angleDiff;
-			}
-			if(player1.angleDiff<-100) 
-			{
-				player1.angleDiff=-360-player1.angleDiff;
-			}
-
-
-			if(abs(player1.angleDiff)>80)
-			{
-				player1.agree=true;
-				player1.oldangle=player1.angle;
-			}
-		}
-
-		if(markers[i].id==player2.markerId)
-		{
-
-
-			player2.angle =markers[i].getAngle();
-			if(player2.oldangle<0) { player2.oldangle=player2.angle;}
-
-			player2.angleDiff=player2.angle-player2.oldangle;
-			if(player2.angleDiff>100)
-			{
-				player2.angleDiff=360-player2.angleDiff;
-			}
-			if(player2.angleDiff<-100) 
-			{
-				player2.angleDiff=-360-player2.angleDiff;
-			}
-
-			if(abs(player2.angleDiff)>80)
-			{
-				player2.agree=true;
-				player2.oldangle=player2.angle;
-			}
-
-		}
-
-
-
-
-
-		if(markers[i].id == TARGETMARKER)
-		{
-			continue;
-		}
-
-		markers[i].draw(frame,Scalar(0,0,255));
-
-		if(markers[i].id == ACTION)
-		{
-			if(action.x == -1) 
-			{ 
-				action = markers[i].getCenter();
-			}
-			else
-			{
-				if(distance(action,markers[i].getCenter()) >= 100)
-				{
-					action = markers[i].getCenter();
-					nextPhase();
-				}
-			}
-		}
-
-		//if(player1.markerId == markers[i].id && aPlayer != player1.markerId) 
-		//{
-		//	aPlayer = markers[i].id;
-		//	break;
-		//}
-
-		/*	if(player2.markerId == markers[i].id && aPlayer != player2.markerId)
-		{
-		aPlayer=markers[i].id;
-		break;
-		}*/
-	}
 }

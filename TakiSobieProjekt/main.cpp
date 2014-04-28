@@ -1,16 +1,10 @@
-﻿/*
-Znane błędy:
--jeśli karta jest idealnie równolegle(abs(a.y-d.y)~=0) to wystepuje problem z wyznaczeniem orientacji cardsInPlay
-położenie problemu: metoda Card::Valid();
-(dokonałem poprawki, ale nie mam na 100% pewnosci że problem zniknął, dlatego zostawiam ten punkt)
-*/
-
-#include <stdio.h>
+﻿#include <stdio.h>
 #include <iostream>
 #include "opencv2\imgproc\imgproc.hpp"
 #include "opencv2/core/core.hpp"
 #include "opencv2/features2d/features2d.hpp"
 #include "opencv2/highgui/highgui.hpp"
+
 #include "opencv2/nonfree/nonfree.hpp"
 #include "settings.h"
 #include "Card.h"
@@ -18,6 +12,7 @@ położenie problemu: metoda Card::Valid();
 #include "CardB.h"
 #include "aruco.h"
 #include <vector>
+
 #include "marker.h"
 #include "cvdrawingutils.h"
 #include <fstream>
@@ -32,15 +27,16 @@ using namespace cv;
 using namespace std;
 
 
-bool check = false;
+bool check = true;
 int c=0;
-int three=200;
-int maxArea= 31;
-int minArea=11;
+int threeMax=200;
+int threeMin=200;
+int maxArea= 25;
+int minArea=16;
 int moveSize =10;
 int drawWindows = 1;
 bool oneAttack=false;
-int updateTime = 3;
+int updateTime = 0;
 int stackWidth = 224;
 int stackHeight = 276;
 int stack1x=1130;
@@ -48,8 +44,11 @@ int stack1y=94;
 int stack2x=1130;
 int stack2y=390;
 
+int mouseX,mouseY;
+int mouseFlag=false;
+bool tryToSaveCard=false;
 
-void LoadCardDatabase(vector<CardB> &cards)
+void LoadCardDatabase(vector<CardB> &cards,Game &game)
 {
 	cout<<"Loading Card`s database"<<endl;
 	fstream plik("cards.txt", ios::in );
@@ -57,7 +56,7 @@ void LoadCardDatabase(vector<CardB> &cards)
 	string name;
 	bool hasHexproof, hasDeatchtuch,hasLifelink,hasDefender,hasFlying,hasReach,hasHaste,hasFirstStrike;
 	vector<pair<int,int>> enterList,upkeepList,passiveList;
-
+	if(!plik.good()) return;
 	while(!plik.eof())
 	{
 		enterCount=passiveCount=upkeepCount=0;
@@ -95,8 +94,13 @@ void LoadCardDatabase(vector<CardB> &cards)
 
 		string effect;
 		plik >> effect;
-		Mat a=imread("C:/Users/lukaszmaly/Documents/Visual Studio 2010/Projects/TakiSobieProjekt/TakiSobieProjekt/"+name+".jpg");
+	
+			Mat a=imread("C:/Users/lukaszmaly/Documents/Visual Studio 2010/Projects/TakiSobieProjekt/TakiSobieProjekt/"+name+".jpg");
+		
+
 		if(!a.data) {cout<<"File "<< name<<".jpg not found"<<endl; continue;}
+			if(game.IsBgrMode()==false)
+			cvtColor(a,a,COLOR_BGR2HSV);
 		cards.push_back(CardB(a));
 		cards[cards.size()-1].Init(id,name,type,att,def,rCost,wCost,gCost,bCost,uCost,lCost,hasDefender,hasLifelink,hasDeatchtuch,hasHaste,hasFlying,hasReach,hasFirstStrike,hasHexproof,enterList,upkeepList,passiveList,effect);
 	}
@@ -108,18 +112,22 @@ bool IsInRectFast(Point p,Point a ,Point c)
 	if(p.x<a.x || p.x>c.x || p.y<a.y || p.y>c.y) return false;
 	return true;
 }
-void SaveCard(Mat &img,Card &card)
+void SaveCard(Mat &img,vector<Card>&cards)
 {
-	Mat tmp;
-	Mat t;
-	img.copyTo(t);
-	tmp.cols=251;
-	tmp.rows=356;
-	Point2f c1[4] = {card.a,card.b,card.c,card.d};
-	Point2f c2[4] = {Point2f(0,0), Point2f(251,0), Point2f(251,356),Point2f(0,356)};
-	Mat mmat(3,3,CV_32FC1);
-	mmat=getAffineTransform(c1,c2);
-	warpAffine(t,tmp,mmat,Size(251,356));
+	tryToSaveCard=false;
+	for(size_t i = 0; i < cards.size(); i++)
+	{
+		if(!IsInRectFast(Point(mouseX,mouseY),cards[i].a,cards[i].c)) continue;
+		Mat tmp;
+		Mat t;
+		img.copyTo(t);
+		tmp.cols=251;
+		tmp.rows=356;
+		Point2f c1[4] = {cards[i].a,cards[i].b,cards[i].c,cards[i].d};
+		Point2f c2[4] = {Point2f(0,0), Point2f(251,0), Point2f(251,356),Point2f(0,356)};
+		Mat mmat(3,3,CV_32FC1);
+		mmat=getAffineTransform(c1,c2);
+		warpAffine(t,tmp,mmat,Size(251,356));
 
 
 		string name;
@@ -128,7 +136,7 @@ void SaveCard(Mat &img,Card &card)
 		cout<<"Dodano nowa karte"<<endl;
 		imshow("Kartadodana"+name,tmp);
 		imwrite( "C:/umk/"+name+".jpg", tmp );
-	
+	}
 }
 
 
@@ -151,7 +159,7 @@ vector<vector<Point>>FindSquaresInImage(Mat &image)
 	vector<Point> approx;
 	vector<Vec4i> hierarchy;		
 	cvtColor(image,diff,CV_RGB2GRAY);
-	Canny(diff,diff,three,three);
+	Canny(diff,diff,threeMin,threeMax);
 	dilate(diff, diff, Mat(), Point(-1,-1));
 	findContours( diff, contours,hierarchy, CV_RETR_TREE, CV_CHAIN_APPROX_SIMPLE, Point(0, 0) );
 
@@ -188,13 +196,26 @@ vector<vector<Point>>FindSquaresInImage(Mat &image)
 	return squares;
 }
 
-bool IsTheProperlyCard(Card &temp,vector<Card> &cards)
+bool IsTheProperlyCard(Card &temp,vector<Card> &cards,int j=-1)
 {
 	Point2f center = temp.getCenter();
 	for(unsigned int i=0;i<cards.size();i++)
 	{
-		if(Game::Distance(center,cards[i].getCenter())<30) return false;
+		if(Game::Distance(center,cards[i].getCenter())<40) return false;
 	}
+	if(j==-1) return true;
+	int dis;
+	int mindist=Game::Distance(center,cards[j].getCenter());
+	for(unsigned int i=0;i<cards.size();i++)
+	{
+		if(i==j || cards[i].fresh==false) continue;
+		dis=Game::Distance(center,cards[i].getCenter());
+	if(dis<mindist) 
+		{return false;
+	}
+
+	}
+
 	return true;
 }
 
@@ -244,7 +265,8 @@ void MultiplyerCardPreparation(vector<Card> &cards,vector<Card>&temp,Game &game)
 		if(cards[i].owner==game.playerIdInMultiplayerMode) continue;
 		for(unsigned int j=0;j<temp.size();j++)
 		{
-			if(Game::Distance(temp[j].getCenter(),cards[i].getCenter())<30)
+			Point oldCenter=Point((cards[i].la.x+cards[i].lb.x+cards[i].lc.x+cards[i].ld.x)/4,(cards[i].la.y+cards[i].lb.y+cards[i].lc.y+cards[i].ld.y)/4);
+			if(Game::Distance(temp[j].getCenter(),cards[i].getCenter())<30 || Game::Distance(temp[j].getCenter(),oldCenter)<30 )
 			{
 				temp.erase(temp.begin()+j);
 				--j;
@@ -253,18 +275,47 @@ void MultiplyerCardPreparation(vector<Card> &cards,vector<Card>&temp,Game &game)
 	}
 }
 
-void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<CardB> &bcards,Game &game)
+void CardPrepare(vector<Card> &tcard,vector<Card> &cards,Game &game)
+{
+
+	for(int j=0;j<tcard.size();j++)
+	{
+		if(IsInRectFast(tcard[j].getCenter(),Point(stack1x,stack1y),Point(stack2x+stackWidth,stack2y+stackHeight))) continue;
+		
+		for(int i=0;i<cards.size();i++)
+		{
+			if(!ChangedPosition(cards[i].a,tcard[j].a,cards[i].b,tcard[j].b,cards[i].c,tcard[j].c,cards[i].d,tcard[j].d))
+			{
+				cards[i].Update(tcard[j].a,tcard[j].b,tcard[j].c,tcard[j].d,game);
+				cards[i].fresh=false;
+				tcard.erase(tcard.begin()+j);	
+				--j;
+				break;
+			}
+		}
+	}
+}
+void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<CardB> &bcards,Game &game, MainServer &mainServer)
 {
 	Mat diff;
 	vector<vector<Point>> squares;
 	frame.copyTo(diff);
 	squares=FindSquaresInImage(diff);
+
 	vector<Card> tcard;
 	//Poprawa rogów kart
+
+	for(unsigned int i=0;i<cards.size();i++)
+	{
+		cards[i].fresh=true;
+	}
+
 	for(unsigned int i=0;i<squares.size();i++)
 	{
 		Card::Prepare2(squares[i],frame);
-		drawContours(diff,squares,i,Scalar(255,255,255),2);
+		if(IsInRectFast(Point(mouseX,mouseY),squares[i][0],squares[i][2]))
+			drawContours(diff,squares,i,Scalar(100,100,100),5);
+		else drawContours(diff,squares,i,Scalar(255,255,255),2);
 	}
 
 	if(drawWindows==1) imshow("Kontury",diff);
@@ -278,11 +329,12 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 		if(game.CheckCardsProp()==true && Card::Valid(squares[i][0],squares[i][1],squares[i][2],squares[i][3])==false)
 		{
 			squares.erase(squares.begin()+i);
-			i=-1;
+			//i=-1;
+			--i;
 			erased++;
 		}
 	}
-	if(erased!=0) cout<<erased <<" kart nie spelnialo norm"<<endl;
+	//if(erased!=0) cout<<erased <<" kart nie spelnialo norm"<<endl;
 
 	//tworzenie tymczaswego wektora z wykrytymi kartami na stole
 	for (unsigned int i = 0; i<squares.size(); i++ ) 
@@ -298,18 +350,30 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 			if(i!=j && Game::Distance(tcard[i].getCenter(),tcard[j].getCenter())<40)
 			{
 				tcard.erase(tcard.begin()+j);
-				i=-1;
-				j=-1;
+				//i=-1;
+				//j=-1;
+				--i;
+				--j;
 				break;
 			}
 		}
 	}
-
-
-
-	if(tcard.size()!=0 && waitKey(5)==122)
+	
+	if(game.IsMultiplayer())
 	{
-		SaveCard(frame,tcard[0]);
+		MultiplyerCardPreparation(cards,tcard,game);
+	}
+	CardPrepare(tcard,cards,game);
+	
+	for (unsigned int i = 0; i<tcard.size(); i++ ) 
+	{
+		tcard[i].Update(tcard[i].a,tcard[i].b,tcard[i].c,tcard[i].d,frame,bcards,game,true);
+	}
+
+
+	if(tcard.size()!=0 && tryToSaveCard)
+	{
+		SaveCard(frame,tcard);
 	}
 
 	//
@@ -334,12 +398,18 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 					Mat mmat(3,3,CV_32FC1);
 					mmat=getAffineTransform(c1,c2);
 					warpAffine(t,tmp,mmat,Size(251,356));
-					Card::fastImg("STATYSTYKA", Card::Compare(bcards[0].img,tmp,game));
+					
+					Card::fastImg("STATYSTYKA", Card::Compare2(bcards[0].img,tmp,game));
 				}
 				if(check==false)
 				{
 					game.firstCardChecked=true;
-					game.server.Markers(w,h);
+					game.server.Markers(w,h,game.IsMultiplayer(),game.playerIdInMultiplayerMode);
+					if(game.IsMultiplayer())
+					{
+						game.SetPlayerPrepared();
+						mainServer.SendReady();
+					}
 				}
 
 
@@ -349,6 +419,21 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 		}
 		return;
 	}
+
+
+
+	if(game.IsMultiplayer() && !game.ArePlayersReady() && !game.gameStarted)
+	{
+		return;
+	}
+	else if(game.IsMultiplayer() && !game.gameStarted)
+	{
+		game.gameStarted=true;
+		game.server.Start();
+	}
+
+
+
 
 	///Sprawdzanie czy są cards na stackie
 	for (unsigned int i = 0; i<stack.size(); i++ ) 
@@ -382,14 +467,16 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 			tcard[i].owner=1;
 			stack.push_back(tcard[i]);
 			tcard.erase(tcard.begin()+i);
-			i=-1;
+		//	i=-1;
+			--i;
 		}
 		else if(IsInRectFast(tcard[i].getCenter(),game.player2.stackB,game.player2.stackE)==true) 
 		{
 			tcard[i].owner=2;
 			stack.push_back(tcard[i]);
 			tcard.erase(tcard.begin()+i);
-			i=-1;
+			//i=-1;
+			--i;
 		}
 	}
 
@@ -416,16 +503,17 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 
 	for (unsigned int i = 0; i<cards.size(); i++ ) 
 	{
+		if(cards[i].fresh==false) continue;
 		int index=-1;
 		int minn=90000;
 		int tempDistance;
 		for(unsigned int j=0;j<tcard.size();j++)
 		{
+		
 			if(cards[i].cardBase.id==tcard[j].cardBase.id)
 			{
 				tempDistance=Game::Distance(cards[i].getCenter(),tcard[j].getCenter());
-
-				if(tempDistance<30 ||(tempDistance<minn && IsTheProperlyCard(tcard[j],cards)==true))
+				if(tempDistance<30 || (tempDistance<minn && IsTheProperlyCard(tcard[j],cards,i)==true))
 				{
 					minn=tempDistance;
 					index=j;
@@ -445,10 +533,24 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 		{
 			cout<<"Przestarzala karta na stosie"<<endl;
 			stack.erase(stack.begin()+i);
-			i=-1;
+			//i=-1;
+			--i;
 		}
 	}
 
+
+	if(game.IsMultiplayer())
+	{
+
+		for(size_t i =0;i<stack.size();i++)
+		{
+			if(stack[i].owner==game.playerIdInMultiplayerMode && mainServer.IsStackClean(game.playerIdInMultiplayerMode,stack[i].cardBase.id))
+			{
+				mainServer.SendCardOnStack(stack[i].owner,stack[i].cardBase.id);
+			}
+		}
+
+	}
 	//dodanie nowych kart, które mogły się pojawić
 	//dodają się tylko landy
 	for(unsigned int i=0;i<tcard.size();i++)
@@ -459,12 +561,17 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 			{
 				game.playedLand=true;
 				tcard[i].Unlock();
+				tcard[i].la=tcard[i].lb=tcard[i].lc=tcard[i].ld=Point(-1,-1);
 				cards.push_back(tcard[i]);
 				cout<<"Dodaje karte"<<endl;
+
 				game.server.SendNewCard(tcard[i].id,tcard[i].cardBase.id,tcard[i].owner,tcard[i].a,tcard[i].b,tcard[i].c,tcard[i].d,tcard[i].taped);
+				mainServer.SendNewCard(tcard[i].id,tcard[i].cardBase.id,tcard[i].owner,tcard[i].a,tcard[i].b,tcard[i].c,tcard[i].d,tcard[i].taped);
+
 				game.GHPlay(tcard[i].owner,tcard[i].id,tcard[i].cardBase.name,-1,-1);
 				tcard.erase(tcard.begin()+i);
-				i=-1;
+				//i=-1;
+				--i;
 			}
 		}
 	}
@@ -481,7 +588,7 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 			{
 
 				game.Pay(stack[i].owner,stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost);
-
+				mainServer.SendPaid(stack[i].owner,stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost);
 				tcard[j].Unlock();
 				stack[i].id=tcard[j].id;
 				/*	stack[i].a = tcard[j].a;
@@ -500,15 +607,21 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 				tt=tcard[j].cardBase.enterAbilities;
 				for(int z=0;z<tt.size();z++)
 				{
-					if(tt[z].second==-1)game.stack.push_back(Spell(tcard[j].cardBase.id,tt[z].first,tcard[j].owner,tcard[j].id,tcard[j].owner,tt[z].second,tcard[j].cardBase.effect));
+					game.stack.push_back(Spell(tcard[j].cardBase.id,tt[z].first,tcard[j].owner,tcard[j].id,tcard[j].owner,tt[z].second,tcard[j].cardBase.effect));
 				}
 
 				cards.push_back(stack[i]);
 
 				game.ChangeStackState(stack[i].owner,NEUTRAL);
+				if(game.IsMultiplayer())
+				{
+					mainServer.ChangeStackColor(stack[i].owner,NEUTRAL);
+				}
 				stack.erase(stack.begin()+i);
 				tcard.erase(tcard.begin()+j);
-				i=j=-1;
+				//i=j=-1;
+				--i;
+				--j;
 				break;
 			}
 		}
@@ -538,33 +651,46 @@ void MainCardLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 		if(game.CanPay(stack[i].owner,stack[i].cardBase.whiteCost,stack[i].cardBase.blueCost,stack[i].cardBase.blackCost,stack[i].cardBase.redCost,stack[i].cardBase.greenCost,stack[i].cardBase.lessCost)==true)
 		{
 			game.ChangeStackState(stack[i].owner,OK);
+			if(game.IsMultiplayer()) mainServer.ChangeStackColor(stack[i].owner,OK);
 		}
 		else
 		{
 			game.ChangeStackState(stack[i].owner,DENY);
+			if(game.IsMultiplayer()) mainServer.ChangeStackColor(stack[i].owner,OK);
 		}
+	}
+
+	for(int i=0;i<cards.size();i++)
+	{
+		if(cards[i].owner!=game.playerIdInMultiplayerMode)
+			cards[i].ttl=Card::TTL;
 	}
 }
 
-void NewRound(Game &game,vector<Card> &cards,vector<Card>&stack)
+void NewRound(Game &game,vector<Card> &cards,vector<Card>&stack,ScriptsManager &sm)
 {
-
 	stack.clear();
 	game.Clear();
 	game.nextPhase();
+
 	if(game.GetCurrentPlayer()==1)  game.setPlayer(1);
 	else game.setPlayer(0);
+	game.gh.NewRound(game.GetCurrentPlayer());
 	game.server.ActivePlayer(game.GetCurrentPlayer());
 	game.server.DrawCard(game.GetCurrentPlayer(),1);
+
+	sm.Upkeep(game,cards,game.GetCurrentPlayer());
 	for(unsigned int i=0;i<cards.size();i++)
 	{
 		cards[i].NewRound(game.GetCurrentPlayer());
 	}
 }
 
-void MainGameLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<CardB> &bcards,Game &game)
+void MainGameLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<CardB> &bcards,Game &game,ScriptsManager &sm, MainServer &mainServer)
 {
-	MainCardLogic(frame,cards,stack,bcards,game);
+	
+	MainCardLogic(frame,cards,stack,bcards,game,mainServer);
+
 	if(game.GetPhase()==ATAK)
 	{
 		for (unsigned int i = 0; i<cards.size(); i++ ) 
@@ -573,6 +699,7 @@ void MainGameLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 			if(cards[i].owner==game.GetCurrentPlayer() && cards[i].CanAttack() && Game::Distance(cards[i].getCenter(),cards[i].old)>50 && cards[i].taped==true) 
 			{
 				cards[i].attack=true; 
+				cout<<"Atakuje karta "<<cards[i].id<<endl;
 			}
 		}
 	}
@@ -584,6 +711,7 @@ void MainGameLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 			if(!(cards[i].owner==game.GetCurrentPlayer()) && Game::Distance(cards[i].getCenter(),cards[i].old)>50) 
 			{
 				cards[i].block=true; 
+				cout<<"KArta blokuje" <<cards[i].id<<endl;
 			}
 
 		}
@@ -626,9 +754,16 @@ void MainGameLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 			{
 				if(cards[i].blocking==cards[j].id)
 				{
-				cards[j].Fight(cards[i],game);
-				cards[j].attack=false;
-				cards[j].canUntap=false;
+					int life1=0;
+					int life2=0;
+					cards[j].Fight(cards[i],game,life1,life2);
+					if(game.IsMultiplayer())
+					{
+						if(life1!=0) mainServer.SendAddLife(cards[j].owner,life1);
+						if(life2!=0) mainServer.SendAddLife(cards[i].owner,life2);
+					}
+					cards[j].attack=false;
+					cards[j].canUntap=false;
 				}
 			}
 		}
@@ -646,7 +781,7 @@ void MainGameLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 						game.AddLife(1,cards[i].GetAttack());
 					}
 				}
-				else
+				else if(cards[i].owner==2)
 				{
 					game.SubLife(1,cards[i].GetAttack());
 					if(cards[i].HasLifelink())
@@ -662,12 +797,12 @@ void MainGameLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 
 	else if(game.GetPhase()==UPKEEP)
 	{
-		NewRound(game,cards,stack);
+		NewRound(game,cards,stack,sm);
 	}
 
 	for(int i=0;i<cards.size();i++)
 	{
-		if(cards[i].dead==true && cards[i].deadSended==false) { cards[i].deadSended=true; game.server.Dead(cards[i].id);game.GHDie(cards[i].id); }
+		if(cards[i].dead==true && cards[i].deadSended==false) { cards[i].deadSended=true; game.server.Dead(cards[i].id);game.GHDie(cards[i].id); if(cards[i].owner==game.playerIdInMultiplayerMode) mainServer.SendDead(cards[i].id); }
 		if(cards[i].dead && cards[i].ttl<=0) { cards.erase(cards.begin() +i); i=-1; }
 	}
 
@@ -675,10 +810,11 @@ void MainGameLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 	for(unsigned int i=0;i<cards.size();i++)
 	{
 		cards[i].Draw(frame,game);
+		if(cards[i].GetDefense()<0 && cards[i].cardBase.type==CREATURE) cards[i].die();
 	}
 	for(unsigned int i=0;i<cards.size();i++)
 	{
-		if(!cards[i].TrySend(game) || cards[i].dead==true) continue;
+		if(cards[i].dead==true) continue;
 		if(ChangedPosition(cards[i].a,cards[i].la,cards[i].b,cards[i].lb,cards[i].c,cards[i].lc,cards[i].d,cards[i].ld))
 		{
 			cards[i].la=cards[i].a;
@@ -694,14 +830,20 @@ void MainGameLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 		if(cards[i].attack==true)
 		{
 			game.server.Attack(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense());
+			mainServer.SendAttackingCard(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense());
+
 		}
 		else if(cards[i].block == true)
 		{
 			game.server.Block(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].blocking,cards[i].GetAttack(),cards[i].GetDefense());
+			mainServer.SendBlockingCard(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense(),cards[i].blocking);
+
 		}
 		else
 		{
 			game.server.UpdateCard(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense());
+			mainServer.SendUpdatedCard(cards[i].id,cards[i].cardBase.id,cards[i].owner,cards[i].a,cards[i].b,cards[i].c,cards[i].d,cards[i].taped,cards[i].GetAttack(),cards[i].GetDefense());
+
 		}
 	}
 
@@ -725,7 +867,7 @@ void MainGameLogic(Mat &frame,vector<Card> &cards,vector<Card>&stack,vector<Card
 
 	putText(frame,cad1, Point(10,25),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 	putText(frame,cad2, Point(10,40),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
-	putText(frame,cad3, Point(10,55),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
+putText(frame,cad3, Point(10,55),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 	putText(frame,cad4, Point(10,70),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
 
 	if(game.t==false)
@@ -803,14 +945,109 @@ int Card::width=-1;
 int Card::height=-1;
 
 
+void CheckMarkers(Mat &frame, Game &game,MainServer &mainServer)
+{
+	MarkerDetector MDetector;
+	MDetector.setMinMaxSize(0.01f);
+	game.markers.clear();
+	MDetector.detect(frame,game.markers);
+
+	for(int i = 0; i < game.markers.size(); i++) 
+	{
+		if(game.markers[i].id==game.player1.markerId)
+		{
+			if(game.IsMultiplayer() && game.playerIdInMultiplayerMode==2) continue;
+
+			game.player1.angle =game.markers[i].getAngle();
+			if(game.player1.oldangle<0) { game.player1.oldangle=game.player1.angle;}
+
+			game.player1.angleDiff=game.player1.angle-game.player1.oldangle;
+			if(game.player1.angleDiff>100)
+			{
+				game.player1.angleDiff=360-game.player1.angleDiff;
+			}
+			if(game.player1.angleDiff<-100) 
+			{
+				game.player1.angleDiff=-360-game.player1.angleDiff;
+			}
+
+
+			if(abs(game.player1.angleDiff)>50)
+			{
+				game.player1.agree=true;
+				mainServer.SendNextPhase();
+				game.player1.oldangle=game.player1.angle;
+			}
+		}
+		else if(game.markers[i].id==game.player2.markerId)
+		{
+			if(game.IsMultiplayer() && game.playerIdInMultiplayerMode==1) continue;
+
+			game.player2.angle =game.markers[i].getAngle();
+			if(game.player2.oldangle<0) { game.player2.oldangle=game.player2.angle;}
+
+			game.player2.angleDiff=game.player2.angle-game.player2.oldangle;
+			if(game.player2.angleDiff>100)
+			{
+				game.player2.angleDiff=360-game.player2.angleDiff;
+			}
+			if(game.player2.angleDiff<-100) 
+			{
+				game.player2.angleDiff=-360-game.player2.angleDiff;
+			}
+
+			if(abs(game.player2.angleDiff)>50)
+			{
+				game.player2.agree=true;
+				mainServer.SendNextPhase();
+				game.player2.oldangle=game.player2.angle;
+			}
+
+		}
+		else if(game.markers[i].id == TARGETMARKER)
+		{
+			continue;
+		}
+		game.markers[i].draw(frame,Scalar(0,0,255));
+	}
+}
+
+
+
+
+void MouseCallbackFunc(int event, int x, int y, int flags, void* userdata)
+{
+	mouseX=x;
+	mouseY=y;
+	if(event == EVENT_LBUTTONDOWN && mouseFlag==false)
+	{
+		cout<<"Clicked"<<endl;
+		mouseFlag=true;
+		tryToSaveCard=true;
+	}
+	else
+	{
+		mouseFlag=false;
+	}
+}
+
+
+
 int main( int argc, char** argv )
 {
-	bool presed = false;
 
+	
 
-	//Game game("lukasz",977,"daniel",341,"192.168.0.100",600,1366,768,8,true);
+	check=false;
+	bool presed = true;
 
-	Game game("lukasz",177,"daniel",341,"localhost",600,1366,768,8,true);
+	//Game game("lukasz",233,"daniel",760,"192.168.0.100",600,800,600,8,true);
+
+	Game game("lukasz",233,"daniel",760,"localhost",600,1366,768,8,true);
+
+	game.gh.GenerateLog();
+	return 0;
+
 	ScriptsManager scriptManager;
 	vector<CardB> dataBaseCards;
 	vector<Card> cardsInPlay;
@@ -819,20 +1056,23 @@ int main( int argc, char** argv )
 	VideoCapture capture(0);
 
 
-	LoadCardDatabase(dataBaseCards);
+	LoadCardDatabase(dataBaseCards,game);
 
 
 
 
-	/*MainServer mainServer = MainServer();
-	mainServer.Read(cardsInPlay,dataBaseCards,game);
-		mainServer.Read(cardsInPlay,dataBaseCards,game);
-			mainServer.Read(cardsInPlay,dataBaseCards,game);
-				mainServer.Read(cardsInPlay,dataBaseCards,game);
-	return 0;*/
+	MainServer mainServer = MainServer();
 
-	namedWindow("Settings",CV_WINDOW_NORMAL);
-	createTrackbar("Threeshold","Settings",&three,300);
+
+	//mainServer.Read(cardsInPlay,dataBaseCards,game);
+	//mainServer.Read(cardsInPlay,dataBaseCards,game);
+	//mainServer.Read(cardsInPlay,dataBaseCards,game);
+	//mainServer.Read(cardsInPlay,dataBaseCards,game);
+
+
+	namedWindow("Settings",CV_GUI_EXPANDED);
+	createTrackbar("Threeshold Min","Settings",&threeMin,300);
+	createTrackbar("Threeshold Max","Settings",&threeMax,300);
 	createTrackbar("Min area ","Settings",&minArea,100);
 	createTrackbar("Max arrea ","Settings",&maxArea,500);
 	createTrackbar("Draw Windows ","Settings",&drawWindows,1);
@@ -845,27 +1085,50 @@ int main( int argc, char** argv )
 	createTrackbar("Stack 2 x ","Settings",&stack2x,1200);
 	createTrackbar("Stack 2 y ","Settings",&stack2y,1200);
 
+
+	namedWindow("Frame",CV_WINDOW_NORMAL);
+	namedWindow("Preview",CV_WINDOW_NORMAL);
+	namedWindow("Kontury",CV_WINDOW_NORMAL);
+	setMouseCallback("Preview", MouseCallbackFunc, NULL);
 	capture.set(CV_CAP_PROP_FRAME_WIDTH, 1280 );
 	capture.set(CV_CAP_PROP_FRAME_HEIGHT, 720 );
-	capture.set(CV_CAP_PROP_FOCUS, 11 );
+	capture.set(CV_CAP_PROP_FOCUS, 12 );
 	capture.read(frame);
 	game.StackSettings(stackWidth,stackHeight,stack1x,stack1y,stack2x,stack2y);
+	game.multiplayerMode=false;
+	game.playerIdInMultiplayerMode=1;
+	if(game.IsMultiplayer())
+	{
+	
+		mainServer.Init("192.168.0.100");
+		mainServer.HostGame();
+	}
+		
 	while(1)
 	{
+	
+
 		game.Update();
 
 		game.server.SetInterval(updateTime);
 		capture.read(frame);
-		game.CheckMarkers(frame);
+			
 
-
+		CheckMarkers(frame,game,mainServer);
+	
+		
 		FirstCalibration(game.markers,frame,game);
-
+		if(game.IsMultiplayer())
+		{
+			mainServer.Recv();
+			mainServer.Read(cardsInPlay,dataBaseCards,game);
+		}
+		
 		if(frame.data)
 		{
-			MainGameLogic(frame,cardsInPlay,cardsOnStack,dataBaseCards,game);
-			scriptManager.Update(frame,game,cardsInPlay,cardsOnStack);
-			game.Draw(frame);
+			MainGameLogic(frame,cardsInPlay,cardsOnStack,dataBaseCards,game,scriptManager,mainServer);
+			scriptManager.Update(frame,game,cardsInPlay,cardsOnStack,mainServer);
+			//game.Draw(frame);
 			char cad6[20];
 			sprintf(cad6,"Can: %d",!presed);
 			putText(frame,cad6, Point(10,130),FONT_HERSHEY_SIMPLEX, 0.5,  Scalar(0,0,255),2);
@@ -873,12 +1136,13 @@ int main( int argc, char** argv )
 			imshow("Preview", frame);
 
 		}
+	
 
 		if(cv::waitKey(5)==27) break;
 		if(cv::waitKey(5)==113) presed = false;
 		if(cv::waitKey(5)==97 && presed==false) { game.nextPhase(); presed=true; }
 		if(cv::waitKey(5)==119 && presed==false) {game.setFaza(4); presed=true; }
-		if(cv::waitKey(5)==99) cardsOnStack.clear();
+
 	}
 	capture.release();
 	cv::waitKey(0);

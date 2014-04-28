@@ -8,12 +8,14 @@
 #include "cvdrawingutils.h"
 #include "settings.h"
 #include <vector>
+#include <time.h>
 #include <fstream>
 using namespace std;
 using namespace cv;
 using namespace aruco;
-#define ACTION 428
-#define TARGETMARKER 985
+//#define ACTION 428
+//#define TARGETMARKER 985
+#define TARGETMARKER 428
 #define M_PI 3.14159265358979323846
 
 
@@ -26,6 +28,7 @@ public:
 	int targetCreature;
 	int targetPlayer;
 	int value;
+
 	string effect;
 	Spell()
 	{
@@ -43,6 +46,179 @@ public:
 	}
 };
 
+
+class Action
+{
+public:
+	Actions a;
+	int owner;
+	int id;
+	int targetPlayer;
+	string name1;
+	string name2;
+	int value;
+	int targetCreature1;
+	int targetCreature2;
+
+	Action(Actions a,int owner=-1,int id=-1,int targetPlayer=-1,int targetCreature1=-1,int targetCreature2=-1,int value=-1,string name1="X",string name2="X")
+	{
+		this->a=a;
+		this->owner=owner;
+		this->targetCreature1=targetCreature1;
+		this->targetCreature2=targetCreature2;
+		this->targetPlayer=targetPlayer;
+		this->value=value;
+		this->name1=name1;
+		this->id=id;
+		this->name2=name2;
+	}
+
+};
+
+class GameRound
+{
+public:
+	int id;
+	int player;
+	vector<Action> actions;
+	GameRound()
+	{
+	}
+	GameRound(int id,int player)
+	{
+		this->id=id;
+		this->player=player;
+	}
+
+	void AddAction(Actions a,int owner=-1,int id=-1,int targetPlayer=-1,int targetCreature1=-1,int targetCreature2=-1,int value=-1,string name1="X",string name2="X")
+	{
+		actions.push_back(Action(a,owner,id,targetPlayer,targetCreature1,targetCreature2,value,name1,name2));
+	}
+
+	void Prepare()
+	{
+		for(unsigned int i=0;i<actions.size();i++)
+		{
+			if(actions[i].a!=DEFEND) continue;
+			for(unsigned int j=i+1;j<actions.size();j++)
+			{
+				if(actions[j].a==ATTACK)
+				{
+					swap(actions[j],actions[i]);
+					break;
+				}
+			}
+		}
+	}
+};
+
+class GameHistory
+{
+
+public:
+	int round;
+	vector<GameRound> rounds;
+
+	GameHistory()
+	{
+		round=0;
+		Init();
+	}
+
+	void Init()
+	{
+		rounds.push_back(GameRound(round,1));
+		round++;
+	}
+
+	void NewRound(int player)
+	{
+		rounds[rounds.size()-1].Prepare();
+		rounds.push_back(GameRound(round,player));
+		round++;
+	}
+
+	void AddAction(Actions a,int owner=-1,int id=-1,int targetPlayer=-1,int targetCreature1=-1,int targetCreature2=-1,int value=-1,string name1="X",string name2="X")
+	{
+		rounds[rounds.size()-1].AddAction(a,owner,id,targetPlayer,targetCreature1,targetCreature2,value,name1,name2);
+	}
+
+	void GenerateLog()
+	{
+		fstream plik;
+	
+		ostringstream os;
+		os<<time(NULL)<<".txt";
+		string buffer(os.str());
+		plik.open(buffer, std::ios::in | std::ios::out | std::ios::app);
+
+		for(unsigned int i=0;i<rounds.size();i++)
+		{
+			if(i!=0) 
+			{
+				plik<<"NEXTTURN"<<endl;
+
+			}
+
+			vector<Action> ac = rounds[i].actions;
+			for(unsigned int k=0;k<ac.size();k++)
+			{
+				if(ac[k].a==PLAYED)
+				{
+					plik<<"PLAY "<<ac[k].owner<<" "<<ac[k].id<<" "<<ac[k].name1<<" "<<ac[k].targetCreature1<<" "<<ac[k].targetPlayer<<endl;
+				}
+				else if(ac[k].a==SUBLIFE)
+				{
+					plik<<"SUBLIFE "<<ac[k].owner<<" "<<ac[k].value<<endl;
+				}
+				else if(ac[k].a==ADDLIFE)
+				{
+					plik<<"ADDLIFE "<<ac[k].owner<<" "<<ac[k].value<<endl;
+				}
+				else if(ac[k].a==DEAD)
+				{
+					plik<<"DEAD "<<ac[k].id<<endl;
+				}
+				else if(ac[k].a==ATTACK)
+				{
+					plik<<"ATTACK "<<ac[k].id<<endl;
+				}
+				else if(ac[k].a==DEFEND)
+				{
+					plik<<"DEFENCE "<<ac[k].targetCreature1<<" "<<ac[k].targetCreature2<<endl;
+				}
+				else if(ac[k].a==STATS)
+				{
+					plik<<"STATS "<<ac[k].id<<" "<<ac[k].targetCreature1<<" "<<ac[k].targetCreature2<<" "<<ac[k].value<<endl;
+				}
+				else if(ac[k].a==NEWGAME)
+				{
+					plik<<"NEWGAME "<<ac[k].name1<<" "<<ac[k].name2<<endl;
+				}
+					else if(ac[k].a==ADDDAMAGE)
+				{
+					plik<<"ADDDAMAGE "<<ac[k].id<<" "<<ac[k].value<<endl;
+				}
+			}
+		}
+		plik.close();
+		Ftp ftp;
+		ftp.connect("nazwa.serwera");
+		Ftp::Response res= ftp.login("login","haslo");
+		if(res.isOk())
+		{
+			ftp.upload("logwalki.txt","dasd",Ftp::Ascii);
+		}
+		else
+		{
+			cout<<"nie polaczono sie z serwerem"<<endl;
+		}
+		ftp.disconnect();
+		
+	}
+};
+
+
 class Game
 {
 private:
@@ -53,16 +229,27 @@ private:
 	int gameWidth;
 	int gameHeight;
 	bool zmiana;
-	Point action;
+
 	State stack1;
 	State stack2;
 	bool checkCardsProp;
 	bool bgrMode;
 	bool targetMode;
 public:
+	GameHistory gh;
+	bool gameStarted;
 	bool multiplayerMode;
 	int playerIdInMultiplayerMode;
+	bool ArePlayersReady() const;
+	bool player1Done;
+	bool player2Done;
+	bool player1StackClean;
+	bool player2StackClean;
+	bool IsStackClean(int player) const;
 
+	void SetPlayerPrepared();
+
+	bool IsMultiplayer() const;
 	bool CanResolve;
 	vector<Spell> stack;
 	void ChangeStackState(int id,State state);
@@ -71,7 +258,7 @@ public:
 	{
 		return std::sqrtf(((b.x-a.x)*(b.x-a.x)+(b.y-a.y)*(b.y-a.y)));
 	}
-	
+
 	bool IsTargetMode();
 	void SetTargetMode(bool value);
 	Point firsCardPoint;
@@ -81,14 +268,14 @@ public:
 
 	bool IsBgrMode();
 	bool CheckCardsProp();
-Point target;
-bool beAbleMarker;
-float targetAngle;
-float targetOldAngle;
+	Point target;
+	bool beAbleMarker;
+	float targetAngle;
+	float targetOldAngle;
 	void StopMarker();
 
-		static float getangle( cv::Point pt1, cv::Point pt2, cv::Point pt0 ) {
-	return atan2f( (pt1.y - pt2.y ),( pt1.x - pt2.x ) ) * 180 / M_PI + 180;
+	static float getangle( cv::Point pt1, cv::Point pt2, cv::Point pt0 ) {
+		return atan2f( (pt1.y - pt2.y ),( pt1.x - pt2.x ) ) * 180 / M_PI + 180;
 	}
 	bool oneAttack;
 
@@ -103,7 +290,6 @@ float targetOldAngle;
 	int GetGameWidth();
 	int GetGameHeight();
 	int distance(Point a,Point b);
-	void CheckMarkers(Mat &img);
 	void setFaza(int i);
 	void setPlayer(int i);
 	string getCurrentPhase();
@@ -128,65 +314,57 @@ float targetOldAngle;
 	bool IsMana(int id,Color color);
 
 	string lastString;
+
 	void GHDefense(int attacker,int defencer)
 	{
-		string log = "DEFENSE "+to_string((_Longlong)attacker) + " " + to_string((_Longlong)attacker);
-		Write(log);
+		gh.AddAction(DEFEND,-1,-1,-1,attacker,defencer);
 	}
+
 	void GHPlay(int owner,int id,string name,int targetCreature,int targetPlayer)
 	{
-		string log = "PLAY "+to_string((_Longlong)owner) + " " +to_string((_Longlong)id) +" "+ name +" " +to_string((_Longlong)targetCreature)+ " " +to_string((_Longlong)targetPlayer);
-		Write(log);
+		gh.AddAction(PLAYED,owner,id,targetPlayer,targetCreature,-1,-1,name);
 	}
+
 	void GHAtack(int id)
 	{
-			string log = "ATTACK "+to_string((_Longlong)id);
-		Write(log);
+		gh.AddAction(ATTACK,-1,id);
 	}
+
 	void GHTap(int id)
 	{
-			string log = "TAP "+to_string((_Longlong)id);
-		Write(log);
+		string log = "TAP "+to_string((_Longlong)id);
 	}
 	void GHUntap(int id)
 	{
-			string log = "UNTAP "+to_string((_Longlong)id);
-		Write(log);
+		string log = "UNTAP "+to_string((_Longlong)id);
 	}
+
 	void GHSubLife(int owner,int value)
 	{
-		string log = "SUBLIFE "+to_string((_Longlong)owner)+" "+to_string((_Longlong)value);
-		Write(log);
-	
+		gh.AddAction(SUBLIFE,owner,-1,-1,-1,-1,value);
 	}
+
 	void GHAddLife(int owner,int value)
 	{
-		string log = "ADDLIFE "+to_string((_Longlong)owner)+" "+to_string((_Longlong)value);
-		Write(log);
-	
+		gh.AddAction(ADDLIFE,owner,-1,-1,-1,-1,value);
+	}
+		void GHAddStats(int id,int att,int def,int perm)
+	{
+		gh.AddAction(STATS,-1,id,-1,att,def,perm);
 	}
 	void GHNewGame(string name1,string name2)
 	{
-		string log = "NEWGAME "+ name1 + " "+ name2;
-
-			Write(log);
-
+		gh.AddAction(NEWGAME,-1,-1,-1,-1,-1,-1,name1,name2);
 	}
+
 	void GHDie(int id)
 	{
-	string log = "DIE "+to_string((_Longlong)id);
-		Write(log);
-	
-
+		gh.AddAction(DEAD,id);
 	}
-	void Write(string log)
+		void GHAddDamage(int id,int value)
 	{
-		fstream plik;
-		plik.open( "log1.txt", std::ios::in | std::ios::out | std::ios::app);
-		plik << log<<endl;
-		plik.close();
+		gh.AddAction(ADDDAMAGE,-1,id,-1,-1,-1,value);
 	}
-
 	static float GetAngle(Point p1,Point p2,Point p0)
 	{
 		float p01 = Distance(p0,p1);
@@ -196,7 +374,7 @@ float targetOldAngle;
 		Point w1 = Point(p1.x-p0.x,p1.y-p0.y);
 		Point w2 = Point(p2.x-p0.x,p2.y-p0.y);
 		if(w1.x*w2.y - w1.y*w2.x < 0)
-		an = -an;
+			an = -an;
 		return an;
 	}
 

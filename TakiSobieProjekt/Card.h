@@ -31,14 +31,21 @@ class Card
 public:
 	static int width;
 	static int height;
-		bool CanBlock(Card &card);
-		bool CanAttack();
+	bool CanBlock(Card &card);
+	bool CanAttack();
 	bool gaveMana;
+	bool checked;
+	bool fresh;
 	bool newRound;
-	void Fight(Card &op,Game &game);
+	vector<pair<int,int>> upkeepAb;
+	void Fight(Card &op,Game &game,int &lifePlayer1,int &lifePlayer2);
 	void GiveLifeToPlayer(int value,Game &game);
 	CardB cardBase;
-
+	bool ChangedPosition(Point a,Point la,Point b,Point lb,Point c,Point lc,Point d,Point ld)
+	{
+		int moveSize=10;
+	return (Game::Distance(a,la)>moveSize && Game::Distance(b,lb)>moveSize && Game::Distance(c,lc)>moveSize && Game::Distance(d,ld)>moveSize);
+	}
 	static void DrawValidCard(Mat &img)
 	{
 		int x,y;
@@ -67,7 +74,7 @@ public:
 
 	bool hasCantAttack;
 	bool hasCantBlock;
-static void Prepare2(vector<Point>&square,Mat &img);
+	static void Prepare2(vector<Point>&square,Mat &img);
 
 	bool hasCantUntap;
 
@@ -126,7 +133,7 @@ static void Prepare2(vector<Point>&square,Mat &img);
 	void Unlock();
 	void setCardBase(CardB &card);
 	void NewRound(int player);
-	void Compare(Mat &img1,Mat &img2,float tab[3],Game &game);
+	float Compare(Mat &img1,Mat &img2,Game &game);
 	Card(Point a, Point b, Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp);
 	Card(Point a, Point b, Point c,Point d,vector<CardB>& bkarty,Game &game,int owner,int baseId);
 	Card(void);
@@ -190,39 +197,66 @@ static void Prepare2(vector<Point>&square,Mat &img);
 	}
 
 
-	static float Card::Compare(Mat &img1,Mat &img2,Game &game)
-{
-	if(img1.data && img2.data)
+	static float Card::Compare2(Mat &img11,Mat &img22,Game &game)
 	{
-		if(game.IsBgrMode()==false)
-		{
-		cvtColor(img1,img1,COLOR_BGR2HSV);
-		cvtColor(img2,img2,COLOR_BGR2HSV);
-		}
-		int width=img1.cols;
-		int height=img1.rows;
-		int n=width*height;
-		int channels=img1.channels();
-		long int red=0,green=0,blue=0;
-		long int red2=0,green2=0,blue2=0;
-		unsigned int wsk=0;
 
-		for(int y=0;y<height;y++)
+
+		if(img11.data && img22.data)
 		{
-			for(int x=0;x<width;x++)
+			Mat img1,img2;
+
+			Mat diff;
+			
+			if(game.IsBgrMode()==false)
 			{
-				wsk=channels*(width*y + x);
-				blue=img1.data[wsk]-img2.data[wsk];
-				blue2+=blue*blue;
-				green=img1.data[wsk+1]-img2.data[wsk+1];
-				green2+=green*green;
-				red=img1.data[wsk+2]-img2.data[wsk +2];
-				red2+=red*red;
+				cvtColor(img11,img1,COLOR_BGR2HSV);
+				cvtColor(img22,img2,COLOR_BGR2HSV);
+				img2.copyTo(diff);
+			
+
 			}
+			else
+			{
+				img11.copyTo(img1);
+				img22.copyTo(img2);
+					img2.copyTo(diff);
+		
+			}
+			
+			int width=img1.cols;
+			int height=img1.rows;
+			int n=width*height;
+			int channels=img1.channels();
+			long int red=0,green=0,blue=0;
+			float red2=0,green2=0,blue2=0;
+			unsigned int wsk=0;
+
+			for(int y=0;y<height;y++)
+			{
+				for(int x=0;x<width;x++)
+				{
+					wsk=channels*(width*y + x);
+					blue=img1.data[wsk]-img2.data[wsk];
+					blue2+=0.4*sqrtf(blue*blue);
+					green=img1.data[wsk+1]-img2.data[wsk+1];
+					green2+=0.4*sqrtf(green*green);
+					red=img1.data[wsk+2]-img2.data[wsk +2];
+					red2+=0.2*sqrtf(red*red);
+					diff.data[wsk]=sqrtf(blue*blue);
+					diff.data[wsk+1]=sqrtf(green*green);
+					diff.data[wsk+2]=sqrtf(red*red);
+
+				}
+			}
+			//	fastImg("Red",red2/(float)n);
+			//	fastImg("Blue",blue2/(float)n);
+			//fastImg("Green",green2/(float)n);
+			imshow("Image1",img1);
+			imshow("Image2",img2);
+			imshow("DIFF",diff);
+			return red2/(float)n + green2/(float)n+blue2/(float)n;
 		}
-		return red2/(float)n + green2/(float)n+blue2/(float)n;
 	}
-}
 
 
 	static float Distance(Point a,Point b)
