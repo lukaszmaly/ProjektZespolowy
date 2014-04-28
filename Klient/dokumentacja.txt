@@ -1,0 +1,180 @@
+Dokumentacja Programistyczna
+Klient
+
+Zadaniem klienta jest prezentacja rozgrywki na ekranie(rzutniku). Przebieg rozgrywki jest odbierany od serwera za pomoc¹ protoko³u UDP, nastêpnie wyœwietlany przez aplikacje
+pisan¹ w jêzyku Java z pomoc¹ biblioteki graficznej Processing.
+
+Lista klas znajduj¹cych siê w aplikacji klientawraz z ich przeznaczeniem:
+
+Board.java
+Klasa planszy, prezentuj¹ca sta³e elementy rozgrywki, generowane z ka¿dym obiegiem pêtli rysuj¹cej. 
+//Metody rysuj¹ce tej klasy buduj¹ plansze na podstawie przeslanych rozmiarow kart przez serwer, m.in. stosy i biblioteki
+// graczy, ich ¿ycie, wartoœci poszczególnych kolorów many, czytniki markerów oraz ko³o ilustruj¹ce aktualne fazy gry.
+	Stack.java
+	Klasa stosu u¿ytkownika
+	Library.java
+	Klasa biblioteki u¿ytkownika
+Card.java
+Klasa opisuj¹ca i wyswietlaj¹ca obiekt karty znajduj¹cej siê na stole
+
+Effect.java
+Klasa efektów graficznych prezentowanych w czasie rozgrywki, zawiera informacje o efektach i sposó ich wyswietlania.
+
+Game.java
+Przechowuje listy kart znajduj¹cych siê w rozgrywce, listy dzialaj¹cych aktualnie efektów, istniej¹cych graczy, typ rozgrywki, wielkoœci kart na stole itd.
+Wczytuje obrazy u¿ywane w innych klasach, zajmuje siê realizacj¹ wiadomoœci odbieranych od serwera.
+
+Main.java
+Tu tworzony jest obiekt Game, przebiega tu pêtpla rysuj¹ca draw(), rysuj¹ca pole za pomoc¹ obiektu klasy Board, iteruje po istniej¹cych klasach i efektach, 
+wyœwietlaj¹c ich aktualny stan, odbiera wiadomoœci od serwera i przekazuje je klasie Game. 
+
+Phases.java
+Klasa elementu graficznego w kszta³cie ko³a prezentuj¹cego fazy gry
+
+Player.java
+Klasa danych gracza
+
+Spark.java
+SparkEdge.java
+SparkSystem.java
+Klasy generuj¹ce i przemieszczaj¹ce "cz¹steczki" wysylane naoko³o nowo po³o¿onej karty na stó³
+
+
+
+wa¿niejsze pola i metody poszczególnych klas:
+
+Board.java
+Pola:
+-dwa obiekty stosów graczy(Stack.java)
+-dwa obiekty bibliotek graczy(Library.java)
+-obiekt gry(Game.java)
+-obrazy i czcionki u¿ywane przy budowy planszy(PImage,Pfont)
+
+Konstruktor:
+-tworzy nowe stosy i biblioteki
+-wczytuje obrazy i czcionki u¿ywane przy rysowaniu planszy
+
+Metody:
+public void display(int color,int transparency, int weight, Player P1,Player P2,int width, int height)
+public void display2(int color,int transparency, int weight, Player P1,Player P2,int width, int height)
+
+	Metody uruchamiaj¹ce funkcje rysuj¹ce poszczególne elementy gry, dziel¹c je ze wzglêdu na oszczêdnoœæ
+	na te które powinny byæ rysowane z ka¿dym obiegiem pêtli rysuj¹cej i te które mog¹ byæ rysowane rzadziej.
+public void displayTokens()
+public void drawMarkersDetector()
+	wyœwietla znaczniki umieszczone w rogach wyœwietlanego ekranu za pomoc¹ których aplikacja serwera dokonuje kalibracji
+	,wyœwietla miejsca z których serwer odczytuje wartoœc i k¹t markerów graczy.
+
+public void drawField()
+public void drawFrame(int color, int weight)
+	metody rysuj¹ce g³ówne czêœci planszy gry
+
+ public void drawLife(Player P1,Player P2)
+ public void drawMana(Player P1,Player P2)
+	metody rysuj¹ce aktualne ¿ycie i manê graczy
+
+public void drawStack()
+public void drawLibrary()
+	metody wewnêtrzych klas, rysuj¹ stosy i biblioteki
+
+Card.java
+Pola:
+PVector[] loc;
+PVector[] loc2;
+int direction
+float, a c, sin, asin
+	Pola opisuj¹ce obiekt karty pod wzglêdem geometrycznym(po³o¿enie w dwóch sytuacjach, k¹t nachylenia)
+
+boolean frame,frameCounter,isDead,attack,block,isBlocked;
+	Opisuj¹ aktualny stan karty, okreœlaj¹c sposób ich wyœwietlania
+
+inne:
+obiekty gry, czcionki, statystyki karty, lista punktów podzielonej krawêdzi
+
+Konstruktor:
+Card(int x1,int y1,int x2,int y2,int x3,int y3,int x4,int y4,int id,int db_id,int owner,PApplet p,Game gm,int power, int toughness)
+Tworzy obiekt karty i dodaje do listy istniej¹cych w grze kart, przydziela po³o¿enie,id gracza, karty, id prezentuj¹ce kartê w bazie, liczy kierunek,
+umieszcza silniki czastek w krawedziach, uzupelnia statystyki, okreœla wektor kierunku i przyspieszenia czasteczek
+
+metody:
+void drawEdges()
+	Metoda rysuj¹ca kartê lub efekty j¹ otaczaj¹ce, w zale¿noœci od rozgrywki(multiplayer/singleplayer)
+int[][] divideEdge(int section,int n)
+	zwraca punkty podzialu krawedzi karty i umieszcza w nich silniki generujace cz¹steczki
+
+Effect.java
+Pola:
+
+enum Type
+	okreœla typ dodawanego efektu
+
+int life,initlife
+	dugoœæ trwania efektu
+PVector v1, v2;
+	miejsce efektu
+
+najwa¿niejszy konstruktor:
+Effect(PApplet p,Game G,Type t,int life,int cardId)
+	okreœla typ efektu, czas trwania i id karty na której efekt ma zostaæ uruchomiony
+public void drawEffect()
+	rysuje efekt w zale¿noœci od jego typu
+
+Game.java
+Pola:
+	Player P1,P2;
+	Player ActivePlayer;
+	ArrayList<Card> Cards;
+	ArrayList<Effect> Effects;
+	ArrayList<String> Msgs = new ArrayList<String>();
+	
+
+zawieraj¹ najwa¿niejsze obiekty gry
+
+ArrayList<PImage> fires2=new ArrayList<PImage>();
+ArrayList<PImage> fires=new ArrayList<PImage>();
+ArrayList<PImage> dbCards=new ArrayList<PImage>();
+ pola typu PImage
+
+	Zawieraj¹ grafiki u¿yte w programie
+
+Pola typy PFont
+	zawieraj¹ czcionki gry
+
+
+UDP zawiera obiekt protoko³u komunikacyjnego
+
+
+Konstruktor:
+Game(PApplet p)
+
+Wczytuje grafiki, czcionki, inicjalizuje listy i zmienne, tworzy oibiekt gniazda i nasluchuje na porcie
+
+Wa¿niejsze metody:
+public void goThroughEffects()
+public void goThroughCards()
+	IOteruje po listach karty i efektów rysuj¹c je na planszy
+
+public void processMessages()
+Metoda przechodz¹ca po nowych wiadomoœciach odebranych od serwera i realizuj¹ca odebrany przebieg gry
+
+
+Main.java
+public void draw()
+g³ówna pêtla rysujaca, przebiega po kartach, efektach, rysuje wybrany widok
+	public void receive(byte[] data, String ip, int port) 
+dodaje do listy wiadomoœci, komunikaty odebrane od serwera
+
+
+Player.java
+boolean isLocal;
+okresla czy dany gracz jest rzeczywistym, siedz¹cym przy stole czy zdalnym
+
+int id,life,manaPool;
+	int w=0,b=0,u=0,r=0,g=0;
+okreslaja zycie i ilosc poszczegolnych kolorow many danego gracza
+
+void addMana(char c)	
+void subtractMana(char c)
+void subtractMana(int w, int u, int b,int r , int g)
+
+zmienia iloœæ many danego gracza

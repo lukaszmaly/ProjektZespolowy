@@ -14,14 +14,14 @@ public class Main extends PApplet {
 
 	public Game game=new Game(this);
 	//int counter=5;
-//	PVector v=null,u=null;
+	PVector v=null,u=null;
 //	PImage img;
 	//ArrayList<PImage> imgs=new ArrayList<PImage>();
 	//Game game;
 	public void setup()
 		{		
 		size(displayWidth, displayHeight);
-
+		smooth();
 		background(0);		
 		}
 	@Override
@@ -38,6 +38,9 @@ public class Main extends PApplet {
 			background(0);
 			game.board.displayTokens();
 			game.processMessages();
+			//image(game.fires3.get(5),500,500);
+		//	image(game.explode.get(3),100,100,game.explode.get(3).width*3,game.explode.get(3).width*3);
+		//	image(game.dbCards.get(3),500,0,100,140);
 		}
 		else
 		if(game.window==1)
@@ -179,19 +182,22 @@ public class Main extends PApplet {
 				}
 		if (mouseButton == LEFT) 
 		{	
+			
+		//	game.Effects.add(new Effect(this, game, Type.EXPLODE, 60, new PVector(500,500), null, false));
+
 			//game.Effects.add(new Effect(this,game,Type.FIRESHIELD,100,1));
 			//game.Effects.add(new Effect(this,game,Type.FIRE2,74,0));
 			
-			game.Effects.add(new Effect(this,game,Type.DEATH,300,0));
+			//game.Effects.add(new Effect(this,game,Type.DEATH,300,0));
 			/*
 			Card c = game.Cards.get(0);
 			c.isDead = true;
 			c.deadCounter=300;
 			//c.sparkTime=15;
 			game.removeById(0);
-			
+			game.Effects.add(new Effect(this, game, Type.EXPLODE, 60, v, u, false));
 			*/
-			
+			//game.Effects.add(new Effect(this,game,Type.EXPLODE,60,0));
 		//	game.Effects.add(new Effect(this,game,Type.FIRE,48,0));
 		//	game.Effects.add(new Effect(this,game,Type.BOOST,50,1));
 		//	game.Effects.add(new Effect(this,game,Type.REDUCTION,50,2));
@@ -201,24 +207,36 @@ public class Main extends PApplet {
 			//game.Effects.add(new Effect(this, game, 200,new PVector(0.5f,0.5f), new PVector(0.001f,0.001f), 30, 0, 255, 0, "TEXT"));
 			
 			//game.Effects.add(new Effect(this,game,Type.BOLT,40,0,game.cardWidth,game.cardHeight,game.Cards));	
-			/*if(v==null)v=new PVector(mouseX,mouseY);
-			else
-			{
-				u=new PVector(mouseX,mouseY);
-				game.Effects.add(new Effect(this,game, Type.SPEAR, 60,new PVector(v.x,v.y),new PVector(u.x, u.y)));
-				v=null;
-				u=null;
-			}
-			
 			if(v==null)v=new PVector(mouseX,mouseY);
 			else
 			{
 				u=new PVector(mouseX,mouseY);
-				game.Effects.add(new Effect(this,game, Type.SPEAR2, 60,new PVector(v.x,v.y),new PVector(u.x, u.y),false));
+				game.Effects.add(new Effect(this,game, Type.FIREBOLTS, 30,new PVector(v.x,v.y),new PVector(u.x, u.y),false));
+			
+				
+				v=null;
+				u=null;
+			}
+			/*
+			if(v==null)v=new PVector(mouseX,mouseY);
+			else
+			{
+				u=new PVector(mouseX,mouseY);
+				game.Effects.add(new Effect(this,game, Type.FIREBOLT, 60,new PVector(width,height*0.1f+random(100)),new PVector(u.x, u.y),false));
+				game.Effects.add(new Effect(this,game, Type.FIREBOLT, 60,new PVector(width,height*0.2f+random(100)),new PVector(u.x, u.y),false));
+				game.Effects.add(new Effect(this,game, Type.FIREBOLT, 60,new PVector(width,height*0.3f+random(100)),new PVector(u.x, u.y),false));
+				game.Effects.add(new Effect(this,game, Type.FIREBOLT, 60,new PVector(width,height*0.4f+random(100)),new PVector(u.x, u.y),false));
+
+				game.Effects.add(new Effect(this,game, Type.FIREBOLT, 60,new PVector(width*0.9f+random(100),0),new PVector(u.x, u.y),false));
+				game.Effects.add(new Effect(this,game, Type.FIREBOLT, 60,new PVector(width*0.8f+random(100),0),new PVector(u.x, u.y),false));
+				game.Effects.add(new Effect(this,game, Type.FIREBOLT, 60,new PVector(width*0.7f+random(100),0),new PVector(u.x, u.y),false));
+				game.Effects.add(new Effect(this,game, Type.FIREBOLT, 60,new PVector(width*0.6f+random(100),0),new PVector(u.x, u.y),false));
+
 				v=null;
 				u=null;
 			}
 			*/
+			
 			
 			//game.Effects.add(new Effect(this,game,Type.DRAW,200,new PVector(game.board.lib1.position.x,game.board.lib1.position.y-0.025f),new PVector(0,0),true));
 		//	game.Effects.add(new Effect(this, game, 200, new PVector(game.board.lib1.position.x,game.board.lib1.position.y+0.08f), new PVector(0, 0),35, 0, 255, 0, "1",true));
