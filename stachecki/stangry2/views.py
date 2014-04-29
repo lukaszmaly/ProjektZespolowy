@@ -310,7 +310,7 @@ def video(request):
 			obiekt.actionlist.update({obiekt.count : "Nadanie statystyki karcie: "+element+"  wartosci: "+list[2]+" "+list[3]});
 		elif ("DEFENCE" in list[0]):
 			obiekt.defenslist.update({obiekt.count : list[2][:-1]});
-			#obiekt.celeobrony.update({obiekt.count : list[1]});
+			obiekt.celeobrony.update({obiekt.count : list[1]});
 			ind=int(list[2][:-1]);
 			element=obiekt.idkarta[ind];
 			ind2 = int(list[1]);
@@ -336,7 +336,7 @@ def video(request):
 	fo.close();
 	fn.close();
 	fl.close();
-	return render_to_response ('video.html',{'karty':obiekt.cardlist, 'licznik':obiekt.count, 'gracz1': 1, 'gracz2': 2, 'ktogra':obiekt.ktogra, 'akcje':obiekt.actionlist, 'deads':obiekt.deadlist, 'idlist':obiekt.idlist, 'ileakcji':obiekt.count, 'hp1':obiekt.hp1list, 'hp2':obiekt.hp2list, 'ataki':obiekt.ataklist,'obrony':obiekt.defenslist, 'dmg':obiekt.dmglist,'dmgvalue':obiekt.dmgvalue, 'tury':obiekt.nextturn, 'cele':obiekt.celeobrony, 'stats':obiekt.stats, 'stats1':obiekt.stats1, 'stats2':obiekt.stats2, 'jakdlugo':obiekt.jakdlugo, 'celeataku':obiekt.celkarty, 'czary':obiekt.czary})
+	return render_to_response ('video.html',{'karty':obiekt.cardlist, 'licznik':obiekt.count, 'gracz1': 1, 'gracz2': 2, 'ktogra':obiekt.ktogra, 'akcje':obiekt.actionlist, 'deads':obiekt.deadlist, 'idlist':obiekt.idlist, 'ileakcji':obiekt.count, 'hp1':obiekt.hp1list, 'hp2':obiekt.hp2list, 'ataki':obiekt.ataklist,'obrony':obiekt.defenslist, 'dmg':obiekt.dmglist,'dmgvalue':obiekt.dmgvalue, 'tury':obiekt.nextturn, 'celeobrony':obiekt.celeobrony, 'stats':obiekt.stats, 'stats1':obiekt.stats1, 'stats2':obiekt.stats2, 'jakdlugo':obiekt.jakdlugo, 'celeataku':obiekt.celkarty, 'czary':obiekt.czary})
 
 def popular(request):
     

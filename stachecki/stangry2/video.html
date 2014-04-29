@@ -26,10 +26,8 @@ $(document).ready(function(){
 	//tablica atakujacych
 	var atakujace=[];
 	//tablica broniacych
-	var broniacy;
-	//indeks tablicy ataujacych, divow, tablicy smierci i tablicy "add damage"
-	var inda=0;
-	//indeksy tablicy
+	var broniacy=[];
+	//indeksy tablicy, smierci i dmg
 	var ind=0, indsm=0, inddmg=0;
 	//ktora karte usunac,coatakuje, co broni , ktorej karcie zwiekszamy damage,cel ataku i czy nastepna tura
 	var cousunac,coatakuje, cobroni,damage, cel, celataku, nextturn;
@@ -62,33 +60,33 @@ $(document).ready(function(){
 	//liczniki, ile tur minelo danemu graczowi
 	var liczniktur1=[],liczniktur2=[];
 	
-		function connect(div1, div2, color, thickness) 
-		{
-			var off1 = getOffset(div1);
-			var off2 = getOffset(div2);
-			// bottom right
-			var x1 = off1.left + off1.width;
-			var y1 = off1.top + off1.height;
-			// top right
-			var x2 = off2.left + off2.width;
-			var y2 = off2.top;
-			// distance
-			var length = Math.sqrt(((x2-x1) * (x2-x1)) + ((y2-y1) * (y2-y1))) ;
-			// center
-			var cx = ((x1 + x2) / 2) - (length / 2);
-			var cy = ((y1 + y2) / 2) - (thickness / 2);
-			// angle
-			var angle = Math.atan2((y1-y2),(x1-x2))*(180/Math.PI);
-			// make hr
-			htmlLine = "<div style='padding:0px; margin:0px; height:" + thickness + "px; background-color:" + color + "; line-height:1px; position:absolute; left:" + cx + "px; top:" + cy + "px; width:" + length + "px; -moz-transform:rotate(" + angle + "deg); -webkit-transform:rotate(" + angle + "deg); -o-transform:rotate(" + angle + "deg); -ms-transform:rotate(" + angle + "deg); transform:rotate(" + angle + "deg);' id='linia' />";
+	function connect(div1, div2, color, thickness) 
+	{
+		var off1 = getOffset(div1);
+		var off2 = getOffset(div2);
+		// bottom right
+		var x1 = off1.left + off1.width;
+		var y1 = off1.top + off1.height;
+		// top right
+		var x2 = off2.left + off2.width;
+		var y2 = off2.top;
+		// distance
+		var length = Math.sqrt(((x2-x1) * (x2-x1)) + ((y2-y1) * (y2-y1))) ;
+		// center
+		var cx = ((x1 + x2) / 2) - (length / 2);
+		var cy = ((y1 + y2) / 2) - (thickness / 2);
+		// angle
+		var angle = Math.atan2((y1-y2),(x1-x2))*(180/Math.PI);
+		// make hr
+		htmlLine = "<div style='padding:0px; margin:0px; height:" + thickness + "px; background-color:" + color + "; line-height:1px; position:absolute; left:" + cx + "px; top:" + cy + "px; width:" + length + "px; -moz-transform:rotate(" + angle + "deg); -webkit-transform:rotate(" + angle + "deg); -o-transform:rotate(" + angle + "deg); -ms-transform:rotate(" + angle + "deg); transform:rotate(" + angle + "deg);' id='linia' />";
 
-			//document.body.innerHTML += htmlLine; 
-			$('.pole').append(htmlLine);
+		//document.body.innerHTML += htmlLine; 
+		$('.pole').append(htmlLine);
 	
-		}
+	}
 
-		function getOffset( el ) 
-		{
+	function getOffset( el ) 
+	{
 		var _x = 0;
 		var _y = 0;
 		var _w = el.offsetWidth|0;
@@ -195,6 +193,11 @@ $(document).ready(function(){
  				$("#linia").remove();
  			}
 			
+			if (akcje[licznik-1]="obrona")
+ 			{
+ 				$("#linia").remove();
+ 			}
+			
 			
 			if (akcje[licznik-3]=="czar" && akcje[licznik-2]!="czar")
  			{
@@ -205,7 +208,7 @@ $(document).ready(function(){
 			akcje[licznik-1] = "nic";
 			
 			//szukamy, co atakuje obrona
-			{% for key,value in cele.iteritems %}
+			{% for key,value in celeobrony.iteritems %}
 				wartosc1 = {{key}};
 				if (wartosc1 == licznik)
 				{
@@ -527,8 +530,7 @@ $(document).ready(function(){
 							$("#"+divs[i]).animate({top:'-30px'}, 1000);
 						}
 													
-						atakujace[inda]=divs[i];
-						inda++;
+						atakujace[licznik-1]=divs[i];
 						akcje[licznik-1] = "atak";
 						//rysowanie strzalki
 						if (tabliceceliatakow[i]!=" ")
@@ -571,8 +573,21 @@ $(document).ready(function(){
 						{
 							$("#"+divs[i]).animate({top:'-10px'}, 1000);		
 						}
-						broniacy=divs[i];
+						broniacy[licznik-1]=divs[i];
 						akcje[licznik-1] = "obrona";
+						if (cel!="")
+						{
+							for (var j=0, ogr2 =ind; j<ogr2;j++)
+							{
+								if (kartynastole[j]==cel)
+								{
+									var div1 = document.getElementById(''+divs[j]);
+									var div2 = document.getElementById(''+divs[i])
+									connect(div1, div2, "#000", 5);
+								}
+							}
+						}
+						else
 						break;	
 							
 					}
@@ -877,13 +892,13 @@ $(document).ready(function(){
 		//atak
 		else if (akcje[licznik]=="atak")
 		{
-			$("#"+atakujace[inda-1]).rotate(360);
-			var kto =  ($("#"+atakujace[inda-1]).parent().attr('class'));
+			$("#"+atakujace[licznik]).rotate(360);
+			var kto =  ($("#"+atakujace[licznik]).parent().attr('class'));
 			if (kto=="gracz1")
-				$("#"+atakujace[inda-1]).animate({top:'-5px'}, 1000);	
+				$("#"+atakujace[licznik]).animate({top:'-5px'}, 1000);	
 			else
-				$("#"+atakujace[inda-1]).animate({top:'90px'}, 1000);	
-			inda--;
+				$("#"+atakujace[licznik]).animate({top:'90px'}, 1000);	
+		
 			
 			
 		}
@@ -891,11 +906,11 @@ $(document).ready(function(){
 		//obrona
 		else if (akcje[licznik]=="obrona")
 		{
-			var kto =  ($("#"+broniacy).parent().attr('class'));
+			var kto =  ($("#"+broniacy[licznik]).parent().attr('class'));
 			if (kto=="gracz1")
-				$("#"+broniacy).animate({top:'-5px'}, 1000);	
+				$("#"+broniacy[licznik]).animate({top:'-5px'}, 1000);	
 			else
-				$("#"+broniacy).animate({top:'90px'}, 1000);	
+				$("#"+broniacy[licznik]).animate({top:'90px'}, 1000);	
 
 		}
 		
