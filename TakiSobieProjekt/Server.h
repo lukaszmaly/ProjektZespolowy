@@ -22,12 +22,14 @@ private:
 public:
 	Server();
 	void NextPhase();
+	void SendWinner(int owner);
 	void VisualEffect(string id,int player,int creature);
 	void PutPermanentOnLibrary(int id);
 		void Scry(int id,int value);
 	void Write(const char tab[100]);
 	void Markers(int w,int h,bool isMultiplayer, int idInMultiplayer);
 	int GetInterval();
+	void Agree(int owner);
 	void CardOnStack(int owner,int id,int status);
 	void Start();
 	void Send(string s);

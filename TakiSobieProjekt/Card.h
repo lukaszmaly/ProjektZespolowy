@@ -29,6 +29,7 @@ using namespace cv;
 class Card
 {
 public:
+	Point veryOld;
 	static int width;
 	static int height;
 	bool CanBlock(Card &card);
@@ -121,7 +122,7 @@ public:
 	Point a,b,c,d;
 	Point la,lb,lc,ld;
 	Mat img;
-	static const int TTL=30;
+	static const int TTL=20;
 	int ttl;
 	void die();
 	void Clear();

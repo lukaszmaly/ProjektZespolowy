@@ -193,11 +193,14 @@ class Mana
 class Player
 {
 public:
-
+	int currentMarkerId;
+	int secondMarkerId;
+	bool recognized;
+	bool ChangedMarkersId(int id);
 	Point stackB;
 	Point stackE;
 	Player(void);
-	void Init(string name,int markerId);
+	void Init(string name,int markerId,int secondMarkerID);
 	Player(string name,int markerId);
 	~Player(void);
 	int hp;

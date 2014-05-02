@@ -1,4 +1,8 @@
 #pragma once
+#define CARDWIDTH 115
+#define CARDHEIGHT 155
+	//tmp.cols=251;
+	//	tmp.rows=356;
 enum Color{
 	WHITE = 0,
 	BLUE = 1,

@@ -152,9 +152,10 @@ void MainServer::UpdateCard(int id,Point a,Point b,Point c,Point d,vector<Card>&
 	{
 		if(cards[i].id==id)
 		{
-			cards[i].Update(a,b,c,d,att,def,game);
 			cards[i].attack=false;
 			cards[i].block=false;
+			cards[i].Update(a,b,c,d,att,def,game);
+		
 			//game.server.UpdateCard(cards[i].id,cards[i].cardBase.id,cards[i].owner,a,b,c,d,cards[i].taped,att,def);
 		}
 	}

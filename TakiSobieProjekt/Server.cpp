@@ -3,10 +3,10 @@
 ///Czasami usuwa karte z karty, popraw
 //popraw czas wysy³ania wiadomoœci
 
-	void Server::Damage(int id1,int value1)
-	{
-		char data[100];
-		int n = sprintf_s(data,"| DAMAGE %d %d |",id1,value1);	
+void Server::SendWinner(int owner)
+{
+	char data[100];
+	int n = sprintf_s(data,"| WINNER %d |",owner);	
 
 	if(soc.send(data, n, client, port) != sf::Socket::Done)
 	{
@@ -16,12 +16,12 @@
 	{
 		cout<< data <<endl;Write(data);
 	}
-	}
-	void Server::VisualEffect(string id,int player,int creature)
-	{
-		if(id.compare("NONE")==0) return;
-		char data[100];
-		int n = sprintf_s(data,"| EFFECT %s %d %d |",id.c_str(),player,creature);	
+}
+
+void Server::Agree(int owner)
+{
+	char data[100];
+	int n = sprintf_s(data,"| AGREE %d |",owner);	
 
 	if(soc.send(data, n, client, port) != sf::Socket::Done)
 	{
@@ -31,7 +31,36 @@
 	{
 		cout<< data <<endl;Write(data);
 	}
+}
+void Server::Damage(int id1,int value1)
+{
+	char data[100];
+	int n = sprintf_s(data,"| DAMAGE %d %d |",id1,value1);	
+
+	if(soc.send(data, n, client, port) != sf::Socket::Done)
+	{
+		cout<<"Blad podczas wysylanie danych o nowej karcie"<<endl;
 	}
+	else if(showLog)
+	{
+		cout<< data <<endl;Write(data);
+	}
+}
+void Server::VisualEffect(string id,int player,int creature)
+{
+	if(id.compare("NONE")==0) return;
+	char data[100];
+	int n = sprintf_s(data,"| EFFECT %s %d %d |",id.c_str(),player,creature);	
+
+	if(soc.send(data, n, client, port) != sf::Socket::Done)
+	{
+		cout<<"Blad podczas wysylanie danych o nowej karcie"<<endl;
+	}
+	else if(showLog)
+	{
+		cout<< data <<endl;Write(data);
+	}
+}
 void Server::Write(const char tab[100])
 {
 	file << tab << endl;
@@ -45,7 +74,7 @@ void Server::Markers(int w,int h,bool isMultiplayer, int idInMultiplayer)
 {	
 	char data[100];
 	char s = isMultiplayer ? 'M' : 'S';
-	
+
 	int n = sprintf_s(data,"| MARKERS %d %d %c %d |",w,h,s,idInMultiplayer);	
 
 	if(soc.send(data, n, client, port) != sf::Socket::Done)
@@ -96,7 +125,7 @@ Server::Server()
 }
 void Server::Start()
 {
-		char data[100];
+	char data[100];
 	int n = sprintf(data,"| START |");	
 	if (soc.send(data, n, client, port) != sf::Socket::Done)
 	{
@@ -109,7 +138,7 @@ void Server::Start()
 }
 void Server::Send(string s)
 {
-		char data[100];
+	char data[100];
 	int n = sprintf(data,"%s",s.c_str());	
 	if (soc.send(data, n, client, port) != sf::Socket::Done)
 	{
@@ -196,24 +225,24 @@ void Server::AddMana(int id,Color color,int count)
 {
 	char data[100];
 	string a = "X";
-		switch(color)
-		{
-		case WHITE:
-			a="W";
-			break;
-		case GREEN:
-			a="G";
-			break;
-		case RED:
-			a="R";
-			break;
-		case BLUE:
-			a="U";
-			break;
-		case BLACK:
-			a="B";
-		}
-		int n = sprintf_s(data,"| ADDMANA %d %s %d |",id,a.c_str(),count);	
+	switch(color)
+	{
+	case WHITE:
+		a="W";
+		break;
+	case GREEN:
+		a="G";
+		break;
+	case RED:
+		a="R";
+		break;
+	case BLUE:
+		a="U";
+		break;
+	case BLACK:
+		a="B";
+	}
+	int n = sprintf_s(data,"| ADDMANA %d %s %d |",id,a.c_str(),count);	
 
 	if(soc.send(data, n, client, port) != sf::Socket::Done)
 	{
@@ -229,24 +258,24 @@ void Server::SubMana(int id,Color color,int count)
 {
 	char data[100];
 	string a;
-		switch(color)
-		{
-		case WHITE:
-			a="W";
-			break;
-		case GREEN:
-			a="G";
-			break;
-		case RED:
-			a="R";
-			break;
-		case BLUE:
-			a="U";
-			break;
-		case BLACK:
-			a="B";
-		}
-		int n = sprintf_s(data,"| SUBMANA %d %s %d |",id,a.c_str(),count);	
+	switch(color)
+	{
+	case WHITE:
+		a="W";
+		break;
+	case GREEN:
+		a="G";
+		break;
+	case RED:
+		a="R";
+		break;
+	case BLUE:
+		a="U";
+		break;
+	case BLACK:
+		a="B";
+	}
+	int n = sprintf_s(data,"| SUBMANA %d %s %d |",id,a.c_str(),count);	
 
 	if(soc.send(data, n, client, port) != sf::Socket::Done)
 	{

@@ -171,7 +171,21 @@ public:
 			{
 
 				game.Pay(stos[i].owner,stos[i].cardBase.whiteCost,stos[i].cardBase.blueCost,stos[i].cardBase.blackCost,stos[i].cardBase.redCost,stos[i].cardBase.greenCost,stos[i].cardBase.lessCost);
-				if(game.IsMultiplayer()) mainServer.ChangeStackColor(stos[i].owner,NEUTRAL);
+			
+				
+				
+					int tc=targetId;
+				int tp=targetPlayerId;
+				if(targetsPlayer==true) tc=-1;
+				else
+					tp=-1;
+				game.GHPlay(stos[i].owner,stos[i].id,stos[i].cardBase.name,tc,tp);
+						if(game.IsMultiplayer()) 
+						{
+							mainServer.ChangeStackColor(stos[i].owner,NEUTRAL);
+							mainServer.SendPlayedCard(stos[i].owner,stos[i].id,stos[i].cardBase.name,tc,tp);
+						}
+				
 				vector<pair<int,int>> t =stos[i].cardBase.enterAbilities;
 				for(int j=0;j<t.size();j++)
 				{

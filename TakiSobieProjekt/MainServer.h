@@ -113,6 +113,8 @@ public:
 
 	void Read(vector<Card>&cards,vector<CardB>&bcards,Game &game)
 	{
+		while(Msg.size()!=0)
+		{
 		vector<string> msg;
 
 		if(Msg.size()!=0)
@@ -175,8 +177,17 @@ public:
 		{
 			SubLife(atoi(msg[2].c_str()),atoi(msg[3].c_str()),game);
 		}
+		else if(msg[1].compare("PLAYED")==0)
+		{
+			PlayedCard(atoi(msg[2].c_str()),atoi(msg[3].c_str()),msg[4],atoi(msg[5].c_str()),atoi(msg[6].c_str()),game);
+		}
+		else if(msg[1].compare("PLAYER")==0)
+		{
+			Player(atoi(msg[2].c_str()),msg[3],game);
+			game.server.AddPlayer(atoi(msg[2].c_str()),msg[3].c_str());
+		}
 		Msg.erase(Msg.begin());
-
+		}
 	}
 	~MainServer(void);
 
@@ -218,6 +229,30 @@ public:
 	void UpdateCard(int id,Point a,Point b,Point c,Point d,vector<Card>&cards,Game &game,int att,int def);
 	//[end of done]
 
+	void PlayedCard(int owner,int id,string name,int targetCreature,int targetPlayer,Game &game)
+	{
+		game.GHPlay(owner,id,name,targetCreature,targetPlayer);
+	}
+	void SendPlayedCard(int owner,int id,string name,int targetCreature,int targetPlayer)
+	{
+		ostringstream os;
+		os<<"| PLAYED " <<owner <<" "<<id<<" "<<name<<" "<<targetCreature<<" "<<targetPlayer<<" |";
+		string buffer(os.str());
+		Send(buffer);
+	}
+	
+	void Player(int owner,string name,Game &game)
+	{
+		if(owner==1) {game.player1.name=name; game.player1.recognized=true;}
+		else if(owner==2) {game.player2.name=name; game.player2.recognized=true;}
+	}
+	void SendPlayer(int owner,string name)
+	{
+		ostringstream os;
+		os<<"| PLAYER " <<owner <<" "<<name<<" |";
+		string buffer(os.str());
+		Send(buffer);
+	}
 
 	void SendCardOnStack(int owner,int id)
 	{

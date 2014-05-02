@@ -167,7 +167,7 @@ void Card::AddEOT(int attack,int defense)
 
 
 	cout<<"Dodaje +"<<attack<<"/+"<<defense<<". Aktualne staty: "<<GetAttack()<<"/"<<GetDefense()<<endl;
-	//if(GetDefense()<=0) die();
+	if(GetDefense()<=0) die();
 }
 void Card::Add(int attack,int defense)
 {
@@ -179,6 +179,7 @@ void Card::Add(int attack,int defense)
 
 Card::Card(Point a, Point b, Point c,Point d,vector<CardB>& bkarty,Game &game,int owner,int baseId)
 {
+
 	fresh = true;
 	newRound=true;
 	attEOT=defEOT=0;
@@ -200,6 +201,7 @@ Card::Card(Point a, Point b, Point c,Point d,vector<CardB>& bkarty,Game &game,in
 	this->c=c;
 	this->d=d;
 	ttl=TTL;
+	veryOld=getCenter();
 	hasCantAttack=hasCantBlock=false;
 	att=-1;
 	def=-1;
@@ -293,7 +295,7 @@ bool Card::TapUntap()
 
 void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty,Game &game,bool temp=false)
 {
-
+	if(dead==false)ttl=TTL;
 	if(temp == false)
 	{
 		this->a=a;
@@ -301,7 +303,7 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 		this->c=c;
 		this->d=d;
 
-		if(dead==false)ttl=TTL;
+		
 
 
 		if(TapUntap()==true)
@@ -318,8 +320,8 @@ void Card::Update(Point a,Point b,Point c,Point d,Mat &img,vector<CardB>& bkarty
 
 		if(game.GetPhase()==PIERWSZY || game.GetPhase()==DRUGI) {old=getCenter(); enemy=Point(-1,-1);}
 	}
-	if(checked==true) return;
-if(temp==true || ChangedPosition(a,la,b,lb,c,lc,d,ld))
+
+if(temp==true)// || ChangedPosition(a,la,b,lb,c,lc,d,ld)
 {
 	Mat tmp;
 	Mat t;
@@ -332,9 +334,11 @@ if(temp==true || ChangedPosition(a,la,b,lb,c,lc,d,ld))
 	mmat=getAffineTransform(c1,c2);
 	warpAffine(t,tmp,mmat,Size(251,356));
 	float min=256*256;
-	int cardId=0;
+	int cardId=-1;
+		if(game.useBlur) GaussianBlur(tmp,tmp,Size(15,15),0);
 		if(game.IsBgrMode()==false)
 			cvtColor(tmp,tmp,COLOR_BGR2HSV);
+	
 	for(unsigned int i=0;i<bkarty.size();i++)
 	{
 		
@@ -348,6 +352,7 @@ if(temp==true || ChangedPosition(a,la,b,lb,c,lc,d,ld))
 
 void Card::Update(Point a,Point b,Point c,Point d,int att,int def,Game &game)
 {
+	veryOld=getCenter();
 	this->a=a;
 	this->b=b;
 	this->c=c;
@@ -460,6 +465,8 @@ void Card::Fight(Card &op,Game &game,int &lp1,int &lp2)
 
 		Damage(op.GetAttack());
 		op.Damage(GetAttack());
+		game.GHAddDamage(op.id,GetAttack());
+		game.GHAddDamage(id,op.GetAttack());
 		game.server.Damage(op.id,GetAttack());
 		game.server.Damage(id,op.GetAttack());
 		if(this->HasLifelink())	{this->GiveLifeToPlayer(this->GetAttack(),game); lp1+=this->GetAttack();}
@@ -474,16 +481,19 @@ void Card::Fight(Card &op,Game &game,int &lp1,int &lp2)
 	else if(this->cardBase.hasFirstStrike)
 	{
 		op.Damage(GetAttack());
-
+		game.GHAddDamage(op.id,GetAttack());
+	
 		if(this->cardBase.hasLifelink)	{this->GiveLifeToPlayer(this->GetAttack(),game);lp1+=this->GetAttack();}
 		if(op.GetDefense()<=0 || this->cardBase.hasDeatchtuch) 
 		{
 			game.server.Damage(op.id,GetAttack());
+
 			op.die(); 
 		}
 		else
 		{
 			Damage(op.GetAttack());
+				game.GHAddDamage(id,op.GetAttack());
 			game.server.Damage(op.id,GetAttack());
 		game.server.Damage(id,op.GetAttack());
 		if(op.cardBase.hasLifelink)	{op.GiveLifeToPlayer(op.GetAttack(),game); lp2+=op.GetAttack();}
@@ -493,15 +503,18 @@ void Card::Fight(Card &op,Game &game,int &lp1,int &lp2)
 	else if(op.cardBase.hasFirstStrike)
 	{
 		Damage(op.GetAttack());
+			game.GHAddDamage(id,op.GetAttack());
 		if(op.cardBase.hasLifelink)	{op.GiveLifeToPlayer(op.GetAttack(),game); lp2+=op.GetAttack();}
 		if(GetDefense()<=0 || op.cardBase.hasDeatchtuch) 
 		{
+			
 			game.server.Damage(id,op.GetAttack());
 			die(); 
 		}
 		else
 		{
 			op.Damage(GetAttack());
+				game.GHAddDamage(op.id,GetAttack());
 			game.server.Damage(op.id,GetAttack());
 			game.server.Damage(id,op.GetAttack());
 			if(this->cardBase.hasLifelink)	{this->GiveLifeToPlayer(this->GetAttack(),game); lp1+=this->GetAttack();}

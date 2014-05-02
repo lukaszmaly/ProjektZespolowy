@@ -274,6 +274,16 @@ void Game::Update()
 			targetOldAngle = targetAngle;
 		}
 	}
+	if(player1.hp<=0)
+	{
+		gameEnded=true;
+		server.SendWinner(2);
+	}
+		if(player2.hp<=0)
+	{
+		gameEnded=true;
+		server.SendWinner(1);
+	}
 
 
 }
@@ -328,8 +338,10 @@ bool Game::IsMultiplayer() const
 	return this->multiplayerMode;
 }
 
-Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h,int interval,bool showLog)
+Game::Game(string player1s,int player1Id,int player1SecondId,string player2s,int player2Id,int player2SecondId,string ip,int port,int w,int h,int interval,bool showLog)
 {
+	useBlur=false;
+	gameEnded=false;
 	bgrMode=false;
 	gameStarted=false;
 	player1Done = false;
@@ -359,12 +371,11 @@ Game::Game(string player1s,int player1Id,string player2s,int player2Id,string ip
 	phase = PIERWSZY;
 	t=false;
 	server.Init(ip,port,interval,showLog);
-	player1.Init(player1s,player1Id);
-	player2.Init(player2s,player2Id);
+	player1.Init(player1s,player1Id,player1SecondId);
+	player2.Init(player2s,player2Id,player2SecondId);
 	aPlayer = player1.markerId;
-	server.AddPlayer(1,player1s.c_str());
-	server.AddPlayer(2,player2s.c_str());
 	server.ActivePlayer(1);
+	
 }
 
 int Game::distance(Point a,Point b)

@@ -13,9 +13,7 @@
 using namespace std;
 using namespace cv;
 using namespace aruco;
-//#define ACTION 428
-//#define TARGETMARKER 985
-#define TARGETMARKER 428
+#define TARGETMARKER 760
 #define M_PI 3.14159265358979323846
 
 
@@ -143,21 +141,23 @@ public:
 		rounds[rounds.size()-1].AddAction(a,owner,id,targetPlayer,targetCreature1,targetCreature2,value,name1,name2);
 	}
 
-	void GenerateLog()
+	void GenerateLog(string player1,string player2)
 	{
 		fstream plik;
-	
+		ostringstream os1;
 		ostringstream os;
 		os<<time(NULL)<<".txt";
 		string buffer(os.str());
 		plik.open(buffer, std::ios::in | std::ios::out | std::ios::app);
-
+		os1<<"log=";
+		os1<<"NEWGAME "<<player1<<" "<<player2<<endl;
+		plik<<"NEWGAME "<<player1<<" "<<player2<<endl;
 		for(unsigned int i=0;i<rounds.size();i++)
 		{
 			if(i!=0) 
 			{
 				plik<<"NEXTTURN"<<endl;
-
+				os1<<"NEXTTURN"<<endl;
 			}
 
 			vector<Action> ac = rounds[i].actions;
@@ -166,54 +166,81 @@ public:
 				if(ac[k].a==PLAYED)
 				{
 					plik<<"PLAY "<<ac[k].owner<<" "<<ac[k].id<<" "<<ac[k].name1<<" "<<ac[k].targetCreature1<<" "<<ac[k].targetPlayer<<endl;
+			os1<<"PLAY "<<ac[k].owner<<" "<<ac[k].id<<" "<<ac[k].name1<<" "<<ac[k].targetCreature1<<" "<<ac[k].targetPlayer<<endl;
+				
 				}
 				else if(ac[k].a==SUBLIFE)
 				{
 					plik<<"SUBLIFE "<<ac[k].owner<<" "<<ac[k].value<<endl;
+				os1<<"SUBLIFE "<<ac[k].owner<<" "<<ac[k].value<<endl;
 				}
 				else if(ac[k].a==ADDLIFE)
 				{
 					plik<<"ADDLIFE "<<ac[k].owner<<" "<<ac[k].value<<endl;
+					os1<<"ADDLIFE "<<ac[k].owner<<" "<<ac[k].value<<endl;
+				
 				}
 				else if(ac[k].a==DEAD)
 				{
 					plik<<"DEAD "<<ac[k].id<<endl;
+						os1<<"DEAD "<<ac[k].id<<endl;
+				
 				}
 				else if(ac[k].a==ATTACK)
 				{
 					plik<<"ATTACK "<<ac[k].id<<endl;
+					os1<<"ATTACK "<<ac[k].id<<endl;
+				
 				}
 				else if(ac[k].a==DEFEND)
 				{
 					plik<<"DEFENCE "<<ac[k].targetCreature1<<" "<<ac[k].targetCreature2<<endl;
+						os1<<"DEFENCE "<<ac[k].targetCreature1<<" "<<ac[k].targetCreature2<<endl;
+				
 				}
 				else if(ac[k].a==STATS)
 				{
 					plik<<"STATS "<<ac[k].id<<" "<<ac[k].targetCreature1<<" "<<ac[k].targetCreature2<<" "<<ac[k].value<<endl;
+					os1<<"STATS "<<ac[k].id<<" "<<ac[k].targetCreature1<<" "<<ac[k].targetCreature2<<" "<<ac[k].value<<endl;
+				
 				}
-				else if(ac[k].a==NEWGAME)
+		/*		else if(ac[k].a==NEWGAME)
 				{
 					plik<<"NEWGAME "<<ac[k].name1<<" "<<ac[k].name2<<endl;
-				}
+				os1<<"NEWGAME "<<ac[k].name1<<" "<<ac[k].name2<<endl;
+				}*/
 					else if(ac[k].a==ADDDAMAGE)
 				{
 					plik<<"ADDDAMAGE "<<ac[k].id<<" "<<ac[k].value<<endl;
+				os1<<"ADDDAMAGE "<<ac[k].id<<" "<<ac[k].value<<endl;
 				}
 			}
 		}
 		plik.close();
-		Ftp ftp;
-		ftp.connect("nazwa.serwera");
-		Ftp::Response res= ftp.login("login","haslo");
-		if(res.isOk())
-		{
-			ftp.upload("logwalki.txt","dasd",Ftp::Ascii);
-		}
-		else
-		{
-			cout<<"nie polaczono sie z serwerem"<<endl;
-		}
-		ftp.disconnect();
+		
+		
+					Http::Request request("/index2.php",Http::Request::Post);
+
+
+	request.setBody(os1.str());
+
+	Http http;
+	http.setHost("pokelife.prv.pl");
+
+
+	Http::Response response = http.sendRequest(request);
+
+	if (response.getStatus() == sf::Http::Response::Ok)
+	{
+		std::cout << response.getBody() << std::endl;
+	}
+	else
+	{
+		std::cout << "request failed" << std::endl;
+	}
+	
+
+
 		
 	}
 };
@@ -222,7 +249,7 @@ public:
 class Game
 {
 private:
-
+	
 	int aPlayer;
 	Phase phase;
 	State stackState;
@@ -236,6 +263,8 @@ private:
 	bool bgrMode;
 	bool targetMode;
 public:
+	bool useBlur;
+	bool gameEnded;
 	GameHistory gh;
 	bool gameStarted;
 	bool multiplayerMode;
@@ -298,7 +327,7 @@ public:
 	void Draw(Mat &frame);
 	int GetCurrentPlayer();
 	Player &getCurrentPlayer();
-	Game(string player1s,int player1Id,string player2s,int player2Id,string ip,int port,int w,int h,int interval,bool showLog);
+	Game(string player1s,int player1Id,int player1secondId,string player2s,int player2Id,int player2secondId,string ip,int port,int w,int h,int interval,bool showLog);
 	~Game();
 
 
@@ -359,7 +388,7 @@ public:
 
 	void GHDie(int id)
 	{
-		gh.AddAction(DEAD,id);
+		gh.AddAction(DEAD,-1,id);
 	}
 		void GHAddDamage(int id,int value)
 	{

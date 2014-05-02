@@ -3,6 +3,7 @@
 
 Player::Player(string name,int markerId)
 {
+	recognized=false;
 	this->markerId=markerId;
 	this->name=name;
 	angleDiff=0;
@@ -11,15 +12,41 @@ Player::Player(string name,int markerId)
 }
 
 
-
-void Player::Init(string name,int markerId)
+bool Player::ChangedMarkersId(int id)
 {
+
+
+	if(id!=markerId && id!=secondMarkerId) return false;
+
+	if(currentMarkerId==-1)
+	{
+		currentMarkerId=id;
+		return false;
+	}
+	if(currentMarkerId!=id)
+	{
+		currentMarkerId=id;
+		return true;
+	}
+
+	return false;
+}
+
+
+
+void Player::Init(string name,int markerId,int secondMarkerID)
+{
+	currentMarkerId=-1;
 	oldangle=-1;
 	agree=false;
 	angle=-1;
 	this->markerId=markerId;
+	this->secondMarkerId=secondMarkerID;
 	this->name=name;
 	hp=20;
+	recognized=false;
+	angleDiff=0;
+	stackE=stackB=Point(-1,-1);
 
 }
 void Player::Draw(Mat &frame)
