@@ -27,7 +27,9 @@ $(document).ready(function() {
 
             renderTo: 'container',
 
-            type: 'column'
+            type: 'column',
+			
+			backgroundColor: 'transparent'
 
         },
 
@@ -55,7 +57,11 @@ $(document).ready(function() {
 
         title: {
 
-            text: 'Najlepsi gracze'
+            text: 'Najlepsi gracze',
+			style: {
+					color: 'white',
+					fontWeight: 'bold'
+				},
 
         },
 
@@ -63,7 +69,11 @@ $(document).ready(function() {
 
         xAxis: {
 
-		
+			labels: {
+                style: {
+                    color: 'white'
+                }
+			},
 
             categories: [{% for el,k in d.iteritems%}
 
@@ -85,10 +95,20 @@ $(document).ready(function() {
 			gridLineWidth: 0,
                 minorGridLineWidth: 0,
             title: {
-
-                text: 'Liczba zwyciêstw'
+				text: 'Liczba zwyciestw',
+				style: {
+					color: 'white',
+					fontWeight: 'bold'
+				},
+                
 
             },
+			
+			labels: {
+                style: {
+                    color: 'white'
+                }
+			},
 
 			tickInterval: 2
 

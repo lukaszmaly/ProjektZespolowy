@@ -18,7 +18,8 @@ $(document).ready(function() {
     var chart1 = new Highcharts.Chart({
         chart: {
             renderTo: 'container',
-            type: 'column'
+            type: 'column',
+			backgroundColor: 'transparent'
         },
 				plotOptions: {
         column: {
@@ -27,7 +28,11 @@ $(document).ready(function() {
 		},
 
         title: {
-            text: 'Popularne karty'
+            text: 'Popularne karty',
+			style: {
+						color: 'white',
+						fontWeight: 'bold'
+					}
         },
 	
         xAxis: {
@@ -37,16 +42,33 @@ $(document).ready(function() {
                             '{{ el }}', 
 
                         ],
-                        {% endfor %}]
+                        {% endfor %}],
+					labels: {
+					style: {
+                    color: 'white'
+					}
+				},
 						
         },
         yAxis: {
 			gridLineWidth: 0,
             minorGridLineWidth: 0,
-            title: {
-                text: 'Liczba użyć'
-            },
-			tickInterval: 1
+			title:{
+					text: 'Liczba uzyc',
+
+					style: {
+					fontWeight: 'bold',
+                    color: 'white'
+					}
+			
+				},
+				labels: {
+					style: {
+                    color: 'white'
+					}
+				},
+			tickInterval: 1,
+	
         },
 		legend: {
                 enabled: false

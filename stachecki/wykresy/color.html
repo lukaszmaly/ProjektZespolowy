@@ -1,68 +1,162 @@
-<!DOCTYPE html>
+{% extends "stat.html" %}
+
+{%block section %}
+			<h2>Witaj na stronie ATMagic<br></h2>
+			<p></p>			
+			<p>Augmented reality etc.<br></p>
+		{% endblock %}
+
+{% block content %}
 <html>
+
 <head>
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+
 <script src="http://code.highcharts.com/highcharts.js"></script>
+
 <script>
+
 $(document).ready(function() {
 
+
+
     var chart1 = new Highcharts.Chart({
+
         chart: {
-			backgroundColor: '#FCFFC5',
+				
+			backgroundColor: 'transparent',
+								
             renderTo: 'container',
+			
             type: 'column'
+
         },
+
 				plotOptions: {
+
         column: {
+
             colorByPoint: true
+
 			}
+
 		},
+
 		colors: [
-				'#0000ff',
-				'#008000',
-                '#ffffff',
-				'#ff0000',				
-                '#000000'
+
+				'#5f9ea0',
+
+				'#7bb661',
+
+                '#ffff00',
+
+				'#8b0000',				
+
+                '#253529'
+
             ],
 
+
+
         title: {
-            text: 'Ulubione kolory'
+
+            text: 'Ulubione kolory',
+			style: {
+                color: 'white',
+                fontWeight: 'bold'
+            }
+
         },
+
 	
+
         xAxis: {
+
 		
+
             categories: [{% for el,k in d.iteritems%}
+
                         [
+
                             '{{ el }}', 
 
+
+
                         ],
-                        {% endfor %}]
+
+                        {% endfor %}],
+			labels: {
+                style: {
+                    color: 'white'
+                }
+            }
+
 						
+
         },
+
         yAxis: {
+			gridLineWidth: 0,
+            minorGridLineWidth: 0,
             title: {
-                text: 'Liczba użyć'
+
+                text: 'Liczba uzyc',
+				style: {
+					color: 'white',
+					fontWeight: 'bold'
+				}
+
             },
-			tickInterval: 2
+
+			tickInterval: 5,
+			labels: {
+                style: {
+                    color: 'white'
+                }
+			}
         },
+
 		legend: {
+
                 enabled: false
+
             },
+
         series: [{
-			name:'Ile razy wystąpił',
+
+			name:'Liczba uzyc',
+
             data: [{% for el,k in d.iteritems %}
+
                         [
+
                             {{k}}, 
 
+
+
                         ],
+
                         {% endfor %}]
+
         }]
+
     });
+
 });
+
 </script>
+
 </head>
+
 <body>
+
 <div id="container" style="width:100%; height:400px;"></div>
 
+
+
 </body>
+
 </html>
+
+{% endblock %}

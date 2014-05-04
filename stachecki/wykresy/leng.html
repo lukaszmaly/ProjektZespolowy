@@ -28,8 +28,8 @@ $(document).ready(function() {
 		   renderTo: 'container',
 
                 type: 'line',
-				
-
+							
+				backgroundColor: 'transparent'
             },
 
        
@@ -37,6 +37,10 @@ $(document).ready(function() {
           title: {
 
                 text: 'Dlugosc gier',
+				style: {
+                    color: 'white',
+					fontWeight: 'bold'
+                }
 
             },
 
@@ -53,7 +57,13 @@ $(document).ready(function() {
 
                         ],
 
-                        {% endfor %}]
+                        {% endfor %}],
+			labels: {
+                style: {
+                    color: 'white'
+                }
+			},
+			
 
 
 
@@ -62,11 +72,6 @@ $(document).ready(function() {
             yAxis: {
 				gridLineWidth: 0,
                 minorGridLineWidth: 0,
-                title: {
-
-                    text: 'Liczba tur'
-
-                },
 
                 plotLines: [{
 
@@ -74,10 +79,22 @@ $(document).ready(function() {
 
                     width: 1,
 
-                    color: '#808080'
+                    color: '#00F'
 
-                }]
+                }],
+				title:{
+					text: 'Liczba tur',
 
+					style: {
+                    color: 'white'
+					}
+			
+				},
+				labels: {
+					style: {
+                    color: 'white'
+					}
+				}
             },
 
 			legend: {
