@@ -1,0 +1,27 @@
+
+{% extends "basebase.html" %}
+
+{%block section %}
+
+<p>Winner: {{dane.0}}</p>
+<p>Przegrany: {{dane.1}}</p>
+<p>Karty Gracza1:
+{% for i,j in wystapienia1.items %}
+{{i}} : {{j}}
+{% endfor%}
+</p>
+
+{%endblock%}
+
+
+{% block content %}
+
+<p>Winner: {{dane.0}}</p>
+<p>Przegrany: {{dane.1}}</p>
+<p>Karty Gracza1:
+{% for i,j in wystapienia1.items %}
+{{i}} : {{j}}
+{% endfor%}
+</p>
+
+{% endblock %}

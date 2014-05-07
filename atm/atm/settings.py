@@ -38,16 +38,30 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
 #    'django.contrib.sites',
     'magic',
+#    'userprofile',
 )
+
+#TEMPLATE_CONTEXT_PROCESSORS = {
+#    'django.contrib.auth.context_processors.auth',
+#    'django.core.context_processors.request',
+#    'django.contrib.messages.context_processors.messages',
+#}
+
+EMAIL_BACKEND='django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST="smtp.gmail.com"
+EMAIL_HOST_USER="atmagicthegathering@gmail.com"
+EMAIL_HOST_PASSWORD="magicgathering"
+EMAIL_PORT=587
+EMAIL_USE_TLS=True
+
 
 MIDDLEWARE_CLASSES = (
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'django.middleware.csrf.CsrfViewMiddleware',
+    #'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-
 )
 
 ROOT_URLCONF = 'atm.urls'
@@ -55,8 +69,8 @@ ROOT_URLCONF = 'atm.urls'
 WSGI_APPLICATION = 'atm.wsgi.application'
 
 TEMPLATE_DIRS = (
-    '/home/erwin/atm/templates',
-    '/home/erwin/atm/magic/templates',
+    '/users/stud/inf/erwinr/atm/templates',
+    '/users/stud/inf/erwinr/atm/magic/templates',
 )
 
 # Database
@@ -66,6 +80,39 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+    }
+}
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format' : "[%(asctime)s] %(levelname)s [%(name)s:%(lineno)s] %(message)s",
+            'datefmt' : "%d/%b/%Y %H:%M:%S"
+        },
+        'simple': {
+            'format': '%(levelname)s %(message)s'
+        },
+    },
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': 'mysite.log',
+            'formatter': 'verbose'
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers':['file'],
+            'propagate': True,
+            'level':'DEBUG',
+        },
+        'atm': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+        },
     }
 }
 
@@ -83,15 +130,18 @@ USE_L10N = True
 USE_TZ = True
 
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.6/howto/static-files/
 
-#STATIC_ROOT=''
+STATIC_ROOT='/users/stud/inf/erwinr/atm/assets/'
 
-MEDIA_ROOT = '/home/erwin/atm/static/'
+#AUTH_PROFILE_MODULE='userprofile.UserProfile'
+
+MEDIA_ROOT = '/users/stud/inf/erwinr/atm/static/'
 
 STATIC_URL = '/static/'
 
 STATICFILES_DIRS = (
-('assets', '/home/erwin/atm/static'),
+('assets', '/users/stud/inf/erwinr/atm/static'),
 )

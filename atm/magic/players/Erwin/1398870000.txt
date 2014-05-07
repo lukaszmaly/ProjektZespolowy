@@ -1,0 +1,16 @@
+NEWGAME Erwin Alex
+PLAY 1 1 AngelicWall -1 -1
+ADDDAMAGE 1 3
+NEXTTURN 
+PLAY 2 2 Shock -1 1
+PLAY 2 2 Shock -1 1
+SUBLIFE 1 18
+NEXTTURN
+PLAY 1 3 GiantGrowth 1 -1
+PLAY 1 4 HeroesReunion
+STATS 1 4 4 2
+ATTACK 1
+SUBLIFE 1 19
+SUBLIFE 2 0
+
+

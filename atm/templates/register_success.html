@@ -1,8 +1,12 @@
 {% extends "base.html" %}
 
-{% block content %}
+{% block section %}
 
-    <h2>zarejestrowano</h2>
-    <p>kliknij <a href="/accounts/login/">tutaj</a> zeby sie zalogowac</p>
+    <h2>Rejestracja zakończona pomyślnie</h2>
+    <center>Zostałeś zarejestrowany, twój login to: {{username}}.
+    Sprawdź swój email, żeby uzyskać qrkod</center>
+   
+    <p>kliknij <a href="/accounts/login/">loguj</a> zeby sie zalogowac</p>
+    <p>albo <a href="/">glowna</a> zeby wrócić na stronę główną</p>
 
 {% endblock %}

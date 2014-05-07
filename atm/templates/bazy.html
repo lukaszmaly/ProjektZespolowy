@@ -1,0 +1,40 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	
+	
+<title>ATMagic</title>
+<link rel="stylesheet" type="text/css" href='{% static "assets/css/default.css" %}'>   
+</head>
+
+<body>
+	<div id="page">
+		<div id="header">
+			<img src='{% static "assets/images/logo.jpg" %}' style="border: 0px solid ; width: 278px; height: 156px;">
+			
+		</div>
+		<div id="body">
+			<div class="featured"> 
+				<img src= '{% static "assets/images/featured-character.png" %}' 
+				style="border: 0px solid ; width: 884px; height: 380px;">
+				
+				<div class="section" >
+					{% block section %}
+					{%endblock %}
+				</div>
+			<div id="content">
+				{% block content%}
+				{% endblock %}
+			
+			</div>
+		</div>
+		
+		
+		<div id="footer">
+			<br><br><br><br><br><br><br><br><br><br><br><br><br>
+			<br><br><br><br><br><br><br><br><br><br><br><br><br>
+			
+	</div>
+</body>
+</html>

@@ -1,0 +1,75 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+	
+	
+<title>ATMagic</title>
+<link rel="stylesheet" type="text/css" href='{% static "assets/css/default.css" %}'>   
+</head>
+
+<body>
+	<div id="page">
+		<div id="header">
+			<img src='{% static "assets/images/logo.png" %}' style="border: 0px solid ; width: 278px; height: 156px;">
+			<ul class="navigation">
+				{%block sidebar %}
+				<li class="first"><a href="/main/" class="active">Strona główna<br></a></li>
+				<li><a href="/gracze/">Gracze</a></li>
+				<li><a href="/stat/">Statystyki</a></li>
+				<li><a href="/video/">video</a></li>
+				<li><a href="/accounts/login/">Zaloguj</a></li>
+				{% endblock %}
+			</ul>	
+		</div>
+		<div id="body">
+			<div class="featured"> 
+				<img src= '{% static "assets/images/featured-character.png" %}' 
+				style="border: 0px solid ; width: 884px; height: 380px;">
+				
+				
+				<div class="section2">
+				{% block section %}
+				
+				{% endblock%}
+				</div>
+				
+			
+			
+			<div id="content">
+				{% block content%}
+				<p>Projekt ATMagic powstał w ramach przedmiotu
+Programowanie Zespołowe, realizowanego w ramach naszych
+studiów na Wydziale Matematyki i Informatyki na UMK w Toruniu
+w roku 2013/2014.
+Nazwę projektu można rozwinąć w następujący sposób:
+Additional Tools for Magic. Nasze dzieło wspomaga jak również
+dodaje emocji podczas sesji przy karcianej grze kolekcjonerskiej
+Magic: The Gathering. Pozwala zapoznać się z koncepcją
+wykorzystania rozszerzonej rzeczywistości w grze karcianej.
+Temat rozszerzonej rzeczywistości jest bardzo interesujący
+i rozbudowany. Zdajemy sobie sprawę z tego, że nasz projekt nie
+wyczerpuje tematu, prezentuje jedynie naszą wizję dodania
+czegoś do zwykłej, i już dość starej, gry.
+ATMagic to open source'owy projekt, przy którym chcieliśmy
+stworzyć własną wizję grania „inaczej”. Kilkoro z nas jest fanami
+gry Magic: The Gathering, a sama praca przy projekcie sprawiła
+nam ogromną radość. Mamy nadzieję, że ci, do których
+skierowany jest projekt, czyli przede wszystkim aktywni gracze,
+mogą zainteresować się nieco innym spojrzeniem na temat gier
+karcianych właśnie dzięki naszemu programowi.</p>
+				{% endblock %}
+				
+			</div>
+		</div>
+		
+		<div id="footer">
+			<ul>
+				<li><a href="about.html" class="video">&nbsp;</a></li>
+				<li><a href="myths.html" class="myths">&nbsp;</a></li>
+				<li class="last"><a href="archives.html" class="archives">&nbsp;</a></li>
+			</ul>
+			
+	</div>
+</body>
+</html>

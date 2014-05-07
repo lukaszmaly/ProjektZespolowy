@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+
+{% block section %}
+
+<p>
+<center><h2>Lista Graczy</h2></center>
+<ul>
+  <hr width="50%" align="left">
+  {% for Gracz in Gracze %}
+  <li style="list-style-type:none;width:50%;">{{Gracz.imie}}<div id="nav">
+      <br>Wygrane: {{Gracz.wygrane}}
+      <br>Przegrane: {{Gracz.przegrane}}
+      <br>Logowania: {{Gracz.logowania}}
+      <hr width="100%" align="left">
+  </li>
+  {% endfor %}
+</ul>
+{% endblock %}

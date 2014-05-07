@@ -1,6 +1,19 @@
 {% extends "stat.html" %}
 
-{% block content %}
+{% block navigation%}
+   <li class="first"><a href="/main/" >Główna<br></a></li>
+   <li><a href="/stat/popular/">Popularne</a></li>
+    <li><a href="/stat/leng/">Dlugosc gier</a></li>
+   <li><a href="/stat/best/" class="active">Najlepsi</a></li>
+{% endblock %}
+
+
+	{%block section %}
+			<h2>Najlepi gracze<br></h2>
+			<p></p>			
+		{% endblock %}
+
+{% block accord %}
 <html>
 
 <head>
@@ -21,7 +34,9 @@ $(document).ready(function() {
 
             renderTo: 'container',
 
-            type: 'column'
+            type: 'column',
+			
+			backgroundColor: 'transparent'
 
         },
 
@@ -37,13 +52,11 @@ $(document).ready(function() {
 
 		colors: [
 
+				'#c0c0c0',
+				
 				'#ffd700',
 
-				'#c0c0c0',
-
                 '#8b4513'
-
-
 
             ],
 
@@ -51,7 +64,11 @@ $(document).ready(function() {
 
         title: {
 
-            text: 'Najlepsi gracze'
+            text: 'Najlepsi gracze',
+			style: {
+					color: 'white',
+					fontWeight: 'bold'
+				},
 
         },
 
@@ -59,7 +76,11 @@ $(document).ready(function() {
 
         xAxis: {
 
-		
+			labels: {
+                style: {
+                    color: 'white'
+                }
+			},
 
             categories: [{% for el,k in d.iteritems%}
 
@@ -78,12 +99,23 @@ $(document).ready(function() {
         },
 
         yAxis: {
-
+			gridLineWidth: 0,
+                minorGridLineWidth: 0,
             title: {
-
-                text: 'Liczba zwyciêstw'
+				text: 'Liczba zwyciestw',
+				style: {
+					color: 'white',
+					fontWeight: 'bold'
+				},
+                
 
             },
+			
+			labels: {
+                style: {
+                    color: 'white'
+                }
+			},
 
 			tickInterval: 2
 
@@ -128,7 +160,7 @@ $(document).ready(function() {
 
 
 </body>
-
 </html>
+
 {% endblock %}
 

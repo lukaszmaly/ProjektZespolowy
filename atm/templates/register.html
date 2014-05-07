@@ -1,13 +1,37 @@
 {% extends "base.html" %}
 
-{% block content %}
-
-    <h2>Rejestracja</h2>
-    <form action="/accounts/register/" method="post">{% csrf_token %}
-    {{form}}
-    
-    <input type="submit" value='Rejestruj' />
-    
-    </form>
-
+{% block navigation %}
+<li class="first"><a href="/main/" >Strona główna<br></a></li>
+				<li><a href="/gracze/">Gracze</a></li>
+				<li><a href="/stat/">Statystyki</a></li>
+				<li><a href="/video/">Video</a></li>
+				<li><a href="/accounts/login/" class="active">Zaloguj</a></li>
 {% endblock %}
+
+{% block section %}
+<center>
+   <h2>Rejestracja</h2>
+	<p>Wprowadź swoje dane i uzyskaj dostęp do gry</p>
+	
+</center>
+{% endblock %}
+
+{% block tab%}
+
+<div style="margin-left:50%;margin-right:50%; ">
+	<fieldset>
+    
+    <form action ="/accounts/register/" method="post" style="color:yellow">
+	{% csrf_token %}
+    {{form}}
+    <input type="submit" value='Rejestruj'/>&nbsp;
+    <input type='Reset' value="Powtórz"/>
+    </form>
+    
+    </fieldset>
+</div>
+{% endblock%}
+
+
+{% block accord%}
+{% endblock%}

@@ -1,44 +1,252 @@
 {% load static %}
+
 <!DOCTYPE html>
-<html lang ='pl'>
-
-<img src='{% static "assets/images/logo.jpg" %}' />
-
-
+<html>
 <head>
-    <title>{% block title %}ATMagic{% endblock %}</title>
+<!<META HTTP-EQUIV="Content-Type" CONTENT="text/html; charset">>
 
-        <link rel="stylesheet" type="text/css" href='{% static "assets/css/default.css" %}'>   
+<title>ATMagic</title>
+<link rel="stylesheet" type="text/css" href="/static/assets/css/default.css">   
+
+<script src="//code.jquery.com/jquery-1.10.2.js"></script>
+<script src="//code.jquery.com/ui/1.10.4/jquery-ui.js"></script>
+
+<script>
+	$(document).ready(function() {
+    $("#accordion section h1").click(function(e) {
+    $(this).parents().siblings("section").addClass("ac_hidden");
+    $(this).parents("section").removeClass("ac_hidden");
+
+    e.preventDefault();
+  });
+});
+</script>
+
+<style>
+    .tabs {
+      position: relative;   
+      min-height: 350px; /* This part sucks */
+      clear: both;
+      margin: 25px 0;
+    }
+    .tab {
+      float: left;
+    }
+    .tab label { 
+      padding: 10px; 
+      border: 1px solid #FBC316; 
+      margin-left: -1px; 
+      position: relative;
+      left: 1px; 
+      color:#FBC316;
+    }
+    .tab [type=radio] {
+      display: none;   
+    }
+    .content {
+      position: absolute;
+      top: 28px;
+      left: 0;
+      background:;
+      right: 0;
+      bottom: 0;
+      padding: 20px;
+      border: 1px solid #FBC316; 
+      
+      overflow: hidden;
+    }
+    .content > * {
+      opacity: 0;
+      
+      -webkit-transform: translate3d(0, 0, 0);
+    
+      -webkit-transform: translateX(-100%);
+      -moz-transform:    translateX(-100%);
+      -ms-transform:     translateX(-100%);
+      -o-transform:      translateX(-100%);
+      
+      -webkit-transition: all 0.6s ease;
+      -moz-transition:    all 0.6s ease;
+      -ms-transition:     all 0.6s ease;
+      -o-transition:      all 0.6s ease;
+    }
+    [type=radio]:checked ~ label {
+      background: #FBC316;
+      border-bottom: 1px solid #FBC316;
+      z-index: 2;
+      color:#000000;
+    }
+    [type=radio]:checked ~ label ~ .content {
+      z-index: 1;
+    }
+    [type=radio]:checked ~ label ~ .content > * {
+      opacity: 1;
+      
+      -webkit-transform: translateX(0);
+      -moz-transform:    translateX(0);
+      -ms-transform:     translateX(0);
+      -o-transform:      translateX(0);
+    }
+    
+	</style>
 
 </head>
 
 <body>
-    <div id="page">
+	
+	<div id="page">
+		
+		<div id="header">
+			
+			<img src ='{% static "assets/images/logo.png" %}'
+			style="border: 0px solid ; width: 360px; height: 150px;">
+			<!--panel nawigacji-->
+			<ul class="navigation">
+				{% block navigation%}
+				<li class="first"><a href="/main/" class="active">Strona główna<br></a></li>
+				<li><a href="/gracze/">Gracze</a></li>
+				<li><a href="/stat/">Statystyki</a></li>
+				<li><a href="/video/">Video</a></li>
+				<li><a href="/accounts/login/">Zaloguj</a></li>
+				{% endblock %}
+			</ul>	
+			<!--/panel-->
+			
+		</div>
+        
+		<div id="body">
+			
+			<div class="featured"> 
+				<img src= '{% static "assets/images/featured-character.png" %}' 
+				style="border: 0px solid ; width: 884px; height: 380px;">
+					<div class="section">
+						
+				{% block section %}
+					<h2>Witaj na stronie ATMagic</h2>
+					<p>Projekt zespołu nr 2 pod opieką mgr Michała Meiny
+					realizowany w ramach przedmiotu Programowaie Zespołowe
+					w roku akademickim 2013/2014</p>				 
+				{% endblock %}
+				</div>
+				
+		   </div>
+				<span>&nbsp;</span>
+				<span>&nbsp;</span>
 
-    <div id="sidebar">
-        {% block sidebar %}
-        <ul>
-<li><a href="/main/">Strona glowna</a>    
-<a href='/gracze/'>Gracze</a>    
-<a href="/about/">Czym jest ATMagic?</a>    
-<a href="/download/">Download</a>    
-<a href="/info/">Dokumentacja</a>    
-<a href="/graf/">Wykresy</a>     
-<a href="/stat/">Statystyki</a>    
-<a href="/video/">Wizualizacja</a>    
-<a href="/accounts/login/">Zaloguj</a>
-</li>
-        </ul>
-        {% endblock %}
-    </div>
+				
+            
+			<div id="content">
+			
+				{% block tab%}
+				<div class="tabs">
+        
+					<div class="tab" >
+					<input type="radio" id="tab-1" name="tab-group-1" checked>
+					<label for="tab-1">Zespół</label>
+					<div class="content" style='overflow:auto;'>
+					<center>
+					<p>Jacek Rzeźnik</p>
+					<p>Łukasz Stachowiak</p>
+					<p>Olek Urbanowicz</p>
+					<p>Erwin Redzej</p>
+					<p>Michał Stachecki</p>
+					</center>
+<!--			
+					<p>Opiekun: mgr Michał Meina</p>
+					<p>Konsultant: Sławomir Strzelec</p>
+-->
+					</div> 
+					</div>
+				
+					<div class="tab">
+					<input type="radio" id="tab-2" name="tab-group-1">
+					<label for="tab-2">Założenia projektu</label>
+					<div class="content" style='overflow:auto;'>
+						<center>
+					<p>Możliwe przeprowadzenie pełnej rozgrywki</p>
+					<p>Prosty interfejs</p>
+					<p>Intuicyjna interakcja z grą</p>
+					<p>Statystyki dostępne online</p>
+					<p>Możliwość gry przez sieć</p>
+                    <p>Możliwość odtworzenia rozgrywki online</p>
+						</center>
+					</div> 
+					</div>
+        
+					<div class="tab">
+					<input type="radio" id="tab-3" name="tab-group-1">
+					<label for="tab-3">Dodatkowe aspekty</label>
+         
+					<div class="content" style='overflow:auto;'>
+						<center>
+					<p>Respektowanie wszystkich zasad gry karcianej</p>
+                    <p>Zachowanie dynamiki rozgrywki</p>
+                    <p>Wykorzystanie prawdziwych kart z gry</p>
+                    <p>Nadanie interesującego wyglądu grze</p>
+					    </center>
+					</div> 
+					</div>
+					</div>
+    
+					{% endblock %}
+		
+				&nbsp;
+			
+			</div>
+			
+			
+			
+			<!--SIDEBAR-->
+			<div id="sidebar"> 	
+			</div>
+			<!--/sidebar-->
+			
+		
+		<!--koniec content-->
 
-    <div id ="content">
-        {% block content %}{% endblock %}
- 
-    </div>
+		<div id="footer">
+			
+			{% block accord %}
+				<div id="accordion" >
+				<section id="item1">
+				<p class="pointer">&#9654;</p><h1><a href="#">O projekcie</a></h1>
+				 Projekt ATMagic powstał w ramach przedmiotu
+Programowanie Zespołowe, realizowanego w ramach naszych
+studiów na Wydziale Matematyki i Informatyki na UMK w Toruniu
+w roku 2013/2014.
+Nazwę projektu można rozwinąć w następujący sposób:
+Additional Tools for Magic. Nasze dzieło wspomaga jak również
+dodaje emocji podczas sesji przy karcianej grze kolekcjonerskiej
+Magic: The Gathering. Pozwala zapoznać się z koncepcją
+wykorzystania rozszerzonej rzeczywistości w grze karcianej.
 
-    </div>
+				</section>
+				<section id="item2" class="ac_hidden">
+				<p class="pointer">&#9654;</p><h1><a href="#">MtG</a></h1>
+				ATMagic to open source'owy projekt, przy którym chcieliśmy
+stworzyć własną wizję grania „inaczej”. Kilkoro z nas jest fanami
+gry Magic: The Gathering, a sama praca przy projekcie sprawiła
+nam ogromną radość. Mamy nadzieję, że ci, do których
+skierowany jest projekt, czyli przede wszystkim aktywni gracze,
+mogą zainteresować się nieco innym spojrzeniem na temat gier
+karcianych właśnie dzięki naszemu programowi.
+				
+				</section>
+				<section id="item3" class="ac_hidden">
+				<p class="pointer">&#9654;</p><h1><a href="#">Rozszerzona rzeczywistość</a></h1>
+				Temat rozszerzonej rzeczywistości jest bardzo interesujący
+i rozbudowany. Zdajemy sobie sprawę z tego, że nasz projekt nie
+wyczerpuje tematu, prezentuje jedynie naszą wizję dodania
+czegoś do zwykłej, i już dość starej, gry.
+				</section>
+				</div>
+			{%endblock%}
+			
+			<span><p>ATM</p></span> 
+		</div>
+	
+	</div>
+
 
 </body>
 </html>
-

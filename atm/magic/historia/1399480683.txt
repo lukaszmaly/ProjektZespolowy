@@ -1,0 +1,8 @@
+NEWGAME happyuser nowzuyztkownik
+PLAY 1 2 TrainedCaracal -1 -1
+PLAY 1 -1 GiantGrowth 2 -1
+STATS 2 3 3 1
+ATTACK 2
+SUBLIFE 2 4
+ADDLIFE 1 4
+NEXTTURN

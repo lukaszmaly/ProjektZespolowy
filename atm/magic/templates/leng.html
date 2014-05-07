@@ -1,6 +1,19 @@
 {% extends "stat.html" %}
 
-{% block  content %}
+{% block navigation%}
+   <li class="first"><a href="/main/" >Główna<br></a></li>
+   <li><a href="/stat/popular/">Popularne</a></li>
+    <li><a href="/stat/leng/"class="active">Dlugosc gier</a></li>
+   <li><a href="/stat/best/" >Najlepsi</a></li>
+{% endblock %}
+
+{%block section %}
+			<h2>Długość rozgrywek<br></h2>
+			<p></p>			
+			<p>Czas liczony w turach gry</p>
+		{% endblock %}
+
+{% block  accord %}
 <html>
 
 <head>
@@ -21,8 +34,9 @@ $(document).ready(function() {
 
 		   renderTo: 'container',
 
-                type: 'line'
-
+                type: 'line',
+							
+				backgroundColor: 'transparent'
             },
 
        
@@ -30,13 +44,16 @@ $(document).ready(function() {
           title: {
 
                 text: 'Dlugosc gier',
+				style: {
+                    color: 'white',
+					fontWeight: 'bold'
+                }
 
             },
 
 
 
             xAxis: {
-
                 categories: [{% for el,i in d.iteritems %}
 
                         [
@@ -47,19 +64,21 @@ $(document).ready(function() {
 
                         ],
 
-                        {% endfor %}]
+                        {% endfor %}],
+			labels: {
+                style: {
+                    color: 'white'
+                }
+			},
+			
 
 
 
             },
 
             yAxis: {
-
-                title: {
-
-                    text: 'Dlugosc gry'
-
-                },
+				gridLineWidth: 0,
+                minorGridLineWidth: 0,
 
                 plotLines: [{
 
@@ -67,10 +86,22 @@ $(document).ready(function() {
 
                     width: 1,
 
-                    color: '#808080'
+                    color: '#00F'
 
-                }]
+                }],
+				title:{
+					text: 'Liczba tur',
 
+					style: {
+                    color: 'white'
+					}
+			
+				},
+				labels: {
+					style: {
+                    color: 'white'
+					}
+				}
             },
 
 			legend: {
@@ -81,7 +112,7 @@ $(document).ready(function() {
 
             tooltip: {
 
-                valueSuffix: 'min'
+                valueSuffix: ''
 
             },
 
@@ -89,8 +120,8 @@ $(document).ready(function() {
 
         series: [{
 
-			name:'Dlugosc gry',
-
+			name:'Liczba tur',
+			
             data: [{% for el,k in d.iteritems %}
 
                         [

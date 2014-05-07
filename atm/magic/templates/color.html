@@ -1,6 +1,14 @@
 {% extends "stat.html" %}
 
-{% block content %}
+
+
+{%block section %}
+			<h2>Najlepi gracze<br></h2>
+			<p></p>			
+			<p>Top 3 graczy</p>
+		{% endblock %}
+
+{% block accord %}
 <html>
 
 <head>
@@ -18,11 +26,11 @@ $(document).ready(function() {
     var chart1 = new Highcharts.Chart({
 
         chart: {
-
-			backgroundColor: '#FCFFC5',
-
+				
+			backgroundColor: 'transparent',
+								
             renderTo: 'container',
-
+			
             type: 'column'
 
         },
@@ -39,15 +47,15 @@ $(document).ready(function() {
 
 		colors: [
 
-				'#0000ff',
+				'#5f9ea0',
 
-				'#008000',
+				'#7bb661',
 
-                '#ffffff',
+                '#ffff00',
 
-				'#ff0000',				
+				'#8b0000',				
 
-                '#000000'
+                '#253529'
 
             ],
 
@@ -55,7 +63,11 @@ $(document).ready(function() {
 
         title: {
 
-            text: 'Ulubione kolory'
+            text: 'Ulubione kolory',
+			style: {
+                color: 'white',
+                fontWeight: 'bold'
+            }
 
         },
 
@@ -75,22 +87,36 @@ $(document).ready(function() {
 
                         ],
 
-                        {% endfor %}]
+                        {% endfor %}],
+			labels: {
+                style: {
+                    color: 'white'
+                }
+            }
 
 						
 
         },
 
         yAxis: {
-
+			gridLineWidth: 0,
+            minorGridLineWidth: 0,
             title: {
 
-                text: 'Liczba u¿yæ'
+                text: 'Liczba uzyc',
+				style: {
+					color: 'white',
+					fontWeight: 'bold'
+				}
 
             },
 
-			tickInterval: 2
-
+			tickInterval: 5,
+			labels: {
+                style: {
+                    color: 'white'
+                }
+			}
         },
 
 		legend: {
@@ -101,7 +127,7 @@ $(document).ready(function() {
 
         series: [{
 
-			name:'Ile razy wyst¹pi³',
+			name:'Liczba uzyc',
 
             data: [{% for el,k in d.iteritems %}
 

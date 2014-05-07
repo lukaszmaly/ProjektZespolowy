@@ -1,6 +1,21 @@
 {% extends "stat.html" %}
 
-{% block content %}
+         {% block navigation%}
+            <li class="first"><a href="/main/" >Główna<br></a></li>
+   <li><a href="/stat/popular/" class="active">Popularne</a></li>
+    <li><a href="/stat/leng/">Dlugosc gier</a></li>
+   <li><a href="/stat/best/">Najlepsi</a></li>
+         {%endblock %}
+
+        {%block section %}
+			<h2>Najpopularniejsze karty</h2>
+			<p></p>
+			<p></p>			
+			<p>Najczęściej używane karty</p>
+		{% endblock %}
+
+
+{% block accord %}
 
 <html>
 <head>
@@ -12,7 +27,8 @@ $(document).ready(function() {
     var chart1 = new Highcharts.Chart({
         chart: {
             renderTo: 'container',
-            type: 'column'
+            type: 'column',
+			backgroundColor: 'transparent'
         },
 				plotOptions: {
         column: {
@@ -21,7 +37,11 @@ $(document).ready(function() {
 		},
 
         title: {
-            text: 'Popularne karty'
+            text: 'Popularne karty',
+			style: {
+						color: 'white',
+						fontWeight: 'bold'
+					}
         },
 	
         xAxis: {
@@ -31,14 +51,33 @@ $(document).ready(function() {
                             '{{ el }}', 
 
                         ],
-                        {% endfor %}]
+                        {% endfor %}],
+					labels: {
+					style: {
+                    color: 'white'
+					}
+				},
 						
         },
         yAxis: {
-            title: {
-                text: 'Liczba użyć'
-            },
-			tickInterval: 1
+			gridLineWidth: 0,
+            minorGridLineWidth: 0,
+			title:{
+					text: 'Liczba uzyc',
+
+					style: {
+					fontWeight: 'bold',
+                    color: 'white'
+					}
+			
+				},
+				labels: {
+					style: {
+                    color: 'white'
+					}
+				},
+			tickInterval: 1,
+	
         },
 		legend: {
                 enabled: false

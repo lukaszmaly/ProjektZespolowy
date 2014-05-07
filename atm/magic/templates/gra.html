@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load static %}
+
+
+			{% block section %}
+				<h2>Statystyki rozgrywki</h2>
+			    <p>Sprawdź informacje o grze i zobacz jej przebieg</p>				 
+				{% endblock %}
+
+			{% block tab %}
+	
+	<div class="tabs">    
+        <div class="tab" >
+        <input type="radio" id="tab-1" name="tab-group-1" checked>
+        <label for="tab-1">Informacje</label>
+        <div class="content" style='overflow:auto;'>
+		
+		<div style="float:left; width:50%">
+		<p>Gracz1:{{dane.0}}</p>
+		<p>Wynik: {{ dane.2 }} </p>
+		<p>Tury: {{ dane.4}} </p>
+		<p>Utrata życia: {{dane.9}}</p>
+		
+		
+		<br></br>
+		<p>Użyte karty:</p>
+		 {% for i,j in wystapienia1.items%}
+		 <p>{{i}} :  {{j}}</p>
+	     {% endfor %}
+    	</div>
+    	
+    	<div style="float:right; width:50%">
+		<p>Gracz2:{{dane.1}}</p>
+		<p>Wynik: {{ dane.3 }} </p>
+		<p>Tury: {{ dane.5}} </p>
+		<p>Utrata życia: {{dane.10}}</p>
+		
+		<br></br>
+		<p>Użyte karty:</p>
+		 {% for i,j in wystapienia2.items%}
+		 <p>{{i}} :  {{j}}</p>
+	     {% endfor %}
+    	</div>
+    	
+        </div> 
+        </div>
+        
+        <div class="tab" >
+        <input type="radio" id="tab-2" name="tab-group-1" >
+        <label for="tab-2">Przebieg</label>
+        <div class="content" style='overflow:auto;'>
+			
+		<li><a href="/video/">Odtwórz</a></li>
+		
+		
+        </div> 
+        </div>
+        
+        
+        
+        
+    </div>
+
+{% endblock %}
+
+

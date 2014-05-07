@@ -1,0 +1,32 @@
+[06/May/2014 17:27:26] "GET / HTTP/1.1" 500 115101
+[06/May/2014 17:27:54] "GET / HTTP/1.1" 500 114348
+Traceback (most recent call last):
+  File "/usr/lib64/python2.6/wsgiref/handlers.py", line 94, in run
+    self.finish_response()
+  File "/usr/lib64/python2.6/wsgiref/handlers.py", line 135, in finish_response
+    self.write(data)
+  File "/usr/lib64/python2.6/wsgiref/handlers.py", line 223, in write
+    self._write(data)
+  File "/usr/lib64/python2.6/socket.py", line 324, in write
+    self.flush()
+  File "/usr/lib64/python2.6/socket.py", line 303, in flush
+    self._sock.sendall(buffer(data, write_offset, buffer_size))
+error: [Errno 32] Broken pipe
+Traceback (most recent call last):
+  File "/usr/lib64/python2.6/SocketServer.py", line 570, in process_request_thread
+    self.finish_request(request, client_address)
+  File "/usr/lib64/python2.6/SocketServer.py", line 332, in finish_request
+    self.RequestHandlerClass(request, client_address, self)
+  File "/users/stud/inf/erwinr/python_modules/python_modules/lib/python2.6/site-packages/Django-1.6.2-py2.6.egg/django/core/servers/basehttp.py", line 126, in __init__
+    super(WSGIRequestHandler, self).__init__(*args, **kwargs)
+  File "/usr/lib64/python2.6/SocketServer.py", line 628, in __init__
+    self.finish()
+  File "/usr/lib64/python2.6/SocketServer.py", line 671, in finish
+    self.wfile.flush()
+  File "/usr/lib64/python2.6/socket.py", line 303, in flush
+    self._sock.sendall(buffer(data, write_offset, buffer_size))
+error: [Errno 32] Broken pipe
+[06/May/2014 17:27:56] "GET / HTTP/1.1" 500 114536
+[06/May/2014 17:27:57] "GET / HTTP/1.1" 500 114536
+[06/May/2014 17:28:00] "GET /main/ HTTP/1.1" 500 114403
+[06/May/2014 17:28:03] "GET /main/ HTTP/1.1" 500 114591

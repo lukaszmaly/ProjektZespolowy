@@ -1,30 +1,65 @@
 {% extends "base.html" %}
 
+{%block section %}
+<h2>Profil Gracza: {{gracz.imie}}</h2>
+<p>Zobacz statystyki rozgrywek i ostatnie gry</p>	
+{% endblock %}
+
+{% block tab %}
+	
+	<div class="tabs">    
+        <div class="tab" >
+        <input type="radio" id="tab-1" name="tab-group-1" checked>
+        <label for="tab-1">Statystyki</label>
+        <div class="content" style='overflow:auto;'>
+		
+		<div style="float:left; width:50%">
+		<p>imie: {{ gracz.imie }}</p>
+		<p>id: {{ gracz.id }} </p>
+		<p>wygrane: {{ gracz.wygrane }} </p>
+		<p>rozgrywki: {{gracz.rozgrywki}}</p>
+		<p>najwiecej zagranych: {{gracz.najwiecejzagranychkart}}</p>
+		<p>Ostatnio grana: {{gracz.ulubionakarta}}</p>
+		<p>Ostatnio grana 2: {{gracz.ulubionakarta2}}</p>
+		<p>Ostatnio grana 3: {{gracz.ulubionakarta3}}</p>
+		<p>najmniej zagranych: {{gracz.najmniejzagranychkart}}</p>
+		
+		
+		</div>
+		
+		<div style="float:right; width:50%">
+		<p>najdluzsza gra: {{gracz.najdluzszagra }}</p>
+		<p>najkrotsza gra: {{gracz.najkrotszagra}} </p>
+		<p>srednia ilost tur: {{gracz.sredniailosctur}} </p>
+		<p>ilosc tur:{{gracz.iloscrozegranychtur}}</p>
+		<p>przegrane: {{gracz.przegrane}}</p>
+		<p>Zagrano: {{gracz.ulubionakartapick}}</p>
+		<p>Zagrano: {{gracz.ulubionakarta2pick}}</p>
+		<p>Zagrano: {{gracz.ulubionakarta3pick}}</p>
+		<p>srednio: {{gracz.sredniozagranychkart}}</p>
+		
+		
+		<p></p>
+        </div>
+        </div> 
+        </div>
+        
+        <div class="tab" >
+        <input type="radio" id="tab-2" name="tab-group-1" checked>
+        <label for="tab-2">Historia gier</label>
+        <div class="content" style='overflow:auto;'>
+			
+		{% for part,dat in partia.items %}
+		<h2><a href = "{{part}}/">{{dat}}</a></h2>
+		{% endfor %}
+		
+        </div> 
+        </div>
+        
+        
+    </div>
+
+{% endblock %}
+
 {% block content %}
-<html>
-<body>
-<h1>{{ gracz.imie }}</h1>
-<p>id: {{ gracz.id }} </p>
-<p>wygrane: {{ gracz.wygrane }} </p>
-<p>przegrane: {{gracz.przegrane }}</p>
-<p>logowania: {{gracz.logowania}} </p>
-<p>mail: {{gracz.mail}} </p>
-
-<h2>ostatnia rozgrywka</h2>
-<p>wygral: {{winner}}</p>
-<p>przeciwnik: {{looser}}</p>
-<p>tury: {{timegame}}</p>
-<p>hp win: {{hp1}}</p>
-<p>hp lost: {{hp2}}</p>
-
-<ul>
-{% for x in hist %}
-    <li>{{ x }}</li>
-{% endfor %}
-<li>wygrywa: {{winner}}</li>
-</ul>
-
-</body>
-</html>
-
 {% endblock %}

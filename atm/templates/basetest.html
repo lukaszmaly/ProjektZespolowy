@@ -1,0 +1,52 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+<img src='{% static "assets/images/logo.png" %}' />
+
+<head>
+<title>ATMagic</title>
+<link rel="stylesheet" type="text/css" href='{% static "assets/css/default.css" %}'>   
+</head>
+<body>
+
+<div id="page">
+	<div id="header">
+		<a id="logo" href="main.html">
+		<img style="border: 0px solid ; width: 278px; height: 156px;" src="images/logo.png" alt="">
+		</a>
+
+		<ul class="navigation">	
+		{% block sidebar %}   
+		<li class="first"><a href="/main/" class="active">Strona główna<br></a></li>
+		<li><a href="/gracze/">Gracze</a></li>
+		<li><a href="/stat/">Statystyki</a></li>
+		<li><a href="/video/">video</a></li>
+		<li><a href="/accounts/login/">Zaloguj</a></li>
+		{% endblock %}
+         </ul>
+         </div>
+         
+		<div id="body">
+			<div class="featured"> 
+                <img style="width: 882px; height: 383px;" alt="" 
+                src='{% static "assets/images/angel.jpg" %}'>
+		
+				<div class="section">
+				{%block section %}
+				<h2>Witaj na stronie ATMagic</h2>
+					
+				
+				{% endblock %}
+		        </div>
+		        
+		<div id="content">
+		
+        {% block content %}
+		{% endblock %}		
+		</div>	
+		</div>
+		</div>
+
+</body>
+</html>
+

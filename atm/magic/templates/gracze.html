@@ -1,20 +1,62 @@
 {% extends "base.html" %}
 
-{% block content %}
+		{%block navigation%}
+			<li class="first"><a href="/main/" >Strona główna<br></a></li>
+			<li><a href="/gracze/" class="active">Gracze</a></li>
+			<li><a href="/stat/">Statystyki</a></li>
+			<li><a href="/video/">video</a></li>
+			<li><a href="/accounts/login/">Zaloguj</a></li>
+		{% endblock %}
+		
+	{%block section %}
+	
+		<h2>Lista Graczy</h2>
+		<p>Wybierz profil użytkownika, a następnie zobacz dane gracza</p>	
+		
+	{% endblock %}
 
-{% if gracze.count > 0 %}
-<h1>Lista graczy:</h1>
-{% for gracz in gracze %}
-<div>
-<h2><a href = "/gracze/{{gracz.id}}/">{{ gracz.imie }}</a></h2>
-</div>
-{% endfor %}
-
-
-{% else %}
-
-<p>Nic!</p>
-
-{% endif%}
+	{% block tab %}
+	
+	<div class="tabs">    
+        <div class="tab" >
+        <input type="radio" id="tab-1" name="tab-group-1" checked>
+        <label for="tab-1">Lista Graczy</label>
+        <div class="content" style='overflow:auto;'>
+		
+			<center>
+			{% for gracz in gracze %}
+			<h2><a href = "/gracze/{{gracz.id}}/">{{ gracz.imie }}</a></h2>
+			{% endfor %}
+			</center>
+        
+        </div> 
+        </div>
+        
+        <div class="tab" >
+        <input type="radio" id="tab-2" name="tab-group-1" >
+        <label for="tab-2">Statystyki ogólne</label>
+        <div class="content" style='overflow:auto;'>
+		
+		<div style="float:left; width:50%">
+		<p>Wygrane: {{dane.0}}</p>		
+		<p>Przegrane: {{dane.1}}</p>	
+		<p>Logowania: {{dane.3}}</p>	
+		<p>Gry: {{dane.2}}</p>	
+		<p>Ilość tur: {{dane.8}}</p>	
+		<p>Średnia tur: {{dane.4}}</p>	
+			
+		</div>
+        
+        <div style="float:right; width:50%">
+        <p>Najmniej kart : {{dane.6}}</p>	
+		<p>Najwięcej kart: {{dane.7}}</p>	
+		<p>Najkrótsza gra: {{dane.9}}</p>	
+		<p>Najdłuższa gra: {{dane.10}}</p>	
+		<p>Zagrane karty: {{dane.5}}</p>
+        </div> 
+        </div>
+        
+        
+    </div>
 
 {% endblock %}

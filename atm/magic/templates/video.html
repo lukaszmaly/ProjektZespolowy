@@ -1,12 +1,943 @@
-{% extends "base.html" %}
 
-{% block content %}
+{% load static %}
+
+<!DOCTYPE html>
 <html>
+<head>
+	
+<link rel="stylesheet" type="text/css" href="/static/assets/css/d.css"> 
+<img src="/static/assets/images/footer.jpg">
+
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"> </script>
+<script type="text/javascript" src="http://jqueryrotate.googlecode.com/svn/trunk/jQueryRotate.js"></script>
+<script>
+
+
+$(document).ready(function(){
+	
+	//zmienna pomocnicza
+	var string, wartosc1;
+	//pierwszy wczytany nick to pierwszy gracz
+	var nickname;
+	//nazwa karty
+	var card;
+	//gracze 1 i 2
+	var gracz1='{{gracz1}}';
+	var gracz2='{{gracz2}}';
+	//ile akcji
+	var ile ={{ileakcji}};
+	//licznik akcji
+	var licznik=0;
+	//pomocnicza
+	//tablica atakujacych
+	var atakujace=[];
+	//tablica broniacych
+	var broniacy=[];
+	//indeksy tablicy, smierci i dmg
+	var ind=0, indsm=0, inddmg=0;
+	//ktora karte usunac,coatakuje, co broni , ktorej karcie zwiekszamy damage,cel ataku i czy nastepna tura
+	var cousunac,coatakuje, cobroni,damage, nextturn;
+	var czar="", ostatniczar=[],difczaru=[],indczaru=0;
+	//tablice
+	var tabliceceliatakow = [];
+	var kartynastole = new Array();
+	var divs =[], divs1=[], divs2=[];
+	var karty=[];
+	var ktorydivwolny=[];
+	//tablice z 0 i 1, gdzie 0 - wolny , 1 - zajety
+	var ktorydivwolny1=[], ktorydivwolny2=[];
+	var akcje = [];
+	//tablice hp obu graczy
+	var tabhp1=[];
+	var tabhp2 = [];
+	//co umarlo
+	var smierci = [];
+	//komu podnieslimsy damage
+	var damages = [], iddmg=[], kartadmg=[],valdmg1=[], valdmg2=[];
+	//tablice podnoszenia statystyk
+	var statsy = [], kartastatsow = [], idstat=[], val1=[], val2=[],  tury=[], tury1=[],tury2=[];
+	var indstatsow=0;
+	//zmienne do statystyk - ktora karta , wartosc 1, wartosc 2, czas trwania
+	var celstatu, stat1,stat2, time;
+	//pomocnicz do pelti
+	var wynik = 0;
+	//liczniki, ile tur minelo danemu graczowi
+	var liczniktur1=[],liczniktur2=[];
+		
+	$("#czar1").appendTo('.gracz1');
+	$("#czar2").appendTo('.gracz2');
+	for (var i = 0, limit = 8; i <= limit; i++) 
+	{
+		string = "gracz1div"+i;
+		$("#"+string).appendTo('.gracz1');
+		$("#"+string).hide();
+		ktorydivwolny1[i]=0;
+		ktorydivwolny2[i]=0;
+		divs1[i]="";
+		divs2[i]="";
+		string = "gracz2div"+i;		
+		$("#"+string).appendTo('.gracz2');		
+		$("#"+string).hide();
+	}
+	
+	for (var i=0, limit = 100;i<=limit;i++)
+	{
+		liczniktur1[i]=0;
+		liczniktur2[i]=0;
+		tury1[i]=0;
+		tury2[i]=0;
+
+	}
+	
+	//wyswietla "plansze", czyli obie ramki do gry
+	$('.gracz1').show();
+	$('.gracz2').show();
+	
+	$("#hp1").append('hp1: 20');
+	$("#hp2").append('hp2: 20');
+	
+	//obsluga przycisku "next"
+	$('.nastepny').click(function()	
+	{
+		if (licznik<ile)	
+		{			
+			//zwiekszamy licznik akcji
+			licznik++;
+			coatakuje="";
+			damage="";
+			cobroni="";
+			cousunac="";
+			nextturn="";
+			celstatu="";
+			czar="";
+			dmgval="";
+			time="";
+			wynik=0;
+			
+			//kopiujemyhp
+			if (licznik==1)
+			{
+				tabhp1[licznik-1]=20;
+				tabhp2[licznik-1]=20;
+			}
+			//w innym przypadku, wpisujemy poprzednia wartosc
+			else
+			{
+				tabhp1[licznik-1]=tabhp1[licznik-2];
+				tabhp2[licznik-1]=tabhp2[licznik-2];
+			}
+
+			if (akcje[licznik-3]=="czar" && akcje[licznik-2]!="czar")
+ 			{
+ 				$("#czar1").empty();
+ 				$("#czar2").empty();
+ 			}
+			
+		
+			akcje[licznik-1] = "nic";
+						
+			//szukamy, ktorej karcie podnosimy statystyki
+			{% for key,value in dmgvalue.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					dmgval={{value}};
+				}
+			{% endfor %}
+			
+			//szukamy, ktorej karcie nadajemy statystyki
+			{% for key,value in stats.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					celstatu={{value}};
+				}
+			{% endfor %}
+			
+			//szukamy, jak dlugo utrzymaja sie statystyki
+			{% for key,value in jakdlugo.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					time={{value}};
+				}
+			{% endfor %}
+			
+			//szukamy , czy karta jest czarem
+			{% for key,value in czary.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					czar='{{value}}';
+				}
+			{% endfor %}
+					
+			//szukamy pierwszej wartosci do statu
+			{% for key,value in stats1.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					stat1={{value}};
+				}
+			{% endfor %}
+			
+			//szukamy drugiej wartosci statystyk
+			{% for key,value in stats2.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					stat2={{value}};
+				}
+			{% endfor %}
+
+	
+			//szukamy, ktory gracz gra
+			{% for key,value in ktogra.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					nickname={{value}};
+				}
+			{% endfor %}
+			
+			//szukamy ataku
+			{% for key,value in ataki.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					coatakuje={{value}};
+				}
+			{% endfor %}
+			
+			//szukamy obrony 
+			{% for key,value in dmg.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					damage={{value}};
+				}
+			{% endfor %}
+			
+			//szukamy, ktora karta broni
+			{% for key,value in obrony.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					cobroni={{value}};
+				}
+			{% endfor %}
+			
+		
+			//szukamy, jesli trzeba bedzie usunac karte
+			{% for key,value in deads.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					cousunac={{value}};
+				}
+			{% endfor %}
+			
+			//szukamy, czy update zdrowia u 1 lub 2-ego gracza
+			{% for key,value in hp1.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					$("#hp1").empty();
+					$("#hp1").append("hp1: "+'{{value}}');
+					tabhp1[licznik-1]='{{value}}';
+
+				}
+			{% endfor %}
+			
+			{% for key,value in hp2.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					$("#hp2").empty();
+					$("#hp2").append("hp2: "+'{{value}}');
+					tabhp2[licznik-1]='{{value}}';
+				}
+			{% endfor %}
+			
+			//szukamy zmiany tury
+			{% for key,value in tury.iteritems %}
+				wartosc1 = {{key}};
+				if (wartosc1 == licznik)
+				{
+					nextturn={{value}};
+				}
+			{% endfor %}
+			
+			if (akcje[licznik-2]=="obrona" && cobroni=="")
+			{
+				var malyindeks=licznik;
+				while(1)
+				{
+					if (akcje[malyindeks-2]=="atak") 
+					{
+						$("#"+atakujace[malyindeks-2]).rotate(360);
+						var kto =  ($("#"+atakujace[malyindeks-2]).parent().attr('class'));
+						if (kto=="gracz1")
+							$("#"+atakujace[malyindeks-2]).animate({top:'-5px'}, 1000);	
+
+						else if (kto=="gracz2")
+							$("#"+atakujace[malyindeks-2]).animate({top:'90px'}, 1000);	
+						
+						malyindeks--;
+					}
+					else if (akcje[malyindeks-2]=="obrona")
+					{	
+						var kto =  ($("#"+broniacy[malyindeks-2]).parent().attr('class'));
+						if (kto=="gracz1")
+							$("#"+broniacy[malyindeks-2]).animate({top:'-100px'}, 1000);	
+						else if (kto=="gracz2")
+							$("#"+broniacy[malyindeks-2]).animate({top:'100px'}, 1000);
+						malyindeks--;
+					}
+					else break;
+				}
+
+			}
+			
+			//sprawdzamy, czy zagrana karta jest czarem
+			if (czar!="")
+			{	
+				if (nickname==gracz1)			
+				{	
+					$("#czar1").empty();	
+					var replaced = czar.replace(/%20/g, " ");
+					ostatniczar[indczaru]=czar;
+					difczaru[indczaru]="czar1";
+					$('<img id="czar" style="position:relative;height:200px;weight:200px; "src="{% static "assets/images/'+replaced+'.jpg" %}" />').prependTo("#czar1");
+					$("#czar1").show();						
+					akcje[licznik-1] = "czar";
+					indczaru++;
+				}
+				else if (nickname==gracz2)
+				{
+					$("#czar2").empty();				
+					var replaced = czar.replace(/%20/g, " ");
+					ostatniczar[indczaru]=czar;
+					difczaru[indczaru]="czar2";
+					$('<img id="czar" style="position:relative;height:200px;weight:200px; "src="{% static "assets/images/'+replaced+'.jpg" %}" />').prependTo("#czar2");
+					$("#czar2").show();						
+					akcje[licznik-1] = "czar";
+					indczaru++;
+				}
+			}
+		
+			//zaleznie od nicku, wczytujemy karte do danego pola
+			else
+			{
+				if (nickname==gracz1)			
+				{			
+		
+					//szukamy, ktora karte wczytac
+					{% for key,value in karty.iteritems %}
+						wartosc1 = {{key}};
+						if (wartosc1 == licznik)
+						{
+							
+							ind++;
+							card='{{value}}';
+							var replaced = card.replace(/%20/g, " ");
+							karty[ind-1]=replaced;
+							for (var i =0,ogr = ktorydivwolny1.length; i<ogr;i++)
+							{
+								if (ktorydivwolny1[i]!=1)
+								{
+									string="gracz1div"+i;
+									$("#"+string).rotate(0);									
+									ktorydivwolny1[i]=1;	
+									divs1[i]=string;
+									divs[ind-1]=string;									
+									break;
+
+								}
+							}
+	
+							$('<img id="theImg" style="height:200px;weight:200px; position:relative;" src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);
+							$("#"+string).show();
+							akcje[licznik-1] = "load";
+						}
+					{% endfor %}
+					//zapamietujemy wczytana karte
+					{% for key,value in idlist.iteritems %}
+						wartosc1 = {{key}};
+						if (wartosc1==licznik)
+							kartynastole[ind-1]='{{value}}';							
+					{% endfor %}
+					
+					
+				}			
+			//analogicznie jak wyzej
+				else if (nickname==gracz2)
+				{	
+
+					
+					{% for key,value in karty.iteritems %}
+						wartosc1 = {{key}};
+						if (wartosc1 == licznik)
+						{
+							ind++;
+							card='{{value}}';
+							
+							var replaced = card.replace(/%20/g, " ");
+							karty[ind-1]=replaced;
+							for (var i =0,ogr = ktorydivwolny2.length; i<ogr;i++)
+							{
+									if (ktorydivwolny2[i]!=1)
+									{
+
+										string="gracz2div"+i;
+										$("#"+string).rotate(0);
+										ktorydivwolny2[i]=1;
+										divs2[i]=string;
+										divs[ind-1]=string;
+										
+										break;
+
+									}
+							}
+							$('<img id="theImg" style="position:relative;height:200px;weight:200px; top:0px"src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+string);
+							$("#"+string).show();
+							akcje[licznik-1] = "load";
+						}
+					{% endfor %}
+					
+					{% for key,value in idlist.iteritems %}
+						wartosc1 = {{key}};
+						if (wartosc1==licznik)
+							kartynastole[ind-1]='{{value}}';							
+					{% endfor %}
+					
+					
+				}
+			}
+			
+			
+			//jesli trzeba cos usunac
+			if (cousunac!="")
+			{
+				for (var i =0, limit = kartynastole.length; i<limit; i++)
+				{
+					if (kartynastole[i]==cousunac)
+					{
+						$("#"+divs[i]).empty();
+						ktorydivwolny[indsm]=divs[i];
+						var kto =  ($("#"+divs[i]).parent().attr('class'));
+						var ktory = divs[i].substr(9,1);
+						if (kto == "gracz1")
+						{
+						
+							ktorydivwolny1[ktory]=0;
+							
+						}
+						else
+						{
+							ktorydivwolny2[ktory]=0;
+						}
+						
+						smierci[indsm]=karty[i];
+						indsm++;
+						akcje[licznik-1] = "dead";
+						break;
+					}
+				}
+ 			}
+			
+			//atak
+			if (coatakuje!="")
+			{
+				for (var i=0, ogr =ind; i<ogr;i++)
+				{
+					if (kartynastole[i]==coatakuje)
+					{	
+						var kto =  ($("#"+divs[i]).parent().attr('class'));
+						if(kto=="gracz1")
+						{
+							$("#"+divs[i]).rotate(90);
+							$("#"+divs[i]).animate({top:'100px'}, 1000);
+							
+
+						}
+						else if (kto=="gracz2")
+						{
+							$("#"+divs[i]).rotate(90);
+							$("#"+divs[i]).animate({top:'-30px'}, 1000);
+						}
+													
+						atakujace[licznik-1]=divs[i];
+						akcje[licznik-1] = "atak";
+						//rysowanie strzalki
+						
+						break;
+					}
+					
+				}
+			}
+			
+			//obrona
+			if (cobroni!="")
+			{
+				
+				for (var i=0, ogr =ind; i<ind;i++)
+				{
+					if (kartynastole[i]==cobroni)
+					{	
+
+						var kto =  ($("#"+divs[i]).parent().attr('class'));
+						if(kto=="gracz1")
+						{
+							$("#"+divs[i]).animate({top:'50px'}, 1000);								
+						}
+							
+						else if (kto=="gracz2")
+						{
+							$("#"+divs[i]).animate({top:'-10px'}, 1000);		
+						}
+						broniacy[licznik-1]=divs[i];
+						akcje[licznik-1] = "obrona";						
+						break;	
+							
+					}
+									
+				}
+
+                
+			}
+			
+		//jesli ktorej karcie trzeba zwiekszyc damage
+		if (damage!="")
+		{
+			for (var i=0, ogr =ind; i<ind;i++)
+			{
+				if (idstat[i]==damage)
+				{	
+					$( "#val1"+damage ).empty();
+					$( "#dmgval"+damage ).empty();
+					$( "#"+statsy[i] ).empty();
+					var replaced = kartastatsow[i].replace(/%20/g, " ");
+					$('<img id="theImg" style="position:relative;height:200px;weight:200px;"src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+statsy[i]);
+					//zmien tu potem na 175
+					$('<div id="val1"'+damage+' style="float:left;position:relative;height:200px;weight:200px; top:140px;"><h4>'+val1[i]+'</h4></div>').prependTo("#"+statsy[i]);
+					//$("#"+divs[i]).prepend(stat1);
+					$('<div id="dmgval"'+damage+' style="float:right;position:relative;height:200px;weight:200px; top:140px;"><h4>'+(val2[i]-dmgval)+'</h4></div>').appendTo("#"+statsy[i]);
+					$( "#"+statsy[i] ).show();				
+					akcje[licznik-1]="add";
+					 //iddmg=[], kartadmg=[],valdmg1=[], valdmg2=[];
+					damages[inddmg]=statsy[i];
+					iddmg[inddmg]=damage;
+					kartadmg[inddmg]=kartastatsow[i];
+					valdmg1[inddmg]=val1[i];
+					valdmg2[inddmg]=(val2[i]);
+					inddmg++;
+					break;
+				}
+
+            }
+		}
+			
+		
+		//gdy mamy podniesc staty
+		if (celstatu!="")
+		{
+			//szukamy karty
+			for (var i=0, ogr =ind; i<ind;i++)
+			{
+				if (kartynastole[i]==celstatu)
+				{	
+					//gdy robimy update
+					for (var j=0, limes = indstatsow; j<indstatsow;j++)
+					{
+						if (idstat[j]==celstatu && wynik==0)
+						{
+							$( "#val1"+celstatu ).empty();
+							$( "#dmgval"+celstatu ).empty();
+							$( "#"+statsy[j] ).empty();
+							var replaced = kartastatsow[j].replace(/%20/g, " ");
+							$('<img id="theImg" style="position:relative;height:200px;weight:200px;"src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+statsy[j]);
+							//zmien potem na 175
+							$('<div id="val1"'+celstatu+' style="float:left;position:relative;height:200px;weight:200px; top:140px;"><h4>'+stat1+'</h4></div>').prependTo("#"+statsy[j]);
+							//$("#"+divs[i]).prepend(stat1);
+							$('<div id="dmgval"'+celstatu+' style="float:right;position:relative;height:200px;weight:200px; top:140px;"><h4>'+stat2+'</h4></div>').appendTo("#"+statsy[j]);
+							$( "#"+statsy[j] ).show();
+							tury[j]=time;					
+							var kto =  ($("#"+statsy[j]).parent().attr('class'));
+							if (kto=="gracz1")
+							{
+								tury1[j]=time;
+							}
+							else
+							{
+								tury2[j]=time;
+							}
+							
+							akcje[licznik-1]="stats";
+							wynik=1;
+							break;
+						}						
+					}
+					//w przeciwnym wypadku, gdy karta laduje pierwszy raz na stole
+					if (wynik != 1)
+					{
+						//zmien potem na 175
+						$('<div id="val1"'+celstatu+' style="float:left;position:relative;height:200px;weight:200px; top:140px;"><h4>'+stat1+'</h4></div>').prependTo("#"+divs[i]);
+						//$("#"+divs[i]).prepend(stat1);
+						$('<div id="dmgval"'+celstatu+' style="float:right;position:relative;height:200px;weight:200px; top:140px;"><h4>'+stat2+'</h4></div>').appendTo("#"+divs[i]);
+						statsy[indstatsow]=divs[i];
+						kartastatsow[indstatsow]=karty[i];
+						idstat[indstatsow]=celstatu;
+						val1[indstatsow]=stat1;
+						val2[indstatsow]=stat2;				
+						indstatsow++;
+						break;
+					}
+					else break;
+				
+				
+				}
+
+            }
+			
+		}
+		
+		//czy zmiana tury
+		if (nextturn !="")
+		{	
+			//cofamy karty u obu graczy
+			for (var i =0,ogr = ktorydivwolny1.length; i<ogr;i++)
+			{
+				if (ktorydivwolny1[i]!=0)
+				{
+					string = divs1[i];
+					$("#"+string).animate({top:'-5px'}, 1000);	
+					//$("#"+string).rotate(0);
+
+				}
+			}
+			
+			for (var i =0,ogr = ktorydivwolny2.length; i<ogr;i++)
+			{
+				if (ktorydivwolny2[i]==1)
+				{
+					string = divs2[i];
+					$("#"+string).animate({top:'90px'}, 1000);	
+				
+				}
+			}	
+			//cofamy wszystkie ataki
+			if (nextturn==gracz1)
+			{
+			
+				for (var j =0, limes = divs.length;j<limes;j++)
+				{
+					var dif=divs[j];
+					var kto =  ($("#"+dif).parent().attr('class'));
+					if (kto=="gracz2")
+					{
+						
+						$("#"+dif).rotate(0);
+					}
+					
+				}
+			
+				for (var j =0,lim = indstatsow; j<lim;j++)
+				{
+					
+					if (tury1[j]!=0)
+					{
+						liczniktur1[j] += 1;
+						
+						if (liczniktur1[j]==tury1[j])
+						{
+						
+							//ladowanie starych statow
+							$( "#val1"+idstat[j] ).remove();
+							$( "#dmgval"+idstat[j]  ).remove();
+							$( "#"+statsy[j] ).empty();
+							var replaced = kartastatsow[j].replace(/%20/g, " ");
+							$('<img id="theImg" style="position:relative;height:200px;weight:200px;"src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+statsy[j]);
+							//zmien potem na 175
+							$('<div id="val1"'+idstat[j] +' style="float:left;position:relative;height:200px;weight:200px; top:140px;"><h4>'+val1[j]+'</h4></div>').prependTo("#"+statsy[j]);
+							//$("#"+divs[i]).prepend(stat1);
+							$('<div id="dmgval"'+idstat[j] +' style="float:right;position:relative;height:200px;weight:200px; top:140px;"><h4>'+val2[j]+'</h4></div>').appendTo("#"+statsy[j]);
+							$( "#"+statsy[j] ).show();
+							break;
+						}
+					}
+				}
+							
+			}
+			else
+			{
+				
+				for (var j =0, limes = divs.length;j<limes;j++)
+				{
+					var dif=divs[j];
+					var kto =  ($("#"+dif).parent().attr('class'));
+					if (kto=="gracz1")
+					{
+							
+						$("#"+dif).rotate(0);
+					}
+					
+				}
+				
+				for (var j =0,lim = indstatsow; j<lim;j++)
+				{
+					
+					if (tury2[j]!=0)
+					{
+						liczniktur2[j] += 1;
+						if (liczniktur2[j]==tury2[j])
+						{
+							
+							//ladowanie starych statow
+							$( "#val1"+idstat[j] ).remove();
+							$( "#dmgval"+idstat[j]  ).remove();
+							$( "#"+statsy[j] ).empty();
+							var replaced = kartastatsow[j].replace(/%20/g, " ");
+							$('<img id="theImg" style="position:relative;height:200px;weight:200px;"src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+statsy[j]);
+							//zmien potem na 175
+							$('<div id="val1"'+idstat[j] +' style="float:left;position:relative;height:200px;weight:200px; top:140px;"><h4>'+val1[j]+'</h4></div>').prependTo("#"+statsy[j]);
+							//$("#"+divs[i]).prepend(stat1);
+							$('<div id="dmgval"'+idstat[j] +' style="float:right;position:relative;height:200px;weight:200px; top:140px;"><h4>'+val2[j]+'</h4></div>').appendTo("#"+statsy[j]);
+							$( "#"+statsy[j] ).show();
+							break;
+						}
+
+					}
+				}
+				
+	
+				akcje [licznik-1]="nextturn";
+			}
+		}
+		
+		
+		//wczytujemy tekst
+		
+		$("#tekst").empty();
+		{% for key,value in akcje.iteritems %}
+			wartosc = {{key}};
+			if (licznik == wartosc)
+				$("#tekst").append('{{value}}');							
+		{% endfor %}
+		
+		}
+		
+		
+	
+    });
+	
+	//obsluga przycisku "previous"
+	$('.poprzedni').click(function()
+	{
+		//zmieniamy hp
+		if (licznik!=0)
+		{
+			
+			$("#hp1").empty();
+			$("#hp1").append("hp1: "+tabhp1[licznik-1]);
+		
+			$("#hp2").empty();
+			$("#hp2").append("hp2: "+tabhp2[licznik-1]);
+			licznik=licznik-1;
+		}
+		//lub czyscimy cale pole
+		else if (licznik==0)
+		{
+			for (var i =0, limit = 8; i<limit; i++)
+			{			
+				$("#gracz1div"+i).empty();
+				$("#gracz2div"+i).empty();
+			}	
+		}
+
+		//jesli byla smierc karty
+		 if (akcje [licznik]=="dead")
+		{
+			var dif = ktorydivwolny[indsm-1];
+			var replaced = smierci[indsm-1].replace(/%20/g, " ");
+			$('<img id="theImg" style="position:relative;height:200px;weight:200px;"src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+dif);							
+			$("#"+dif).show();
+			divs[divs.length-1]=dif;
+			var kto =  ($("#"+dif).parent().attr('class'));
+			var ktory = dif.substr(9,1);
+			if (kto == gracz1)
+			{
+				$("#tekst").append("Usuwam");
+				ktorydivwolny1[ktory]=1;
+							
+			}
+			else
+			{
+				ktorydivwolny2[ktory]=1;
+			}
+			if (indsm!=0)
+			indsm--;
+			
+		}
+		
+		////jesli byl load karty
+		else if (akcje [licznik] == "load")
+		{
+		
+			karty[ind-1]="";
+			$("#"+divs[ind-1]).empty();
+			$("#"+divs[ind-1]).hide();
+			var kto =  ($("#"+divs[ind-1]).parent().attr('class'));
+			var ktory = divs[ind-1].substr(9,1);
+			if (kto == "gracz1")
+			{
+						
+				ktorydivwolny1[ktory]=0;
+							
+			}
+			else
+			{
+				ktorydivwolny2[ktory]=0;
+			}
+			ind --;
+		}
+		
+		//atak
+		else if (akcje[licznik]=="atak")
+		{
+			$("#"+atakujace[licznik]).rotate(360);
+			var kto =  ($("#"+atakujace[licznik]).parent().attr('class'));
+			if (kto=="gracz1")
+				$("#"+atakujace[licznik]).animate({top:'-5px'}, 1000);	
+			else
+				$("#"+atakujace[licznik]).animate({top:'90px'}, 1000);	
+		
+			
+			
+		}
+		
+		//obrona
+		else if (akcje[licznik]=="obrona")
+		{
+			var kto =  ($("#"+broniacy[licznik]).parent().attr('class'));
+			if (kto=="gracz1")
+				$("#"+broniacy[licznik]).animate({top:'-5px'}, 1000);	
+			else
+				$("#"+broniacy[licznik]).animate({top:'90px'}, 1000);	
+
+		}
+		
+		else if (akcje[licznik]=="stats")
+		{
+			var dif = statsy[indstatsow-1];
+			$( "#val1"+idstat[indstatsow-1] ).empty();
+			$( "#dmgval"+idstat[indstatsow-1] ).empty();
+			$("#"+dif).empty();
+			var replaced = kartastatsow[indstatsow-1].replace(/%20/g, " ");
+			$('<img id="theImg" style="position:relative;height:200px;weight:200px;"src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+dif);	
+			//zmien potem na 175
+			$('<div id="val1"'+idstat[indstatsow-1] +' style="float:left;position:relative;height:200px;weight:200px; top:140px;"><h4>'+val1[indstatsow-1]+'</h4></div>').prependTo("#"+dif);
+			$('<div id="dmgval"'+idstat[indstatsow-1] +' style="float:right;position:relative;height:200px;weight:200px; top:140px;"><h4>'+val2[indstatsow-1]+'</h4></div>').appendTo("#"+dif);
+			$("#"+dif).show();
+			indstatsow--;
+		}
+		
+		//wczytanie czaru
+		
+		else if (akcje[licznik-1]=="czar" || akcje[licznik-2]=="czar")
+ 		{
+				$("#"+difczaru[indczaru-1]).empty();	
+ 				var replaced = ostatniczar[indczaru-1].replace(/%20/g, " ");
+ 				$('<img id="theImg" style="position:relative;height:200px;weight:200px;"src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+difczaru[indczaru-1]);
+ 				$("#"+difczaru[indczaru-1]).show();	
+				//indczaru--;
+ 		}
+		
+		//gdy pojawil sie czar 
+		//akcja nr 3 - nie ma czaru, nr 4 - jest, nr 5 - jest, nr 6 - znika znowu
+		else if (akcje[licznik]=="czar")
+		{
+
+			$("#"+difczaru[indczaru-1]).empty();
+			indczaru--;
+		}
+
+		
+		
+		//add damage
+		else if (akcje[licznik]=="add")
+		{	
+			$( "#val1"+iddmg[inddmg-1] ).empty();
+			$( "#dmgval"+iddmg[inddmg-1] ).empty();
+			$( "#"+damages[inddmg-1] ).empty();
+			var replaced = kartadmg[inddmg-1].replace(/%20/g, " ");
+			$('<img id="theImg" style="position:relative;height:200px;weight:200px;"src="{% static "assets/images/'+replaced+'.jpg" %}" />').appendTo("#"+damages[inddmg-1]);
+			//zmien tu potem na 175
+			$('<div id="val1"'+iddmg[inddmg-1]+' style="float:left;position:relative;height:200px;weight:200px; top:140px;"><h4>'+valdmg1[inddmg-1]+'</h4></div>').prependTo("#"+damages[inddmg-1]);
+			//$("#"+divs[i]).prepend(stat1);
+			$('<div id="dmgval"'+iddmg[inddmg-1]+' style="float:right;position:relative;height:200px;weight:200px; top:140px;"><h4>'+(valdmg2[inddmg-1])+'</h4></div>').appendTo("#"+damages[inddmg-1]);
+			$( "#"+damages[inddmg-1] ).show();	
+			//iddmg=[], kartadmg=[],valdmg1=[], valdmg2=[];
+			//akcje[licznik-1]="add";
+			//damages[inddmg-1]="";
+			inddmg--;
+		}
+		
+		//i wyswietlamy tekst
+		
+		$("#tekst").empty();
+		{% for key,value in akcje.iteritems %}
+			wartosc = {{key}};
+			if (licznik == wartosc)
+				$("#tekst").append('{{value}}');							
+		{% endfor %}	
+
+		
+    });
+});
+</script>
+</head>
+
 <body>
-<h1>visual studio</h1>
-<p>robota na pozniej</p>
+<br>
+<button class ="poprzedni" >Previous</button>
+<button class ="nastepny">Next</button>
+<div id="tekst"><h2></div></h2>
+<div id="hp1"><h2></div></h2>
+<div class="pole">
+<div class="gracz1" style="height:400px; width:2000px; overflow:auto; position:relative;left:0px;top:0px;margin-bottom:0px;">
+<div style="display: table-row">
+        <div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:50px;top:0px; " id ="czar1"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:250px;top:0px;" id ="gracz1div0"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:350px;top:0px;" id ="gracz1div1"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:450px;top:0px;" id ="gracz1div2"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:550px;top:0px;" id ="gracz1div3"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:650px;top:0px;" id ="gracz1div4"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:750px;top:0px;" id ="gracz1div5"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:850px;top:0px;" id ="gracz1div6"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:950px;top:0px;" id ="gracz1div7"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:1050px;top:0px;" id ="gracz1div8"> </div>
+    </div>
+
+</div>
+
+<div class="gracz2" style="height:400px; width:2000px; overflow:auto; position:relative;left:0px;top:0px;">	
+<div style="display: table-row">
+        <div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:50px;top:100px;" id ="czar2"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:250px;top:100px;" id ="gracz2div0"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:350px;top:100px;" id ="gracz2div1"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:450px;top:100px;" id ="gracz2div2"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:550px;top:100px;" id ="gracz2div3"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:650px;top:100px;" id ="gracz2div4"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:750px;top:100px;" id ="gracz2div5"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:850px;top:100px;" id ="gracz2div6"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:950px;top:100px;" id ="gracz2div7"> </div>
+		<div style="display: table-cell;overflow:hidden; height=200px; weight=200px; position:relative;left:1050px;top:100px;" id ="gracz2div8"> </div>
+    </div>
+
+</div>
+<div id="hp2"><h2></div></h2>
+</div>
+
 </body>
 </html>
-
-{% endblock %}
-~                      
